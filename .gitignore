@@ -1,0 +1,5 @@
+Coq_Make
+*~
+*.glob
+*.v.d
+*.vo
