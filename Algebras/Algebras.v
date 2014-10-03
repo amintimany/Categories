@@ -42,10 +42,7 @@ Proof.
   intros H1.
   destruct ah as [ahm ahc]; destruct ah' as [ahm' ahc']; simpl in *.
   destruct H1.
-  match goal with
-      [ahc' : ?A |- _] =>
-        destruct (proof_irrelevance A ahc ahc')
-  end.
+  destruct (proof_irrelevance _ ahc ahc').
   trivial.
 Qed.
 

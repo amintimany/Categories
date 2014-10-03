@@ -21,10 +21,7 @@ Proof.
   intros H1.
   destruct N as [NT NC]; destruct N' as [NT' NC']; simpl in *.
   destruct H1.
-  match goal with
-      [NC' : ?A |- _] =>
-        destruct (proof_irrelevance A NC NC')
-  end.
+  destruct (proof_irrelevance _ NC NC').
   trivial.
 Qed.
 

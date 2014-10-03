@@ -20,10 +20,7 @@ Proof.
   intros H1.
   destruct cah as [cahm cahc]; destruct cah' as [cahm' cahc']; simpl in *.
   destruct H1.
-  match goal with
-      [cahc' : ?A |- _] =>
-        destruct (proof_irrelevance A cahc cahc')
-  end.
+  destruct (proof_irrelevance _ cahc cahc').
   trivial.
 Qed.
 
