@@ -1,0 +1,66 @@
+Mod_Essentials = \
+	Essentials/Notations\
+	Essentials/Types\
+
+Mod_Category = \
+	Category/Category\
+	Category/Tactics\
+	Category/Opposite\
+	Category/Morph\
+	Category/Core
+
+Mod_Ext_Cons =\
+	Ext_Cons/Arrow_Cat\
+	Ext_Cons/Prod_Cat\
+	Ext_Cons/Core
+
+Mod_Functor =\
+	Functor/Functor\
+	Functor/Functor_Ops\
+	Functor/Functor_Properties\
+	Functor/Tactics\
+	Functor/Core
+
+Mod_Coq_Cats =\
+	Coq_Cats/Type_Cat\
+	Coq_Cats/Set_Cat\
+	Coq_Cats/Prop_Cat\
+	Coq_Cats/Core
+
+Mod_Basic_Cons =\
+	Basic_Cons/Initial\
+	Basic_Cons/Terminal\
+	Basic_Cons/Product\
+	Basic_Cons/Sum\
+	Basic_Cons/Exponential\
+	Basic_Cons/Facts\
+	Basic_Cons/Core\
+	Basic_Cons/CCC\
+	Basic_Cons/Basic_Cons_facts
+
+Mod_Algebras =\
+	Algebras/Algebras\
+	Algebras/CoAlgebras\
+	Algebras/Core
+
+Mod_Cat =\
+	Cat/Cat\
+	Cat/Cat_Cat_facts
+
+Mod_NatTrans =\
+	NatTrans/NatTrans
+
+Mod_Yoneda =\
+	Yoneda/Yoneda
+
+Mod_Demo =\
+	Demo/Demo
+
+Modules = $(Mod_Essentials) $(Mod_Category) $(Mod_Ext_Cons) $(Mod_Functor) $(Mod_Coq_Cats) $(Mod_Basic_Cons) $(Mod_Algebras) $(Mod_Cat) $(Mod_NatTrans) $(Mod_Yoneda) $(Mod_Demo)
+
+
+
+
+
+
+
