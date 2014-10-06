@@ -2,6 +2,30 @@ Require Import Category.Core.
 Require Import Functor.Functor.
 Require Import Functor.Tactics.
 
+(* Opposite Functor *)
+Section Opposite_Functor.
+  Context `{C : Category Obj Hom} `{D : Category Obj' Hom'} (F : Functor C D).
+
+  Program Instance Opposite_Functor : Functor C^op D^op :=
+    {
+      FO := F _o;
+      FA := λ a b h, F _a b a h;
+      F_id := λ a, @F_id _ _ _ _ _ _ F a;
+      F_compose := λ a b c f g, @F_compose _ _ _ _ _ _ F c b a g f
+    }.
+
+End Opposite_Functor.
+
+Section Opposite_Opposite_Functor.
+  Context `{C : Category Obj Hom} `{D : Category Obj' Hom'} (F : Functor C D).
+  
+  Theorem Opposite_Opposite_Functor : Opposite_Functor (Opposite_Functor F) ≃ F.
+    destruct C; destruct D; destruct F.
+    reflexivity.
+  Qed.
+
+End Opposite_Opposite_Functor.
+
 (* Functor composition *)
 
 Section Functor_Compose.

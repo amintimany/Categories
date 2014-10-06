@@ -36,7 +36,11 @@ Mod_Basic_Cons =\
 	Basic_Cons/Facts\
 	Basic_Cons/Core\
 	Basic_Cons/CCC\
-	Basic_Cons/Basic_Cons_facts
+	Basic_Cons/Basic_Cons_facts\
+	Basic_Cons/Equalizer\
+	Basic_Cons/CoEqualizer\
+	Basic_Cons/PullBack\
+	Basic_Cons/PushOut
 
 Mod_Algebras =\
 	Algebras/Algebras\
@@ -53,10 +57,16 @@ Mod_NatTrans =\
 Mod_Yoneda =\
 	Yoneda/Yoneda
 
+Mod_Limits =\
+	Limits/Limit\
+	Limits/CoLimit\
+	Limits/Duality
+
+
 Mod_Demo =\
 	Demo/Demo
 
-Modules = $(Mod_Essentials) $(Mod_Category) $(Mod_Ext_Cons) $(Mod_Functor) $(Mod_Coq_Cats) $(Mod_Basic_Cons) $(Mod_Algebras) $(Mod_Cat) $(Mod_NatTrans) $(Mod_Yoneda) $(Mod_Demo)
+Modules = $(Mod_Essentials) $(Mod_Category) $(Mod_Ext_Cons) $(Mod_Functor) $(Mod_Coq_Cats) $(Mod_Basic_Cons) $(Mod_Algebras) $(Mod_Cat) $(Mod_NatTrans) $(Mod_Yoneda) $(Mod_Limits) $(Mod_Demo)
 
 
 

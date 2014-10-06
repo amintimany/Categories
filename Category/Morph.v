@@ -60,38 +60,33 @@ Class Isomorphic `{C : Category Obj Hom} (a b : Obj) :=
 
 Existing Instance iso_morphism_isomorphism.
 
-Definition iso_morphism_HOM `{C : Category Obj Hom} {a b : Obj} (I : Isomorphic a b) : HOM a b :=
-  @iso_morphism _ _ _ _ _ I.
-
-Coercion iso_morphism_HOM : Isomorphic >-> HOM.
-
 Coercion iso_morphism_isomorphism : Isomorphic >-> Isomorphism.
 
 Notation "a ≡ b" := (Isomorphic a b) (at level 70, no associativity).
 
 Section Isomorphic_equiv.
-    Context `{C : Category Obj Hom} (a b c : Obj).
+  Context `{C : Category Obj Hom} (a b c : Obj).
     
-    Theorem Isomorphic_refl : a ≡ a.
-    Proof.
-      do 2 exists id; auto.
-    Qed.
-
-    Theorem Isomorphic_sym : a ≡ b → b ≡ a.
-    Proof.
-      intros I.
-      eapply (Build_Isomorphic _ _ _ _ _ _ (Inverse_Isomorphism I)).
-    Qed.
-
-    Theorem Isomorphic_trans : a ≡ b → b ≡ c → a ≡ c.
-    Proof.
-      intros I I'.
-      eapply (Build_Isomorphic _ _ _ _ _ _ (Isomorphism_Compose I I')).
-    Qed.
-
-    Hint Resolve Isomorphic_refl Isomorphic_trans.
-    Hint Immediate Isomorphic_sym.
-  End Isomorphic_equiv.
+  Theorem Isomorphic_refl : a ≡ a.
+  Proof.
+    do 2 exists id; auto.
+  Qed.
+  
+  Theorem Isomorphic_sym : a ≡ b → b ≡ a.
+  Proof.
+    intros I.
+    eapply (Build_Isomorphic _ _ _ _ _ _ (Inverse_Isomorphism I)).
+  Qed.
+  
+  Theorem Isomorphic_trans : a ≡ b → b ≡ c → a ≡ c.
+  Proof.
+    intros I I'.
+    eapply (Build_Isomorphic _ _ _ _ _ _ (Isomorphism_Compose I I')).
+  Qed.
+  
+  Hint Resolve Isomorphic_refl Isomorphic_trans.
+  Hint Immediate Isomorphic_sym.
+End Isomorphic_equiv.
 
 
 Class Monic `{C : Category Obj Hom} (a b : Obj) :=
@@ -100,28 +95,17 @@ Class Monic `{C : Category Obj Hom} (a b : Obj) :=
   mono_morphism_monomorphism : ∀ (c : Obj) (g h : Hom c a), mono_morphism ∘ g = mono_morphism ∘ h → g = h
 }.
 
-Definition mono_morphism_HOM `{C : Category Obj Hom} {a b : Obj} (I : Monic a b) : HOM a b :=
-  @mono_morphism _ _ _ _ _ I.
-
-Coercion mono_morphism_HOM : Monic >-> HOM.
-
 Class Epic `{C : Category Obj Hom} (a b : Obj) :=
 {
   epi_morphism : Hom a b;
   epi_morphism_epimorphism : ∀ (c : Obj) (g h : Hom b c), g ∘ epi_morphism = h ∘ epi_morphism -> g = h
 }.
 
-Definition epi_morphism_HOM `{C : Category Obj Hom} {a b : Obj} (I : Epic a b) : HOM a b :=
-  @epi_morphism _ _ _ _ _ I.
-
-Coercion epi_morphism_HOM : Epic >-> HOM.
-
 Notation "a ≫–> b" := (Monic a b).
 
 Notation "a –≫ b" := (Epic a b).
 
 Section Iso_Mono_Epi.
-
   Context `{C : Category Obj Hom} {a b : Obj} (f : Hom a b) (I : Isomorphism f).
 
   Program Instance Ismorphism_Monic : a ≫–> b :=

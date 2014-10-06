@@ -198,7 +198,6 @@ Program Instance Exp_Cat_eval `(C : Category Obj) `(C' : Category Obj') : Functo
 
 Next Obligation. (* F_compose *)
 Proof.
-  unfold HOM in *; program_simpl.
   simpl in *.
   match goal with
       [|- ?A ∘ ?B ∘ ?D = ?E ∘ ?F ∘ ?G] =>

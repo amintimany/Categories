@@ -9,8 +9,6 @@ Require Import Ext_Cons.Core.
 Require Import NatTrans.NatTrans.
 
 
-Local Obligation Tactic := (unfold HOM in * || idtac); program_simpl; auto.
-
 Program Instance Hom_Func `(C : Category Obj Hom) : Functor (Prod_Cat C ^op C) Type_Cat :=
 {
   FO := fun x => Hom (fst x) (snd x);

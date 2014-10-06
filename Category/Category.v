@@ -34,8 +34,6 @@ Notation "f ∘ g" := (compose g f).
 
 Global Generalizable Variables Obj Hom.
 
-Definition HOM `{C : Category Obj Hom} := Hom.
-
 Hint Resolve id_unit_left id_unit_right.
 
 Lemma Category_eq_simplify `(C : Category Obj Hom) `(C' : Category Obj' Hom') : Obj = Obj' → Hom ≃ Hom' → @compose _ _ C ≃ @compose _ _ C' → @id _ _ C ≃ @id _ _ C' → C ≃ C'.
