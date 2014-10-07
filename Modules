@@ -19,7 +19,9 @@ Mod_Functor =\
 	Functor/Functor_Ops\
 	Functor/Functor_Properties\
 	Functor/Tactics\
-	Functor/Core
+	Functor/Core\
+	Functor/Representable/Core\
+	Functor/Representable/Hom_Func
 
 Mod_Coq_Cats =\
 	Coq_Cats/Type_Cat\
@@ -34,9 +36,11 @@ Mod_Basic_Cons =\
 	Basic_Cons/Sum\
 	Basic_Cons/Exponential\
 	Basic_Cons/Facts\
+	Basic_Cons/Facts/Init_Prod\
+	Basic_Cons/Facts/Term_Prod\
+	Basic_Cons/Facts/Core\
 	Basic_Cons/Core\
 	Basic_Cons/CCC\
-	Basic_Cons/Basic_Cons_facts\
 	Basic_Cons/Equalizer\
 	Basic_Cons/CoEqualizer\
 	Basic_Cons/PullBack\
@@ -49,24 +53,42 @@ Mod_Algebras =\
 
 Mod_Cat =\
 	Cat/Cat\
-	Cat/Cat_Cat_facts
+	Cat/Cat_Initial\
+	Cat/Cat_Terminal\
+	Cat/Cat_Product\
+	Cat/Cat_Exponential\
+	Cat/Cat_CCC\
+	Cat/Facts
 
 Mod_NatTrans =\
 	NatTrans/NatTrans
 
 Mod_Yoneda =\
-	Yoneda/Yoneda
+	Yoneda/Y_emb\
+	Yoneda/Y_Left\
+	Yoneda/Y_Right\
+	Yoneda/Y_Left_Right\
+	Yoneda/Y_Right_Left\
+	Yoneda/Y_Lem\
+	Yoneda/CoYoneda\
+	Yoneda/Core
 
 Mod_Limits =\
 	Limits/Limit\
 	Limits/CoLimit\
-	Limits/Duality
+	Limits/Duality\
+	Limits/Core
+
+Mod_Categories =\
+	Categories/Discr\
+	Categories/Monoid_Cat\
+	Categories/Examples/List_Monoid_Cat
 
 
 Mod_Demo =\
 	Demo/Demo
 
-Modules = $(Mod_Essentials) $(Mod_Category) $(Mod_Ext_Cons) $(Mod_Functor) $(Mod_Coq_Cats) $(Mod_Basic_Cons) $(Mod_Algebras) $(Mod_Cat) $(Mod_NatTrans) $(Mod_Yoneda) $(Mod_Limits) $(Mod_Demo)
+Modules = $(Mod_Essentials) $(Mod_Category) $(Mod_Ext_Cons) $(Mod_Functor) $(Mod_Coq_Cats) $(Mod_Basic_Cons) $(Mod_Algebras) $(Mod_Cat) $(Mod_NatTrans) $(Mod_Yoneda) $(Mod_Limits) $(Mod_Categories) $(Mod_Demo)
 
 
 

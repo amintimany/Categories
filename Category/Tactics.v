@@ -1,7 +1,5 @@
 Require Import Category.Category.
 
-Obligation Tactic := program_simpl; auto.
-
 (* basic tactics for categories *)
 
 Ltac reveal_comp_in_goal f g :=
@@ -96,7 +94,7 @@ Tactic Notation "simpl_ids" := simpl_ids.
 
 Tactic Notation "simpl_ids" "in" hyp(I) := simpl_ids_in_I I.
 
-Hint Extern 2 => simpl_ids.
+Hint Extern 1 => progress simpl_ids.
 
 (* Automating use of functional_extensionality *)
 Hint Extern 1 => 

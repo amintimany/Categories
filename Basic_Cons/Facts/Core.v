@@ -1,0 +1,2 @@
+Require Export Basic_Cons.Facts.Init_Prod.
+Require Export Basic_Cons.Facts.Term_Prod.

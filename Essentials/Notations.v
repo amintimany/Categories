@@ -24,6 +24,15 @@ Reserved Notation "x ↑ y" (at level 9, no associativity).
 
 Reserved Notation "f ↑↑ g " (at level 9, no associativity).
 
+Delimit Scope category_scope with category.
+
+Delimit Scope morphism_scope with morphism.
+
+Delimit Scope object_scope with object.
+
+Open Scope morphism_scope.
+
+Open Scope object_scope.
 
 
 Notation "a ≃ b" := (JMeq a b) (at level 70, right associativity).

@@ -2,6 +2,8 @@ Require Import Category.Core.
 Require Import Basic_Cons.Core.
 Require Export Essentials.Types.
 
+Local Obligation Tactic := program_simpl; auto 3.
+
 (* The category of Coq Types! *)
 
 (*
