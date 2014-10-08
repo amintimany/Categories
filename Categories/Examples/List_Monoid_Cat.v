@@ -9,7 +9,7 @@ Section List_Monoid_Cat.
 
   Program Instance List_Monoid : Monoid :=
     {
-      Mon_Car := list A;
+      Mon_car := list A;
       
       Mon_op := λ a b, (a ++ b)%list;
       

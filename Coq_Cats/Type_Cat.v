@@ -36,9 +36,9 @@ Program Instance Type_Cat_Has_Initial : Has_Initial Type_Cat :=
 (* Type_Cat_Has_Initial Proved! *)
 
 
-Program Instance Singleton_Type_term : Terminal Type_Cat Singleton_Type :=
+Program Instance Singleton_Type_term : Terminal Type_Cat unit :=
 {
-  t_morph := λ _ _, ST
+  t_morph := λ _ _, tt
 }.
 
 Next Obligation. (* t_morph_unique *)
@@ -51,7 +51,7 @@ Qed.
 
 Program Instance Type_Cat_Has_Terminal : Has_Terminal Type_Cat :=
 {
-  HT_term := Singleton_Type
+  HT_term := unit
 }.
 
 (* Type_Cat_Has_Terminal Proved! *)

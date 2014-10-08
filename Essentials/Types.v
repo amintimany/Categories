@@ -8,9 +8,3 @@ match goal with
   | [H : context[Empty] |- _] => tac
 end
 .
-
-Inductive Singleton_Type : Type :=
-  ST : Singleton_Type
-.
-
-Hint Constructors Singleton_Type.

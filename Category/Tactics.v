@@ -1,5 +1,7 @@
 Require Import Category.Category.
 
+Local Open Scope morphism_scope.
+
 (* basic tactics for categories *)
 
 Ltac reveal_comp_in_goal f g :=

@@ -29,13 +29,13 @@ Section PreOrder_Cat.
   Hint Extern 1 =>
   match goal with
       [|- PreOrder_Arrow ?A ?B ?H1 = PreOrder_Arrow ?A ?B ?H2] =>
-      progress destruct (proof_irrelevance _ H1 H2)
+      destruct (proof_irrelevance _ H1 H2); reflexivity
   end.
 
   Hint Extern 1 =>
   match goal with
       [|- PreOrder_Arrow ?A ?B ?H1 = PreOrder_Arrow ?A ?B ?H2] =>
-      progress destruct (proof_irrelevance _ H2 H1)
+      destruct (proof_irrelevance _ H2 H1); reflexivity
   end.
 
   Hint Resolve PreOrder_refl PreOrder_trans.
@@ -45,3 +45,25 @@ Section PreOrder_Cat.
   Program Instance PreOrder_Cat : Category (@PreOrder_car P) (PreOrder_Hom).
 
 End PreOrder_Cat.
+
+Hint Constructors PreOrder_Hom.
+
+Hint Extern 1 =>
+match goal with
+    [H : PreOrder_Hom _ _ _ |- _] =>
+    destruct H; simpl in *
+end.
+
+Hint Extern 1 =>
+match goal with
+    [|- PreOrder_Arrow ?P ?A ?B ?H1 = PreOrder_Arrow ?P ?A ?B ?H2] =>
+    destruct (proof_irrelevance _ H1 H2); reflexivity
+end.
+
+Hint Extern 1 =>
+match goal with
+    [|- PreOrder_Arrow ?P ?A ?B ?H1 = PreOrder_Arrow ?P ?A ?B ?H2] =>
+    destruct (proof_irrelevance _ H2 H1); reflexivity
+end.
+
+Hint Resolve PreOrder_refl PreOrder_trans.

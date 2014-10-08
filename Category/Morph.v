@@ -1,8 +1,3 @@
-(**
-    This file contains the basic definitions for Isomorphisms Monomorphisms, Epimorphisms and when two objects are isomorphic.
-
-*)
-
 Require Import Category.Category.
 Require Import Category.Tactics.
 
@@ -10,16 +5,16 @@ Class Isomorphism `{C : Category Obj Hom} {a b : Obj} (f : Hom a b) : Type :=
 {
   inverse_morphism : Hom b a;
   
-  left_inverse : inverse_morphism ∘ f = id;
+  left_inverse : (inverse_morphism ∘ f) = id;
   
-  right_inverse : f ∘ inverse_morphism = id
+  right_inverse : (f ∘ inverse_morphism) = id
 }.
 
 Arguments inverse_morphism {_ _ _ _ _} _ {_}.
 
-Notation "f '⁻¹'" := (inverse_morphism f) (at level 7, no associativity).
+Notation "f '⁻¹'" := (inverse_morphism f) (at level 7, no associativity) : morphism_scope.
 
-Instance Inverse_Isomorphism `{C : Category Obj Hom} {a b : Obj} {f : Hom a b} (I : Isomorphism f) : Isomorphism (inverse_morphism f) :=
+Instance Inverse_Isomorphism `{C : Category Obj Hom} {a b : Obj} {f : Hom a b} (I : Isomorphism f) : Isomorphism (f⁻¹) :=
 {
   inverse_morphism := f;
   left_inverse := right_inverse;
@@ -28,7 +23,7 @@ Instance Inverse_Isomorphism `{C : Category Obj Hom} {a b : Obj} {f : Hom a b} (
 
 Program Instance Isomorphism_Compose `{C : Category Obj Hom} {a b c : Obj} {f : Hom a b} {g : Hom b c} (I : Isomorphism f) (I' : Isomorphism g): Isomorphism (g ∘ f) :=
 {
-  inverse_morphism := (inverse_morphism f ∘ inverse_morphism g)
+  inverse_morphism := (f⁻¹ ∘ g⁻¹)
 }.
 
 Next Obligation. (* left_inverse *)

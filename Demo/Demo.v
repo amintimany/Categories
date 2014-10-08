@@ -46,7 +46,7 @@ Proof.
   exact(
       (fix m (n : nat) :=
         match n with
-          | O => algcons' (inl ST)
+          | O => algcons' (inl tt)
           | S n' => algcons' (inr (m n'))
         end) H
     ).
@@ -77,8 +77,8 @@ Proof.
   simpl.
   induction x.
   {
-    assert(H1 := equal_f f_com (inl ST)); cbv in H1; rewrite <- H1.
-    assert(H2 := equal_f g_com (inl ST)); cbv in H2; rewrite <- H2.
+    assert(H1 := equal_f f_com (inl tt)); cbv in H1; rewrite <- H1.
+    assert(H2 := equal_f g_com (inl tt)); cbv in H2; rewrite <- H2.
     trivial.
   }
   {
@@ -122,7 +122,7 @@ Instance CoNat_coalg : CoAlgebra S_nat_func :=
   Destructors :=
     fun x =>
       match x with
-        | CoO => inl ST
+        | CoO => inl tt
         | CoS n => inr n
       end
 }.

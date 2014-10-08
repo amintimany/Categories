@@ -28,7 +28,7 @@ Class Category (Obj : Type) (Hom : Obj → Obj → Type) : Type :=
   id_unit_right : ∀ (a b : Obj) (h : Hom a b), h ∘ id = h
 }.
 
-Notation "f ∘ g" := (compose g f).
+Notation "f ∘ g" := (compose g f) : morphism_scope.
 
 (* Allowing variables Obj and Hom be generalizable anywhere we work with categories *)
 
