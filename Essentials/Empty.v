@@ -1,4 +1,4 @@
-Inductive Empty : Type :=.
+Inductive Empty : Set :=.
 
 Hint Extern 1 =>
 let tac := (repeat intros ?); match goal with [H : Empty |- _] => contradict H end in
