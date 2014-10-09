@@ -6,7 +6,7 @@
 Require Import Category.Core.
 Require Import Functor.Core.
 
-Class NatTrans `{C : Category Obj} `{C' : Category Obj' Hom'} (F F' : Functor C C') :=
+Class NatTrans `{C : Category Obj Hom} `{C' : Category Obj' Hom'} (F F' : Functor C C') :=
 {
   Trans (c : Obj) : Hom' (F _o c) (F' _o c);
   Trans_com {c c' : Obj} (h : Hom c c') : (Trans c') ∘ F _a _ _ h = F' _a _ _ h ∘ (Trans c)
@@ -53,26 +53,26 @@ Proof.
   rewrite assoc; trivial.
 Qed.
 
-Program Instance NatTrans_id `{C : Category Obj Hom} `{C' : Category Obj'} {F : Functor C C'} : NatTrans F F :=
+Program Instance NatTrans_id `{C : Category Obj Hom} `{C' : Category Obj' Hom'} {F : Functor C C'} : NatTrans F F :=
 {
   Trans := fun x : Obj => F _a _ _ id
 }.
 
 (* NatTrans_id defined *)
 
-Theorem NatTrans_id_unit_left `{C : Category Obj Hom} `{C' : Category Obj'} {F F' : Functor C C'} (tr : NatTrans F F') : (NatTrans_compose tr NatTrans_id) = tr.
+Theorem NatTrans_id_unit_left `{C : Category Obj Hom} `{C' : Category Obj' Hom'} {F F' : Functor C C'} (tr : NatTrans F F') : (NatTrans_compose tr NatTrans_id) = tr.
 Proof.
   apply NatTrans_eq_simplify; simpl.
   extensionality x; auto.
 Qed.
 
-Theorem NatTrans_id_unit_right `{C : Category Obj Hom} `{C' : Category Obj'} {F F' : Functor C C'} (tr : NatTrans F F') : (NatTrans_compose NatTrans_id tr) = tr.
+Theorem NatTrans_id_unit_right `{C : Category Obj Hom} `{C' : Category Obj' Hom'} {F F' : Functor C C'} (tr : NatTrans F F') : (NatTrans_compose NatTrans_id tr) = tr.
 Proof.
   apply NatTrans_eq_simplify; simpl.
   extensionality x; auto.
 Qed.
 
-Instance Func_Cat `(C : Category Obj) `(C' : Category Obj') : Category (Functor C C') (λ F G, NatTrans F G) :=
+Instance Func_Cat `(C : Category Obj Hom) `(C' : Category Obj' Hom') : Category (Functor C C') (λ F G, NatTrans F G) :=
 {
   compose := @NatTrans_compose _ _ _ _ _ _;
 
@@ -88,7 +88,7 @@ Instance Func_Cat `(C : Category Obj) `(C' : Category Obj') : Category (Functor 
                
 }.
 
-Theorem NatIso `{C : Category Obj} `{C' : Category Obj'} (F G : Functor C C') (n : NatTrans F G) (n' : NatTrans G F) : (∀ (c : Obj), (Trans n c) ∘ (Trans n' c) = G _a _ _ (@id _ _ _ c)) -> (∀ (c : Obj), (Trans n' c) ∘ (Trans n c) = F _a _ _ (@id _ _ _ c))  -> F ≡ G.
+Theorem NatIso `{C : Category Obj Hom} `{C' : Category Obj' Hom'} (F G : Functor C C') (n : NatTrans F G) (n' : NatTrans G F) : (∀ (c : Obj), (Trans n c) ∘ (Trans n' c) = G _a _ _ (@id _ _ _ c)) -> (∀ (c : Obj), (Trans n' c) ∘ (Trans n c) = F _a _ _ (@id _ _ _ c))  -> F ≡ G.
 Proof.
   intros H1 H2.
   exists n; exists n'; apply NatTrans_eq_simplify; extensionality c; simpl; auto.

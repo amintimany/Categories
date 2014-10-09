@@ -5,9 +5,8 @@ Require Import Functor.Core.
 Require Import Cat.Cat.
 Require Import Ext_Cons.Prod_Cat.
 Require Import Basic_Cons.Product.
-Require Export Essentials.Types.
 
-Program Instance Prod_Cat_proj1 `(C : Category Obj) `(C' : Category Obj') : Functor (Prod_Cat C C') C :=
+Program Instance Prod_Cat_proj1 `(C : Category Obj Hom) `(C' : Category Obj' Hom') : Functor (Prod_Cat C C') C :=
 {
   FO := fun x => fst x;
   FA := fun _ _ f => fst f
@@ -15,7 +14,7 @@ Program Instance Prod_Cat_proj1 `(C : Category Obj) `(C' : Category Obj') : Func
 
 (* Prod_Cat_Proj1 defined *)
 
-Program Instance Prod_Cat_proj2 `(C : Category Obj) `(C' : Category Obj') : Functor (Prod_Cat C C') C' :=
+Program Instance Prod_Cat_proj2 `(C : Category Obj Hom) `(C' : Category Obj' Hom') : Functor (Prod_Cat C C') C' :=
 {
   FO := fun x => snd x;
   FA := fun _ _ f => snd f
@@ -24,7 +23,7 @@ Program Instance Prod_Cat_proj2 `(C : Category Obj) `(C' : Category Obj') : Func
 (* Prod_Cat_Proj2 defined *)
 
 
-Program Instance Prod_Cat_morph_ex `(C : Category Obj) `(C' : Category Obj') `(C'' : Category Obj'') (F : Functor C''  C) (G : Functor C'' C') : Functor C'' (Prod_Cat C C') :=
+Program Instance Prod_Cat_morph_ex `(C : Category Obj Hom) `(C' : Category Obj' Hom') `(C'' : Category Obj'' Hom'') (F : Functor C''  C) (G : Functor C'' C') : Functor C'' (Prod_Cat C C') :=
 {
   FO := fun x => (F _o x, G _o x);
   FA := fun _ _ f => (F _a _ _ f, G _a _ _ f)

@@ -3,9 +3,8 @@ Require Import Functor.Core.
 Require Import Cat.Cat.
 Require Import Basic_Cons.Terminal.
 Require Import Categories.Discr.
-Require Export Essentials.Types.
 
-Program Instance Functor_To_1_Cat `(C' : Category Obj) : Functor C' 1%category :=
+Program Instance Functor_To_1_Cat `(C' : Category Obj Hom) : Functor C' 1%category :=
 {
   FO := fun x => tt;
   FA := fun a b f => Discr_id _ _

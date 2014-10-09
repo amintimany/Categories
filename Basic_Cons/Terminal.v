@@ -10,7 +10,7 @@ Class Terminal `(C : Category Obj Hom) (term : Obj) : Type :=
   t_morph_unique : ∀ (d : Obj) (f g : Hom d term), f = g
 }.
 
-Theorem Terminal_iso `{C : Category Obj} (t t' : Obj) : Terminal C t → Terminal C t' → t ≡ t'.
+Theorem Terminal_iso `{C : Category Obj Hom} (t t' : Obj) : Terminal C t → Terminal C t' → t ≡ t'.
 Proof.
   intros [tm tmu] [tm' tmu'].
   exists (tm' t); exists (tm t'); trivial.

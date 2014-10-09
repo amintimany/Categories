@@ -1,7 +1,7 @@
 Require Import Category.Core.
 Require Import Functor.Core.
 
-Class Algebra `{C : Category Obj} (T : Functor C C) : Type :=
+Class Algebra `{C : Category Obj Hom} (T : Functor C C) : Type :=
 {
   Alg_Carrier : Obj;
   Constructors : Hom (T _o Alg_Carrier) Alg_Carrier
@@ -47,7 +47,7 @@ Proof.
 Qed.
 
 
-Theorem Algebra_Hom_compose_assoc `{C : Category Obj} {T : Functor C C} {alg alg' alg'' alg''' : Algebra T} (f : Algebra_Hom alg alg') (g : Algebra_Hom alg' alg'') (h : Algebra_Hom alg'' alg''') :
+Theorem Algebra_Hom_compose_assoc `{C : Category Obj Hom} {T : Functor C C} {alg alg' alg'' alg''' : Algebra T} (f : Algebra_Hom alg alg') (g : Algebra_Hom alg' alg'') (h : Algebra_Hom alg'' alg''') :
   (Algebra_Hom_compose f (Algebra_Hom_compose g h)) = (Algebra_Hom_compose (Algebra_Hom_compose f g) h).
 Proof.
   apply Algebra_Hom_eq_simplify; simpl; rewrite assoc; trivial.
@@ -72,7 +72,7 @@ Proof.
   apply Algebra_Hom_eq_simplify; simpl; simpl_ids; reflexivity.
 Qed.
 
-Instance Algebra_Cat `{C : Category Obj} (T : Functor C C) : Category (Algebra T) (λ alg alg', Algebra_Hom alg alg') :=
+Instance Algebra_Cat `{C : Category Obj Hom} (T : Functor C C) : Category (Algebra T) (λ alg alg', Algebra_Hom alg alg') :=
 {
   compose := @Algebra_Hom_compose _ _ _ T;
 

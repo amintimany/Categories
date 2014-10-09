@@ -45,7 +45,7 @@ End Functor_Compose.
 (* Associativity of functor composition *)
 
 Section Functor_Assoc.
-    Context `{C1 : Category Obj1} `{C2 : Category Obj2} `{C3 : Category Obj3} `{C4 : Category Obj4} (F : Functor C1 C2) (G : Functor C2 C3) (H : Functor C3 C4).
+    Context `{C1 : Category Obj1 Hom1} `{C2 : Category Obj2 Hom2} `{C3 : Category Obj3 Hom3} `{C4 : Category Obj4 Hom4} (F : Functor C1 C2) (G : Functor C2 C3) (H : Functor C3 C4).
 
   Theorem Functor_assoc :
     (Functor_compose F (Functor_compose G H)) = (Functor_compose (Functor_compose F G) H).

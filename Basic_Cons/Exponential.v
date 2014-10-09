@@ -199,7 +199,7 @@ Existing Instance HE_exp_exp.
 
 Section Curry_UnCurry.
 
-  Context  `{C : Category Obj} {HP : Has_Products C} {HE : Has_Exponentials C} {a b c : Obj}.
+  Context  `{C : Category Obj Hom} {HP : Has_Products C} {HE : Has_Exponentials C} {a b c : Obj}.
 
   Theorem curry_uncurry (f : Hom a (c ↑ b)) : curry (uncurry f) = f.
   Proof.

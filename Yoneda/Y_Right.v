@@ -9,7 +9,7 @@ Require Import Yoneda.Y_emb.
 
 Local Obligation Tactic := idtac.
 
-Program Instance Y_right `(C : Category Obj) : Functor (Prod_Cat C ^op (Func_Cat C ^op Type_Cat)) Type_Cat :=
+Program Instance Y_right `(C : Category Obj Hom) : Functor (Prod_Cat C ^op (Func_Cat C ^op Type_Cat)) Type_Cat :=
 {
   FO := fun x => (snd x) _o (fst x);
   FA := fun x y f => ((snd y) _a _ _ (fst f)) ∘ (@Trans _ _ _ _ _ _ _ _ (snd f) (fst x))

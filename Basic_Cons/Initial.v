@@ -15,7 +15,7 @@ Class Initial `(C : Category Obj Hom) (init : Obj) : Type :=
   i_morph_unique : ∀ (d : Obj) (f g : Hom init d), f = g
 }.
 
-Theorem Initial_iso `{C : Category Obj} (i i' : Obj) : Initial C i → Initial C i' → i ≡ i'.
+Theorem Initial_iso `{C : Category Obj Hom} (i i' : Obj) : Initial C i → Initial C i' → i ≡ i'.
 Proof.
   intros [im imu] [im' imu'].
   exists (im i'); exists (im' i); trivial.

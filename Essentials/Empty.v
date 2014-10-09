@@ -1,4 +1,3 @@
-
 Inductive Empty : Type :=.
 
 Hint Extern 1 =>

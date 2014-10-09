@@ -2,7 +2,7 @@ Require Import Category.Core.
 Require Import Functor.Core.
 
 
-Class CoAlgebra `{C : Category Obj} (T : Functor C C) : Type :=
+Class CoAlgebra `{C : Category Obj Hom} (T : Functor C C) : Type :=
 {
   CoAlg_Carrier : Obj;
   Destructors : Hom CoAlg_Carrier (T _o CoAlg_Carrier)
@@ -45,7 +45,7 @@ Qed.
 (* Algebra_Hom_compose defined! *)
 
 
-Theorem CoAlgebra_Hom_compose_assoc `{C : Category Obj} {T : Functor C C} {calg calg' calg'' calg''' : CoAlgebra T} (f : CoAlgebra_Hom calg calg') (g : CoAlgebra_Hom calg' calg'') (h : CoAlgebra_Hom calg'' calg''') :
+Theorem CoAlgebra_Hom_compose_assoc `{C : Category Obj Hom} {T : Functor C C} {calg calg' calg'' calg''' : CoAlgebra T} (f : CoAlgebra_Hom calg calg') (g : CoAlgebra_Hom calg' calg'') (h : CoAlgebra_Hom calg'' calg''') :
   (CoAlgebra_Hom_compose f (CoAlgebra_Hom_compose g h)) = (CoAlgebra_Hom_compose (CoAlgebra_Hom_compose f g) h).
 Proof.
   apply CoAlgebra_Hom_eq_simplify; simpl; rewrite assoc; reflexivity.
@@ -58,19 +58,19 @@ Program Instance CoAlgebra_Hom_id `{C : Category Obj Hom} {T : Functor C C} (cal
 
 (* Algebra_Hom_id Defined *)
 
-Theorem CoAlgebra_Hom_id_unit_left `{C : Category Obj} {T : Functor C C} {calg calg' : CoAlgebra T} (f : CoAlgebra_Hom calg calg') :
+Theorem CoAlgebra_Hom_id_unit_left `{C : Category Obj Hom} {T : Functor C C} {calg calg' : CoAlgebra T} (f : CoAlgebra_Hom calg calg') :
   (CoAlgebra_Hom_compose f (CoAlgebra_Hom_id calg')) = f.
 Proof.
   apply CoAlgebra_Hom_eq_simplify; simpl; simpl_ids; reflexivity.
 Qed.
 
-Theorem CoAlgebra_Hom_id_unit_right `{C : Category Obj} {T : Functor C C} {calg calg' : CoAlgebra T} (f : CoAlgebra_Hom calg calg') :
+Theorem CoAlgebra_Hom_id_unit_right `{C : Category Obj Hom} {T : Functor C C} {calg calg' : CoAlgebra T} (f : CoAlgebra_Hom calg calg') :
   (CoAlgebra_Hom_compose (CoAlgebra_Hom_id calg) f) = f.
 Proof.
   apply CoAlgebra_Hom_eq_simplify; simpl; simpl_ids; reflexivity.
 Qed.
 
-Instance CoAlgebra_Cat `{C : Category Obj} (T : Functor C C) : Category (CoAlgebra T) (λ calg calg', CoAlgebra_Hom calg calg') :=
+Instance CoAlgebra_Cat `{C : Category Obj Hom} (T : Functor C C) : Category (CoAlgebra T) (λ calg calg', CoAlgebra_Hom calg calg') :=
 {
   compose := @CoAlgebra_Hom_compose _ _ _ T;
 

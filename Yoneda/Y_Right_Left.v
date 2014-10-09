@@ -11,7 +11,7 @@ Require Import Yoneda.Y_Right.
 
 Local Obligation Tactic := idtac.
 
-Program Instance Y_right_to_left_NT `(C : Category Obj) (c : Obj) (F : Functor C ^op Type_Cat) (h : F _o c) : NatTrans (Yoneda_emb_O _ c) F :=
+Program Instance Y_right_to_left_NT `(C : Category Obj Hom) (c : Obj) (F : Functor C ^op Type_Cat) (h : F _o c) : NatTrans (Yoneda_emb_O _ c) F :=
 {
   Trans := fun c' => fun g => (F _a _ _ g) h
 }.
@@ -28,7 +28,7 @@ Proof.
   trivial.
 Qed.
 
-Program Instance Y_right_to_left `(C : Category Obj) : NatTrans (Y_right C) (Y_left C) :=
+Program Instance Y_right_to_left `(C : Category Obj Hom) : NatTrans (Y_right C) (Y_left C) :=
 {
   Trans := fun c_F => fun h => Y_right_to_left_NT _ (fst c_F) (snd c_F) h
 }.

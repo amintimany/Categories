@@ -1,5 +1,5 @@
 Require Import Category.Core.
-Require Import Essentials.Types.
+Require Import Essentials.Empty.
 
 Section Discr.
   Context (Obj : Type).
@@ -37,7 +37,7 @@ Notation "0" := (Discr_Cat Empty) : category_scope.
 Notation "1" := (Discr_Cat unit) : category_scope.
 
 Inductive S_Type (T : Type) : Type :=
-| NEW : S_Type T
+| NEW : unit → S_Type T
 | OLD : T → S_Type T
 .
 

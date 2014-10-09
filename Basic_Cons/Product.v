@@ -42,7 +42,7 @@ Proof.
   ); auto.
 Qed.
 
-Definition Arrow_Product `{C : Category Obj}
+Definition Arrow_Product `{C : Category Obj Hom}
            {a b c d x y : Obj}
            (pabx : Product C a b x)
            (pcdy : Product C c d y)

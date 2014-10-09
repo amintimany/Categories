@@ -3,7 +3,7 @@ Require Import Functor.Core.
 Require Import Cat.Cat.
 Require Import Basic_Cons.Initial.
 Require Import Categories.Discr.
-Require Import Essentials.Types.
+Require Import Essentials.Empty.
 
 Program Instance Functor_From_Empty_Cat `(C' : Category Obj Hom) : Functor 0%category C' :=
 {

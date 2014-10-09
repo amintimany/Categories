@@ -40,7 +40,7 @@ Proof.
 Qed.
 
 
-Program Definition ARROW_ARROW_compose `{C : Category Obj} {x y z} (h : ARROW_ARROW x y) (h' : ARROW_ARROW y z) : ARROW_ARROW x z :=
+Program Definition ARROW_ARROW_compose `{C : Category Obj Hom} {x y z} (h : ARROW_ARROW x y) (h' : ARROW_ARROW y z) : ARROW_ARROW x z :=
   mkARROW_ARROW _ _ _ x z
       ((ARROW_ARROW_HOM _ _ h') ∘ (ARROW_ARROW_HOM _ _ h))
       ((ARROW_ARROW_HOM' _ _ h') ∘ (ARROW_ARROW_HOM' _ _ h))
@@ -59,12 +59,12 @@ Qed.
 
 (* ARROW_ARROW_compose defined *)
 
-Program Definition ARROW_ARROW_id `{C : Category Obj} {x} : ARROW_ARROW x x :=
+Program Definition ARROW_ARROW_id `{C : Category Obj Hom} {x} : ARROW_ARROW x x :=
   mkARROW_ARROW _ _ _ x x id id _.
 
 (* ARROW_ARROW_id defined *)
 
-Program Instance Arrow_Cat `(C : Category Obj) : Category (@ARROW _ _ C) (λ f g, ARROW_ARROW f g) :=
+Program Instance Arrow_Cat `(C : Category Obj Hom) : Category (@ARROW _ _ C) (λ f g, ARROW_ARROW f g) :=
 {
   compose := λ _ _ _ f g, ARROW_ARROW_compose f g;
   

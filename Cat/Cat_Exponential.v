@@ -9,11 +9,10 @@ Require Import Ext_Cons.Prod_Cat.
 Require Import Basic_Cons.Product.
 Require Import Basic_Cons.Exponential.
 Require Import NatTrans.NatTrans.
-Require Export Essentials.Types.
 
 Local Obligation Tactic := idtac.
 
-Program Instance Exp_Cat_eval `(C : Category Obj) `(C' : Category Obj') : Functor (Prod_Cat (Func_Cat C C') C) C' :=
+Program Instance Exp_Cat_eval `(C : Category Obj Hom) `(C' : Category Obj' Hom') : Functor (Prod_Cat (Func_Cat C C') C) C' :=
 {
   FO := fun x => (fst x) _o (snd x);
   FA := fun A B f => ((fst B) _a _ _ (snd f)) ∘ (@Trans _ _ _ _ _ _ _ _ (fst f) _)
@@ -58,7 +57,7 @@ Qed.
 
 Local Obligation Tactic := program_simpl; auto.
 
-Program Instance Exp_Cat_morph_ex_O `{C : Category Obj} `{C' : Category Obj'} `{C'' : Category Obj''} (F : Functor (Prod_Cat C'' C)  C') (a : Obj'') : Functor C C' :=
+Program Instance Exp_Cat_morph_ex_O `{C : Category Obj Hom} `{C' : Category Obj' Hom'} `{C'' : Category Obj'' Hom''} (F : Functor (Prod_Cat C'' C)  C') (a : Obj'') : Functor C C' :=
 {
   FO := fun x => F _o (a, x);
   FA := fun _ _ f => F _a _ _ (@id _ _ _ a, f)
@@ -73,7 +72,7 @@ Program Instance Exp_Cat_morph_ex_A `{C : Category Obj Hom} `{C' : Category Obj'
 
 (* Exp_Cat_morph_ex_A defined *)
 
-Program Instance Exp_Cat_morph_ex `{C : Category Obj} `{C' : Category Obj'} `{C'' : Category Obj''} (F : Functor (Prod_Cat C'' C)  C') : Functor C'' (Func_Cat C C') :=
+Program Instance Exp_Cat_morph_ex `{C : Category Obj Hom} `{C' : Category Obj' Hom'} `{C'' : Category Obj'' Hom''} (F : Functor (Prod_Cat C'' C)  C') : Functor C'' (Func_Cat C C') :=
 {
   FO := Exp_Cat_morph_ex_O F;
   FA := Exp_Cat_morph_ex_A F
@@ -158,10 +157,7 @@ Proof.
         unfold Trans in H'';
         rewrite <- H''
     end.
-
-    destruct HO.
-    simpl in *.
-    reflexivity.
+    destruct HO; simpl in *; reflexivity.
   }
   {
     extensionality x.
@@ -179,9 +175,9 @@ Proof.
           simpl in H'';
           repeat (repeat rewrite F_id in H'';
           simpl in H'');
-          repeat rewrite id_unit_right in H''
+          repeat rewrite id_unit_right in H'';
+          trivial
     end.
-    trivial.
   }
 Qed.
 
@@ -192,9 +188,6 @@ Instance Cat_Has_Exponentials : Has_Exponentials Cat :=
   HE_exp := fun C C' => (mkCAT _ _ (Func_Cat (THE_CAT C) (THE_CAT C')));
   HE_exp_exp := Cat_Exponentials
 }.
-
-
-
 
 
 
