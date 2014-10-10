@@ -88,8 +88,12 @@ Section Limit_CoLimit.
     {
       intros H.
       destruct f; destruct g.
-      dependent destruction H.
-      auto 2.
+      dependent destruction C.
+      match goal with
+          [|- Build_CoCone_Morph _ _ _ _ ?A = Build_CoCone_Morph _ _ _ _ ?B] =>
+          destruct (proof_irrelevance _ A B)
+      end.
+      reflexivity.
     }
     {
       destruct C; destruct J; destruct D; destruct cn.
@@ -124,8 +128,12 @@ Section CoLimit_Limit.
     {
       intros H.
       destruct f; destruct g.
-      dependent destruction H.
-      auto 2.
+      dependent destruction C.
+      match goal with
+          [|- Build_Cone_Morph _ _ _ _ ?A = Build_Cone_Morph _ _ _ _ ?B] =>
+          destruct (proof_irrelevance _ A B)
+      end.
+      reflexivity.
     }
     {
       destruct C; destruct J; destruct D; destruct cn.

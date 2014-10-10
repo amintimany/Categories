@@ -84,7 +84,7 @@ Notation CoLimit D c := (Initial (CoCone_Cat D) c).
 
 Notation Has_CoLimit D := (Has_Initial (CoCone_Cat D)).
 
-Notation Has_CoLimits C := (∀ `{J : Category Obj' Hom'} (D : Functor J C), Has_CoLimit D).
+Notation CoComplete C := (∀ `{J : Category Obj' Hom'} (D : Functor J C), Has_CoLimit D).
 
 
 

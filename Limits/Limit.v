@@ -84,7 +84,7 @@ Notation Limit D c := (Terminal (Cone_Cat D) c).
 
 Notation Has_Limit D := (Has_Terminal (Cone_Cat D)).
 
-Notation Has_Limits C := (∀ `{J : Category Obj' Hom'} (D : Functor J C), Has_Limit D).
+Notation Complete C := (∀ `{J : Category Obj' Hom'} (D : Functor J C), Has_Limit D).
 
 
 
