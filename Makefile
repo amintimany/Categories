@@ -7,7 +7,7 @@ Sources := $(Modules:%=%.v)
 all : Coq_Make
 	$(MAKE) -f Coq_Make all
 
-clean :
+clean : Coq_Make
 	$(MAKE) -f Coq_Make clean; rm -rf Coq_Make
 
 Coq_Make: Makefile Modules $(Sources)
