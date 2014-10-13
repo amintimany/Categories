@@ -8,5 +8,6 @@ Require Export Basic_Cons.Equalizer.
 Require Export Basic_Cons.CoEqualizer.
 Require Export Basic_Cons.PullBack.
 Require Export Basic_Cons.PushOut.
+Require Export General_Product.
 
 

@@ -4,16 +4,16 @@ Require Import Basic_Cons.Initial.
 
 Section CoCones.
 
-  Context {ObjJ : Type} {HomJ : ObjJ → ObjJ → Type} {J : Category ObjJ HomJ}
+  Context `{J : Category Obj' Hom'}
           `{C : Category Obj Hom} (D : Functor J C).
   
   Class CoCone : Type :=
     {
       CoCone_obj : Obj;
   
-      CoCone_arrow : ∀ (c : ObjJ), Hom (D _o c) CoCone_obj;
+      CoCone_arrow : ∀ (c : Obj'), Hom (D _o c) CoCone_obj;
 
-      CoCone_com : ∀ (c d : ObjJ) (h : HomJ c d), (CoCone_arrow d) ∘ (D _a _ _ h) = CoCone_arrow c
+      CoCone_com : ∀ (c d : Obj') (h : Hom' c d), (CoCone_arrow d) ∘ (D _a _ _ h) = CoCone_arrow c
     }.
 
   Coercion CoCone_obj : CoCone >-> Obj.
@@ -22,7 +22,7 @@ Section CoCones.
     {
       CoCone_Morph_arrow : Hom c c';
 
-      CoCone_Morph_com : ∀ (a : ObjJ),  CoCone_Morph_arrow ∘ (@CoCone_arrow c a) = (@CoCone_arrow c' a)
+      CoCone_Morph_com : ∀ (a : Obj'),  CoCone_Morph_arrow ∘ (@CoCone_arrow c a) = (@CoCone_arrow c' a)
     }.
 
   Coercion CoCone_Morph_arrow : CoCone_Morph >-> Hom.

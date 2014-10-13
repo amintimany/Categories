@@ -44,7 +44,8 @@ Mod_Basic_Cons =\
 	Basic_Cons/Equalizer\
 	Basic_Cons/CoEqualizer\
 	Basic_Cons/PullBack\
-	Basic_Cons/PushOut
+	Basic_Cons/PushOut\
+	Basic_Cons/General_Product
 
 Mod_Algebras =\
 	Algebras/Algebras\

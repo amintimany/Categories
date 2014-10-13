@@ -3,7 +3,7 @@ Require Import Category.Core.
 (*
    The Arrow Category of C:
      Objects : Arrows of C
-     Arrows: g -> h is a pair of arrows (f,f') s.t. the ollowing commutes:
+     Arrows: for g : a → b and h : c → d, an arrow from g to h is a pair of arrows (f,f') s.t. the ollowing commutes:
 
              g
          a  –––→  b
@@ -12,101 +12,101 @@ Require Import Category.Core.
          ↓        ↓
          c  ——–→ d
              h
-
-     The rest is trivial.
 *)
 
-Record ARROW `{Category Obj Hom} :=
-  mkARROW{
-      ARROW_ORIG : Obj;
-      ARROW_TARG : Obj;
-      ARROW_HOM : Hom ARROW_ORIG ARROW_TARG
+Section Arrow_Cat.
+
+  Class Arrow `(C : Category Obj Hom) :=
+    {
+      Orig : Obj;
+      Targ : Obj;
+      Arr : Hom Orig Targ
     }.
 
-Record ARROW_ARROW `{Category Obj Hom} (a b : ARROW) :=
-  mkARROW_ARROW{
-      ARROW_ARROW_HOM : Hom (ARROW_ORIG a) (ARROW_ORIG b);
-      ARROW_ARROW_HOM' : Hom (ARROW_TARG a) (ARROW_TARG b);
-      ARROW_ARROW_com : ARROW_ARROW_HOM' ∘ (ARROW_HOM a) = (ARROW_HOM b) ∘ (ARROW_ARROW_HOM)
+  Arguments Orig {_ _ _} _ : clear implicits.
+  Arguments Targ {_ _ _} _ : clear implicits.
+  Arguments Arr {_ _ _} _ : clear implicits.
+
+  Class Arrow_Hom `(C : Category Obj Hom) (a b : Arrow C) :=
+    {
+      Arr_H : Hom (Orig a) (Orig b);
+      Arr_H' : Hom (Targ a) (Targ b);
+      Arr_Hom_com : Arr_H' ∘ (Arr a) = (Arr b) ∘ Arr_H
     }.
 
-Lemma ARROW_ARROW_eq_simplify `{Category Obj Hom} {a b : ARROW} (f g : ARROW_ARROW a b) : ARROW_ARROW_HOM _ _ f = ARROW_ARROW_HOM _ _ g → ARROW_ARROW_HOM' _ _ f = ARROW_ARROW_HOM' _ _ g → f = g.
-Proof.
-  intros H1 H2.
-  destruct f as [fh fh' fc]; destruct g as [gh gh' gc]; simpl in *.
-  destruct H1; destruct H2.
-  destruct (proof_irrelevance _ fc gc).
-  reflexivity.
-Qed.
+  Arguments Arr_H {_ _ _ _ _} _ : clear implicits.
+  Arguments Arr_H' {_ _ _ _ _} _ : clear implicits.
+  Arguments Arr_Hom_com {_ _ _ _ _} _ : clear implicits.
 
+  Context `(C : Category Obj Hom).
 
-Program Definition ARROW_ARROW_compose `{C : Category Obj Hom} {x y z} (h : ARROW_ARROW x y) (h' : ARROW_ARROW y z) : ARROW_ARROW x z :=
-  mkARROW_ARROW _ _ _ x z
-      ((ARROW_ARROW_HOM _ _ h') ∘ (ARROW_ARROW_HOM _ _ h))
-      ((ARROW_ARROW_HOM' _ _ h') ∘ (ARROW_ARROW_HOM' _ _ h))
-      _.
+  Section Arrow_Hom_eq_simplify.
+    Context {a b : Arrow C} (f g : Arrow_Hom C a b).
 
-Next Obligation. (* ARROW_ARROW_com *)
-Proof.
-  destruct h as [hh hh' hc]; destruct h' as [h'h h'h' h'c].
-  simpl.
-  repeat rewrite assoc.
-  rewrite hc.
-  match goal with [|- ?A ∘ ?B ∘ ?C = _] => reveal_comp A B end.
-  rewrite h'c.
-  rewrite assoc; auto.
-Qed.
+    Lemma Arrow_Hom_eq_simplify : Arr_H f = Arr_H g → Arr_H' f = Arr_H' g → f = g.
+    Proof.
+      intros H1 H2.
+      destruct f as [fh fh' fc]; destruct g as [gh gh' gc]; simpl in *.
+      destruct H1; destruct H2.
+      destruct (proof_irrelevance _ fc gc).
+      reflexivity.
+    Qed.
 
-(* ARROW_ARROW_compose defined *)
+  End Arrow_Hom_eq_simplify.
 
-Program Definition ARROW_ARROW_id `{C : Category Obj Hom} {x} : ARROW_ARROW x x :=
-  mkARROW_ARROW _ _ _ x x id id _.
+  Hint Extern 1 (?A = ?B :> Arrow_Hom _ _ _) => apply Arrow_Hom_eq_simplify; simpl.
 
-(* ARROW_ARROW_id defined *)
+  Section Compose_id.
 
-Program Instance Arrow_Cat `(C : Category Obj Hom) : Category (@ARROW _ _ C) (λ f g, ARROW_ARROW f g) :=
-{
-  compose := λ _ _ _ f g, ARROW_ARROW_compose f g;
-  
-  id := λ a, ARROW_ARROW_id
+    Context {x y z} (h : Arrow_Hom C x y) (h' : Arrow_Hom C y z).
 
-}.
+    Program Instance Arrow_Hom_compose : Arrow_Hom C x z :=
+      {
+        Arr_H := (Arr_H h') ∘ (Arr_H h);
+        Arr_H' := (Arr_H' h') ∘ (Arr_H' h)
+      }.
 
-Next Obligation. (* assoc *)
-Proof.
-  destruct a as [aor atr ah]; destruct b as [bor btr bh];
-    destruct c as [cor ctr ch]; destruct d as [dor dtr dh];
-    destruct f as [fg fh' fc]; destruct g as [gg gh' gc]; destruct h as [hh hh' hc];
-    simpl in *.
-  
-  apply ARROW_ARROW_eq_simplify; simpl; rewrite assoc; trivial.
-Qed.
+    Next Obligation. (* Arr_Hom_com *)
+    Proof.
+      destruct h as [hh hh' hc]; destruct h' as [h'h h'h' h'c].
+      simpl.
+      repeat rewrite assoc.
+      rewrite hc.
+      match goal with [|- ?A ∘ ?B ∘ ?C = _] => reveal_comp A B end.
+      rewrite h'c.
+      rewrite assoc; auto.
+    Qed.
 
-Next Obligation. (* assoc_sym *)
-Proof.
-  destruct a as [aor atr ah]; destruct b as [bor btr bh];
-    destruct c as [cor ctr ch]; destruct d as [dor dtr dh];
-    destruct f as [fg fh' fc]; destruct g as [gg gh' gc]; destruct h as [hh hh' hc];
-    simpl in *.
-  
-  apply ARROW_ARROW_eq_simplify; simpl; rewrite assoc; trivial.
-Qed.
+    (* Arrow_Hom_compose defined *)
 
+    Program Instance Arrow_id : Arrow_Hom C x x :=
+      {
+        Arr_H := id;
+        Arr_H' := id
+      }.
 
-Next Obligation. (* id_unit_left *)
-Proof.
-  destruct a as [aor atr ah]; destruct b as [bor btr bh];
-    destruct h as [hg hh' hc];
-    simpl in *.
-  apply ARROW_ARROW_eq_simplify; simpl; auto.
-Qed.
+    (* Arrow_Hom_id defined *)
 
-Next Obligation. (* id_unit_right *)
-Proof.
-  destruct a as [aor atr ah]; destruct b as [bor btr bh];
-    destruct h as [hg hh' hc];
-    simpl in *.
-    apply ARROW_ARROW_eq_simplify; simpl; auto.
-Qed.
+  End Compose_id.
 
-(* Arrow_Cat defined *)
+  Program Instance Arrow_Cat : Category (Arrow C) (Arrow_Hom C) :=
+    {
+      compose := λ _ _ _ f g, Arrow_Hom_compose f g;
+      
+      id := λ a, Arrow_id
+    }.
+
+  (* Arrow_Cat defined *)
+
+End Arrow_Cat.
+
+Hint Extern 1 (?A = ?B :> Arrow_Hom _ _ _) => apply Arrow_Hom_eq_simplify; simpl.
+
+Arguments Orig {_ _ _} _ : clear implicits.
+Arguments Targ {_ _ _} _ : clear implicits.
+Arguments Arr {_ _ _} _ : clear implicits.
+
+Arguments Arr_H {_ _ _ _ _} _ : clear implicits.
+Arguments Arr_H' {_ _ _ _ _} _ : clear implicits.
+Arguments Arr_Hom_com {_ _ _ _ _} _ : clear implicits.
+

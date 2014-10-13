@@ -1,5 +1,4 @@
 Require Import Category.Core.
-Require Import Ext_Cons.Core.
 Require Import Functor.Core.
 
 (* Terminal Object *)

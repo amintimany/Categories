@@ -1,5 +1,5 @@
 Require Import Category.Core.
-Require Import Ext_Cons.Core.
+Require Import Ext_Cons.Prod_Cat.
 Require Import Functor.Core.
 
 Class Sum `(C : Category Obj Hom) (c d p : Obj) : Type :=
@@ -21,23 +21,7 @@ Proof.
   intros [S1 S2 SX SXC1 SXC2 SU] [S1' S2' SX' SXC1' SXC2' SU'].
   exists (SX p' S1' S2'); exists (SX' p S1 S2);
   [apply (SU p S1 S2)| apply (SU' p' S1' S2')]; trivial;
-  (
-    let simplify A B :=
-        match B with
-          | S1 => replace (A ∘ B) with S1'
-          | S1' => replace (A ∘ B) with S1
-          | S2 => replace (A ∘ B) with S2'
-          | S2' => replace (A ∘ B) with S2
-        end
-    in
-      repeat
-        match goal with
-          | [|- (?A ∘ ?B) ∘ ?C = ?D] =>
-            reveal_comp B C; simplify B C
-          | [|- ?A ∘ ?B = ?C] => simplify A B
-      end
-  ); auto
-  .
+  rewrite assoc; repeat (rewrite SXC1 || rewrite SXC2 || rewrite SXC1' || rewrite SXC2'); trivial.
 Qed.
 
 

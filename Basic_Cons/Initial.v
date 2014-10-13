@@ -1,9 +1,4 @@
-(**
-    This file contains basic internal constructions of category theory. E.g., initial and terminal objects, products, etc.
-*)
-
 Require Import Category.Core.
-Require Import Ext_Cons.Core.
 Require Import Functor.Core.
 
 (* Initial Object *)

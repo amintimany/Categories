@@ -4,16 +4,16 @@ Require Import Basic_Cons.Terminal.
 
 Section Cones.
 
-  Context {ObjJ : Type} {HomJ : ObjJ → ObjJ → Type} {J : Category ObjJ HomJ}
+  Context `{J : Category Obj' Hom'}
           `{C : Category Obj Hom} (D : Functor J C).
   
   Class Cone : Type :=
     {
       Cone_obj : Obj;
   
-      Cone_arrow : ∀ (c : ObjJ), Hom Cone_obj (D _o c);
+      Cone_arrow : ∀ (c : Obj'), Hom Cone_obj (D _o c);
 
-      Cone_com : ∀ (c d : ObjJ) (h : HomJ c d), (D _a _ _ h) ∘ (Cone_arrow c) = Cone_arrow d
+      Cone_com : ∀ (c d : Obj') (h : Hom' c d), (D _a _ _ h) ∘ (Cone_arrow c) = Cone_arrow d
     }.
 
   Coercion Cone_obj : Cone >-> Obj.
@@ -22,7 +22,7 @@ Section Cones.
     {
       Cone_Morph_arrow : Hom c c';
 
-      Cone_Morph_com : ∀ (a : ObjJ),  (@Cone_arrow c' a) ∘ Cone_Morph_arrow = (@Cone_arrow c a)
+      Cone_Morph_com : ∀ (a : Obj'),  (@Cone_arrow c' a) ∘ Cone_Morph_arrow = (@Cone_arrow c a)
     }.
 
   Coercion Cone_Morph_arrow : Cone_Morph >-> Hom.

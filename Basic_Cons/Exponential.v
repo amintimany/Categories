@@ -1,5 +1,5 @@
 Require Import Category.Core.
-Require Import Ext_Cons.Core.
+Require Import Ext_Cons.Prod_Cat.
 Require Import Functor.Core.
 Require Import Basic_Cons.Product.
 

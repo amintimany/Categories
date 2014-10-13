@@ -1,5 +1,7 @@
 Require Import Category.Core.
-Require Import Basic_Cons.Core.
+Require Import Basic_Cons.CCC.
+Require Import Basic_Cons.Initial.
+Require Import Basic_Cons.Sum.
 Require Export Essentials.Empty.
 
 Local Obligation Tactic := program_simpl; auto 3.

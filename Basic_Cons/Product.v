@@ -1,5 +1,5 @@
 Require Import Category.Core.
-Require Import Ext_Cons.Core.
+Require Import Ext_Cons.Prod_Cat.
 Require Import Functor.Core.
 
 (* Product Object *)
@@ -24,22 +24,8 @@ Proof.
   intros [P1 P2 PX PXC1 PXC2 PU] [P1' P2' PX' PXC1' PXC2' PU'].
   exists (PX' p P1 P2); exists (PX p' P1' P2');
   [apply (PU p P1 P2) | apply (PU' p' P1' P2')]; trivial;
-  (
-    let simplify A B :=
-        match A with
-          | P1 => replace (A ∘ B) with P1'
-          | P1' => replace (A ∘ B) with P1
-          | P2 => replace (A ∘ B) with P2'
-          | P2' => replace (A ∘ B) with P2
-        end
-    in
-      repeat
-        match goal with
-          | [|- ?A ∘ ?B ∘ ?C = ?D] =>
-            reveal_comp A B; simplify A B
-          | [|- ?A ∘ ?B = ?C] => simplify A B
-      end
-  ); auto.
+  rewrite <- assoc;
+  repeat (rewrite PXC1 || rewrite PXC2 || rewrite PXC1' || rewrite PXC2'); trivial.
 Qed.
 
 Definition Arrow_Product `{C : Category Obj Hom}
