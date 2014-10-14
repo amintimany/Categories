@@ -39,13 +39,16 @@ Mod_Basic_Cons =\
 	Basic_Cons/Facts/Init_Prod\
 	Basic_Cons/Facts/Term_Prod\
 	Basic_Cons/Facts/Core\
+	Basic_Cons/Facts/Equalizer_Monic\
+	Basic_Cons/Facts/CoEqualizer_Epic\
 	Basic_Cons/Core\
 	Basic_Cons/CCC\
 	Basic_Cons/Equalizer\
 	Basic_Cons/CoEqualizer\
 	Basic_Cons/PullBack\
 	Basic_Cons/PushOut\
-	Basic_Cons/General_Product
+	Basic_Cons/General_Product\
+	Basic_Cons/General_Sum
 
 Mod_Algebras =\
 	Algebras/Algebras\
