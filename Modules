@@ -7,6 +7,7 @@ Mod_Category = \
 	Category/Tactics\
 	Category/Opposite\
 	Category/Morph\
+	Category/SubCategory\
 	Category/Core
 
 Mod_Ext_Cons =\
@@ -19,6 +20,7 @@ Mod_Functor =\
 	Functor/Functor_Ops\
 	Functor/Functor_Properties\
 	Functor/Tactics\
+	Functor/Functor_Image\
 	Functor/Core\
 	Functor/Representable/Core\
 	Functor/Representable/Hom_Func
@@ -81,7 +83,8 @@ Mod_Limits =\
 	Limits/Limit\
 	Limits/CoLimit\
 	Limits/Duality\
-	Limits/Core
+	Limits/Core\
+	Limits/Gen_Prod_Eq_Limits
 
 Mod_Categories =\
 	Categories/Discr\

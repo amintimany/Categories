@@ -2,7 +2,7 @@ Require Import Category.Core.
 Require Import Functor.Core.
 Require Import Basic_Cons.Terminal.
 
-Section Cones.
+Section Limit.
 
   Context `{J : Category Obj' Hom'}
           `{C : Category Obj Hom} (D : Functor J C).
@@ -69,7 +69,12 @@ Section Cones.
 
   (* Cone_Cat defined *)
 
-End Cones.
+  Class Limit (l : Cone) : Type :=
+    {
+      Lim_term : Terminal Cone_Cat l
+    }.
+
+End Limit.
 
 Arguments Cone_obj {_ _ _ _ _ _ _} _.
 Arguments Cone_arrow {_ _ _ _ _ _ _} _ _.
@@ -80,12 +85,11 @@ Arguments Cone_Morph_com {_ _ _ _ _ _ _ _ _} _ _.
 
 Hint Extern 1 (?A = ?B :> Cone_Morph _ _ _) => apply Cone_Morph_eq_simplify; simpl.
 
-Notation Limit D c := (Terminal (Cone_Cat D) c).
-
-Notation Has_Limit D := (Has_Terminal (Cone_Cat D)).
-
-Notation Complete C := (∀ `{J : Category Obj' Hom'} (D : Functor J C), Has_Limit D).
-
+Class Complete `(C : Category Obj Hom) :=
+{
+  Limit_of `{J : Category Obj' Hom'} (D : Functor J C) : Cone D;
+  Limit_of_Limit `{J : Category Obj' Hom'} (D : Functor J C) : Limit D (Limit_of D)
+}.
 
 
 

@@ -71,19 +71,29 @@ Section Functor_Properties.
     }
   Qed.
 
+
+End Functor_Properties.
+
+Section Embedding.
+  Context `(C : Category Obj Hom) `(C' : Category Obj' Hom').
+
   (**
   An embedding is a functor that is faully-faithful. Such a functor is necessarily essentially injective and also guarantees isomorphisms, i.e., if F __O c === F __O c' then c === c'.
    *)
 
   Class Embedding : Type :=
     {
-      F_Faithful : Faithful_Func;
+      Embedding_Func : Functor C C';
+
+      F_Faithful : Faithful_Func Embedding_Func;
       
-      F_Full : Full_Func;
+      F_Full : Full_Func Embedding_Func;
 
-      F_Essentially_Injective := Fully_Faithful_Essentially_Injective F_Faithful F_Full;
+      F_Essentially_Injective := Fully_Faithful_Essentially_Injective Embedding_Func F_Faithful F_Full;
 
-      F_Guarantees_Isos := Fully_Faithful_Guarantees_Isos F_Faithful F_Full
+      F_Guarantees_Isos := Fully_Faithful_Guarantees_Isos Embedding_Func F_Faithful F_Full
     }.
 
-End Functor_Properties.
+  Coercion Embedding_Func : Embedding >-> Functor.
+
+End Embedding.

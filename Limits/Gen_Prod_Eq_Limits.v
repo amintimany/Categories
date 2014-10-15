@@ -122,7 +122,7 @@ Section Gen_Prod_Eq_Complete.
 
       Program Instance Lim_Cone_is_limit : Limit D Lim_Cone :=
         {
-          t_morph := Cone_Morph_to_Lim_Cone
+          Lim_term := {| t_morph := Cone_Morph_to_Lim_Cone |}
         }.
 
       Next Obligation. (* t_morph_unique *)
@@ -134,12 +134,13 @@ Section Gen_Prod_Eq_Complete.
       Qed.
 
     End Limits_Exist.
-End Gen_Prod_Eq_Limits.
+  End Gen_Prod_Eq_Limits.
 
 (*
-  
-  Program Instance Gen_Prod_Eq_Complete : Complete C.
-
+  Program Instance Gen_Prod_Eq_Complete : Complete C :=
+    {
+      Limit_of := λ _ _ _ D, Lim_Cone D
+    }.
 *)
 
 End Gen_Prod_Eq_Complete.

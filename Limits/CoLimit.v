@@ -2,7 +2,7 @@ Require Import Category.Core.
 Require Import Functor.Core.
 Require Import Basic_Cons.Initial.
 
-Section CoCones.
+Section CoLimit.
 
   Context `{J : Category Obj' Hom'}
           `{C : Category Obj Hom} (D : Functor J C).
@@ -69,7 +69,12 @@ Section CoCones.
 
   (* Cone_Cat defined *)
 
-End CoCones.
+  Class CoLimit (l : CoCone) : Type :=
+    {
+      CoLim_init : Initial CoCone_Cat l
+    }.
+  
+End CoLimit.
 
 Arguments CoCone_obj {_ _ _ _ _ _ _} _.
 Arguments CoCone_arrow {_ _ _ _ _ _ _} _ _.
@@ -80,11 +85,11 @@ Arguments CoCone_Morph_com {_ _ _ _ _ _ _ _ _} _ _.
 
 Hint Extern 1 (?A = ?B :> CoCone_Morph _ _ _) => apply CoCone_Morph_eq_simplify; simpl.
 
-Notation CoLimit D c := (Initial (CoCone_Cat D) c).
-
-Notation Has_CoLimit D := (Has_Initial (CoCone_Cat D)).
-
-Notation CoComplete C := (∀ `{J : Category Obj' Hom'} (D : Functor J C), Has_CoLimit D).
+Class CoComplete `(C : Category Obj Hom) :=
+{
+  CoLimit_of `{J : Category Obj' Hom'} (D : Functor J C) : CoCone D;
+  CoLimit_of_CoLimit `{J : Category Obj' Hom'} (D : Functor J C) : CoLimit D (CoLimit_of D)
+}.
 
 
 

@@ -64,15 +64,17 @@ Proof.
   trivial.
 Qed.
 
-Instance Yoneda_Embedding `(C : Category Obj Hom) : Embedding (Yoneda_emb C) :=
+Instance Yoneda_Embedding `(C : Category Obj Hom) : Embedding C (Func_Cat C ^op Type_Cat) :=
 {
+  Embedding_Func := Yoneda_emb C;
   F_Faithful := Yoneda_Faithful C;
   F_Full := Yoneda_Full C
 }.
 
 Theorem Yoneda_Iso `(C : Category Obj Hom) : forall (c c' : Obj), (Yoneda_emb C) _o c ≡ (Yoneda_emb C) _o c' -> c ≡ c'.
 Proof.
-  apply (@F_Guarantees_Isos _ _ _ _ _ _ (Yoneda_emb C) _).
+  intros.
+  apply (@F_Guarantees_Isos _ _ _ _ _ _ (Yoneda_Embedding C) _); trivial.
 Qed.
 
 Ltac Yoneda := apply Yoneda_Iso.

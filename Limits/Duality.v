@@ -70,7 +70,11 @@ Section Limit_CoLimit.
           (D : Functor J C) (cn : Cone D)
           (L : Limit D cn).
 
-  Program Instance CoLimit_of_Limit : CoLimit (Opposite_Functor D) (CoCone_of_Cone cn).
+
+  Program Instance CoLimit_of_Limit : CoLimit (Opposite_Functor D) (CoCone_of_Cone cn) :=
+    {
+      CoLim_init := {| i_morph := _; i_morph_unique := _ |}
+    }.
 
   Next Obligation. (* i_morph *)
   Proof.
@@ -78,7 +82,7 @@ Section Limit_CoLimit.
     match goal with
         [d : CoCone _ |- _] =>
         let d' := fresh "d'" in
-        set (d' := CoCone_Morph_of_Cone_Morph (@t_morph _ _ _ _ L (Cone_of_CoCone d)));
+        set (d' := CoCone_Morph_of_Cone_Morph (@t_morph _ _ _ _ (@Lim_term _ _ _ _ _ _ _ _ L) (Cone_of_CoCone d)));
           destruct d; exact d'
     end.
   Defined.
@@ -97,7 +101,7 @@ Section Limit_CoLimit.
     }
     {
       destruct C; destruct J; destruct D; destruct cn.
-      apply (@t_morph_unique _ _ _ _ L).
+      apply (@t_morph_unique _ _ _ _ (@Lim_term _ _ _ _ _ _ _ _ L)).
     }
   Qed.
 
@@ -110,7 +114,10 @@ Section CoLimit_Limit.
           (D : Functor J C) (cn : CoCone D)
           (L : CoLimit D cn).
 
-  Program Instance Limit_of_CoLimit : Limit (Opposite_Functor D) (Cone_of_CoCone cn).
+  Program Instance Limit_of_CoLimit : Limit (Opposite_Functor D) (Cone_of_CoCone cn) :=
+    {
+      Lim_term := {| t_morph := _; t_morph_unique := _ |}
+    }.
 
   Next Obligation. (* t_morph *)
   Proof.
@@ -118,7 +125,7 @@ Section CoLimit_Limit.
     match goal with
         [d : Cone _ |- _] =>
         let d' := fresh "d'" in
-        set (d' := Cone_Morph_of_CoCone_Morph (@i_morph _ _ _ _ L (CoCone_of_Cone d)));
+        set (d' := Cone_Morph_of_CoCone_Morph (@i_morph _ _ _ _ (@CoLim_init _ _ _ _ _ _ _ _ L) (CoCone_of_Cone d)));
           destruct d; exact d'
     end.
   Defined.
@@ -137,7 +144,7 @@ Section CoLimit_Limit.
     }
     {
       destruct C; destruct J; destruct D; destruct cn.
-      apply (@i_morph_unique _ _ _ _ L).
+      apply (@i_morph_unique _ _ _ _ (@CoLim_init _ _ _ _ _ _ _ _ L)).
     }
   Qed.
 
