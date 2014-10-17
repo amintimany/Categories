@@ -1,4 +1,4 @@
-Require Import Category.Core.
+Require Import Category.Main.
 
 Section Equalizer.
   Context `(C : Category Obj Hom) {a b : Obj} (f g : Hom a b).
@@ -29,13 +29,12 @@ End Equalizer.
 
 Class Has_Equalizers `(C : Category Obj Hom) : Type :=
 {
-  HE_Eqz : ∀ {a b : Obj},  Hom a b → Hom a b → Obj;
+  Equalizer_of : ∀ {a b : Obj},  Hom a b → Hom a b → Obj;
   
-  HE_Eqz_Equalizer : ∀ (a b : Obj) (f g : Hom a b), Equalizer C f g (HE_Eqz f g)
+  Equalizer_of_Equalizer : ∀ (a b : Obj) (f g : Hom a b), Equalizer C f g (Equalizer_of f g)
 }.
 
-Existing Instance HE_Eqz_Equalizer.
+Existing Instance Equalizer_of_Equalizer.
 
-Notation Equalizer_of f g := (HE_Eqz f g).
 
 

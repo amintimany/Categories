@@ -1,5 +1,5 @@
-Require Import Category.Core.
-Require Import Functor.Core.
+Require Import Category.Main.
+Require Import Functor.Main.
 
 
 Class CoAlgebra `{C : Category Obj Hom} (T : Functor C C) : Type :=

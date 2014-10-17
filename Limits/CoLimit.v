@@ -1,6 +1,9 @@
-Require Import Category.Core.
-Require Import Functor.Core.
+Require Import Category.Main.
+Require Import Functor.Main.
 Require Import Basic_Cons.Initial.
+Require Import Ext_Cons.Arrow.
+Require Import Coq_Cats.Type_Cat.Card_Restriction.
+
 
 Section CoLimit.
 
@@ -85,15 +88,42 @@ Arguments CoCone_Morph_com {_ _ _ _ _ _ _ _ _} _ _.
 
 Hint Extern 1 (?A = ?B :> CoCone_Morph _ _ _) => apply CoCone_Morph_eq_simplify; simpl.
 
+
+Class Has_Restricted_CoLimits `(C : Category Obj Hom) (P : Card_Restriction) :=
+{
+  Restricted_CoLimit_of `{J : Category Obj' Hom'} (D : Functor J C) : (P Obj') → (P (Arrow J)) → CoCone D;
+  Restricted_CoLimit_of_CoLimit `{J : Category Obj' Hom'} (D : Functor J C) (PO : P Obj') (PH : P (Arrow J)) : CoLimit D (Restricted_CoLimit_of D PO PH)
+}.
+
+Existing Instance Restricted_CoLimit_of_CoLimit.
+
 Class CoComplete `(C : Category Obj Hom) :=
 {
   CoLimit_of `{J : Category Obj' Hom'} (D : Functor J C) : CoCone D;
   CoLimit_of_CoLimit `{J : Category Obj' Hom'} (D : Functor J C) : CoLimit D (CoLimit_of D)
 }.
 
+Existing Instance CoLimit_of_CoLimit.
 
 
+Section Restricted_CoLimits_to_CoComplete.
+  Context `(C : Category Obj Hom) (P : Card_Restriction) {HRL : Has_Restricted_CoLimits C P} (All_Ps : ∀ t, P t).
+  
+  Instance No_Restriction_CoComplete : CoComplete C :=
+    {
+      CoLimit_of := λ O H J D, Restricted_CoLimit_of D (All_Ps O) (All_Ps (Arrow J))
+    }.
 
+End Restricted_CoLimits_to_CoComplete.
 
+Section CoComplete_to_Restricted_CoLimits.
+  Context `(C : Category Obj Hom) {CC : CoComplete C} (P : Card_Restriction).
+  
+  Instance CoComplete_Has_Restricted_CoLimits : Has_Restricted_CoLimits C P :=
+    {
+      Restricted_CoLimit_of := λ _ _ J D _ _, CoLimit_of D
+    }.
+
+End CoComplete_to_Restricted_CoLimits.
 
 

@@ -1,6 +1,6 @@
-Require Import Category.Core.
+Require Import Category.Main.
 Require Import Ext_Cons.Prod_Cat.
-Require Import Functor.Core.
+Require Import Functor.Main.
 
 (* Product Object *)
 

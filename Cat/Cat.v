@@ -1,6 +1,5 @@
-Require Import Category.Core.
-Require Import Functor.Core.
-
+Require Import Category.Main.
+Require Import Functor.Main.
 
 Record CAT : Type :=
   mkCAT {
@@ -9,44 +8,25 @@ Record CAT : Type :=
       THE_CAT : Category OBJECTS HOMS
     }.
 
-Definition F_CAT (C C' : CAT) := Functor (THE_CAT C) (THE_CAT C').
+Coercion THE_CAT : CAT >-> Category.
 
-Instance Cat : Category CAT F_CAT :=
+Coercion mkCAT : Category >-> CAT.
+
+Instance Cat : Category CAT (λ A B, Functor A B) :=
 {
-  compose := fun C D E =>
-              @Functor_compose
-                _ _ (THE_CAT C)
-                _ _ (THE_CAT D)
-                _ _ (THE_CAT E);
+  compose := fun C D E => Functor_compose;
   
-  assoc := fun (C D E F : CAT) (G : F_CAT C D) (H : F_CAT D E) (I : F_CAT E F) =>
-            @Functor_assoc
-              _ _ (THE_CAT C)
-              _ _ (THE_CAT D)
-              _ _ (THE_CAT E)
-              _ _ (THE_CAT F)
-              G H I;
-  assoc_sym := fun (C D E F : CAT) (G : F_CAT C D) (H : F_CAT D E) (I : F_CAT E F) =>
-            eq_sym (@Functor_assoc
-              _ _ (THE_CAT C)
-              _ _ (THE_CAT D)
-              _ _ (THE_CAT E)
-              _ _ (THE_CAT F)
-              G H I);
+  assoc := fun (C D E F : CAT) (G : Functor C D) (H : Functor D E) (I : Functor E F) =>
+            @Functor_assoc _ _ _ _ _ _ _ _ _ _ _ _ G H I;
 
-  id := fun (C : CAT) =>
-         @Functor_id
-          _ _ (THE_CAT C);
+  assoc_sym := fun (C D E F : CAT) (G : Functor C D) (H : Functor D E) (I : Functor E F) =>
+            eq_sym (@Functor_assoc _ _ _ _ _ _ _ _ _ _ _ _ G H I);
 
-  id_unit_left := fun (C D : CAT) =>
-                   @Functor_id_unit_left
-                     _ _ (THE_CAT C)
-                     _ _ (THE_CAT D);
+  id := fun (C : CAT) => Functor_id;
 
-  id_unit_right := fun (C D : CAT) =>
-                   @Functor_id_unit_right
-                     _ _ (THE_CAT C)
-                     _ _ (THE_CAT D)
+  id_unit_left := fun (C D : CAT) => @Functor_id_unit_left _ _ _ _ _ _;
+
+  id_unit_right := fun (C D : CAT) => @Functor_id_unit_right _ _ _ _ _ _
 }.
 
 

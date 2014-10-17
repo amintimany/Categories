@@ -1,4 +1,4 @@
-Require Import Category.Core.
+Require Import Category.Main.
 
 (* General Sum *)
 
@@ -35,15 +35,27 @@ End General_Sum.
 
 Class Has_General_Sums `(C : Category Obj Hom) (A : Type) : Type :=
 {
-  HGS_sum : (A → Obj) → Obj;
+  Gen_Sum_of : (A → Obj) → Obj;
 
-  HGS_sum_sum : ∀ (objs : A → Obj), General_Sum C A objs (HGS_sum objs)
+  Gen_Sum_sum : ∀ (objs : A → Obj), General_Sum C A objs (Gen_Sum_of objs)
 }.
 
-Existing Instance HGS_sum_sum.
+Existing Instance Gen_Sum_sum.
 
-Notation Gen_Sum_of objs := (HGS_sum objs).
 
+Class Has_Restricted_General_Sums `(C : Category Obj Hom) (P : Type → Prop) : Type :=
+  {
+    HRGS_HGS : ∀ (A : Type), P A → Has_General_Sums C A
+  }.
+
+Existing Instance HRGS_HGS.
+
+Class Has_All_General_Sums `(C : Category Obj Hom) : Type :=
+  {
+    HAGS_HGS : ∀ (A : Type), Has_General_Sums C A
+  }.
+
+Existing Instance HAGS_HGS.
 
 
 

@@ -1,6 +1,6 @@
-Require Import Category.Core.
+Require Import Category.Main.
 Require Import Ext_Cons.Prod_Cat.
-Require Import Functor.Core.
+Require Import Functor.Main.
 Require Import Basic_Cons.Product.
 
 Class Exponential `(C : Category Obj Hom) (HP : Has_Products C) (c d e : Obj) : Type :=

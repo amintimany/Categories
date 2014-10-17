@@ -1,4 +1,4 @@
-Require Import Category.Core.
+Require Import Category.Main.
 
 (* General Product *)
 
@@ -35,15 +35,26 @@ End General_Prod.
 
 Class Has_General_Products `(C : Category Obj Hom) (A : Type) : Type :=
 {
-  HGP_prod : (A → Obj) → Obj;
+  Gen_Prod_of : (A → Obj) → Obj;
 
-  HGP_prod_prod : ∀ (objs : A → Obj), General_Product C A objs (HGP_prod objs)
+  Gen_Prod_prod : ∀ (objs : A → Obj), General_Product C A objs (Gen_Prod_of objs)
 }.
 
-Existing Instance HGP_prod_prod.
+Existing Instance Gen_Prod_prod.
 
-Notation Gen_Prod_of objs := (HGP_prod objs).
+Class Has_Restricted_General_Products `(C : Category Obj Hom) (P : Type → Prop) : Type :=
+  {
+    HRGP_HGP : ∀ (A : Type), P A → Has_General_Products C A
+  }.
 
+Existing Instance HRGP_HGP.
+
+Class Has_All_General_Products `(C : Category Obj Hom) : Type :=
+  {
+    HAGP_HGP : ∀ (A : Type), Has_General_Products C A
+  }.
+
+Existing Instance HAGP_HGP.
 
 
 

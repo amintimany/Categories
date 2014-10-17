@@ -1,4 +1,4 @@
-Require Import Category.Core.
+Require Import Category.Main.
 
 Section CoEqualizer.
   Context `(C : Category Obj Hom) {a b : Obj} (f g : Hom a b).
@@ -29,11 +29,9 @@ End CoEqualizer.
 
 Class Has_CoEqualizers `(C : Category Obj Hom) : Type :=
 {
-  HCE_CEqz : ∀ {a b : Obj}, Hom a b → Hom a b → Obj;
+  CoEqualizer_of : ∀ {a b : Obj}, Hom a b → Hom a b → Obj;
   
-  HCE_CEqz_CoEqualizer : ∀ (a b : Obj) (f g : Hom a b), CoEqualizer C f g (HCE_CEqz f g)
+  CoEqualizer_of_CoEqualizer : ∀ (a b : Obj) (f g : Hom a b), CoEqualizer C f g (CoEqualizer_of f g)
 }.
 
-Existing Instance HCE_CEqz_CoEqualizer.
-
-Notation CoEqualizer_of f g := (HCE_CEqz f g).
+Existing Instance CoEqualizer_of_CoEqualizer.

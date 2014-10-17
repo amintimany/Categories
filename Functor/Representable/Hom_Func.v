@@ -1,6 +1,6 @@
-Require Import Category.Core.
+Require Import Category.Main.
 Require Import Functor.Functor.
-Require Import Coq_Cats.Type_Cat.
+Require Import Coq_Cats.Type_Cat.Type_Cat.
 Require Import Ext_Cons.Prod_Cat.
 
 

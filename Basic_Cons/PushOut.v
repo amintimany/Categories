@@ -1,4 +1,4 @@
-Require Import Category.Core.
+Require Import Category.Main.
 
 Section PushOut.
   Context `(C : Category Obj Hom) {a b x : Obj} (f : Hom x a) (g : Hom x b).
@@ -39,11 +39,9 @@ End PushOut.
 
 Class Has_PushOuts `(C : Category Obj Hom) : Type :=
 {
-  HPO_PO : ∀ {a b x : Obj}, Hom x a → Hom x b → Obj;
+  PushOut_of : ∀ {a b x : Obj}, Hom x a → Hom x b → Obj;
 
-  HPO_PO_PushOut : ∀ (a b x : Obj) (f : Hom x a) (g : Hom x b), PushOut C f g (HPO_PO f g)
+  PushOut_of_PushOut : ∀ (a b x : Obj) (f : Hom x a) (g : Hom x b), PushOut C f g (PushOut_of f g)
 }.
 
-Existing Instance HPO_PO_PushOut.
-
-Notation PushOut_of f g := (HPO_PO f g).
+Existing Instance PushOut_of_PushOut.

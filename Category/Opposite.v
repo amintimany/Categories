@@ -26,13 +26,9 @@ Notation "C '^op'" := (Opposite C) (at level 9, no associativity).
 Theorem C_OP_OP `(C : Category Obj Hom) : (C^op)^op = C.
 Proof.
   destruct C; reflexivity.
-Qed.
+Defined.
 
 Hint Resolve C_OP_OP.
-
-Definition C_OP_OP_sym `(C : Category Obj Hom) := eq_sym (@C_OP_OP _ _ C).
-
-Hint Resolve C_OP_OP_sym.
 
 Theorem CoIso `{C : Category Obj Hom} (a b : Obj) : a ≡ b → @Isomorphic _ _ C^op a b. 
 Proof.

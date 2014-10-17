@@ -1,6 +1,8 @@
-Require Import Category.Core.
-Require Import Functor.Core.
+Require Import Category.Main.
+Require Import Functor.Main.
 Require Import Basic_Cons.Terminal.
+Require Import Ext_Cons.Arrow.
+Require Import Coq_Cats.Type_Cat.Card_Restriction.
 
 Section Limit.
 
@@ -85,15 +87,38 @@ Arguments Cone_Morph_com {_ _ _ _ _ _ _ _ _} _ _.
 
 Hint Extern 1 (?A = ?B :> Cone_Morph _ _ _) => apply Cone_Morph_eq_simplify; simpl.
 
+Class Has_Restricted_Limits `(C : Category Obj Hom) (P : Card_Restriction) :=
+{
+  Restricted_Limit_of `{J : Category Obj' Hom'} (D : Functor J C) : (P Obj') → (P (Arrow J)) → Cone D;
+  Restricted_Limit_of_Limit `{J : Category Obj' Hom'} (D : Functor J C) (PO : P Obj') (PH : P (Arrow J)) : Limit D (Restricted_Limit_of D PO PH)
+}.
+
+Existing Instance Restricted_Limit_of_Limit.
+
 Class Complete `(C : Category Obj Hom) :=
 {
   Limit_of `{J : Category Obj' Hom'} (D : Functor J C) : Cone D;
   Limit_of_Limit `{J : Category Obj' Hom'} (D : Functor J C) : Limit D (Limit_of D)
 }.
 
+Existing Instance Limit_of_Limit.
 
+Section Restricted_Limits_to_Complete.
+  Context `(C : Category Obj Hom) (P : Card_Restriction) {HRL : Has_Restricted_Limits C P} (All_Ps : ∀ t, P t).
+  
+  Instance No_Restriction_Complete : Complete C :=
+    {
+      Limit_of := λ O H J D, Restricted_Limit_of D (All_Ps O) (All_Ps (Arrow J))
+    }.
 
+End Restricted_Limits_to_Complete.
 
+Section Complete_to_Restricted_Limits.
+  Context `(C : Category Obj Hom) {CC : Complete C} (P : Card_Restriction).
+  
+  Instance Complete_Has_Restricted_Limits : Has_Restricted_Limits C P :=
+    {
+      Restricted_Limit_of := λ _ _ J D _ _, Limit_of D
+    }.
 
-
-
+End Complete_to_Restricted_Limits.

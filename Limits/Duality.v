@@ -1,7 +1,10 @@
-Require Import Category.Core.
-Require Import Functor.Core.
+Require Import Category.Main.
+Require Import Functor.Main.
 Require Import Basic_Cons.Initial.
 Require Import Basic_Cons.Terminal.
+Require Import Coq_Cats.Type_Cat.Card_Restriction.
+Require Import Ext_Cons.Arrow.
+
 
 Require Import Limits.Limit.
 Require Import Limits.CoLimit.
@@ -150,9 +153,92 @@ Section CoLimit_Limit.
 
 End CoLimit_Limit.
 
+Section Has_Restricted_Limits_CoLimits.
+  Context `{C : Category Obj Hom} (P : Card_Restriction)
+  {HRL : Has_Restricted_Limits C P}.
 
+  Program Instance Has_Restricted_Limits_CoLimits : Has_Restricted_CoLimits (C ^op) P. 
+  
+  Next Obligation.
+    rewrite <- (C_OP_OP C) in HRL.
+    rewrite (Opposite_Opposite_Functor D).
+    destruct C.
+    destruct J.
+    match goal with
+        [H : @Card_Rest P Obj' |- _] =>
+        refine (CoCone_of_Cone (@Restricted_Limit_of _ _ _ P HRL _ _ _ (Opposite_Functor D) H _))
+    end.
+    eapply Card_Rest_Respect.
+    eapply Arrow_OP_Iso.
+    trivial.
+  Defined.
+  
+  Next Obligation.
+    unfold Has_Restricted_Limits_CoLimits_obligation_1; simpl.
+    rewrite (Opposite_Opposite_Functor D).
+    destruct J; destruct C.
+    unfold eq_rect_r, eq_rect; simpl.
+    apply (CoLimit_of_Limit (Opposite_Functor D)).
+    apply Restricted_Limit_of_Limit.
+  Qed.
 
+End Has_Restricted_Limits_CoLimits.
 
+Section Has_Restricted_CoLimits_Limits.
+  Context `{C : Category Obj Hom} (P : Card_Restriction)
+  {HRCL : Has_Restricted_CoLimits C P}.
 
+  Program Instance Has_Restricted_CoLimits_Limits : Has_Restricted_Limits (C ^op) P. 
+  
+  Next Obligation.
+    rewrite <- (C_OP_OP C) in HRCL.
+    rewrite (Opposite_Opposite_Functor D).
+    destruct C.
+    destruct J.
+    match goal with
+        [H : @Card_Rest P Obj' |- _] =>
+        refine (Cone_of_CoCone (@Restricted_CoLimit_of _ _ _ P HRCL _ _ _ (Opposite_Functor D) H _))
+    end.
+    eapply Card_Rest_Respect.
+    eapply Arrow_OP_Iso.
+    trivial.
+  Defined.
+  
+  Next Obligation.
+    unfold Has_Restricted_CoLimits_Limits_obligation_1; simpl.
+    rewrite (Opposite_Opposite_Functor D).
+    destruct J; destruct C.
+    unfold eq_rect_r, eq_rect; simpl.
+    apply (Limit_of_CoLimit (Opposite_Functor D)).
+    apply Restricted_CoLimit_of_CoLimit.
+  Qed.
 
+End Has_Restricted_CoLimits_Limits.
 
+Section Complete_CoComplete.
+  Context `{C : Category Obj Hom} {CC : Complete C}.
+
+  Instance Complete_CoComplete : CoComplete (C ^op).
+  Proof.
+    eapply (@No_Restriction_CoComplete _ _ (C ^op) (Build_Card_Restriction (λ _, True) (λ _ _ _ _ , I))); auto.
+    eapply Complete_Has_Restricted_Limits in CC.
+    eapply Has_Restricted_Limits_CoLimits.
+    eauto 1.
+    simpl; trivial.
+  Qed.
+
+End Complete_CoComplete.
+
+Section CoComplete_Complete.
+  Context `{C : Category Obj Hom} {CC : CoComplete C}.
+
+  Instance CoComplete_Complete : Complete (C ^op).
+  Proof.
+    eapply (@No_Restriction_Complete _ _ (C ^op) (Build_Card_Restriction (λ _, True) (λ _ _ _ _ , I))); auto.
+    eapply CoComplete_Has_Restricted_CoLimits in CC.
+    eapply Has_Restricted_CoLimits_Limits.
+    eauto 1.
+    simpl; trivial.
+  Qed.
+
+End CoComplete_Complete.

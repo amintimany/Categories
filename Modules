@@ -8,12 +8,18 @@ Mod_Category = \
 	Category/Opposite\
 	Category/Morph\
 	Category/SubCategory\
-	Category/Core
+	Category/Composable_Chain\
+	Category/Main
 
 Mod_Ext_Cons =\
+	Ext_Cons/Arrow\
+	Ext_Cons/Arrow_To\
+	Ext_Cons/Arrow_From\
+	Ext_Cons/Slice_Cat\
+	Ext_Cons/CoSlice_Cat\
 	Ext_Cons/Arrow_Cat\
 	Ext_Cons/Prod_Cat\
-	Ext_Cons/Core
+	Ext_Cons/Main
 
 Mod_Functor =\
 	Functor/Functor\
@@ -21,15 +27,20 @@ Mod_Functor =\
 	Functor/Functor_Properties\
 	Functor/Tactics\
 	Functor/Functor_Image\
-	Functor/Core\
-	Functor/Representable/Core\
+	Functor/Main\
+	Functor/Representable/Main\
 	Functor/Representable/Hom_Func
 
 Mod_Coq_Cats =\
-	Coq_Cats/Type_Cat\
+	Coq_Cats/Type_Cat/Type_Cat\
+	Coq_Cats/Type_Cat/Type_Cat_Initial\
+	Coq_Cats/Type_Cat/Type_Cat_CCC\
+	Coq_Cats/Type_Cat/Type_Cat_Sum\
+	Coq_Cats/Type_Cat/Facts\
+	Coq_Cats/Type_Cat/Card_Restriction\
 	Coq_Cats/Set_Cat\
 	Coq_Cats/Prop_Cat\
-	Coq_Cats/Core
+	Coq_Cats/Main
 
 Mod_Basic_Cons =\
 	Basic_Cons/Initial\
@@ -40,10 +51,10 @@ Mod_Basic_Cons =\
 	Basic_Cons/Facts\
 	Basic_Cons/Facts/Init_Prod\
 	Basic_Cons/Facts/Term_Prod\
-	Basic_Cons/Facts/Core\
+	Basic_Cons/Facts/Main\
 	Basic_Cons/Facts/Equalizer_Monic\
 	Basic_Cons/Facts/CoEqualizer_Epic\
-	Basic_Cons/Core\
+	Basic_Cons/Main\
 	Basic_Cons/CCC\
 	Basic_Cons/Equalizer\
 	Basic_Cons/CoEqualizer\
@@ -55,7 +66,7 @@ Mod_Basic_Cons =\
 Mod_Algebras =\
 	Algebras/Algebras\
 	Algebras/CoAlgebras\
-	Algebras/Core
+	Algebras/Main
 
 Mod_Cat =\
 	Cat/Cat\
@@ -77,13 +88,13 @@ Mod_Yoneda =\
 	Yoneda/Y_Right_Left\
 	Yoneda/Y_Lem\
 	Yoneda/CoYoneda\
-	Yoneda/Core
+	Yoneda/Main
 
 Mod_Limits =\
 	Limits/Limit\
 	Limits/CoLimit\
 	Limits/Duality\
-	Limits/Core\
+	Limits/Main\
 	Limits/Gen_Prod_Eq_Limits
 
 Mod_Categories =\

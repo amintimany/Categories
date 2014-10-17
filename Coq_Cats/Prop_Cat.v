@@ -1,4 +1,4 @@
-Require Import Category.Core.
+Require Import Category.Main.
 Require Import Basic_Cons.CCC.
 Require Import Basic_Cons.Initial.
 Require Import Basic_Cons.Sum.

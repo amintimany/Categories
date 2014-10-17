@@ -1,9 +1,10 @@
-Require Export Essentials.Notations.
-
 Require Export Coq.Program.Equality.
 Require Export Coq.Program.Tactics.
 Require Export Coq.Logic.FunctionalExtensionality.
 Require Export Coq.Logic.ProofIrrelevance.
+
+Require Export Essentials.Notations.
+Require Export Essentials.Tactics.
 
 Class Category (Obj : Type) (Hom : Obj → Obj → Type) : Type :=
 {

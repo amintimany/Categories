@@ -1,5 +1,5 @@
-Require Import Category.Core.
-Require Import Functor.Core.
+Require Import Category.Main.
+Require Import Functor.Main.
 Require Import Cat.Cat.
 Require Import Basic_Cons.Terminal.
 Require Import Categories.Discr.
@@ -12,9 +12,9 @@ Program Instance Functor_To_1_Cat `(C' : Category Obj Hom) : Functor C' 1%catego
 
 (* Functor_To_Singleton_Cat defined *)
 
-Program Instance Cat_Term : Terminal Cat (mkCAT _ _ 1%category) :=
+Program Instance Cat_Term : Terminal Cat 1%category :=
 {
-  t_morph := fun x => Functor_To_1_Cat (THE_CAT x)
+  t_morph := fun x => Functor_To_1_Cat x
 }.
 
 Next Obligation. (* t_morph_unique *)

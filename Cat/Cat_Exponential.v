@@ -2,8 +2,8 @@ Require Import Cat.Cat_Product.
 
 Require Import Coq.Logic.EqdepFacts.
 
-Require Import Category.Core.
-Require Import Functor.Core.
+Require Import Category.Main.
+Require Import Functor.Main.
 Require Import Cat.Cat.
 Require Import Ext_Cons.Prod_Cat.
 Require Import Basic_Cons.Product.
@@ -94,11 +94,11 @@ Qed.
 
 Local Obligation Tactic := idtac.
 
-Program Instance Cat_Exponentials (C : CAT) (C' : CAT) : Exponential Cat Cat_Has_Products C C' (mkCAT _ _ (Func_Cat (THE_CAT C) (THE_CAT C'))) :=
+Program Instance Cat_Exponentials (C : CAT) (C' : CAT) : Exponential Cat Cat_Has_Products C C' (Func_Cat C C') :=
 {
-  eval := Exp_Cat_eval (THE_CAT C) (THE_CAT C');
+  eval := Exp_Cat_eval C C';
   
-  Exp_morph_ex := fun C'' F => @Exp_Cat_morph_ex _ _ (THE_CAT C) _ _ (THE_CAT C') _ _ (THE_CAT C'') F
+  Exp_morph_ex := fun C'' F => @Exp_Cat_morph_ex _ _ C _ _ C' _ _ C'' F
 }.
 
 Next Obligation. (* Exp_morph_com *)
@@ -185,7 +185,7 @@ Qed.
 
 Instance Cat_Has_Exponentials : Has_Exponentials Cat :=
 {
-  HE_exp := fun C C' => (mkCAT _ _ (Func_Cat (THE_CAT C) (THE_CAT C')));
+  HE_exp := fun C C' => Func_Cat C C';
   HE_exp_exp := Cat_Exponentials
 }.
 

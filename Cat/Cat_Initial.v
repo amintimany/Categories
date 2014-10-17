@@ -1,5 +1,5 @@
 Require Import Category.Category.
-Require Import Functor.Core.
+Require Import Functor.Main.
 Require Import Cat.Cat.
 Require Import Basic_Cons.Initial.
 Require Import Categories.Discr.
@@ -13,15 +13,10 @@ Program Instance Functor_From_Empty_Cat `(C' : Category Obj Hom) : Functor 0%cat
 
 (* Functor_From_Empty_Cat defined *)
 
-Program Instance Cat_Init : Initial Cat (mkCAT _ _ 0%category) :=
+Program Instance Cat_Init : Initial Cat (0%category) :=
 {
-  i_morph := fun x => Functor_From_Empty_Cat (THE_CAT x)
+  i_morph := fun x => Functor_From_Empty_Cat x
 }.
-
-Next Obligation. (* i_morph_unique *)
-Proof.
-  Functor_extensionality a b F; simpl in *; auto.
-Qed.
 
 (* Cat_init defined *)
 

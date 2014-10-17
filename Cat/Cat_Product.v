@@ -1,7 +1,7 @@
 Require Import Coq.Logic.EqdepFacts.
 
-Require Import Category.Core.
-Require Import Functor.Core.
+Require Import Category.Main.
+Require Import Functor.Main.
 Require Import Cat.Cat.
 Require Import Ext_Cons.Prod_Cat.
 Require Import Basic_Cons.Product.
@@ -33,12 +33,12 @@ Program Instance Prod_Cat_morph_ex `(C : Category Obj Hom) `(C' : Category Obj' 
 
 Local Obligation Tactic := idtac.
 
-Program Instance Cat_Products (C : CAT) (C' : CAT) : Product Cat C C' (mkCAT _ _ (Prod_Cat (THE_CAT C) (THE_CAT C'))) :=
+Program Instance Cat_Products (C : CAT) (C' : CAT) : Product Cat C C' (Prod_Cat C C') :=
 {
-  Pi_1 := Prod_Cat_proj1 (THE_CAT C) (THE_CAT C');
-  Pi_2 := Prod_Cat_proj2 (THE_CAT C)(THE_CAT C');
+  Pi_1 := Prod_Cat_proj1 C C';
+  Pi_2 := Prod_Cat_proj2 C C';
 
-  Prod_morph_ex := fun P => fun F G => Prod_Cat_morph_ex (THE_CAT C) (THE_CAT C') (THE_CAT P) F G
+  Prod_morph_ex := fun P => fun F G => Prod_Cat_morph_ex C C' P F G
 }.
 
 Next Obligation. (* Prod_morph_com1 *)
@@ -56,7 +56,8 @@ Qed.
 Next Obligation. (* Prod_morph_unique *)
 Proof.
   intros C C' p' r1 r2 f g H1 H2 H3 H4.
-  program_simpl.
+  destruct H1; destruct H2.
+  dependent destruction H3; dependent destruction H4.
   cut (f _o = g _o); [intros HO|].
   {
     apply Functor_eq_simplify.
@@ -69,26 +70,24 @@ Proof.
                  [H : existT _ _ _ = existT _ _ _ |- _] =>
                  apply eq_sigT_eq_dep in H; apply eq_dep_JMeq in H
              end.
-      
       match goal with
       [|- ?A ~= ?B] =>
-      cut ((fst A, snd A) ~= (fst B, snd B)); [destruct A; destruct B; simpl; trivial|]
-      end.
-      eapply FA_equal_f in H1; trivial.
-      eapply FA_equal_f in H3; trivial.
-      match goal with
-          [|- (?A, ?B) ~= (?C, ?D)] =>
-          cut (A ~= C); [intros HU; rewrite HU; cut (B ~= D); [intros HU'; rewrite HU'; trivial| symmetry; exact H3]| symmetry; exact H1]
-      end.
+      cut (fst A ~= fst B); [cut (snd A ~= snd B); [elim A; elim B; auto 2|]|]
+      end;
+        repeat
+          match goal with
+              [H : _ ≃ _|- _] =>
+              (try (eapply (FA_equal_f _) in H; symmetry in H; eauto; fail) || clear H)
+          end.
     }
   }      
   {
-    extensionality x.
-    apply (fun p => equal_f p x) in H0; apply (fun p => equal_f p x) in H2.
-    simpl in H0, H2; simpl.
+    extensionality z.
+    apply (fun p => equal_f p z) in x1; apply (fun p => equal_f p z) in x2. 
+    simpl in x1, x2; simpl.
     match goal with
         [|- ?A = ?B] =>
-        destruct A; destruct B; simpl in H0, H2; subst; trivial
+        destruct A; destruct B; simpl in x1, x2; subst; trivial
     end.
   }
 Qed.
@@ -98,7 +97,7 @@ Qed.
 
 Instance Cat_Has_Products : Has_Products Cat :=
 {
-  HP_prod := fun C C' => (mkCAT _ _ (Prod_Cat (THE_CAT C) (THE_CAT C')));
+  HP_prod := fun C C' => Prod_Cat C C';
   HP_prod_prod := Cat_Products
 }.
 

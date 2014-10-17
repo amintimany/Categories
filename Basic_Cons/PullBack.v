@@ -1,4 +1,4 @@
-Require Import Category.Core.
+Require Import Category.Main.
 
 Section PullBack.
   Context `(C : Category Obj Hom) {a b x : Obj} (f : Hom a x) (g : Hom b x).
@@ -39,11 +39,9 @@ End PullBack.
 
 Class Has_PullBacks `(C : Category Obj Hom) : Type :=
 {
-  HPB_PB : ∀ {a b x : Obj}, Hom a x → Hom b x → Obj;
+  PullBack_of : ∀ {a b x : Obj}, Hom a x → Hom b x → Obj;
 
-  HPB_PB_PullBack : ∀ (a b x : Obj) (f : Hom a x) (g : Hom b x), PullBack C f g (HPB_PB f g)
+  PullBack_of_PullBack : ∀ (a b x : Obj) (f : Hom a x) (g : Hom b x), PullBack C f g (PullBack_of f g)
 }.
 
-Existing Instance HPB_PB_PullBack.
-
-Notation PullBack_of f g := (HPB_PB f g).
+Existing Instance PullBack_of_PullBack.

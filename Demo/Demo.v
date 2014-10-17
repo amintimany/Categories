@@ -1,8 +1,9 @@
-Require Import Category.Core.
-Require Import Functor.Core.
-Require Import Basic_Cons.Core.
-Require Import Coq_Cats.Type_Cat.
-Require Import Algebras.Core.
+Require Import Category.Main.
+Require Import Functor.Main.
+Require Import Basic_Cons.Main.
+Require Import Coq_Cats.Type_Cat.Type_Cat.
+Require Import Coq_Cats.Type_Cat.Facts.
+Require Import Algebras.Main.
 
 Program Instance S_nat_func : Functor Type_Cat Type_Cat :=
 {

@@ -1,4 +1,4 @@
-Require Import Category.Core.
+Require Import Category.Main.
 Require Import Functor.Functor.
 Require Import Functor.Tactics.
 
@@ -19,9 +19,15 @@ End Opposite_Functor.
 Section Opposite_Opposite_Functor.
   Context `{C : Category Obj Hom} `{D : Category Obj' Hom'} (F : Functor C D).
   
-  Theorem Opposite_Opposite_Functor : Opposite_Functor (Opposite_Functor F) ≃ F.
-    destruct C; destruct D; destruct F.
-    reflexivity.
+  Theorem Opposite_Opposite_Functor : 
+    F = 
+    match (C_OP_OP C) in (_ = Y) return Functor Y _ with
+        eq_refl =>
+        match (C_OP_OP D) in (_ = Z) return Functor _ Z with
+            eq_refl => Opposite_Functor (Opposite_Functor F)
+        end
+    end.
+    destruct C; destruct D; destruct F; reflexivity.
   Qed.
 
 End Opposite_Opposite_Functor.

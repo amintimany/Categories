@@ -1,4 +1,4 @@
-Require Import Category.Core.
+Require Import Category.Main.
 Require Import Essentials.Empty.
 
 Section Discr.

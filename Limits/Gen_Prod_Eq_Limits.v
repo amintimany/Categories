@@ -1,10 +1,11 @@
-Require Import Category.Core.
-Require Import Functor.Core.
-Require Import Ext_Cons.Arrow_Cat.
+Require Import Category.Main.
+Require Import Functor.Main.
+Require Import Ext_Cons.Arrow.
 Require Import Basic_Cons.Terminal.
 Require Import Basic_Cons.General_Product.
 Require Import Basic_Cons.Equalizer.
 Require Import Basic_Cons.Facts.Equalizer_Monic.
+Require Import Coq_Cats.Type_Cat.Card_Restriction.
 
 Require Import Limits.Limit.
 
@@ -24,9 +25,9 @@ Section Gen_Prod_Eq_Complete.
 
       Let Hom_Prod : Obj := Gen_Prod_of (λ f, D _o (Targ f)).
 
-      Let Obj_Prod_prod : General_Product _ _ _ Obj_Prod := @HGP_prod_prod _ _ _ _ HGPO (D _o).
+      Let Obj_Prod_prod : General_Product _ _ _ Obj_Prod := @Gen_Prod_prod _ _ _ _ HGPO (D _o).
 
-      Let Hom_Prod_prod : General_Product _ _ _ Hom_Prod := @HGP_prod_prod _ _ _ _ HGPH (λ f, D _o (Targ f)).
+      Let Hom_Prod_prod : General_Product _ _ _ Hom_Prod := @Gen_Prod_prod _ _ _ _ HGPH (λ f, D _o (Targ f)).
 
       Definition Projs : Hom Obj_Prod Hom_Prod := (@GP_Prod_morph_ex _ _ _ _ _ _ Hom_Prod_prod Obj_Prod (λ f, @GP_Proj _ _ _ _ _ _ Obj_Prod_prod (Targ f))).
 
@@ -35,7 +36,7 @@ Section Gen_Prod_Eq_Complete.
       Program Instance Lim_Cone : Cone D :=
         {
           Cone_obj := Equalizer_of Projs D_imgs;
-          Cone_arrow := λ c, (@GP_Proj _ _ _ _ _ _ Obj_Prod_prod c) ∘ (@equalizer_morph _ _ _ _ _ Projs D_imgs _ (@HE_Eqz_Equalizer _ _ _ HE _ _ Projs D_imgs))
+          Cone_arrow := λ c, (@GP_Proj _ _ _ _ _ _ Obj_Prod_prod c) ∘ (@equalizer_morph _ _ _ _ _ Projs D_imgs _ (@Equalizer_of_Equalizer _ _ _ HE _ _ Projs D_imgs))
         }.
 
       Next Obligation. (* Cone_com *)
@@ -120,7 +121,7 @@ Section Gen_Prod_Eq_Complete.
 
       End Every_Cone_Equalizes.
 
-      Program Instance Lim_Cone_is_limit : Limit D Lim_Cone :=
+      Program Instance Lim_Cone_is_Limit : Limit D Lim_Cone :=
         {
           Lim_term := {| t_morph := Cone_Morph_to_Lim_Cone |}
         }.
@@ -136,12 +137,27 @@ Section Gen_Prod_Eq_Complete.
     End Limits_Exist.
   End Gen_Prod_Eq_Limits.
 
-(*
-  Program Instance Gen_Prod_Eq_Complete : Complete C :=
-    {
-      Limit_of := λ _ _ _ D, Lim_Cone D
-    }.
-*)
+  Section Restricted_Limits.
+    Context (P : Card_Restriction) {CHRP : Has_Restricted_General_Products C P} {HE : Has_Equalizers C}.
+
+    Program Instance Restr_Gen_Prod_Eq_Restr_Limits : Has_Restricted_Limits C P :=
+      {
+        Restricted_Limit_of := λ _ _ _ D PO PH, @Lim_Cone _ _ _ (HRGP_HGP _ PO) (HRGP_HGP _ PH) _ D;
+        Restricted_Limit_of_Limit := λ _ _ _ D PO PH, @Lim_Cone_is_Limit _ _ _ (HRGP_HGP _ PO) (HRGP_HGP _ PH) _ D
+      }.
+
+  End Restricted_Limits.
+
+    Section Complete.
+    Context {CHAP : Has_All_General_Products C} {HE : Has_Equalizers C}.
+
+    Program Instance Gen_Prod_Eq_Complete : Complete C :=
+      {
+        Limit_of := λ _ _ _ D, @Lim_Cone _ _ _ (HAGP_HGP _) (HAGP_HGP _) _ D;
+        Limit_of_Limit := λ _ _ _ D, @Lim_Cone_is_Limit _ _ _ (HAGP_HGP _) (HAGP_HGP _) _ D
+      }.
+
+  End Complete.
 
 End Gen_Prod_Eq_Complete.
 

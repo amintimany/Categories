@@ -1,4 +1,4 @@
-Require Import Category.Core.
+Require Import Category.Main.
 
 Class Functor `(C : Category Obj Hom) `(C' : Category Obj' Hom') : Type := 
 {

@@ -1,10 +1,5 @@
-(**
-  This file contains the basic definition of a natrual transformation. It defines their equality, composition and identity natrual transformation. It furthermore, constructs the category "Func_Cat" whose objects are functors and arrows are natrual transformations.
-
-*)
-
-Require Import Category.Core.
-Require Import Functor.Core.
+Require Import Category.Main.
+Require Import Functor.Main.
 
 Class NatTrans `{C : Category Obj Hom} `{C' : Category Obj' Hom'} (F F' : Functor C C') :=
 {

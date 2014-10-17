@@ -1,12 +1,12 @@
-Require Import Category.Core.
-Require Import Functor.Core.
+Require Import Category.Main.
+Require Import Functor.Main.
 
 Require Import Basic_Cons.Initial.
 Require Import Basic_Cons.Terminal.
 Require Import Basic_Cons.Product.
 
 Require Import NatTrans.NatTrans.
-Require Import Yoneda.Core.
+Require Import Yoneda.Main.
 
 Section Term_Prod.
 
