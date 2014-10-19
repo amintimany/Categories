@@ -70,12 +70,11 @@ Section CoLimit.
       id := Cone_Morph_id
     }.
 
+  Existing Instance CoCone_Cat.
+
   (* Cone_Cat defined *)
 
-  Class CoLimit (l : CoCone) : Type :=
-    {
-      CoLim_init : Initial CoCone_Cat l
-    }.
+  Class CoLimit (l : CoCone) : Type := CoLim_init : Initial CoCone_Cat l.
   
 End CoLimit.
 
@@ -87,6 +86,15 @@ Arguments CoCone_Morph_arrow {_ _ _ _ _ _ _ _ _} _.
 Arguments CoCone_Morph_com {_ _ _ _ _ _ _ _ _} _ _.
 
 Hint Extern 1 (?A = ?B :> CoCone_Morph _ _ _) => apply CoCone_Morph_eq_simplify; simpl.
+
+Class Has_CoLimit `{C : Category Obj Hom} `{J : Category Obj' Hom'} (D : Functor J C) :=
+{
+  HCL_CoLim : CoCone D;
+
+  HCL_CoLim_CoLimit : CoLimit D HCL_CoLim
+}.
+
+Existing Instance HCL_CoLim_CoLimit.
 
 
 Class Has_Restricted_CoLimits `(C : Category Obj Hom) (P : Card_Restriction) :=

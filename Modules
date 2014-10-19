@@ -54,6 +54,8 @@ Mod_Basic_Cons =\
 	Basic_Cons/Facts/Main\
 	Basic_Cons/Facts/Equalizer_Monic\
 	Basic_Cons/Facts/CoEqualizer_Epic\
+	Basic_Cons/Facts/Gen_Prod_as_Limit\
+	Basic_Cons/Facts/Gen_Sum_as_CoLimit\
 	Basic_Cons/Main\
 	Basic_Cons/CCC\
 	Basic_Cons/Equalizer\

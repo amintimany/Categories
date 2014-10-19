@@ -69,12 +69,11 @@ Section Limit.
       id := Cone_Morph_id
     }.
 
+  Existing Instance Cone_Cat.
+
   (* Cone_Cat defined *)
 
-  Class Limit (l : Cone) : Type :=
-    {
-      Lim_term : Terminal Cone_Cat l
-    }.
+  Class Limit (l : Cone) : Type := Lim_term : Terminal Cone_Cat l.
 
 End Limit.
 
@@ -87,9 +86,19 @@ Arguments Cone_Morph_com {_ _ _ _ _ _ _ _ _} _ _.
 
 Hint Extern 1 (?A = ?B :> Cone_Morph _ _ _) => apply Cone_Morph_eq_simplify; simpl.
 
+Class Has_Limit `{C : Category Obj Hom} `{J : Category Obj' Hom'} (D : Functor J C) :=
+{
+  HL_Lim : Cone D;
+
+  HL_Lim_Limit : Limit D HL_Lim
+}.
+
+Existing Instance HL_Lim_Limit.
+
 Class Has_Restricted_Limits `(C : Category Obj Hom) (P : Card_Restriction) :=
 {
   Restricted_Limit_of `{J : Category Obj' Hom'} (D : Functor J C) : (P Obj') → (P (Arrow J)) → Cone D;
+
   Restricted_Limit_of_Limit `{J : Category Obj' Hom'} (D : Functor J C) (PO : P Obj') (PH : P (Arrow J)) : Limit D (Restricted_Limit_of D PO PH)
 }.
 
@@ -98,6 +107,7 @@ Existing Instance Restricted_Limit_of_Limit.
 Class Complete `(C : Category Obj Hom) :=
 {
   Limit_of `{J : Category Obj' Hom'} (D : Functor J C) : Cone D;
+
   Limit_of_Limit `{J : Category Obj' Hom'} (D : Functor J C) : Limit D (Limit_of D)
 }.
 

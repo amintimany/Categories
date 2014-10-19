@@ -1,5 +1,8 @@
 Require Import Category.Main.
 Require Import Essentials.Empty.
+Require Import Functor.Functor.
+Require Import Ext_Cons.Arrow.
+Require Import Coq_Cats.Type_Cat.Type_Cat.
 
 Section Discr.
   Context (Obj : Type).
@@ -50,3 +53,26 @@ Fixpoint Type_n (n : nat) {struct n} : Type :=
 .
 
 Notation "'Discr_n' n" := (Discr_Cat (Type_n n)) (at level 200, n bigint) : category_scope.
+
+(* Discrete Functor *)
+Section Discr_Func.
+  Context `(C : Category Obj Hom) (A : Type) (Omap : A → Obj).
+
+  Program Instance Discrete_Functor : Functor (Discr_Cat A) C :=
+    {
+      FO := Omap;
+      
+      FA := λ (a b : A) (X : Discr_Hom A a b),
+            match X in (Discr_Hom _ y y0) return (Hom (Omap y) (Omap y0)) with
+              | Discr_id _ => id
+            end
+    }.
+
+End Discr_Func.
+
+(* The fact that in discrete category object type and arrow type are isomorphic *)
+Instance Discr_Hom_Iso (A : Type) : A ≡ Arrow (Discr_Cat A).
+Proof.
+  exists (λ a, (Build_Arrow _ _ _ _ _ (Discr_id _ a))).
+  exists (λ x, Orig x); extensionality x; [|destruct x as [? ? []]]; simpl; trivial.
+Qed.
