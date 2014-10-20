@@ -4,3 +4,7 @@ Require Export Basic_Cons.Facts.Equalizer_Monic.
 Require Export Basic_Cons.Facts.CoEqualizer_Epic.
 Require Export Basic_Cons.Facts.Gen_Prod_as_Limit.
 Require Export Basic_Cons.Facts.Gen_Sum_as_CoLimit.
+Require Export Basic_Cons.Facts.Gen_Prod_Sum_Duality.
+Require Export Basic_Cons.Facts.Equalizer_CoEqualizer_Duality.
+Require Export Basic_Cons.Facts.Gen_Prod_Iso.
+Require Export Basic_Cons.Facts.Gen_Sum_Iso.

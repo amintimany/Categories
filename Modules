@@ -56,6 +56,10 @@ Mod_Basic_Cons =\
 	Basic_Cons/Facts/CoEqualizer_Epic\
 	Basic_Cons/Facts/Gen_Prod_as_Limit\
 	Basic_Cons/Facts/Gen_Sum_as_CoLimit\
+	Basic_Cons/Facts/Gen_Prod_Sum_Duality\
+	Basic_Cons/Facts/Equalizer_CoEqualizer_Duality\
+	Basic_Cons/Facts/Gen_Prod_Iso\
+	Basic_Cons/Facts/Gen_Sum_Iso\
 	Basic_Cons/Main\
 	Basic_Cons/CCC\
 	Basic_Cons/Equalizer\
@@ -97,7 +101,8 @@ Mod_Limits =\
 	Limits/CoLimit\
 	Limits/Duality\
 	Limits/Main\
-	Limits/Gen_Prod_Eq_Limits
+	Limits/Gen_Prod_Eq_Limits\
+	Limits/Gen_Sum_CoEq_CoLimits
 
 Mod_Categories =\
 	Categories/Discr\
