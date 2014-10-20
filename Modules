@@ -36,6 +36,8 @@ Mod_Coq_Cats =\
 	Coq_Cats/Type_Cat/Type_Cat_Initial\
 	Coq_Cats/Type_Cat/Type_Cat_CCC\
 	Coq_Cats/Type_Cat/Type_Cat_Sum\
+	Coq_Cats/Type_Cat/Type_Cat_Gen_Sum\
+	Coq_Cats/Type_Cat/Type_Cat_Gen_Prod\
 	Coq_Cats/Type_Cat/Facts\
 	Coq_Cats/Type_Cat/Card_Restriction\
 	Coq_Cats/Set_Cat\
