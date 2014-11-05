@@ -2,6 +2,10 @@ Require Import Category.Main.
 Require Import Basic_Cons.General_Product.
 Require Import Basic_Cons.General_Sum.
 
+Set Primitive Projections.
+
+Set Universe Polymorphism.
+
 Section Gen_Sum_Gen_Prod.
   Context `(C : Category Obj Hom) (A : Type) (objs : A → Obj) (p : Obj) (GP : General_Product C A objs p).
 

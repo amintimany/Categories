@@ -9,6 +9,10 @@ Require Import Coq_Cats.Type_Cat.Card_Restriction.
 
 Require Import Limits.Limit.
 
+Set Primitive Projections.
+
+Set Universe Polymorphism.
+
 Section Gen_Prod_Eq_Complete.
   Context `{C : Category Obj Hom}.
 

@@ -2,6 +2,10 @@ Require Import Category.Main.
 Require Import Basic_Cons.General_Product.
 Require Import Coq_Cats.Type_Cat.Type_Cat.
 
+Set Primitive Projections.
+
+Set Universe Polymorphism.
+
 Program Instance Type_Cat_Gen_Prod (A : Type) (objs : A → Type) : General_Product Type_Cat A objs (∀ x, objs x).
 
 Next Obligation. (* Gen_Prod_morph_unique *)

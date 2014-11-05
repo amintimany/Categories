@@ -5,6 +5,10 @@ Require Import Basic_Cons.Initial.
 Require Import Categories.Discr.
 Require Import Essentials.Empty.
 
+Set Primitive Projections.
+
+Set Universe Polymorphism.
+
 Program Instance Functor_From_Empty_Cat `(C' : Category Obj Hom) : Functor 0%category C' :=
 {
   FO := fun x => Empty_rect _ x;

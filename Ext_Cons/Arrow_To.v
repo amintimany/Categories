@@ -1,31 +1,35 @@
 Require Import Category.Main.
 Require Import Ext_Cons.Arrow.
 
+Set Primitive Projections.
+
+Set Universe Polymorphism.
+
 Section Arrow_To.
 
-  Class Arrow_To `(C : Category Obj Hom) (c : Obj) :=
+  Class Arrow_To (C : Category) (c : Obj) :=
     {
       AT_Orig : Obj;
       AT_Arr : Hom AT_Orig c
     }.
 
-  Arguments AT_Orig {_ _ _ _} _ : clear implicits.
-  Arguments AT_Arr {_ _ _ _} _ : clear implicits.
+  Arguments AT_Orig {_ _} _ : clear implicits.
+  Arguments AT_Arr {_ _} _ : clear implicits.
 
-  Program Instance Arrow_of_Arrow_To `{C : Category Obj Hom} {c : Obj} (AF : Arrow_To C c) : Arrow C :=
+  Program Instance Arrow_of_Arrow_To {C : Category} {c : Obj} (AF : Arrow_To C c) : Arrow C :=
     {
       Arr := AT_Arr AF
     }.
 
-  Class Arrow_To_Hom `{C : Category Obj Hom} {c : Obj} (a b : Arrow_To C c) :=
+  Class Arrow_To_Hom {C : Category} {c : Obj} (a b : Arrow_To C c) :=
     {
       Arr_T_H : Hom (AT_Orig a) (AT_Orig b);
       Arr_T_Hom_com : (AT_Arr a) = (AT_Arr b) ∘ Arr_T_H
     }.
-  Arguments Arr_T_H {_ _ _ _ _ _} _ : clear implicits.
-  Arguments Arr_T_Hom_com {_ _ _ _ _ _} _ : clear implicits.
+  Arguments Arr_T_H {_ _ _ _} _ : clear implicits.
+  Arguments Arr_T_Hom_com {_ _ _ _} _ : clear implicits.
 
-  Program Instance Arrow_Hom_of_Arrow_To_Hom `{C : Category Obj Hom} {c : Obj} {AT AT' : Arrow_To C c} (ATH : Arrow_To_Hom AT AT') : Arrow_Hom (Arrow_of_Arrow_To AT) (Arrow_of_Arrow_To AT') :=
+  Program Instance Arrow_Hom_of_Arrow_To_Hom {C : Category} {c : Obj} {AT AT' : Arrow_To C c} (ATH : Arrow_To_Hom AT AT') : Arrow_Hom (Arrow_of_Arrow_To AT) (Arrow_of_Arrow_To AT') :=
     {
       Arr_H' := id;
       Arr_H := Arr_T_H ATH
@@ -35,7 +39,7 @@ Section Arrow_To.
     rewrite (Arr_T_Hom_com ATH); auto.
   Qed.
 
-  Context `(C : Category Obj Hom).
+  Context (C : Category).
 
   Section Arrow_To_Hom_eq_simplify.
     Context {c : Obj} {a b : Arrow_To C c} (f g : Arrow_To_Hom a b).
@@ -53,7 +57,7 @@ Section Arrow_To.
 
   Section Compose_id.
 
-    Context {c x y z} (h : @Arrow_To_Hom _ _ _ c x y) (h' : Arrow_To_Hom y z).
+    Context {c x y z} (h : @Arrow_To_Hom _ c x y) (h' : Arrow_To_Hom y z).
 
     Program Instance Arrow_To_Hom_compose : Arrow_To_Hom x z :=
       {
@@ -83,11 +87,11 @@ End Arrow_To.
 
 Hint Extern 1 (?A = ?B :> Arrow_To_Hom _ _) => apply Arrow_To_Hom_eq_simplify; simpl.
 
-Arguments AT_Orig {_ _ _ _} _ : clear implicits.
-Arguments AT_Arr {_ _ _ _} _ : clear implicits.
+Arguments AT_Orig {_ _} _ : clear implicits.
+Arguments AT_Arr {_ _} _ : clear implicits.
 
-Arguments Arr_T_H {_ _ _ _ _ _} _ : clear implicits.
-Arguments Arr_T_Hom_com {_ _ _ _ _ _} _ : clear implicits.
+Arguments Arr_T_H {_ _ _ _} _ : clear implicits.
+Arguments Arr_T_Hom_com {_ _ _ _} _ : clear implicits.
 
 Coercion Arrow_of_Arrow_To : Arrow_To >-> Arrow.
 

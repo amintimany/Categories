@@ -4,6 +4,9 @@ Require Import Basic_Cons.Initial.
 Require Import Ext_Cons.Arrow.
 Require Import Coq_Cats.Type_Cat.Card_Restriction.
 
+Set Primitive Projections.
+
+Set Universe Polymorphism.
 
 Section CoLimit.
 

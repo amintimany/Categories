@@ -6,6 +6,10 @@ Require Import Cat.Cat.
 Require Import Ext_Cons.Prod_Cat.
 Require Import Basic_Cons.Product.
 
+Set Primitive Projections.
+
+Set Universe Polymorphism.
+
 Program Instance Prod_Cat_proj1 `(C : Category Obj Hom) `(C' : Category Obj' Hom') : Functor (Prod_Cat C C') C :=
 {
   FO := fun x => fst x;

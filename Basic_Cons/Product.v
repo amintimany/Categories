@@ -2,10 +2,15 @@ Require Import Category.Main.
 Require Import Ext_Cons.Prod_Cat.
 Require Import Functor.Main.
 
+
+Set Primitive Projections.
+
+Set Universe Polymorphism.
+
 (* Product Object *)
 
 
-Class Product `(C : Category Obj Hom) (c d p : Obj) : Type :=
+Class Product (C : Category) (c d p : Obj) : Type :=
 {
   Pi_1 : Hom p c;
   Pi_2 : Hom p d;
@@ -19,7 +24,7 @@ Class Product `(C : Category Obj Hom) (c d p : Obj) : Type :=
   Prod_morph_unique : ∀ (p' : Obj) (r1 : Hom p' c) (r2 : Hom p' d) (f g : Hom p' p), (Pi_1 ∘ f = r1) → (Pi_2 ∘ f = r2) → (Pi_1 ∘ g = r1) → (Pi_2 ∘ g = r2) → f = g
 }.
 
-Theorem Product_iso `{C : Category Obj Hom} (c d p p': Obj) : Product C c d p → Product C c d p' → p ≡ p'.
+Theorem Product_iso {C : Category} (c d p p': Obj) : Product C c d p → Product C c d p' → p ≡ p'.
 Proof.
   intros [P1 P2 PX PXC1 PXC2 PU] [P1' P2' PX' PXC1' PXC2' PU'].
   exists (PX' p P1 P2); exists (PX p' P1' P2');
@@ -28,16 +33,16 @@ Proof.
   repeat (rewrite PXC1 || rewrite PXC2 || rewrite PXC1' || rewrite PXC2'); trivial.
 Qed.
 
-Definition Arrow_Product `{C : Category Obj Hom}
+Definition Arrow_Product {C : Category}
            {a b c d x y : Obj}
            (pabx : Product C a b x)
            (pcdy : Product C c d y)
            (f : Hom a c) (g : Hom b d)
 : Hom x y :=
-  @Prod_morph_ex _ _ C c d y pcdy x (f ∘ (@Pi_1 _ _ C a b x pabx)) (g ∘ (@Pi_2 _ _ C a b x pabx))
+  @Prod_morph_ex C c d y pcdy x (f ∘ (@Pi_1 C a b x pabx)) (g ∘ (@Pi_2 C a b x pabx))
 .
 
-Program Instance Product_Functor `{C : Category Obj Hom} (pr : Obj → Obj → Obj) (pr_prod : ∀ a b, Product C a b (pr a b)) : Functor (Prod_Cat C C) C :=
+Program Instance Product_Functor {C : Category} (pr : Obj → Obj → Obj) (pr_prod : ∀ a b, Product C a b (pr a b)) : Functor (Prod_Cat C C) C :=
 {
   FO := fun x => pr (fst x) (snd x); 
   FA := fun a b f => Arrow_Product (pr_prod _ _) (pr_prod _ _) (fst f) (snd f)
@@ -119,7 +124,7 @@ Qed.
 
 (* Product_Functor defined *)
 
-Class Has_Products `(C : Category Obj Hom) : Type :=
+Class Has_Products (C : Category) : Type :=
 {
   HP_prod : Obj → Obj → Obj;
 

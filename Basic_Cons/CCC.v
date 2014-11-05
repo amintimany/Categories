@@ -3,6 +3,10 @@ Require Export Basic_Cons.Terminal.
 Require Export Basic_Cons.Product.
 Require Export Basic_Cons.Exponential.
 
+Set Primitive Projections.
+
+Set Universe Polymorphism.
+
 (* Cartesian Closed Category : one that has terminal element, binary products (all finite products) and exponential *)
 Class CCC `(C : Category Obj) : Type :=
 {

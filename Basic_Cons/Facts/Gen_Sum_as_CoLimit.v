@@ -6,6 +6,10 @@ Require Import Limits.CoLimit.
 Require Import Basic_Cons.Initial.
 Require Import Coq_Cats.Type_Cat.Card_Restriction.
 
+Set Primitive Projections.
+
+Set Universe Polymorphism.
+
 Section Gen_Sum_CoLimit.
   Context `(C : Category Obj Hom) (A : Type) (objs : A → Obj)
           (l : CoCone (Discrete_Functor C A objs))

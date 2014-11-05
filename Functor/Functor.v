@@ -1,15 +1,19 @@
 Require Import Category.Main.
 
-Class Functor `(C : Category Obj Hom) `(C' : Category Obj' Hom') : Type := 
+Set Primitive Projections.
+
+Set Universe Polymorphism.
+
+Class Functor (C C' : Category) : Type := 
 {
   (* Object map *)
-  FO : Obj → Obj';
+  FO : @Obj C → @Obj C';
 
   (* Arrow map *)
-  FA : ∀ {a b : Obj}, Hom a b → Hom' (FO a) (FO b);
+  FA : ∀ {a b}, @Hom C a b → @Hom C' (FO a) (FO b);
 
   (* Mapping of identities *)
-  F_id : ∀ {c : Obj}, FA (@id _ _ _ c) = @id _ _ _ (FO c);
+  F_id : ∀ {c}, FA (@id _ c) = @id _ (FO c);
   
   (* Functor commuting with composition *)
   F_compose : ∀ {a b c} (f : Hom a b) (g : Hom b c), FA (g ∘ f) = (FA g) ∘ (FA f)
@@ -17,9 +21,9 @@ Class Functor `(C : Category Obj Hom) `(C' : Category Obj' Hom') : Type :=
   (* F_id and F_compose together state the fact that functors are morphisms of categories (preserving the structure of categories!)*)
 }.
 
-Notation "F '_o'" := (@FO _ _ _ _ _ _ F).
+Notation "F '_o'" := (@FO _ _ F).
 
-Notation "F '_a'" := (@FA _ _ _ _ _ _ F).
+Notation "F '_a'" := (@FA _ _ F).
 
 Hint Extern 2 => (apply F_id).
 
@@ -46,7 +50,7 @@ Hint Extern 2 => Functor_Simplify.
 
 Section Functor_eq_simplification.
 
-  Context `{C : Category Obj Hom} `{C' : Category Obj' Hom'} (F G : Functor C C').
+  Context {C C' : Category} (F G : Functor C C').
 
   Lemma Functor_eq_simplify : (F _o = G _o) -> (F _a ≃ G  _a) -> F = G.
   Proof.
@@ -70,13 +74,13 @@ Section Functor_eq_simplification.
                                   (match Oeq in (_ = u) return (fO a = u a) with
                                        eq_refl => eq_refl
                                    end)
-                                  in (_ = Y) return (Hom' (fO a) _ = Hom' Y _) with
+                                  in (_ = Y) return (Hom (fO a) _ = Hom Y _) with
                                     eq_refl => 
                                     (match
                                         (match Oeq in (_ = u) return (fO b = u b) with
                                              eq_refl => eq_refl
                                          end)
-                                        in (_ = Y) return (Hom' _ (fO b) = Hom' _ Y) with
+                                        in (_ = Y) return (Hom _ (fO b) = Hom _ Y) with
                                           eq_refl => eq_refl
                                       end)
                                 end) in (_ = Z) return Z with

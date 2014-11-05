@@ -14,6 +14,10 @@ Require Import Coq_Cats.Type_Cat.Card_Restriction.
 Require Import Limits.Limit.
 Require Import Limits.CoLimit.
 
+Set Primitive Projections.
+
+Set Universe Polymorphism.
+
 Section Gen_Sum_CoEq_Co_Complete.
    Context `{C : Category Obj Hom} `{J : Category Obj' Hom'} {HGPO : Has_General_Sums C Obj'} {HGPH : Has_General_Sums C (Arrow J)} {HE : Has_CoEqualizers C} (D : Functor J C).
 

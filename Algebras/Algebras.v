@@ -1,6 +1,10 @@
 Require Import Category.Main.
 Require Import Functor.Main.
 
+Set Primitive Projections.
+
+Set Universe Polymorphism.
+
 Class Algebra `{C : Category Obj Hom} (T : Functor C C) : Type :=
 {
   Alg_Carrier : Obj;

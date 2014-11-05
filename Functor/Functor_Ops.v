@@ -2,22 +2,26 @@ Require Import Category.Main.
 Require Import Functor.Functor.
 Require Import Functor.Tactics.
 
+Set Primitive Projections.
+
+Set Universe Polymorphism.
+
 (* Opposite Functor *)
 Section Opposite_Functor.
-  Context `{C : Category Obj Hom} `{D : Category Obj' Hom'} (F : Functor C D).
+  Context {C D : Category} (F : Functor C D).
 
   Program Instance Opposite_Functor : Functor C^op D^op :=
     {
       FO := F _o;
       FA := λ a b h, F _a b a h;
-      F_id := λ a, @F_id _ _ _ _ _ _ F a;
-      F_compose := λ a b c f g, @F_compose _ _ _ _ _ _ F c b a g f
+      F_id := λ a, @F_id _ _ F a;
+      F_compose := λ a b c f g, @F_compose _ _ F c b a g f
     }.
 
 End Opposite_Functor.
 
 Section Opposite_Opposite_Functor.
-  Context `{C : Category Obj Hom} `{D : Category Obj' Hom'} (F : Functor C D).
+  Context {C D : Category} (F : Functor C D).
   
   Theorem Opposite_Opposite_Functor : 
     F = 
@@ -47,7 +51,7 @@ End Opposite_Opposite_Functor.
 
 Section Functor_Compose.
 
-  Context `{C : Category Obj Hom} `{C' : Category Obj' Hom'} `{C'' : Category Obj'' Hom''} (F : Functor C C') (F' : Functor C' C'').
+  Context {C C' C'' : Category} (F : Functor C C') (F' : Functor C' C'').
 
   Program Instance Functor_compose : Functor C C'' :=
     {
@@ -62,21 +66,21 @@ End Functor_Compose.
 (* Associativity of functor composition *)
 
 Section Functor_Assoc.
-    Context `{C1 : Category Obj1 Hom1} `{C2 : Category Obj2 Hom2} `{C3 : Category Obj3 Hom3} `{C4 : Category Obj4 Hom4} (F : Functor C1 C2) (G : Functor C2 C3) (H : Functor C3 C4).
+    Context {C1 C2 C3 C4 : Category} (F : Functor C1 C2) (G : Functor C2 C3) (H : Functor C3 C4).
 
   Theorem Functor_assoc :
     (Functor_compose F (Functor_compose G H)) = (Functor_compose (Functor_compose F G) H).
   Proof.
     apply Functor_eq_simplify.
-    simpl; reflexivity.
-    simpl; reflexivity.
+    reflexivity.
+    reflexivity.
   Qed.
 
 End Functor_Assoc.
 
 (* Identitiy functor *)
 
-Program Instance Functor_id `{C : Category Obj Hom} : Functor C C :=
+Program Instance Functor_id `{C : Category} : Functor C C :=
   {
     FO := fun x => x;
     FA := fun c d f => f
@@ -85,7 +89,7 @@ Program Instance Functor_id `{C : Category Obj Hom} : Functor C C :=
   (* Functor_id defined -- the rest of the obligations are taken care of by Program system *)
 
 Section Functor_Identity_Unit.
-  Context  `(C : Category Obj Hom) `(C' : Category Obj' Hom') (F : Functor C C').
+  Context  (C C' : Category) (F : Functor C C').
 
   Theorem Functor_id_unit_left : (Functor_compose F Functor_id) = F.
   Proof.

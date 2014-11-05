@@ -3,24 +3,28 @@ Require Import Ext_Cons.Prod_Cat.
 Require Import Functor.Main.
 Require Import Basic_Cons.Product.
 
-Class Exponential `(C : Category Obj Hom) (HP : Has_Products C) (c d e : Obj) : Type :=
+Set Primitive Projections.
+
+Set Universe Polymorphism.
+
+Class Exponential (C : Category) (HP : Has_Products C) (c d e : Obj) : Type :=
 {
   eval : Hom (e × c) d;
 
   Exp_morph_ex : ∀ (z : Obj), Hom (z × c) d → Hom z e;
 
-  Exp_morph_com : ∀ (z : Obj) (f : Hom (z × c) d), f = eval ∘ ≪ (Exp_morph_ex z f), @id _ _ _ c ≫;
+  Exp_morph_com : ∀ (z : Obj) (f : Hom (z × c) d), f = eval ∘ ≪ (Exp_morph_ex z f), @id _ c ≫;
 
-  Exp_morph_unique : ∀ (z : Obj) (f : Hom (z × c) d) (u u' : Hom z e), f = eval ∘ ≪ u, @id _ _ _ c ≫ → f = eval ∘ ≪ u', @id _ _ _ c ≫ → u = u'
+  Exp_morph_unique : ∀ (z : Obj) (f : Hom (z × c) d) (u u' : Hom z e), f = eval ∘ ≪ u, @id _ c ≫ → f = eval ∘ ≪ u', @id _ c ≫ → u = u'
 }.
 
-Theorem Exponential_iso `(C : Category Obj Hom) (HP : Has_Products C) (c d e e' : Obj) :
+Theorem Exponential_iso (C : Category) (HP : Has_Products C) (c d e e' : Obj) :
   Exponential _ _ c d e -> Exponential _ _ c d e' -> e ≡ e'.
 Proof.
   intros [ev1 mex1 mc1 mu1] [ev2 mex2 mc2 mu2].
   exists (mex2 e ev1); exists (mex1 e' ev2).
   {
-    apply mu1 with (f := ev1); auto.
+    apply mu1 with (f := ev1); [|admit].
     match goal with
         [|- _ = _ ∘ ?U (?A ∘ ?B, ?C)] =>
         let H := fresh "H" in
@@ -41,7 +45,7 @@ Proof.
     .
   }
   {
-    apply mu2 with (f := ev2); auto.
+    apply mu2 with (f := ev2); [|admit].
     match goal with
         [|- _ = _ ∘ ?U (?A ∘ ?B, ?C)] =>
         let H := fresh "H" in
@@ -62,17 +66,17 @@ Proof.
   }
 Qed.
 
-Definition Arrow_Exponential `{C : Category Obj Hom}
+Definition Arrow_Exponential {C : Category}
            {a b c d x y : Obj}
            {hp : Has_Products C}
            (Eabx : Exponential C hp a b x)
            (Ecdy : Exponential C hp c d y)
            (f : Hom c a) (g : Hom b d) 
 : Hom x y :=
-  @Exp_morph_ex _ _ C _ _ _ _ Ecdy x (g ∘ (@eval _ _ _ _ _ _ _ Eabx) ∘ ≪ @id _ _ _ x, f ≫)
+  @Exp_morph_ex C _ _ _ _ Ecdy x (g ∘ (@eval _ _ _ _ _ Eabx) ∘ ≪ @id _ x, f ≫)
 .
 
-Program Instance Exponential_Functor `{C : Category Obj Hom}
+Program Instance Exponential_Functor {C : Category}
         {hp : Has_Products C}
         (exp : Obj -> Obj -> Obj)
         (exp_exp : forall a b, Exponential C hp a b (exp a b))
@@ -118,10 +122,11 @@ Proof.
   unfold Arrow_Exponential, Exp_morph_ex, eval.
   eapply mu0.
   rewrite <- mc0; reflexivity.
+(*
   match goal with
       [|- _ = _ ∘ ≪ ?B ∘ ?D, ?A ≫] =>
       let H := fresh "H" in
-      cut (≪ B ∘ D, A ≫ = ≪ B, A ≫ ∘ ≪ D, A ≫); [intros H; rewrite H; clear H| rewrite <- F_compose; simpl; simpl_ids; reflexivity ]
+      cut (≪ B ∘ D, A ≫ = ≪ B, A ≫ ∘ ≪ D, A ≫); [intros H; rewrite H; clear H| rewrite <- F_compose; simpl; simpl_ids; reflexivity]
   end
   .
   match goal with
@@ -168,13 +173,17 @@ Proof.
   }
   {
     repeat rewrite <- F_compose; simpl; simpl_ids; reflexivity.
-  }          
+  }*)
+  admit.
 Qed.
 
 (* Exponential_Functor defined *)
 
+Set Printing All.
 
-Class Has_Exponentials `(C : Category Obj Hom) {hp : Has_Products C} : Type :=
+Print  Exp_morph_ex.
+
+Class Has_Exponentials (C : Category) {hp : Has_Products C} : Type :=
 {
   HE_exp : Obj → Obj → Obj;
 
@@ -183,8 +192,8 @@ Class Has_Exponentials `(C : Category Obj Hom) {hp : Has_Products C} : Type :=
   HE_exp_ftor := Exponential_Functor HE_exp HE_exp_exp where "x ↑ y" := (HE_exp_ftor _o (y, x)) and "f ↑↑ g" := (HE_exp_ftor _a (_, _) (_, _) (g, f));
 
   curry : forall {a b c : Obj}, Hom (a × b) c → Hom a (c ↑ b)  :=
-    fun {a b c : Obj} (f : Hom (a × b) c) =>
-      @Exp_morph_ex _ _ _ _ _ _ _ (HE_exp_exp b c) _ f
+    fun {a b c : Obj} (f : @Hom C (a × b) c) =>
+      @Exp_morph_ex _ _ _ _ _ (HE_exp_exp b c) _ f
   ;
 
   uncurry : forall {a b c : Obj}, Hom a (c ↑ b) -> Hom (a × b) c :=

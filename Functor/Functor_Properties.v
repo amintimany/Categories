@@ -2,32 +2,36 @@ Require Import Category.Main.
 Require Import Functor.Functor.
 Require Import Functor.Tactics.
 
+Set Primitive Projections.
+
+Set Universe Polymorphism.
+
 Section Functor_Properties.
-  Context `{C : Category Obj Hom} `{C' : Category Obj' Hom'} (F : Functor C C').
+  Context {C C' : Category} (F : Functor C C').
 
   Definition Injective_Func := ∀ (c c' : Obj), F _o c = F _o c' → c = c'.
 
   Definition Essentially_Injective_Func := ∀ (c c' : Obj), F _o c = F _o c' → c ≡ c'.
   
-  Definition Surjective_Func := ∀ (c : Obj'), {c' : Obj | F _o c' = c}.
+  Definition Surjective_Func := ∀ (c : Obj), {c' : Obj | F _o c' = c}.
 
-  Definition Essentially_Surjective_Func := ∀ (c : Obj'), {c' : Obj & F _o c' ≡ c}.
+  Definition Essentially_Surjective_Func := ∀ (c : Obj), {c' : Obj & F _o c' ≡ c}.
   
   Definition Faithful_Func := ∀ (c c' : Obj) (h h' : Hom c c'), F _a _ _ h = F _a _ _ h' → h = h'.
   
-  Definition Full_Func := ∀ (c1 c2 : Obj) (h' : Hom' (F _o c1) (F _o c2)), {h : Hom c1 c2 | F _a _ _ h = h'}.
+  Definition Full_Func := ∀ (c1 c2 : Obj) (h' : Hom (F _o c1) (F _o c2)), {h : Hom c1 c2 | F _a _ _ h = h'}.
 
   Theorem Fully_Faithful_Essentially_Injective : Faithful_Func → Full_Func → Essentially_Injective_Func.
   Proof.
     intros F_Faithful F_Full c c' H.
     destruct (F_Full _ _ (
-                       match H in (_ = Y) return Hom' (F _o c) Y with
-                         | eq_refl => F _a _ _ (@id _ _ _ c)
+                       match H in (_ = Y) return Hom (F _o c) Y with
+                         | eq_refl => F _a _ _ (@id _ c)
                        end)
              ) as [U' HU].
     destruct (F_Full _ _ (
-                       match H in (_ = Y) return Hom' Y (F _o c) with
-                         | eq_refl => F _a _ _ (@id _ _ _ c)
+                       match H in (_ = Y) return Hom Y (F _o c) with
+                         | eq_refl => F _a _ _ (@id _ c)
                        end)
              ) as [V' HV].
     exists U'; exists V'.
@@ -75,7 +79,7 @@ Section Functor_Properties.
 End Functor_Properties.
 
 Section Embedding.
-  Context `(C : Category Obj Hom) `(C' : Category Obj' Hom').
+  Context (C C' : Category).
 
   (**
   An embedding is a functor that is faully-faithful. Such a functor is necessarily essentially injective and also guarantees isomorphisms, i.e., if F __O c === F __O c' then c === c'.

@@ -2,6 +2,11 @@ Require Import Category.Main.
 Require Import Basic_Cons.Equalizer.
 Require Import Basic_Cons.CoEqualizer.
 
+
+Set Primitive Projections.
+
+Set Universe Polymorphism.
+
 Section CoEq_Eq.
   Context `{C : Category Obj Hom} {a b c: Obj} (f g : Hom a b) (Eq : Equalizer C f g c).
 

@@ -4,6 +4,10 @@ Require Import Coq_Cats.Type_Cat.Type_Cat.
 Require Import Ext_Cons.Prod_Cat.
 Require Import NatTrans.NatTrans.
 
+Set Primitive Projections.
+
+Set Universe Polymorphism.
+
 Program Instance Yoneda_emb_O `(C : Category Obj Hom) (c : Obj) : Functor C ^op Type_Cat :=
 {
   FO := fun x => Hom x c;

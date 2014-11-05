@@ -9,6 +9,10 @@ Require Import Yoneda.Y_emb.
 
 Local Obligation Tactic := idtac.
 
+Set Primitive Projections.
+
+Set Universe Polymorphism.
+
 Program Instance Y_right `(C : Category Obj Hom) : Functor (Prod_Cat C ^op (Func_Cat C ^op Type_Cat)) Type_Cat :=
 {
   FO := fun x => (snd x) _o (fst x);

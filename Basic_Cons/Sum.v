@@ -2,6 +2,11 @@ Require Import Category.Main.
 Require Import Ext_Cons.Prod_Cat.
 Require Import Functor.Main.
 
+
+Set Primitive Projections.
+
+Set Universe Polymorphism.
+
 Class Sum `(C : Category Obj Hom) (c d p : Obj) : Type :=
 {
   Inj_1 : Hom c p;

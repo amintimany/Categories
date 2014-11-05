@@ -10,6 +10,10 @@ Require Import Basic_Cons.Product.
 Require Import Basic_Cons.Exponential.
 Require Import NatTrans.NatTrans.
 
+Set Primitive Projections.
+
+Set Universe Polymorphism.
+
 Local Obligation Tactic := idtac.
 
 Program Instance Exp_Cat_eval `(C : Category Obj Hom) `(C' : Category Obj' Hom') : Functor (Prod_Cat (Func_Cat C C') C) C' :=

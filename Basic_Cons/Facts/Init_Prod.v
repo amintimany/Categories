@@ -7,6 +7,10 @@ Require Import Basic_Cons.CCC.
 Require Import NatTrans.NatTrans.
 Require Import Yoneda.Main.
 
+Set Primitive Projections.
+
+Set Universe Polymorphism.
+
 Section Init_Prod.
 
   Context `{C : Category Obj Hom} {C_CCC : CCC C} {C_HI : Has_Initial C}.

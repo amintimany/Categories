@@ -4,6 +4,10 @@ Require Import Cat.Cat.
 Require Import Basic_Cons.Terminal.
 Require Import Categories.Discr.
 
+Set Primitive Projections.
+
+Set Universe Polymorphism.
+
 Program Instance Functor_To_1_Cat `(C' : Category Obj Hom) : Functor C' 1%category :=
 {
   FO := fun x => tt;

@@ -1,5 +1,9 @@
 Require Import Category.Main.
 
+Set Primitive Projections.
+
+Set Universe Polymorphism.
+
 Section PullBack.
   Context `(C : Category Obj Hom) {a b x : Obj} (f : Hom a x) (g : Hom b x).
   

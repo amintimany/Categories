@@ -1,6 +1,10 @@
 Require Import Category.Main.
 Require Import Ext_Cons.Arrow.
 
+Set Primitive Projections.
+
+Set Universe Polymorphism.
+
 (*
    The Arrow Category of C:
      Objects : Arrows of C
@@ -16,10 +20,14 @@ Require Import Ext_Cons.Arrow.
 *)
 
 Section Arrow_Cat.
-  Context `(C : Category Obj Hom).
+  Context (C : Category).
 
-  Program Instance Arrow_Cat : Category (Arrow C) (@Arrow_Hom _ _ C) :=
+  Program Instance Arrow_Cat : Category :=
     {
+      Obj := Arrow C;
+
+      Hom := @Arrow_Hom C;
+
       compose := λ _ _ _ f g, Arrow_Hom_compose _ f g;
       
       id := λ a, Arrow_id _

@@ -9,6 +9,10 @@ Require Import Yoneda.Y_emb.
 Require Import Yoneda.Y_Left.
 Require Import Yoneda.Y_Right.
 
+Set Primitive Projections.
+
+Set Universe Polymorphism.
+
 Local Obligation Tactic := idtac.
 
 Program Instance Y_right_to_left_NT `(C : Category Obj Hom) (c : Obj) (F : Functor C ^op Type_Cat) (h : F _o c) : NatTrans (Yoneda_emb_O _ c) F :=

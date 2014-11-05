@@ -2,6 +2,10 @@ Require Import Category.Main.
 Require Import Basic_Cons.Sum.
 Require Import Coq_Cats.Type_Cat.Type_Cat.
 
+Set Primitive Projections.
+
+Set Universe Polymorphism.
+
 Local Obligation Tactic := program_simpl; auto 2.
 
 Program Instance sum_Sum (A B : Type) : Sum Type_Cat A B (A + B)%type.

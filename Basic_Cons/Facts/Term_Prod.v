@@ -8,6 +8,10 @@ Require Import Basic_Cons.Product.
 Require Import NatTrans.NatTrans.
 Require Import Yoneda.Main.
 
+Set Primitive Projections.
+
+Set Universe Polymorphism.
+
 Section Term_Prod.
 
   Context `{C : Category Obj Hom} {C_HT : Has_Terminal C} {C_HP : Has_Products C}.

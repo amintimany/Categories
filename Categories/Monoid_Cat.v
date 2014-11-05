@@ -1,5 +1,9 @@
 Require Import Category.Main.
 
+Set Primitive Projections.
+
+Set Universe Polymorphism.
+
 Class Monoid : Type :=
 {
   Mon_car : Type;

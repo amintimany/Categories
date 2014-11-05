@@ -1,6 +1,7 @@
 Mod_Essentials = \
 	Essentials/Notations\
-	Essentials/Empty
+	Essentials/Empty\
+	Essentials/Tactics
 
 Mod_Category = \
 	Category/Category\
@@ -12,13 +13,13 @@ Mod_Category = \
 	Category/Main
 
 Mod_Ext_Cons =\
+	Ext_Cons/Prod_Cat\
 	Ext_Cons/Arrow\
 	Ext_Cons/Arrow_To\
 	Ext_Cons/Arrow_From\
 	Ext_Cons/Slice_Cat\
 	Ext_Cons/CoSlice_Cat\
 	Ext_Cons/Arrow_Cat\
-	Ext_Cons/Prod_Cat\
 	Ext_Cons/Main
 
 Mod_Functor =\

@@ -1,6 +1,11 @@
 Require Import Category.Main.
 Require Import Ext_Cons.Arrow_To.
 
+
+Set Primitive Projections.
+
+Set Universe Polymorphism.
+
 (*
    The Slice of Category C with respect to c:
      Objects : Arrows of C ending in c
@@ -18,10 +23,14 @@ Require Import Ext_Cons.Arrow_To.
 *)
 
 Section Slice_Cat.
-  Context `(C : Category Obj Hom) (c : Obj).
+  Context (C : Category) (c : Obj).
 
-  Program Instance Slice_Cat : Category (Arrow_To C c) (@Arrow_To_Hom _ _ C c) :=
+  Program Instance Slice_Cat : Category :=
     {
+      Obj := (Arrow_To C c);
+
+      Hom := (@Arrow_To_Hom C c);
+
       compose := λ _ _ _ f g, Arrow_To_Hom_compose _ f g;
       
       id := λ a, Arrow_To_id _

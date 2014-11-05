@@ -3,3 +3,5 @@ Coq_Make
 *.glob
 *.v.d
 *.vo
+*.aux
+.coq-native

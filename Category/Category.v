@@ -6,8 +6,16 @@ Require Export Coq.Logic.ProofIrrelevance.
 Require Export Essentials.Notations.
 Require Export Essentials.Tactics.
 
-Class Category (Obj : Type) (Hom : Obj → Obj → Type) : Type :=
+Set Primitive Projections.
+
+Set Universe Polymorphism.
+
+Class Category : Type :=
 {
+  Obj : Type;
+
+  Hom : Obj → Obj → Type;
+
   (* composition of morphisms: *)
   compose : ∀ {a b c : Obj}, Hom a b → Hom b c → Hom a c where "f ∘ g" := (compose g f);
 
@@ -37,10 +45,10 @@ Global Generalizable Variables Obj Hom.
 
 Hint Resolve id_unit_left id_unit_right.
 
-Lemma Category_eq_simplify `(C : Category Obj Hom) `(C' : Category Obj' Hom') : Obj = Obj' → Hom ≃ Hom' → @compose _ _ C ≃ @compose _ _ C' → @id _ _ C ≃ @id _ _ C' → C ≃ C'.
+Lemma Category_eq_simplify (C C' : Category) : @Obj C = @Obj C' → @Hom C ≃ @Hom C' → @compose C ≃ @compose C' → @id C ≃ @id C' → C ≃ C'.
 Proof.
   intros H1 H2 H3 H4.
-  destruct C as [Ccomp Cas Cass Cid Ciul Ciur]; destruct C' as [Ccomp' Cas' Cass' Cid' Ciul' Ciur']; simpl in *.
+  destruct C as [? ? Ccomp Cas Cass Cid Ciul Ciur]; destruct C' as [? ? Ccomp' Cas' Cass' Cid' Ciul' Ciur']; simpl in *.
   destruct H1.
   dependent destruction H2.
   dependent destruction H3.

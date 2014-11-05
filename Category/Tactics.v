@@ -1,6 +1,8 @@
 Require Import Category.Category.
 
-Local Open Scope morphism_scope.
+Set Primitive Projections.
+
+Set Universe Polymorphism.
 
 (* basic tactics for categories *)
 
@@ -8,20 +10,15 @@ Ltac reveal_comp_in_goal f g :=
   match goal with
     | [ |- context[f ∘ g] ] => idtac
     | [ |- context[?B ∘ (?A ∘ f)] ] =>
-      let J := fresh "H" in
-      assert (J := assoc f A B); rewrite <- J; clear J
+      rewrite <- (assoc f _ _)
     | [ |- context[((g ∘ ?A) ∘ ?B)] ] =>
-      let J := fresh "H" in
-      assert (J := assoc B A g); rewrite J; clear J
+      rewrite (assoc _ _ g)
     | [ |- context[(?A ∘ f) ∘ (g ∘ ?B)] ] =>
-      let J := fresh "H" in
-      assert (J := assoc B g (A ∘ f)); rewrite <- J; clear J
+      rewrite <- (assoc _ g (_ ∘ f))
     | [ |- context[((?A ∘ f) ∘ g)] ] =>
-      let J := fresh "H" in
-      assert (J := assoc g f A); rewrite J; clear J
+      rewrite (assoc g f)
     | [ |- context[(f ∘ (g ∘ ?B))] ] =>
-      let J := fresh "H" in
-      assert (J := assoc B g f); rewrite <- J; clear J
+      rewrite <- (assoc _ g f)
   end;
   match goal with
     | [ |- context[f ∘ g] ] => idtac

@@ -3,6 +3,9 @@ Require Import Basic_Cons.CCC.
 Require Import Basic_Cons.Initial.
 Require Import Basic_Cons.Sum.
 
+Set Primitive Projections.
+
+Set Universe Polymorphism.
 
 (*
 **********************************************************

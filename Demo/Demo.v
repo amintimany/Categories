@@ -5,6 +5,10 @@ Require Import Coq_Cats.Type_Cat.Type_Cat.
 Require Import Coq_Cats.Type_Cat.Facts.
 Require Import Algebras.Main.
 
+Set Primitive Projections.
+
+Set Universe Polymorphism.
+
 Program Instance S_nat_func : Functor Type_Cat Type_Cat :=
 {
   FO := λ a, (_T_ Type_Cat) ⊕ a ;

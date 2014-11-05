@@ -3,6 +3,10 @@ Require Import Functor.Functor.
 Require Import Basic_Cons.General_Product.
 Require Import Coq_Cats.Type_Cat.Type_Cat.
 
+Set Primitive Projections.
+
+Set Universe Polymorphism.
+
 Section Gen_Prod_Iso.
   Context `(C : Category Obj Hom) (A B : Type) (objs : A → Obj) (p : Obj)
           (GP : General_Product C A objs p) (I : B ≡ A).

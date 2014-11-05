@@ -11,6 +11,9 @@ Require Import Yoneda.Y_Right.
 Require Import Yoneda.Y_Left_Right.
 Require Import Yoneda.Y_Right_Left.
 
+Set Primitive Projections.
+
+Set Universe Polymorphism.
 
 Local Obligation Tactic := idtac.
 

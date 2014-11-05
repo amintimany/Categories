@@ -7,6 +7,10 @@ Require Import NatTrans.NatTrans.
 
 Require Import Yoneda.Y_emb.
 
+Set Primitive Projections.
+
+Set Universe Polymorphism.
+
 Local Obligation Tactic := idtac.
 
 Program Instance Y_left `(C : Category Obj Hom) : Functor (Prod_Cat C ^op (Func_Cat C ^op Type_Cat)) Type_Cat :=

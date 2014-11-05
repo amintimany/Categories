@@ -1,5 +1,9 @@
 Require Import Category.Main.
 
+Set Primitive Projections.
+
+Set Universe Polymorphism.
+
 Section Equalizer.
   Context `(C : Category Obj Hom) {a b : Obj} (f g : Hom a b).
 

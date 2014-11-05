@@ -1,5 +1,10 @@
 Require Import Category.Main.
 
+
+Set Primitive Projections.
+
+Set Universe Polymorphism.
+
 (* General Product *)
 
 Section General_Prod.

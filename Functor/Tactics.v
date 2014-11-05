@@ -1,6 +1,10 @@
 Require Import Category.Main.
 Require Import Functor.Functor.
 
+Set Primitive Projections.
+
+Set Universe Polymorphism.
+
 Ltac Functor_Simplify :=
   match goal with
     | [|- ?F _a _ _ ?A = @id _ _ _ (?F _o ?x)] =>

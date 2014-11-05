@@ -9,6 +9,10 @@ Require Import Ext_Cons.Arrow.
 Require Import Limits.Limit.
 Require Import Limits.CoLimit.
 
+Set Primitive Projections.
+
+Set Universe Polymorphism.
+
 Section Cone_CoCone.
   Context {ObjJ : Type} {HomJ : ObjJ → ObjJ → Type} {J : Category ObjJ HomJ}
           `{C : Category Obj Hom} {D : Functor J C} (cn : Cone D).

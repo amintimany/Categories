@@ -11,6 +11,10 @@ Require Import Yoneda.Y_Left_Right.
 Require Import Yoneda.Y_Right_Left.
 Require Import Yoneda.Y_Lem.
 
+Set Primitive Projections.
+
+Set Universe Polymorphism.
+
 Local Obligation Tactic := idtac.
 
 (* Defineing CoYoneda explicitly. This makes definition of natrual isomorphisms simpler! *)

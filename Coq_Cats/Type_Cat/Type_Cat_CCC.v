@@ -2,6 +2,10 @@ Require Import Category.Main.
 Require Import Basic_Cons.CCC.
 Require Import Coq_Cats.Type_Cat.Type_Cat.
 
+Set Primitive Projections.
+
+Set Universe Polymorphism.
+
 Local Obligation Tactic := program_simpl; auto 3.
 
 Program Instance unit_Type_term : Terminal Type_Cat unit :=

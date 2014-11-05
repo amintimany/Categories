@@ -1,6 +1,10 @@
 Require Import Category.Main.
 Require Import Functor.Main.
 
+Set Primitive Projections.
+
+Set Universe Polymorphism.
+
 Class NatTrans `{C : Category Obj Hom} `{C' : Category Obj' Hom'} (F F' : Functor C C') :=
 {
   Trans (c : Obj) : Hom' (F _o c) (F' _o c);

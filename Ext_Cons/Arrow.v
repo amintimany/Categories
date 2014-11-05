@@ -1,30 +1,34 @@
 Require Import Category.Main.
 Require Import Coq_Cats.Type_Cat.Type_Cat.
 
+Set Primitive Projections.
+
+Set Universe Polymorphism.
+
 Section Arrow.
 
-  Class Arrow `(C : Category Obj Hom) :=
+  Class Arrow (C : Category) :=
     {
       Orig : Obj;
       Targ : Obj;
       Arr : Hom Orig Targ
     }.
 
-  Arguments Orig {_ _ _} _ : clear implicits.
-  Arguments Targ {_ _ _} _ : clear implicits.
-  Arguments Arr {_ _ _} _ : clear implicits.
+  Arguments Orig {_} _ : clear implicits.
+  Arguments Targ {_} _ : clear implicits.
+  Arguments Arr {_} _ : clear implicits.
 
-  Class Arrow_Hom `{C : Category Obj Hom} (a b : Arrow C) :=
+  Class Arrow_Hom {C : Category} (a b : Arrow C) :=
     {
       Arr_H : Hom (Orig a) (Orig b);
       Arr_H' : Hom (Targ a) (Targ b);
       Arr_Hom_com : Arr_H' ∘ (Arr a) = (Arr b) ∘ Arr_H
     }.
-  Arguments Arr_H {_ _ _ _ _} _ : clear implicits.
-  Arguments Arr_H' {_ _ _ _ _} _ : clear implicits.
-  Arguments Arr_Hom_com {_ _ _ _ _} _ : clear implicits.
+  Arguments Arr_H {_ _ _} _ : clear implicits.
+  Arguments Arr_H' {_ _ _} _ : clear implicits.
+  Arguments Arr_Hom_com {_ _ _} _ : clear implicits.
 
-  Context `(C : Category Obj Hom).
+  Context (C : Category).
 
   Section Arrow_Hom_eq_simplify.
     Context {a b : Arrow C} (f g : Arrow_Hom a b).
@@ -77,22 +81,22 @@ End Arrow.
 
 Hint Extern 1 (?A = ?B :> Arrow_Hom _ _) => apply Arrow_Hom_eq_simplify; simpl.
 
-Arguments Orig {_ _ _} _ : clear implicits.
-Arguments Targ {_ _ _} _ : clear implicits.
-Arguments Arr {_ _ _} _ : clear implicits.
+Arguments Orig {_} _ : clear implicits.
+Arguments Targ {_} _ : clear implicits.
+Arguments Arr {_} _ : clear implicits.
 
-Arguments Arr_H {_ _ _ _ _} _ : clear implicits.
-Arguments Arr_H' {_ _ _ _ _} _ : clear implicits.
-Arguments Arr_Hom_com {_ _ _ _ _} _ : clear implicits.
+Arguments Arr_H {_ _ _} _ : clear implicits.
+Arguments Arr_H' {_ _ _} _ : clear implicits.
+Arguments Arr_Hom_com {_ _ _} _ : clear implicits.
 
 
-Definition Arrow_to_Arrow_OP `(C : Category Obj Hom) (ar : Arrow C) : Arrow (C ^op).
+Definition Arrow_to_Arrow_OP (C : Category) (ar : Arrow C) : Arrow (C ^op).
 Proof.
   destruct ar.
-  refine (Build_Arrow _ _ _ _ _ _); eauto.
+  econstructor; eauto.
 Defined.
 
-Lemma Arrow_OP_Iso `(C : Category Obj Hom) : Arrow C ≡ Arrow (C ^op).
+Lemma Arrow_OP_Iso (C : Category) : @Isomorphic Type_Cat (Arrow C) (Arrow (C ^op)).
 Proof.
   exists (Arrow_to_Arrow_OP C).
   set (ACO := Arrow_to_Arrow_OP (C ^op)).
