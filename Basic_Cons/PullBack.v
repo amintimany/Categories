@@ -5,7 +5,7 @@ Set Primitive Projections.
 Set Universe Polymorphism.
 
 Section PullBack.
-  Context `(C : Category Obj Hom) {a b x : Obj} (f : Hom a x) (g : Hom b x).
+  Context (C : Category) {a b x : Obj} (f : Hom a x) (g : Hom b x).
   
   Class PullBack (p : Obj) : Type :=
     {
@@ -41,7 +41,7 @@ Section PullBack.
 
 End PullBack.
 
-Class Has_PullBacks `(C : Category Obj Hom) : Type :=
+Class Has_PullBacks (C : Category) : Type :=
 {
   PullBack_of : ∀ {a b x : Obj}, Hom a x → Hom b x → Obj;
 

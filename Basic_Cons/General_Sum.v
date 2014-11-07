@@ -1,6 +1,5 @@
 Require Import Category.Main.
 
-
 Set Primitive Projections.
 
 Set Universe Polymorphism.
@@ -8,7 +7,7 @@ Set Universe Polymorphism.
 (* General Sum *)
 
 Section General_Sum.
-  Context `(C : Category Obj Hom) (A : Type) (objs : A → Obj).
+  Context (C : Category) (A : Type) (objs : A → Obj).
 
   Class General_Sum (GS_Sum : Obj) : Type :=
     {
@@ -32,13 +31,13 @@ Section General_Sum.
     exists (SX p' SIJ'); exists (SX' p SIJ);
     [apply (SU p SIJ) | apply (SU' p' SIJ')]; eauto 2;
       intros a; rewrite assoc; repeat (rewrite SXC || rewrite SXC'); trivial.
-Qed.
+  Qed.
 
 End General_Sum.
 
 (* Product_Functor defined *)
 
-Class Has_General_Sums `(C : Category Obj Hom) (A : Type) : Type :=
+Class Has_General_Sums (C : Category) (A : Type) : Type :=
 {
   Gen_Sum_of : (A → Obj) → Obj;
 
@@ -48,14 +47,14 @@ Class Has_General_Sums `(C : Category Obj Hom) (A : Type) : Type :=
 Existing Instance Gen_Sum_sum.
 
 
-Class Has_Restricted_General_Sums `(C : Category Obj Hom) (P : Type → Prop) : Type :=
+Class Has_Restricted_General_Sums (C : Category) (P : Type → Prop) : Type :=
   {
     HRGS_HGS : ∀ (A : Type), P A → Has_General_Sums C A
   }.
 
 Existing Instance HRGS_HGS.
 
-Class Has_All_General_Sums `(C : Category Obj Hom) : Type :=
+Class Has_All_General_Sums (C : Category) : Type :=
   {
     HAGS_HGS : ∀ (A : Type), Has_General_Sums C A
   }.

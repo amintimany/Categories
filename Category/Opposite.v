@@ -31,15 +31,9 @@ Instance Opposite (C : Category) : Category :=
 
 Notation "C '^op'" := (Opposite C) (at level 9, no associativity).
 
-Theorem C_OP_OP (C : Category) : (C^op)^op = C.
-Proof.
-  reflexivity.
-Defined.
-
-Hint Resolve C_OP_OP.
-
-Theorem CoIso {C : Category} (a b : Obj) : a ≡ b → @Isomorphic C^op a b. 
+Theorem CoIso {C : Category} (a b : Obj) : @Isomorphic C a b → @Isomorphic C^op a b. 
 Proof.
   intros [f [g H1 H2]].
-(*  exists g; exists f; auto. *) admit.
+  refine (Build_Isomorphic (C^op) _ _ g _).
+  refine (Build_Isomorphism (C^op) _ _ _ f _ _); trivial.
 Qed.

@@ -5,7 +5,7 @@ Set Primitive Projections.
 Set Universe Polymorphism.
 
 Section PushOut.
-  Context `(C : Category Obj Hom) {a b x : Obj} (f : Hom x a) (g : Hom x b).
+  Context (C : Category) {a b x : Obj} (f : Hom x a) (g : Hom x b).
 
   Class PushOut (p : Obj) : Type :=
     {
@@ -41,7 +41,7 @@ Section PushOut.
 
 End PushOut.
 
-Class Has_PushOuts `(C : Category Obj Hom) : Type :=
+Class Has_PushOuts (C : Category) : Type :=
 {
   PushOut_of : ∀ {a b x : Obj}, Hom x a → Hom x b → Obj;
 

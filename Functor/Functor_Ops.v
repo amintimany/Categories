@@ -20,33 +20,6 @@ Section Opposite_Functor.
 
 End Opposite_Functor.
 
-Section Opposite_Opposite_Functor.
-  Context {C D : Category} (F : Functor C D).
-  
-  Theorem Opposite_Opposite_Functor : 
-    F = 
-    match (C_OP_OP C) in (_ = Y) return Functor Y _ with
-        eq_refl =>
-        match (C_OP_OP D) in (_ = Z) return Functor _ Z with
-            eq_refl => Opposite_Functor (Opposite_Functor F)
-        end
-    end.
-    destruct C; destruct D; destruct F; reflexivity.
-  Defined.
-
-  Theorem Functor_Opposite_Opposite : 
-    Opposite_Functor (Opposite_Functor F) = 
-    match eq_sym (C_OP_OP C) in (_ = Y) return Functor Y _ with
-        eq_refl =>
-        match eq_sym (C_OP_OP D) in (_ = Z) return Functor _ Z with
-            eq_refl => F
-        end
-    end.
-    destruct C; destruct D; destruct F; reflexivity.
-  Defined.
-
-End Opposite_Opposite_Functor.
-
 (* Functor composition *)
 
 Section Functor_Compose.

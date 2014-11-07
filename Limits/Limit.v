@@ -10,16 +10,15 @@ Set Universe Polymorphism.
 
 Section Limit.
 
-  Context `{J : Category Obj' Hom'}
-          `{C : Category Obj Hom} (D : Functor J C).
+  Context {J C : Category} (D : Functor J C).
   
   Class Cone : Type :=
     {
-      Cone_obj : Obj;
+      Cone_obj : @Obj C;
   
-      Cone_arrow : ∀ (c : Obj'), Hom Cone_obj (D _o c);
+      Cone_arrow : ∀ (c : @Obj J), @Hom C Cone_obj (D _o c);
 
-      Cone_com : ∀ (c d : Obj') (h : Hom' c d), (D _a _ _ h) ∘ (Cone_arrow c) = Cone_arrow d
+      Cone_com : ∀ (c d : @Obj J) (h : @Hom J c d), (D _a _ _ h) ∘ (Cone_arrow c) = Cone_arrow d
     }.
 
   Coercion Cone_obj : Cone >-> Obj.
@@ -28,7 +27,7 @@ Section Limit.
     {
       Cone_Morph_arrow : Hom c c';
 
-      Cone_Morph_com : ∀ (a : Obj'),  (@Cone_arrow c' a) ∘ Cone_Morph_arrow = (@Cone_arrow c a)
+      Cone_Morph_com : ∀ (a : Obj),  (@Cone_arrow c' a) ∘ Cone_Morph_arrow = (@Cone_arrow c a)
     }.
 
   Coercion Cone_Morph_arrow : Cone_Morph >-> Hom.
@@ -67,13 +66,13 @@ Section Limit.
 
   (* Cone_Morph_compose defined *)
 
-  Program Instance Cone_Cat : Category Cone Cone_Morph :=
+  Program Instance Cone_Cat : Category :=
     {
+      Obj := Cone;
+      Hom := Cone_Morph;
       compose := Cone_Morph_compose;
       id := Cone_Morph_id
     }.
-
-  Existing Instance Cone_Cat.
 
   (* Cone_Cat defined *)
 
@@ -81,58 +80,58 @@ Section Limit.
 
 End Limit.
 
-Arguments Cone_obj {_ _ _ _ _ _ _} _.
-Arguments Cone_arrow {_ _ _ _ _ _ _} _ _.
-Arguments Cone_com {_ _ _ _ _ _ _} _ {_ _} _.
+Arguments Cone_obj {_ _ _} _.
+Arguments Cone_arrow {_ _ _} _ _.
+Arguments Cone_com {_ _ _} _ {_ _} _.
 
-Arguments Cone_Morph_arrow {_ _ _ _ _ _ _ _ _} _.
-Arguments Cone_Morph_com {_ _ _ _ _ _ _ _ _} _ _.
+Arguments Cone_Morph_arrow {_ _ _ _ _} _.
+Arguments Cone_Morph_com {_ _ _ _ _} _ _.
 
 Hint Extern 1 (?A = ?B :> Cone_Morph _ _ _) => apply Cone_Morph_eq_simplify; simpl.
 
-Class Has_Limit `{C : Category Obj Hom} `{J : Category Obj' Hom'} (D : Functor J C) :=
+Class Has_Limit {C J : Category} (D : Functor J C) :=
 {
-  HL_Lim : Cone D;
+  HL_Limit : Cone D;
 
-  HL_Lim_Limit : Limit D HL_Lim
+  HL_Limit_Limit : Limit D HL_Limit
 }.
 
-Existing Instance HL_Lim_Limit.
+Existing Instance HL_Limit_Limit.
 
-Class Has_Restricted_Limits `(C : Category Obj Hom) (P : Card_Restriction) :=
+Class Has_Restricted_Limits (C : Category) (P : Card_Restriction) :=
 {
-  Restricted_Limit_of `{J : Category Obj' Hom'} (D : Functor J C) : (P Obj') → (P (Arrow J)) → Cone D;
+  Restricted_Limit_of {J : Category} (D : Functor J C) : (P (@Obj J)) → (P (Arrow J)) → Cone D;
 
-  Restricted_Limit_of_Limit `{J : Category Obj' Hom'} (D : Functor J C) (PO : P Obj') (PH : P (Arrow J)) : Limit D (Restricted_Limit_of D PO PH)
+  Restricted_Limit_of_Limit {J : Category} (D : Functor J C) (PO : P (@Obj J)) (PH : P (Arrow J)) : Limit D (Restricted_Limit_of D PO PH)
 }.
 
 Existing Instance Restricted_Limit_of_Limit.
 
-Class Complete `(C : Category Obj Hom) :=
+Class Complete (C : Category) :=
 {
-  Limit_of `{J : Category Obj' Hom'} (D : Functor J C) : Cone D;
+  Limit_of {J : Category} (D : Functor J C) : Cone D;
 
-  Limit_of_Limit `{J : Category Obj' Hom'} (D : Functor J C) : Limit D (Limit_of D)
+  Limit_of_Limit {J : Category} (D : Functor J C) : Limit D (Limit_of D)
 }.
 
 Existing Instance Limit_of_Limit.
 
 Section Restricted_Limits_to_Complete.
-  Context `(C : Category Obj Hom) (P : Card_Restriction) {HRL : Has_Restricted_Limits C P} (All_Ps : ∀ t, P t).
+  Context (C : Category) (P : Card_Restriction) {HRL : Has_Restricted_Limits C P} (All_Ps : ∀ t, P t).
   
   Instance No_Restriction_Complete : Complete C :=
     {
-      Limit_of := λ O H J D, Restricted_Limit_of D (All_Ps O) (All_Ps (Arrow J))
+      Limit_of := λ J D, Restricted_Limit_of D (All_Ps (@Obj J)) (All_Ps (Arrow J))
     }.
 
 End Restricted_Limits_to_Complete.
 
 Section Complete_to_Restricted_Limits.
-  Context `(C : Category Obj Hom) {CC : Complete C} (P : Card_Restriction).
+  Context (C : Category) {CC : Complete C} (P : Card_Restriction).
   
   Instance Complete_Has_Restricted_Limits : Has_Restricted_Limits C P :=
     {
-      Restricted_Limit_of := λ _ _ J D _ _, Limit_of D
+      Restricted_Limit_of := λ J D _ _, Limit_of D
     }.
 
 End Complete_to_Restricted_Limits.

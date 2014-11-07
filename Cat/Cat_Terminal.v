@@ -8,7 +8,7 @@ Set Primitive Projections.
 
 Set Universe Polymorphism.
 
-Program Instance Functor_To_1_Cat `(C' : Category Obj Hom) : Functor C' 1%category :=
+Program Instance Functor_To_1_Cat (C' : Category) : Functor C' 1%category :=
 {
   FO := fun x => tt;
   FA := fun a b f => Discr_id _ _

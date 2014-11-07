@@ -39,6 +39,10 @@ Class Category : Type :=
 
 Notation "f ∘ g" := (compose g f) : morphism_scope.
 
+Bind Scope category_scope with Category.
+
+Bind Scope morphism_scope with Hom.
+
 (* Allowing variables Obj and Hom be generalizable anywhere we work with categories *)
 
 Global Generalizable Variables Obj Hom.

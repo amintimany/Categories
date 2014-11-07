@@ -55,7 +55,7 @@ Section Functor_Properties.
     }
   Qed.
 
-  Theorem Fully_Faithful_Guarantees_Isos : Faithful_Func → Full_Func → ∀ (c c' : Obj), F _o c ≡ F _o c' → c ≡ c'.
+  Theorem Fully_Faithful_Conservative : Faithful_Func → Full_Func → ∀ (c c' : Obj), F _o c ≡ F _o c' → c ≡ c'.
   Proof.
     intros F_Faithful F_Full c c' [f [g H1 H2]].
     destruct (F_Full _ _ f) as [Ff Hf].
@@ -95,7 +95,7 @@ Section Embedding.
 
       F_Essentially_Injective := Fully_Faithful_Essentially_Injective Embedding_Func F_Faithful F_Full;
 
-      F_Guarantees_Isos := Fully_Faithful_Guarantees_Isos Embedding_Func F_Faithful F_Full
+      F_Conservative := Fully_Faithful_Conservative Embedding_Func F_Faithful F_Full
     }.
 
   Coercion Embedding_Func : Embedding >-> Functor.

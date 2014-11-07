@@ -15,7 +15,7 @@ Program Instance Empty_init : Initial Type_Cat Empty.
 
 Program Instance Type_Cat_Has_Initial : Has_Initial Type_Cat :=
 {
-  HI_init := Empty
+  Init_of := Empty
 }.
 
 (* Type_Cat_Has_Initial Proved! *)

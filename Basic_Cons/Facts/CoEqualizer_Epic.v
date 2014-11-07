@@ -8,7 +8,7 @@ Set Primitive Projections.
 Set Universe Polymorphism.
 
 Section CoEqualizer_Epic.
-  Context `{C : Category Obj Hom} {a b e} (f g : Hom a b) {Eq : CoEqualizer C f g e}.
+  Context {C : Category} {a b e} (f g : Hom a b) {Eq : CoEqualizer C f g e}.
 
   Program Instance CoEqualizer_Epic : b –≫ e :=
     {

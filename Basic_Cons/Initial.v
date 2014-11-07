@@ -23,15 +23,15 @@ Qed.
 
 Class Has_Initial (C : Category) : Type :=
 {
-  HI_init : Obj;
-  HI_init_init : Initial C HI_init;
+  Init_of : Obj;
+  Init_of_init : Initial C Init_of;
 
-  I_morph := @i_morph _ _ HI_init_init
+  I_morph := @i_morph _ _ Init_of_init
 }.
 
-Existing Instance HI_init_init.
+Arguments Init_of C {_} : clear implicits.
 
-Notation "'_I_' D" := (@HI_init D _).
+Existing Instance Init_of_init.
 
 
 

@@ -5,7 +5,7 @@ Set Primitive Projections.
 Set Universe Polymorphism.
 
 Section Equalizer.
-  Context `(C : Category Obj Hom) {a b : Obj} (f g : Hom a b).
+  Context (C : Category) {a b : Obj} (f g : Hom a b).
 
   Class Equalizer (e : Obj) : Type :=
     {
@@ -31,7 +31,7 @@ Section Equalizer.
 
 End Equalizer.
 
-Class Has_Equalizers `(C : Category Obj Hom) : Type :=
+Class Has_Equalizers (C : Category) : Type :=
 {
   Equalizer_of : ∀ {a b : Obj},  Hom a b → Hom a b → Obj;
   

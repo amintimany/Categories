@@ -8,7 +8,7 @@ Set Primitive Projections.
 Set Universe Polymorphism.
 
 Section Equalizer_Monic.
-  Context `{C : Category Obj Hom} {a b e} (f g : Hom a b) {Eq : Equalizer C f g e}.
+  Context {C : Category} {a b e} (f g : Hom a b) {Eq : Equalizer C f g e}.
 
   Program Instance Equalizer_Monic : e ≫–> a :=
     {

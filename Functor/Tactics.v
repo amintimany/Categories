@@ -7,20 +7,20 @@ Set Universe Polymorphism.
 
 Ltac Functor_Simplify :=
   match goal with
-    | [|- ?F _a _ _ ?A = @id _ _ _ (?F _o ?x)] =>
-      rewrite <- F_id; (simpl||idtac)
+    | [|- ?F _a _ _ ?A = @id _ (?F _o ?x)] =>
+      rewrite <- F_id; simpl
     | [|- (@id _ _ _ (?F _o ?x)) = ?F _a _ _ ?A] =>
-      rewrite <- F_id; (simpl||idtac)
+      rewrite <- F_id; simpl
     | [|- ?F _a _ _ ?A ∘ ?F _a _ _ ?B = ?F _a _ _ ?C ∘ ?F _a _ _ ?D] =>
-      repeat rewrite <- F_compose; (simpl||idtac)
+      repeat rewrite <- F_compose; simpl
     | [|- ?F _a _ _ ?A ∘ ?F _a _ _ ?B = ?F _a _ _ ?C] =>
-      rewrite <- F_compose; (simpl||idtac)
+      rewrite <- F_compose; simpl
     | [|- ?F _a _ _ ?C = ?F _a _ _ ?A ∘ ?F _a _ _ ?B] =>
-      rewrite <- F_compose; (simpl||idtac)
+      rewrite <- F_compose; simpl
     | [|- context [?F _a _ _ id] ] =>
-      rewrite F_id; (simpl||idtac)
+      rewrite F_id; simpl
     | [|- context [?F _a _ _ ?A ∘ ?F _a _ _ ?B]] =>
-      rewrite <- F_compose; (simpl||idtac)
+      rewrite <- F_compose; simpl
   end
 .
 

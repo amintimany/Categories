@@ -16,10 +16,10 @@ Set Universe Polymorphism.
 
 Local Obligation Tactic := idtac.
 
-Program Instance Exp_Cat_eval `(C : Category Obj Hom) `(C' : Category Obj' Hom') : Functor (Prod_Cat (Func_Cat C C') C) C' :=
+Program Instance Exp_Cat_eval (C C' : Category) : Functor (Prod_Cat (Func_Cat C C') C) C' :=
 {
   FO := fun x => (fst x) _o (snd x);
-  FA := fun A B f => ((fst B) _a _ _ (snd f)) ∘ (@Trans _ _ _ _ _ _ _ _ (fst f) _)
+  FA := fun A B f => ((fst B) _a _ _ (snd f)) ∘ (@Trans _ _ _ _ (fst f) _)
 }.
 
 Next Obligation. (* F_id *)
@@ -29,11 +29,11 @@ Qed.
 
 Next Obligation. (* F_compose *)
 Proof.
-  intros Obj Hom C Obj' Hom' C' [D1 x1] [D2 x2] [D3 x3] [f1 f2] [g1 g2].
+  intros C C' [D1 x1] [D2 x2] [D3 x3] [f1 f2] [g1 g2].
   simpl in *.
   match goal with
       [|- ?A ∘ ?B ∘ ?D = ?E ∘ ?F ∘ ?G] =>
-      reveal_comp A B; reveal_comp E F; f_equal
+      reveal_comp A B; reveal_comp E F; apply f_equal
   end
   .
   match goal with
@@ -43,7 +43,7 @@ Proof.
             match goal with
                 [H : NatTrans _ F |- _] =>
                 let H' := fresh "H" in
-                assert (H' := @Trans_com _ _ _ _ _ _ _ _ H _ _ X); symmetry in H'; rewrite H'
+                assert (H' := @Trans_com _ _ _ _ H _ _ X); symmetry in H'; rewrite H'
             end
         end
   end
@@ -51,7 +51,7 @@ Proof.
   rewrite F_compose.
   match goal with
       [|- ?A ∘ ?B ∘ ?D = _] =>
-      reveal_comp A B; f_equal
+      reveal_comp A B; apply f_equal
   end
   .
   apply Trans_com.
@@ -61,22 +61,22 @@ Qed.
 
 Local Obligation Tactic := program_simpl; auto.
 
-Program Instance Exp_Cat_morph_ex_O `{C : Category Obj Hom} `{C' : Category Obj' Hom'} `{C'' : Category Obj'' Hom''} (F : Functor (Prod_Cat C'' C)  C') (a : Obj'') : Functor C C' :=
+Program Instance Exp_Cat_morph_ex_O {C C' C'' : Category} (F : Functor (Prod_Cat C'' C)  C') (a : @Obj C'') : Functor C C' :=
 {
   FO := fun x => F _o (a, x);
-  FA := fun _ _ f => F _a _ _ (@id _ _ _ a, f)
+  FA := fun _ _ f => F _a _ _ (@id _ a, f)
 }.
 
 (* Exp_Cat_morph_ex_O defined *)
 
-Program Instance Exp_Cat_morph_ex_A `{C : Category Obj Hom} `{C' : Category Obj' Hom'} `{C'' : Category Obj'' Hom''} (F : Functor (Prod_Cat C'' C)  C') (a b : Obj'') (h : Hom'' a b) : NatTrans (Exp_Cat_morph_ex_O F a) (Exp_Cat_morph_ex_O F b) :=
+Program Instance Exp_Cat_morph_ex_A {C C' C'' : Category} (F : Functor (Prod_Cat C'' C)  C') (a b : @Obj C'') (h : @Hom C'' a b) : NatTrans (Exp_Cat_morph_ex_O F a) (Exp_Cat_morph_ex_O F b) :=
 {
-  Trans := fun c => F _a _ _ (h, @id _ _ _ c)
+  Trans := fun c => F _a _ _ (h, @id _ c)
 }.
 
 (* Exp_Cat_morph_ex_A defined *)
 
-Program Instance Exp_Cat_morph_ex `{C : Category Obj Hom} `{C' : Category Obj' Hom'} `{C'' : Category Obj'' Hom''} (F : Functor (Prod_Cat C'' C)  C') : Functor C'' (Func_Cat C C') :=
+Program Instance Exp_Cat_morph_ex {C C' C'' : Category} (F : Functor (Prod_Cat C'' C)  C') : Functor C'' (Func_Cat C C') :=
 {
   FO := Exp_Cat_morph_ex_O F;
   FA := Exp_Cat_morph_ex_A F
@@ -96,13 +96,58 @@ Qed.
 
 (* Exp_Cat_morph_ex *)
 
+Lemma Exp_cat_morph_ex_eval_id {C C' C'' : Category} (u : Functor C'' (Func_Cat C C')) : u = Exp_Cat_morph_ex (Exp_Cat_eval C C' ∘ ((@Prod_of Cat Cat_Has_Products) _a (_, _) (_, _) (u, @id Cat C))).
+Proof.
+  match goal with
+      |- ?A = ?B =>
+      cut (A _o = B _o); [intros H4|]
+  end.
+  {
+    apply Functor_eq_simplify.
+    assumption.
+    {
+      apply FA_extensionality; trivial.
+      {
+        intros a b h.
+        set (V := (u _o)).
+        match type of H4 with
+            ?A = ?B =>
+            set (Va := eq_ind_r (λ f0 : Obj → Functor C C', f0 a = B a) eq_refl H4);
+              set (Vb := eq_ind_r (λ f0 : Obj → Functor C C', f0 b = B b) eq_refl H4)
+        end.
+        hnf in Va, Vb.
+        match goal with
+            |- ?A ~= ?B =>
+            cut (match Va in (_ = t) return @Hom (Func_Cat _ _) t _ with eq_refl => match Vb in (_ = t') return @Hom (Func_Cat _ _) _ t' with eq_refl => A end end = B); [intros H5; rewrite <- H5; clear H5; destruct H4; trivial|]
+        end.
+        apply NatTrans_eq_simplify.
+        extensionality m.
+        match goal with
+            |- ?A = ?B =>
+            cut (A ≃ B); [intros H5; rewrite H5; trivial|]
+        end.
+        apply (@JMeq_trans _ _ _ _ (Trans (u _a _ _ h) m)).
+        destruct H4; trivial.
+        simpl; rewrite F_id; auto.
+      }
+    }
+  }
+  {
+    extensionality x.
+    apply Functor_eq_simplify.
+    reflexivity.
+    FA_extensionality a b f.
+    repeat (simpl; rewrite F_id); auto.
+  }
+Qed.
+
 Local Obligation Tactic := idtac.
 
-Program Instance Cat_Exponentials (C : CAT) (C' : CAT) : Exponential Cat Cat_Has_Products C C' (Func_Cat C C') :=
+Program Instance Cat_Exponentials (C C' : Category) : Exponential Cat Cat_Has_Products C C' (Func_Cat C C') :=
 {
   eval := Exp_Cat_eval C C';
   
-  Exp_morph_ex := fun C'' F => @Exp_Cat_morph_ex _ _ C _ _ C' _ _ C'' F
+  Exp_morph_ex := fun C'' F => @Exp_Cat_morph_ex C C' C'' F
 }.
 
 Next Obligation. (* Exp_morph_com *)
@@ -120,69 +165,8 @@ Next Obligation. (* Exp_morph_unique *)
 Proof.
   intros C C' z f u u' H1 H2.
   program_simpl.
-  destruct C as [Obj Hom C]; destruct C' as [Obj' Hom' C'].
-  cut (u _o = u' _o); [intros HO|].
-  apply Functor_eq_simplify.
-  {
-    trivial.
-  }
-  {
-    FA_extensionality a b F.
-    destruct z as [Objz Homz z]; destruct u as [uO uA uid ucomp]; destruct u' as [uO' uA' uid' ucomp']; simpl in *.
-    set (HN := (eq_ind_r (fun f : Objz -> (Functor C C') => NatTrans (f a) (f b) = NatTrans (uO' a) (uO' b)) eq_refl HO)).
-    set (uAabf' := (
-                    match HN in (_ = Z) return Z with
-                      |eq_refl =>
-                       uA a b F
-                    end
-        )).
-    apply (@JMeq_trans _ _ _ _ uAabf'); [destruct HN; trivial|
-               match goal with
-                   [|- ?A ~= ?B] =>
-                   let H' := fresh "H" in
-                   cut (A = B); [intros H'; rewrite H'; trivial|]
-               end
-              ].
-    apply NatTrans_eq_simplify.
-    extensionality c.
-    unfold Trans.
-    match goal with
-        [|- ?A = ?B] =>
-        let H' := fresh "H" in
-        cut (A ~= B); [intros H'; rewrite H'; trivial|]
-    end.
-    match goal with
-        [H' : ?A = ?B , H : existT _ ?A _ = existT _ ?B _ |- _] =>
-        apply eq_sigT_eq_dep in H; apply eq_dep_JMeq in H;
-        let H'' := fresh "H" in
-        assert (H'' := @FA_equal_f _ _ _ _ _ _ _ _ H' H (_, _) (_, _) (F, @id _ _ _ c)); simpl in H'';
-        repeat rewrite F_id in H'';
-        repeat rewrite id_unit_left in H'';
-        unfold Trans in H'';
-        rewrite <- H''
-    end.
-    destruct HO; simpl in *; reflexivity.
-  }
-  {
-    extensionality x.
-    Functor_extensionality a b F.
-    match goal with
-        [H' : ?A = ?B , H : existT _ ?A _ = existT _ ?B _ |- _] =>
-        apply (fun p => equal_f p (x, a)) in H'; trivial
-    end.
-    match goal with
-        [H' : ?A = ?B , H : existT _ ?A _ = existT _ ?B _ |- _] =>
-        apply eq_sigT_eq_dep in H; apply eq_dep_JMeq in H;
-        let H'' := fresh "H" in
-        assert (H'' := @FA_equal_f _ _ _ _ _ _ _ _ H' H (_, _) (_, _) (@id _ _ (THE_CAT z) x, F));
-          unfold Trans in H'';
-          simpl in H'';
-          repeat (repeat rewrite F_id in H'';
-          simpl in H'');
-          repeat rewrite id_unit_right in H'';
-          trivial
-    end.
-  }
+  assert (H3 := @f_equal _ _ Exp_Cat_morph_ex _ _ H2).
+  repeat rewrite <- Exp_cat_morph_ex_eval_id in H3; trivial.
 Qed.
 
 (* Cat_Exponentials defined *)

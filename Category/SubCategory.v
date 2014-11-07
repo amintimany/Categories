@@ -8,12 +8,12 @@ Set Universe Polymorphism.
 Section SubCategory.
   Context (C : Category)
           (Obj_Cri : Obj → Prop)
-          (Hom_Cri : ∀ a b, Hom a b → Prop).
-
-  Program Instance SubCategory
+          (Hom_Cri : ∀ a b, Hom a b → Prop)
           (Hom_Cri_id : ∀ a, Obj_Cri a → Hom_Cri _ _ (@id _ a))
-          (Hom_Cri_compose : ∀ a b c (f : Hom a b) (g : Hom b c), Hom_Cri _ _ f → Hom_Cri _ _ g → Hom_Cri _ _ (g ∘ f))
-  : Category :=
+          (Hom_Cri_compose : ∀ a b c (f : Hom a b) (g : Hom b c),
+                               Hom_Cri _ _ f → Hom_Cri _ _ g → Hom_Cri _ _ (g ∘ f)).
+
+  Program Instance SubCategory : Category :=
   {
     Obj := sig Obj_Cri;
 

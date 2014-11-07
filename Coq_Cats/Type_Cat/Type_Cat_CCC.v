@@ -23,7 +23,7 @@ Qed.
 
 Program Instance Type_Cat_Has_Terminal : Has_Terminal Type_Cat :=
 {
-  HT_term := unit
+  Term_of := unit
 }.
 
 (* Type_Cat_Has_Terminal Proved! *)

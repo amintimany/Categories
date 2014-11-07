@@ -33,26 +33,18 @@ Proof.
   repeat (rewrite PXC1 || rewrite PXC2 || rewrite PXC1' || rewrite PXC2'); trivial.
 Qed.
 
-Definition Arrow_Product {C : Category}
-           {a b c d x y : Obj}
-           (pabx : Product C a b x)
-           (pcdy : Product C c d y)
-           (f : Hom a c) (g : Hom b d)
-: Hom x y :=
-  @Prod_morph_ex C c d y pcdy x (f ∘ (@Pi_1 C a b x pabx)) (g ∘ (@Pi_2 C a b x pabx))
-.
-
 Program Instance Product_Functor {C : Category} (pr : Obj → Obj → Obj) (pr_prod : ∀ a b, Product C a b (pr a b)) : Functor (Prod_Cat C C) C :=
 {
   FO := fun x => pr (fst x) (snd x); 
-  FA := fun a b f => Arrow_Product (pr_prod _ _) (pr_prod _ _) (fst f) (snd f)
+  FA := fun a b f =>
+       @Prod_morph_ex C _ _ _ (pr_prod _ _) _ ((fst f) ∘ (@Pi_1 C _ _ _ (pr_prod _ _))) ((snd f) ∘ (@Pi_2 C _ _ _ (pr_prod _ _)))
 }.
 
 Next Obligation. (* F_id *)  
 Proof.
   simpl.
   match goal with
-      [|- Arrow_Product ?A ?A _ _ = _] =>
+      [|- @Prod_morph_ex _ _ _ _ ?A _ _ _ = _] =>
       destruct A as [p1 p2 mex mc1 mc2 mu]
   end
   .
@@ -66,60 +58,19 @@ Qed.
 
 Next Obligation. (* F_compose *)  
 Proof.
-  simpl in *.
-  repeat match goal with
-      | [|- context[(pr_prod ?A ?B)] ] =>
-        let P1 := fresh "P1_0" in
-        let P2 := fresh "P2_0" in
-        let MEX := fresh "mex" in
-        let MC1 := fresh "mc" in
-        let MC2 := fresh "mc'" in
-        let MU := fresh "mu" in
-        destruct (pr_prod A B) as [P1 P2 MEX MC1 MC2 MU]
-  end
-  .
-  simpl.
-  eapply mu0.
-  rewrite mc0; reflexivity.
-  rewrite mc'0; reflexivity.
-  match goal with
-      [|- ?A ∘ (mex0 ?B ?C ?D) ∘ _ = _] =>
-      let H := fresh "H" in
-      reveal_comp A (mex0 B C D);
-        assert(H := mc0 B C D);
-        rewrite H;
-        clear H
-  end
-  .
-  match goal with
-      [|- (?A ∘ ?B) ∘ (mex1 ?C ?D ?E) = _] =>
-      let H := fresh "H" in
-      reveal_comp B (mex1 C D E);
-        assert(H := mc1 C D E);
-        rewrite H;
-        clear H
-  end
-  .
-  rewrite assoc; trivial.
-  match goal with
-      [|- ?A ∘ (mex0 ?B ?C ?D) ∘ _ = _] =>
-      let H := fresh "H" in
-      reveal_comp A (mex0 B C D);
-        assert(H := mc'0 B C D);
-        rewrite H;
-        clear H
-  end
-  .
-  match goal with
-      [|- (?A ∘ ?B) ∘ (mex1 ?C ?D ?E) = _] =>
-      let H := fresh "H" in
-      reveal_comp B (mex1 C D E);
-        assert(H := mc'1 C D E);
-        rewrite H;
-        clear H
-  end
-  .
-  rewrite assoc; trivial.
+  eapply Prod_morph_unique.
+  + rewrite Prod_morph_com_1; reflexivity.
+  + rewrite Prod_morph_com_2; reflexivity.
+  + repeat rewrite <- assoc.
+    rewrite Prod_morph_com_1.
+    rewrite assoc.
+    rewrite Prod_morph_com_1.
+    auto.
+  + repeat rewrite <- assoc.
+    rewrite Prod_morph_com_2.
+    rewrite assoc.
+    rewrite Prod_morph_com_2.
+    auto.
 Qed.
 
 (* Product_Functor defined *)
@@ -130,11 +81,8 @@ Class Has_Products (C : Category) : Type :=
 
   HP_prod_prod : ∀ a b, Product C a b (HP_prod a b);
 
-  HP_prod_ftor := Product_Functor HP_prod HP_prod_prod
+  Prod_of := Product_Functor HP_prod HP_prod_prod
 }.
-
-Notation "x × y" := (HP_prod_ftor _o (x, y)).
-Notation "≪ f , g ≫" := (HP_prod_ftor _a (_,_) (_,_) (f,g)).
 
 Existing Instance HP_prod_prod.
 

@@ -18,12 +18,15 @@ Set Universe Polymorphism.
 
 (* The category of Types in Coq's "Prop" universe (Coq's Proposits) *)
 
-Program Instance Prop_Cat : Category Prop (λ A B, A → B) :=
+Program Instance Prop_Cat : Category :=
 {
+  Obj := Prop; 
+
+  Hom := (λ A B, A → B);
+
   compose := fun A B C (g : A -> B) (h : B -> C) => fun (x : A) => h (g x);
 
   id := fun A => fun x => x
-
 }.
 
 Program Instance False_init : Initial Prop_Cat False.

@@ -22,14 +22,13 @@ Qed.
 
 Class Has_Terminal (C : Category) : Type :=
 {
-  HT_term : Obj;
-  HT_term_term : Terminal C HT_term;
+  Term_of : Obj;
+  Term_of_term : Terminal C Term_of;
 
-  T_morph := @t_morph _ _ HT_term_term
+  T_morph := @t_morph _ _ Term_of_term
 }.
 
-Existing Instance HT_term_term.
+Arguments Term_of C {_} : clear implicits.
 
-Notation "'_T_' D" := (@HT_term D _).
-
+Existing Instance Term_of_term.
 

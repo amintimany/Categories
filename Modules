@@ -96,7 +96,6 @@ Mod_Yoneda =\
 	Yoneda/Y_Left_Right\
 	Yoneda/Y_Right_Left\
 	Yoneda/Y_Lem\
-	Yoneda/CoYoneda\
 	Yoneda/Main
 
 Mod_Limits =\

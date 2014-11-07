@@ -5,7 +5,7 @@ Set Primitive Projections.
 Set Universe Polymorphism.
 
 Section CoEqualizer.
-  Context `(C : Category Obj Hom) {a b : Obj} (f g : Hom a b).
+  Context (C : Category) {a b : Obj} (f g : Hom a b).
 
   Class CoEqualizer (ce : Obj) : Type :=
     {
@@ -31,7 +31,7 @@ Section CoEqualizer.
 
 End CoEqualizer.
 
-Class Has_CoEqualizers `(C : Category Obj Hom) : Type :=
+Class Has_CoEqualizers (C : Category) : Type :=
 {
   CoEqualizer_of : ∀ {a b : Obj}, Hom a b → Hom a b → Obj;
   

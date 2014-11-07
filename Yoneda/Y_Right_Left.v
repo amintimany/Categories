@@ -15,31 +15,30 @@ Set Universe Polymorphism.
 
 Local Obligation Tactic := idtac.
 
-Program Instance Y_right_to_left_NT `(C : Category Obj Hom) (c : Obj) (F : Functor C ^op Type_Cat) (h : F _o c) : NatTrans (Yoneda_emb_O _ c) F :=
+Program Instance Y_right_to_left_NT (C : Category) (c : Obj) (F : Functor C ^op Type_Cat) (h : F _o c) : NatTrans (Yoneda_emb_O _ c) F :=
 {
   Trans := fun c' => fun g => (F _a _ _ g) h
 }.
 
 Next Obligation. (* Trnas_com *)
 Proof.
-  intros Obj Hom C c F h c1 c2 h'.
+  intros C c F h c1 c2 h'.
   extensionality g; simpl.
   match goal with
       [|- ?F _a _ _ (?X ∘ ?Y) ?Z = _] =>
       transitivity (((F _a _ _ Y) ∘ (F _a _ _ X)) Z); trivial
   end.
-  rewrite <- F_compose.
-  trivial.
+  rewrite <- F_compose; trivial.
 Qed.
 
-Program Instance Y_right_to_left `(C : Category Obj Hom) : NatTrans (Y_right C) (Y_left C) :=
+Program Instance Y_right_to_left (C : Category) : NatTrans (Y_right C) (Y_left C) :=
 {
-  Trans := fun c_F => fun h => Y_right_to_left_NT _ (fst c_F) (snd c_F) h
+  Trans := fun c_F => fun h => Y_right_to_left_NT C (fst c_F) (snd c_F) h
 }.
 
 Next Obligation. (* Trans_com *)
 Proof.
-  intros Obj Hom C [c f] [c' f'] [h N].
+  intros C [c f] [c' f'] [h N].
   simpl in *.
   extensionality g; simpl.
   apply NatTrans_eq_simplify.

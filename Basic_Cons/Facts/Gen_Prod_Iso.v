@@ -7,26 +7,28 @@ Set Primitive Projections.
 
 Set Universe Polymorphism.
 
+(* If a category C has gen_prod of A and A ≡ B, then C has gen_prod of B *)
+
 Section Gen_Prod_Iso.
-  Context `(C : Category Obj Hom) (A B : Type) (objs : A → Obj) (p : Obj)
-          (GP : General_Product C A objs p) (I : B ≡ A).
+  Context (C : Category) (A B : Type) (objs : A → Obj) (p : Obj)
+          (GP : General_Product C A objs p) (I : @Isomorphic Type_Cat B A).
 
   Let equal_f : ∀ {A B : Type} {f g : A → B} (H : f = g) (x : A), f x = g x.
   Proof.
     intros ? ? ? ? H x; rewrite H; trivial.
   Defined.
 
-  Program Instance Gen_Prod_Iso : General_Product C B (λ x, objs (@iso_morphism _ _ _ _ _ I x)) p :=
+  Program Instance Gen_Prod_Iso : General_Product C B (λ x, objs (@iso_morphism _ _ _ I x)) p :=
     {
-      GP_Proj := λ x, GP_Proj _ _ _ (@iso_morphism _ _ _ _ _ I x);
+      GP_Proj := λ x, GP_Proj _ _ _ (@iso_morphism _ _ _ I x);
       GP_Prod_morph_ex := 
-        (λ (x : Obj) (prj : ∀ (y : B), Hom x (objs (@iso_morphism _ _ _ _ _ I y))), @GP_Prod_morph_ex _ _ _ _ _ _ GP _ (λ y, match (equal_f (@right_inverse _ _ _ _ _ _ (@iso_morphism_isomorphism _ _ _ _ _ I))) y in (_ = z) return Hom _ (objs z) with eq_refl => prj (@inverse_morphism _ _ _ _ _ _ (@iso_morphism_isomorphism _ _ _ _ _ I) y) end))
+        (λ (x : Obj) (prj : ∀ (y : B), Hom x (objs (@iso_morphism _ _ _ I y))), @GP_Prod_morph_ex _ _ _ _ GP _ (λ y, match (equal_f (@right_inverse _ _ _ _ (@iso_morphism_isomorphism _ _ _ I))) y in (_ = z) return Hom _ (objs z) with eq_refl => prj (@inverse_morphism _ _ _ _ (@iso_morphism_isomorphism _ _ _ I) y) end))
     }.
 
   Next Obligation. (* GP_Prod_morph_com *)
   Proof.
     destruct I as [If [Ir Iil Iir]]; clear I; cbv in Iir, Iil.
-    rewrite (@GP_Prod_morph_com _ _ _ _ _ _ _ _ (λ y, match equal_f Iir y in (_ = z) return Hom p' (objs z) with eq_refl => prj (Ir y) end)).
+    rewrite (@GP_Prod_morph_com _ _ _ _ _ _ (λ y, match equal_f Iir y in (_ = z) return Hom p' (objs z) with eq_refl => prj (Ir y) end)).
     cbv.
     match goal with
         [|- ?A = ?B] =>
@@ -52,7 +54,7 @@ Section Gen_Prod_Iso.
         let x := fresh "x" in
         let Hf' := fresh "Hf'" in
         let Hg' := fresh "Hg'" in
-        eapply (@GP_Prod_morph_unique _ _ _ _ _ _ _ _ (λ y, match equal_f Iir y in (_ = z) return Hom p' (objs z) with eq_refl => prj (Ir y) end)); 
+        eapply (@GP_Prod_morph_unique _ _ _ _ _ _ (λ y, match equal_f Iir y in (_ = z) return Hom p' (objs z) with eq_refl => prj (Ir y) end)); 
           intros x; rewrite <- (equal_f Iir x)
     end; trivial.
   Qed.
@@ -60,19 +62,20 @@ Section Gen_Prod_Iso.
 End Gen_Prod_Iso.
 
 Section Has_Gen_Prod_Iso.
-  Context `(C : Category Obj Hom) (A B : Type)
-          (GP : Has_General_Products C A) (I : B ≡ A).
+  Context (C : Category) (A B : Type)
+          (GP : Has_General_Products C A) (I : @Isomorphic Type_Cat B A).
   
   Program Instance Has_Gen_Prod_Iso : Has_General_Products C B :=
     {
-      Gen_Prod_of := λ pr_of, Gen_Prod_of (λ y, pr_of (@inverse_morphism _ _ _ _ _ _ (@iso_morphism_isomorphism _ _ _ _ _ I) y))
+      Gen_Prod_of := λ pr_of, Gen_Prod_of (λ y, pr_of (@inverse_morphism _ _ _ _ (@iso_morphism_isomorphism _ _ _ I) y))
 
     }.
 
   Next Obligation. (* Gen_Prod_prod *)
   Proof.
-    assert (U := @Gen_Prod_Iso _ _ _ _ B _ _ (Gen_Prod_prod (λ y : A, objs (@inverse_morphism _ _ _ _ _ _ (@iso_morphism_isomorphism _ _ _ _ _ I) y))) I).
+    assert (U := @Gen_Prod_Iso _ _ B _ _ (Gen_Prod_prod (λ y : A, objs (@inverse_morphism _ _ _ _ (@iso_morphism_isomorphism _ _ _ I) y))) I).
     destruct I as [If [Ir Iil Iir]]; clear I; cbv - [Gen_Prod_of] in *.
+    simpl in *.
     cut (objs = (λ x : B, objs (Ir (If x)))).
     intros H.
     rewrite <- H in U.

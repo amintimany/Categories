@@ -17,12 +17,12 @@ Set Universe Polymorphism.
 
 Local Obligation Tactic := idtac.
 
-Lemma Yoneda_Lemma `(C : Category Obj Hom) : (Y_left C) ≡ (Y_right C).
+Lemma Yoneda_Lemma (C : Category) : @Isomorphic (Func_Cat _ _) (Y_left C) (Y_right C).
 Proof.
   apply NatIso with (n := Y_left_to_right C) (n' := Y_right_to_left C);
     intros [c F]; extensionality x; simpl in *.
   {  
-    repeat rewrite (@F_id _ _ _ _ _ _ F); reflexivity.
+    repeat rewrite (@F_id _ _ F); reflexivity.
   }
   {
     apply NatTrans_eq_simplify.
@@ -33,12 +33,12 @@ Proof.
       transitivity ((X ∘ Y) Z); trivial
     end.
     rewrite <- Trans_com.
-    rewrite (@F_id _ _ _ _ _ _ F).
+    rewrite (@F_id _ _ F).
     trivial.
   }
 Qed.
 
-Lemma Yoneda_Faithful `(C : Category Obj Hom) : Faithful_Func (Yoneda_emb C).
+Lemma Yoneda_Faithful (C : Category) : Faithful_Func (Yoneda_emb C).
 Proof.
   intros c c' f f' H.
   simpl in *.
@@ -52,7 +52,7 @@ Proof.
   trivial.
 Qed.
 
-Lemma Yoneda_Full `(C : Category Obj Hom) : Full_Func (Yoneda_emb C).
+Lemma Yoneda_Full (C : Category) : Full_Func (Yoneda_emb C).
 Proof.
   intros c c' N.
   exists (Trans (Y_left_to_right C) (c, (((Yoneda_emb C) _o) c')) N).
@@ -67,17 +67,17 @@ Proof.
   trivial.
 Qed.
 
-Instance Yoneda_Embedding `(C : Category Obj Hom) : Embedding C (Func_Cat C ^op Type_Cat) :=
+Instance Yoneda_Embedding (C : Category) : Embedding C (Func_Cat C ^op Type_Cat) :=
 {
   Embedding_Func := Yoneda_emb C;
   F_Faithful := Yoneda_Faithful C;
   F_Full := Yoneda_Full C
 }.
 
-Theorem Yoneda_Iso `(C : Category Obj Hom) : forall (c c' : Obj), (Yoneda_emb C) _o c ≡ (Yoneda_emb C) _o c' -> c ≡ c'.
+Theorem Yoneda_Iso (C : Category) : forall (c c' : Obj), (Yoneda_emb C) _o c ≡ (Yoneda_emb C) _o c' -> c ≡ c'.
 Proof.
   intros.
-  apply (@F_Guarantees_Isos _ _ _ _ _ _ (Yoneda_Embedding C) _); trivial.
+  apply (@F_Conservative _ _ (Yoneda_Embedding C) _); trivial.
 Qed.
 
 Ltac Yoneda := apply Yoneda_Iso.

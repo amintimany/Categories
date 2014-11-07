@@ -9,13 +9,15 @@ Set Primitive Projections.
 
 Set Universe Polymorphism.
 
-Program Instance Functor_From_Empty_Cat `(C' : Category Obj Hom) : Functor 0%category C' :=
+Program Instance Functor_From_Empty_Cat (C' : Category) : Functor 0%category C' :=
 {
   FO := fun x => Empty_rect _ x;
   FA := fun a b f => match a as _ return _ with end
 }.
 
 (* Functor_From_Empty_Cat defined *)
+
+Local Hint Extern 1 => simpl in *.
 
 Program Instance Cat_Init : Initial Cat (0%category) :=
 {

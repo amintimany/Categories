@@ -27,8 +27,10 @@ Section Discr.
     auto.
   Defined.
 
-  Program Instance Discr_Cat : Category Obj Discr_Hom :=
+  Program Instance Discr_Cat : Category :=
     {
+      Obj := Obj;
+      Hom := Discr_Hom;
       compose := Discr_Hom_compose;
       id := λ a, Discr_id a
     }.
@@ -60,7 +62,7 @@ Notation "'Discr_n' n" := (Discr_Cat (Type_n n)) (at level 200, n bigint) : cate
 
 (* Discrete Functor *)
 Section Discr_Func.
-  Context `(C : Category Obj Hom) (A : Type) (Omap : A → Obj).
+  Context (C : Category) (A : Type) (Omap : A → Obj).
 
   Program Instance Discrete_Functor : Functor (Discr_Cat A) C :=
     {
@@ -68,7 +70,7 @@ Section Discr_Func.
       
       FA := λ (a b : A) (X : Discr_Hom A a b),
             match X in (Discr_Hom _ y y0) return (Hom (Omap y) (Omap y0)) with
-              | Discr_id _ => id
+              | Discr_id _ _ => id
             end
     }.
 
@@ -77,6 +79,7 @@ End Discr_Func.
 (* The fact that in discrete category object type and arrow type are isomorphic *)
 Instance Discr_Hom_Iso (A : Type) : A ≡ Arrow (Discr_Cat A).
 Proof.
-  exists (λ a, (Build_Arrow _ _ _ _ _ (Discr_id _ a))).
-  exists (λ x, Orig x); extensionality x; [|destruct x as [? ? []]]; simpl; trivial.
+  refine (Build_Isomorphic Type_Cat _ _ (λ a, (Build_Arrow (Discr_Cat _) _ _ (Discr_id _ a))) _).
+  refine (Build_Isomorphism Type_Cat _ _ _ (λ a : (Arrow (Discr_Cat _)), Orig a) _ _);
+    extensionality x; [|destruct x as [? ? []]]; simpl; trivial.
 Qed.

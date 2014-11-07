@@ -1,6 +1,5 @@
 Require Import Category.Main.
 
-
 Set Primitive Projections.
 
 Set Universe Polymorphism.
@@ -8,7 +7,7 @@ Set Universe Polymorphism.
 (* General Product *)
 
 Section General_Prod.
-  Context `(C : Category Obj Hom) (A : Type) (objs : A → Obj).
+  Context (C : Category) (A : Type) (objs : A → Obj).
 
   Class General_Product (GP_Prod : Obj) : Type :=
     {
@@ -38,7 +37,7 @@ End General_Prod.
 
 (* Product_Functor defined *)
 
-Class Has_General_Products `(C : Category Obj Hom) (A : Type) : Type :=
+Class Has_General_Products (C : Category) (A : Type) : Type :=
 {
   Gen_Prod_of : (A → Obj) → Obj;
 
@@ -47,19 +46,16 @@ Class Has_General_Products `(C : Category Obj Hom) (A : Type) : Type :=
 
 Existing Instance Gen_Prod_prod.
 
-Class Has_Restricted_General_Products `(C : Category Obj Hom) (P : Type → Prop) : Type :=
+Class Has_Restricted_General_Products (C : Category) (P : Type → Prop) : Type :=
   {
     HRGP_HGP : ∀ (A : Type), P A → Has_General_Products C A
   }.
 
 Existing Instance HRGP_HGP.
 
-Class Has_All_General_Products `(C : Category Obj Hom) : Type :=
+Class Has_All_General_Products (C : Category) : Type :=
   {
     HAGP_HGP : ∀ (A : Type), Has_General_Products C A
   }.
 
 Existing Instance HAGP_HGP.
-
-
-

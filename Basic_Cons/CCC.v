@@ -8,7 +8,7 @@ Set Primitive Projections.
 Set Universe Polymorphism.
 
 (* Cartesian Closed Category : one that has terminal element, binary products (all finite products) and exponential *)
-Class CCC `(C : Category Obj) : Type :=
+Class CCC (C : Category) : Type :=
 {
   CCC_HT : Has_Terminal C;
   CCC_HC : Has_Products C;
