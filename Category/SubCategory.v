@@ -13,6 +13,8 @@ Section SubCategory.
           (Hom_Cri_compose : ∀ a b c (f : Hom a b) (g : Hom b c),
                                Hom_Cri _ _ f → Hom_Cri _ _ g → Hom_Cri _ _ (g ∘ f)).
 
+  Local Obligation Tactic := idtac.
+
   Program Instance SubCategory : Category :=
   {
     Obj := sig Obj_Cri;
@@ -24,6 +26,28 @@ Section SubCategory.
 
     id := λ a, exist _ (@id C (proj1_sig a)) (Hom_Cri_id (proj1_sig a) (proj2_sig a))
   }.
+
+  Next Obligation.
+    intros.
+    apply sig_proof_irrelevance; simpl; abstract auto.
+  Qed.
+
+  Next Obligation.
+    symmetry.
+    apply SubCategory_obligation_1.
+  Qed.
+
+  Next Obligation.
+    intros a b [ho hp].
+    apply sig_proof_irrelevance.
+    simpl; auto.
+  Qed.
+  
+  Next Obligation.
+    intros a b [ho hp].
+    apply sig_proof_irrelevance.
+    simpl; auto.
+  Qed.
 
 End SubCategory.
 

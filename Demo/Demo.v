@@ -11,8 +11,8 @@ Set Universe Polymorphism.
 
 Program Instance S_nat_func : Functor Type_Cat Type_Cat :=
 {
-  FO := λ a, (_T_ Type_Cat) ⊕ a ;
-  FA := λ a b f, 〚 @id _ _ _ (_T_ Type_Cat), f 〛
+  FO := λ a, Sum_of _o (Term_of Type_Cat, a);
+  FA := λ a b f, Sum_of _a (_, _) (_, _) (@id _ (Term_of Type_Cat), f)
 }.
 
 Next Obligation. (* mapping of identities *)
@@ -133,27 +133,22 @@ Instance CoNat_coalg : CoAlgebra S_nat_func :=
 }.
 
 (* morphism from another alg to CoNat_coalg *)
-Program Instance CoNat_coalg_morph coalg' : CoAlgebra_Hom coalg' CoNat_coalg.
-
-Next Obligation. (* coalg_map *)
-Proof.
-  destruct coalg' as [coalgc' coalgdest'].
-  red in X.
-  exact(
-      (cofix m (x : coalgc') :=
-         match (coalgdest' x) with
-           | inl _ => CoO
-           | inr x' => CoS (m x')
-         end) X
-    ).
-Defined.
+Program Instance CoNat_coalg_morph coalg' : CoAlgebra_Hom coalg' CoNat_coalg :=
+{
+  coalg_map :=
+    λ (H : @CoAlg_Carrier _ _ coalg'),
+    (cofix m (x : @CoAlg_Carrier _ _ coalg') : CoNat :=
+       match @Destructors _ _ coalg' x with
+         | inl _ => CoO
+         | inr x' => CoS (m x')
+       end) H
+}.
 
 Next Obligation. (* coalg_map_com *)
 Proof.
-  destruct coalg' as [coalgc' coalgdest'].
   extensionality x.
-  red in x.
-  cbv.
+  destruct coalg' as [coalgc' coalgdest'].
+  simpl.
   destruct (coalgdest' x) as [[]|x']; trivial.
 Qed.
 
@@ -166,27 +161,19 @@ Program Instance CoNat_alg_term : Terminal S_nat_coalg_cat CoNat_coalg :=
 
 Next Obligation. (* t_morph_unique *)
 Proof.
-  destruct d as [coalgc algdest].
-  destruct f as [f_morph f_com].
-  destruct g as [g_morph g_com].
-  cbv.
   apply CoAlgebra_Hom_eq_simplify.
   extensionality x; simpl.
-   apply CoNat_eq_eq; revert x.
+  apply CoNat_eq_eq; revert x.
   cofix H.
   intros x.
-  assert(H1 := equal_f f_com x); cbv in H1.
-  assert(H2 := equal_f g_com x); cbv in H2.
-  destruct (algdest x) as [[]|x'].
-  destruct (f_morph x); destruct (g_morph x); try discriminate.
-  constructor.
-  destruct (f_morph x); destruct (g_morph x); try discriminate.
-  inversion H1; inversion H2; subst.
-  constructor.
+  assert(H1 := equal_f (@coalg_map_com _ _ _ _ f) x); cbv -[coalg_map Destructors] in H1.
+  assert(H2 := equal_f (@coalg_map_com _ _ _ _ g) x); cbv -[coalg_map Destructors] in H2.
+  destruct (@Destructors _ _ d x); destruct ((@coalg_map _ _ _ _ f) x); destruct ((@coalg_map _ _ _ _ g) x); try discriminate; try constructor.
+  inversion H1; inversion H2.
   apply H.
 Qed.
 
-(* CoNat_coalg_term Proved! :-) *)
+(* CoNat_coalg_term Proved! *)
 
 
 
