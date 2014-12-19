@@ -37,9 +37,12 @@ Program Instance Prod_Cat_morph_ex (C C' C'': Category) (F : Functor C''  C) (G 
 
 Local Obligation Tactic := idtac.
 
-Program Instance Cat_Products (C C' : Category) : Product Cat C C' (Prod_Cat C C') :=
+Program Instance Cat_Products (C C' : Category) : @Product Cat C C' :=
 {
+  product := (Prod_Cat C C');
+
   Pi_1 := Prod_Cat_proj1 C C';
+
   Pi_2 := Prod_Cat_proj2 C C';
 
   Prod_morph_ex := fun P => fun F G => Prod_Cat_morph_ex C C' P F G
@@ -57,6 +60,24 @@ Proof.
   apply Functor_eq_simplify; simpl; trivial.
 Qed.
 
+Lemma pair_JM_eq (A B C D : Type) (a : A * B) (c : C * D) : fst a ≃ fst c -> snd a ≃ snd c -> a ≃ c.
+Proof.
+  intros H1 H2.
+  dependent destruction H1; dependent destruction H2.
+  cutrewrite (a = c); trivial.
+  destruct a; destruct c;
+  simpl in *;
+  repeat match goal with [H : _ = _|-_] => rewrite H end; trivial.
+Qed.
+
+Lemma pair_eq (A B : Type) (a b : A * B) : fst a = fst b -> snd a = snd b -> a = b.
+Proof.
+  intros H1 H2.
+  destruct a; destruct b;
+  simpl in *;
+  repeat match goal with [H : _ = _|-_] => rewrite H end; trivial.
+Qed.
+
 Next Obligation. (* Prod_morph_unique *)
 Proof.
   intros C C' p' r1 r2 f g H1 H2 H3 H4.
@@ -69,40 +90,34 @@ Proof.
     }
     {
       FA_extensionality a b F.
-      match goal with
-      [|- ?A ~= ?B] =>
-      cut (fst A ~= fst B); [cut (snd A ~= snd B); [elim A; elim B; auto 2|]|]
-      end.
-      {
-        match type of H4 with
-            ?A = ?B =>
-            eapply (@JMeq_trans _ _ _ _ (A _a _ _ F) _); [rewrite H4|]; trivial
-        end.
-      }
+      apply pair_JM_eq.
       {
         match type of H3 with
             ?A = ?B =>
             eapply (@JMeq_trans _ _ _ _ (A _a _ _ F) _); [rewrite H3|]; trivial
         end.
       }
+      {
+        match type of H4 with
+            ?A = ?B =>
+            eapply (@JMeq_trans _ _ _ _ (A _a _ _ F) _); [rewrite H4|]; trivial
+        end.
+      }
     }
   }
   {
     extensionality z.
-    match goal with
-        [|- ?A = ?B] =>
-        cut (fst A = fst B); [cut (snd A = snd B); [destruct A; destruct B; intros H5 H6; simpl in H5, H6; rewrite H5; rewrite H6; trivial |]|]
-    end.
-    {
-      match type of H4 with
-          ?A = ?B =>
-          transitivity (A _o z); [rewrite H4|]; trivial
-      end.
-    }
+    apply pair_eq.
     {
       match type of H3 with
           ?A = ?B =>
           transitivity (A _o z); [rewrite H3|]; trivial
+      end.
+    }
+    {
+      match type of H4 with
+          ?A = ?B =>
+          transitivity (A _o z); [rewrite H4|]; trivial
       end.
     }
   }
@@ -111,11 +126,7 @@ Qed.
 
 (* Cat_Products defined *)
 
-Instance Cat_Has_Products : Has_Products Cat :=
-{
-  HP_prod := fun C C' => Prod_Cat C C';
-  HP_prod_prod := Cat_Products
-}.
+Program Instance Cat_Has_Products : Has_Products Cat.
 
 
 

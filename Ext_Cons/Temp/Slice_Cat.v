@@ -1,6 +1,7 @@
-Require Import Category.Main.
-Require Import Ext_Cons.Arrow_To.
-
+Require Import Category.Category.
+Require Import Functor.Functor Functor.Functor_Ops Const_Func.
+Require Import Ext_Cons.Comma.
+Require Import Categories.Discr.
 
 Set Primitive Projections.
 
@@ -25,17 +26,6 @@ Set Universe Polymorphism.
 Section Slice_Cat.
   Context (C : Category) (c : Obj).
 
-  Program Instance Slice_Cat : Category :=
-    {
-      Obj := (Arrow_To C c);
-
-      Hom := (@Arrow_To_Hom C c);
-
-      compose := λ _ _ _ f g, Arrow_To_Hom_compose _ f g;
-      
-      id := λ a, Arrow_To_id _
-    }.
-
-  (* Arrow_Cat defined *)
+  Instance Slice_Cat : Category := Comma C C 1 Functor_id (Const_Func _ c).
 
 End Slice_Cat.

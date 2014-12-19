@@ -1,5 +1,4 @@
 Require Import Category.Category.
-Require Import Category.Tactics.
 
 Set Primitive Projections.
 

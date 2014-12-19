@@ -1,5 +1,5 @@
 Require Import Category.Main.
-Require Import Ext_Cons.Arrow_From.
+Require Export Ext_Cons.Arrow_From.
 
 Set Primitive Projections.
 

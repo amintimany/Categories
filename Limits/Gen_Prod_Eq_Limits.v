@@ -1,11 +1,14 @@
+(* To be changed after re definition of limits *)
+
+(*
 Require Import Category.Main.
 Require Import Functor.Main.
 Require Import Ext_Cons.Arrow.
 Require Import Basic_Cons.Terminal.
-Require Import Basic_Cons.General_Product.
 Require Import Basic_Cons.Equalizer.
 Require Import Basic_Cons.Facts.Equalizer_Monic.
 Require Import Coq_Cats.Type_Cat.Card_Restriction.
+Require Import Categories.Discr.
 
 Require Import Limits.Limit.
 
@@ -19,11 +22,68 @@ Section Gen_Prod_Eq_Complete.
   Section Gen_Prod_Eq_Limits.
     Context {J : Category}.
 
-    Context {HGPO : Has_General_Products C (@Obj J)} {HGPH : Has_General_Products C (Arrow J)} {HE : Has_Equalizers C}.
+    Context {OProd : ∀ (map : J → C), Limit (Discrete_Functor C map)} {HProd : ∀ (map : (Arrow J) → C), Limit (Discrete_Functor C map)} {Eqs : Has_Equalizers C}.
 
     Section Limits_Exist.
-
       Context (D : Functor J C).
+
+      Local Notation Obj_Prod := (OProd (D _o)) (only parsing).
+      Local Notation Hom_Prod := (HProd (fun f => D _o (Targ f))) (only parsing).
+
+      Program Instance Projs_Cone : Cone (Discrete_Functor C (fun f => D _o (Targ f))) :=
+        {
+          cone := Obj_Prod;
+          Cone_arrow := fun f => Cone_arrow (@terminal _ Obj_Prod) (Targ f)
+        }.
+
+      Definition Projs : @Hom C Obj_Prod Hom_Prod := @t_morph (Cone_Cat (Discrete_Functor C (fun f => D _o (Targ f)))) _ Projs_Cone.
+      
+      Program Instance D_imgs_Cone : Cone (Discrete_Functor C (fun f => D _o (Targ f))) :=
+        {
+          cone := Obj_Prod;
+          Cone_arrow := fun f => (D _a _ _ (Arr f)) ∘ (Cone_arrow (@terminal _ Obj_Prod) (Orig f))
+        }.
+
+      Definition D_imgs : @Hom C Obj_Prod Hom_Prod := @t_morph (Cone_Cat (Discrete_Functor C (fun f => D _o (Targ f)))) _ D_imgs_Cone.
+
+      Program Instance Lim_Cone : Cone D :=
+        {
+          cone := Eqs _ _ Projs D_imgs;
+
+          Cone_arrow := λ c, (Cone_arrow (@terminal _ Obj_Prod) c) ∘ (@equalizer_morph _ _ _ _ _ (Eqs _ _ Projs D_imgs))
+        }.
+
+      Next Obligation. (* Cone_com *)
+      Proof.
+        rewrite <- assoc.
+        match goal with
+            [|- ?A ∘ ?C = ?D ∘ ?E] =>
+            let H := fresh "H" in
+            let H' := fresh "H'" in
+            cut (A = Cone_arrow (@terminal _ Hom_Prod) (@Build_Arrow _ _ _ h) ∘ D_imgs);
+              [cut(D = Cone_arrow (@terminal _ Hom_Prod) (@Build_Arrow _ _ _ h) ∘ Projs);
+                [intros H H'; rewrite H; rewrite H'; clear H H' | ] |
+              ]
+        end.
+        repeat rewrite assoc.
+        rewrite equalizer_morph_com.
+        reflexivity.
+        {
+          set (H := @Cone_com _ _ _ (@terminal _ Hom_Prod)).
+          Set Printing All.
+          unfold Projs.
+
+          rewrite (@Cone_com _ _ _ (@terminal _ Hom_Prod)).
+          reflexivity.
+        }
+        {
+          unfold D_imgs.
+          rewrite (@GP_Prod_morph_com _ _ (λ f : Arrow J, (D _o) (Targ f))).
+          reflexivity.
+        }
+      Qed.
+
+
 
       Let Obj_Prod : @Obj C := Gen_Prod_of (D _o).
 
@@ -165,3 +225,4 @@ Section Gen_Prod_Eq_Complete.
 
 End Gen_Prod_Eq_Complete.
 
+*)

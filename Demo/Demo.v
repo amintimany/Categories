@@ -4,28 +4,20 @@ Require Import Basic_Cons.Main.
 Require Import Coq_Cats.Type_Cat.Type_Cat.
 Require Import Coq_Cats.Type_Cat.Facts.
 Require Import Algebras.Main.
+Require Import Ext_Cons.Prod_Cat.
+Require Import Cat.Facts.
 
 Set Primitive Projections.
 
 Set Universe Polymorphism.
 
-Program Instance S_nat_func : Functor Type_Cat Type_Cat :=
+Program Instance term_id : Functor Type_Cat (Prod_Cat Type_Cat Type_Cat) :=
 {
-  FO := λ a, Sum_of _o (Term_of Type_Cat, a);
-  FA := λ a b f, Sum_of _a (_, _) (_, _) (@id _ (Term_of Type_Cat), f)
+  FO := fun a => (@CCC_term Type_Cat _, a);
+  FA := fun a b f => (@id _ (@CCC_term Type_Cat _), f)
 }.
 
-Next Obligation. (* mapping of identities *)
-Proof.
-  extensionality x.
-  destruct x as [a|x]; trivial.
-Qed.
-
-Next Obligation. (* functor commuting with compose *)
-Proof.
-  extensionality x.
-  destruct x as [m|x]; trivial.
-Qed.
+Instance S_nat_func : Functor Type_Cat Type_Cat := (@Sum_Func Type_Cat _) ∘ term_id.
 
 (* S_nat_func defined *)
 
@@ -66,8 +58,9 @@ Qed.
 
 (* nat_alg_morph defined *)
 
-Program Instance nat_alg_init : Initial S_nat_alg_cat nat_alg :=
+Program Instance nat_alg_init : Initial S_nat_alg_cat :=
 {
+  initial := nat_alg;
   i_morph := nat_alg_morph
 }.
 
@@ -154,8 +147,9 @@ Qed.
 
 (* CoNat_coalg_morph defined *)
 
-Program Instance CoNat_alg_term : Terminal S_nat_coalg_cat CoNat_coalg :=
+Program Instance CoNat_alg_term : Terminal S_nat_coalg_cat :=
 {
+  terminal := CoNat_coalg;
   t_morph := CoNat_coalg_morph
 }.
 

@@ -8,11 +8,11 @@ Set Primitive Projections.
 Set Universe Polymorphism.
 
 Section CoEqualizer_Epic.
-  Context {C : Category} {a b e} (f g : Hom a b) {Eq : CoEqualizer C f g e}.
+  Context {C : Category} {a b } (f g : Hom a b) {ce : CoEqualizer f g}.
 
-  Program Instance CoEqualizer_Epic : b –≫ e :=
+  Program Instance CoEqualizer_Epic : b –≫ ce :=
     {
-      epi_morphism := coequalizer_morph C f g
+      epi_morphism := coequalizer_morph f g
     }.
 
   Next Obligation. (* mono_morphism_monomorphism *)

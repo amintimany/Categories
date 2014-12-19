@@ -36,3 +36,5 @@ Delimit Scope object_scope with object.
 Open Scope category_scope.
 
 Open Scope morphism_scope.
+
+Open Scope object_scope.

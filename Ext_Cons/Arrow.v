@@ -56,13 +56,12 @@ Section Arrow.
 
     Next Obligation. (* Arr_Hom_com *)
     Proof.
-      destruct h as [hh hh' hc]; destruct h' as [h'h h'h' h'c].
-      simpl.
-      repeat rewrite assoc.
+      destruct h as [hh hh' hc]; destruct h' as [h'h h'h' h'c]; simpl.
+      rewrite assoc.
       rewrite hc.
       match goal with [|- ?A ∘ ?B ∘ ?C = _] => reveal_comp A B end.
       rewrite h'c.
-      rewrite assoc; auto.
+      auto.
     Qed.
 
     (* Arrow_Hom_compose defined *)
@@ -96,10 +95,7 @@ Proof.
   econstructor; eauto.
 Defined.
 
-Lemma Arrow_OP_Iso (C : Category) : @Isomorphic Type_Cat (Arrow C) (Arrow (C ^op)).
+Lemma Arrow_OP_Iso (C : Category) : (Arrow C) ≡≡ (Arrow (C ^op)) ::> Type_Cat.
 Proof.
-  exists (Arrow_to_Arrow_OP C).
-  set (ACO := Arrow_to_Arrow_OP (C ^op)).
-  destruct C.
-  exists ACO; extensionality x; destruct x; trivial.
+  eapply (@Build_Isomorphism Type_Cat _ _ (Arrow_to_Arrow_OP C) (Arrow_to_Arrow_OP (C ^op))); auto.
 Qed.

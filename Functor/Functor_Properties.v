@@ -34,47 +34,22 @@ Section Functor_Properties.
                          | eq_refl => F _a _ _ (@id _ c)
                        end)
              ) as [V' HV].
-    exists U'; exists V'.
-    {
-      apply F_Faithful.
-      rewrite F_compose.
-      rewrite HU, HV.
-      repeat rewrite F_id.
-      clear.
-      destruct H.
-      auto.
-    }
-    {
-      apply F_Faithful.
-      rewrite F_compose.
-      rewrite HU, HV.
-      repeat rewrite F_id.
-      clear.
-      destruct H.
-      auto.
-    }
+    apply (@Build_Isomorphism _ _ _ U' V');
+      apply F_Faithful; rewrite F_compose;
+      rewrite HU, HV;
+      repeat rewrite F_id; clear; destruct H; auto.
   Qed.
 
   Theorem Fully_Faithful_Conservative : Faithful_Func → Full_Func → ∀ (c c' : Obj), F _o c ≡ F _o c' → c ≡ c'.
   Proof.
-    intros F_Faithful F_Full c c' [f [g H1 H2]].
+    intros F_Faithful F_Full c c' [f g H1 H2].
     destruct (F_Full _ _ f) as [Ff Hf].
     destruct (F_Full _ _ g) as [Fg Hg].
-    exists Ff; exists Fg.
-    {
-      apply F_Faithful.
-      rewrite F_compose.
-      rewrite Hf, Hg, F_id.
-      trivial.
-    }
-    {
-      apply F_Faithful.
-      rewrite F_compose.
-      rewrite Hf, Hg, F_id.
-      trivial.
-    }
+    apply (@Build_Isomorphism _ _ _ Ff Fg);
+      apply F_Faithful;
+      rewrite F_compose;
+      rewrite Hf, Hg, F_id; trivial.
   Qed.
-
 
 End Functor_Properties.
 
@@ -82,7 +57,7 @@ Section Embedding.
   Context (C C' : Category).
 
   (**
-  An embedding is a functor that is faully-faithful. Such a functor is necessarily essentially injective and also guarantees isomorphisms, i.e., if F __O c === F __O c' then c === c'.
+    An embedding is a functor that is faully-faithful. Such a functor is necessarily essentially injective and conservative, i.e., if F __O c === F __O c' then c === c'.
    *)
 
   Class Embedding : Type :=

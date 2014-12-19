@@ -17,7 +17,7 @@ Set Universe Polymorphism.
 
 Local Obligation Tactic := idtac.
 
-Lemma Yoneda_Lemma (C : Category) : @Isomorphic (Func_Cat _ _) (Y_left C) (Y_right C).
+Lemma Yoneda_Lemma (C : Category) : (Y_left C) ≡≡ (Y_right C) ::> (Func_Cat _ _).
 Proof.
   apply NatIso with (n := Y_left_to_right C) (n' := Y_right_to_left C);
     intros [c F]; extensionality x; simpl in *.

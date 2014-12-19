@@ -31,9 +31,10 @@ Instance Opposite (C : Category) : Category :=
 
 Notation "C '^op'" := (Opposite C) (at level 9, no associativity).
 
-Theorem CoIso {C : Category} (a b : Obj) : @Isomorphic C a b → @Isomorphic C^op a b. 
+Theorem CoIso {C : Category} (a b : C) : a ≡≡ b ::> C → a ≡≡ b ::> C^op. 
 Proof.
-  intros [f [g H1 H2]].
-  refine (Build_Isomorphic (C^op) _ _ g _).
-  refine (Build_Isomorphism (C^op) _ _ _ f _ _); trivial.
+  intros I.
+  eapply (Build_Isomorphism C^op _ _ I⁻¹ I); unfold compose; simpl; auto.
 Qed.
+
+(* TODO: question, should I add auto unfloding of compose if the category is an opposite!? see how often it is necessary.*)

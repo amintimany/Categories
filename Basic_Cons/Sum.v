@@ -2,40 +2,44 @@ Require Import Category.Main.
 Require Import Ext_Cons.Prod_Cat.
 Require Import Functor.Main.
 
-
 Set Primitive Projections.
 
 Set Universe Polymorphism.
 
-Class Sum (C : Category) (c d p : Obj) : Type :=
+Class Sum {C : Category} (c d : C) : Type :=
 {
-  Inj_1 : Hom c p;
-  Inj_2 : Hom d p;
+  sum : C;
 
-  Sum_morph_ex : ∀ (p' : Obj) (r1 : Hom c p') (r2 : Hom d p'), Hom p p';
+  Inj_1 : Hom c sum;
+
+  Inj_2 : Hom d sum;
+
+  Sum_morph_ex : ∀ (p' : Obj) (r1 : Hom c p') (r2 : Hom d p'), Hom sum p';
 
   Sum_morph_com_1 : ∀ (p' : Obj) (r1 : Hom c p') (r2 : Hom d p'), (Sum_morph_ex p' r1 r2) ∘ Inj_1 = r1 ;
   
   Sum_morph_com_2 : ∀ (p' : Obj) (r1 : Hom c p') (r2 : Hom d p'), (Sum_morph_ex p' r1 r2) ∘ Inj_2 = r2;
   
-  Sum_morph_unique : ∀ (p' : Obj) (r1 : Hom c p') (r2 : Hom d p') (f g : Hom p p'), (f ∘ Inj_1 = r1) → (f ∘ Inj_2 = r2) → (g ∘ Inj_1 = r1) → (g ∘ Inj_2 = r2) → f = g
+  Sum_morph_unique : ∀ (p' : Obj) (r1 : Hom c p') (r2 : Hom d p') (f g : Hom sum p'), (f ∘ Inj_1 = r1) → (f ∘ Inj_2 = r2) → (g ∘ Inj_1 = r1) → (g ∘ Inj_2 = r2) → f = g
 }.
 
-Theorem Sum_iso {C : Category} (c d p p': Obj) : Sum C c d p -> Sum C c d p' -> p ≡ p'.
+Coercion sum : Sum >-> Obj.
+
+Theorem Sum_iso {C : Category} (c d : C) (S S' : Sum c d) : S ≡ S'.
 Proof.
-  intros [S1 S2 SX SXC1 SXC2 SU] [S1' S2' SX' SXC1' SXC2' SU'].
-  exists (SX p' S1' S2'); exists (SX' p S1 S2);
-  [apply (SU p S1 S2)| apply (SU' p' S1' S2')]; trivial;
-  rewrite assoc; repeat (rewrite SXC1 || rewrite SXC2 || rewrite SXC1' || rewrite SXC2'); trivial.
+  eapply (@Build_Isomorphism _ _ _ (Sum_morph_ex S' Inj_1 Inj_2) (Sum_morph_ex S Inj_1 Inj_2));
+    eapply Sum_morph_unique; trivial;
+  rewrite assoc; repeat (rewrite Sum_morph_com_1 || rewrite Sum_morph_com_2); trivial.
 Qed.
 
-Program Instance Sum_Functor {C : Category}
-        (sm : Obj → Obj → Obj)
-        (sm_sum : ∀ a b, Sum C a b (sm a b))
+Class Has_Sums (C : Category) := has_sums : ∀ a b, Sum a b.
+
+Program Instance Sum_Func {C : Category}
+        (HS : Has_Sums C)
 : Functor (Prod_Cat C C) C :=
 {
-  FO := fun x => sm (fst x) (snd x); 
-  FA := fun a b f => @Sum_morph_ex C _ _ _ (sm_sum _ _) _ ((@Inj_1 C _ _ _ (sm_sum _ _)) ∘ (fst f)) ((@Inj_2 C _ _ _ (sm_sum _ _)) ∘ (snd f))
+  FO := fun x => HS (fst x) (snd x); 
+  FA := fun a b f => Sum_morph_ex _ (Inj_1 ∘ (fst f)) (Inj_2 ∘ (snd f))
 }.
 
 Next Obligation. (* F_id *)  
@@ -81,17 +85,6 @@ Proof.
 Qed.
 
 (* Sum_Functor defined *)
-
-Class Has_Sums (C : Category) : Type :=
-{
-  HS_sum : Obj → Obj → Obj;
-
-  HS_sum_sum : forall a b, Sum C a b (HS_sum a b);
-
-  Sum_of := Sum_Functor HS_sum HS_sum_sum
-}.
-
-Existing Instance HS_sum_sum.
 
 
 

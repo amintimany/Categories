@@ -14,16 +14,16 @@ Set Universe Polymorphism.
 
 Section Term_Prod.
 
-  Context {C : Category} {C_HT : Has_Terminal C} {C_HP : Has_Products C}.
+  Context {C : Category} {term : Terminal C} {C_HP : Has_Products C}.
 
-  Program Instance Term_Prod_lr (a : Obj) : NatTrans (((Yoneda_emb C) _o) (Prod_of _o (a, Term_of C))) (((Yoneda_emb C) _o) a) :=
+  Program Instance Term_Prod_lr (a : Obj) : NatTrans (((Yoneda_emb C) _o) (Prod_Func _o (a, term))) (((Yoneda_emb C) _o) a) :=
   {
     Trans := fun b f => Pi_1 ∘ f
   }.
 
-  Program Instance Term_Prod_rl (a : Obj) : NatTrans (((Yoneda_emb C) _o) a) (((Yoneda_emb C) _o) (Prod_of _o(a,  Term_of C))) :=
+  Program Instance Term_Prod_rl (a : Obj) : NatTrans (((Yoneda_emb C) _o) a) (((Yoneda_emb C) _o) (Prod_Func _o(a,  term))) :=
   {
-    Trans := fun b f =>  Prod_morph_ex _ f (@T_morph C _ b)
+    Trans := fun b f =>  Prod_morph_ex _ f (@t_morph C _ b)
   }.
 
   Next Obligation. (* Trans_com *)
@@ -39,7 +39,7 @@ Section Term_Prod.
     apply t_morph_unique.
   Qed.
 
-  Theorem Term_Prod (a : Obj) : (Prod_of _o (a, Term_of C)) ≡ a.
+  Theorem Term_Prod (a : Obj) : (Prod_Func _o (a, @terminal _ term)) ≡ a.
   Proof.
     Yoneda.
     apply (NatIso _ _ (Term_Prod_lr a) (Term_Prod_rl a)).

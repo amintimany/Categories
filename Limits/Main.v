@@ -1,7 +1,5 @@
 Require Export Limits.Limit.
-Require Export Limits.CoLimit.
-Require Export Limits.Duality.
-
+Require Export Gen_Prod_Eq_Limits.
 
 
 

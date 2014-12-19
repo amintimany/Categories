@@ -8,30 +8,21 @@ Set Universe Polymorphism.
 
 (* Initial Object *)
 
-
-Class Initial (C : Category) (init : Obj) : Type :=
+Class Initial (C : Category) : Type :=
 {
-  i_morph : ∀ (d : Obj), Hom init d;
-  i_morph_unique : ∀ (d : Obj) (f g : Hom init d), f = g
+  initial : C;
+  i_morph : ∀ (d : Obj), Hom initial d;
+  i_morph_unique : ∀ (d : Obj) (f g : Hom initial d), f = g
 }.
 
-Theorem Initial_iso {C : Category} (i i' : Obj) : Initial C i → Initial C i' → i ≡ i'.
+Coercion initial : Initial >-> Obj.
+
+Theorem Initial_iso {C : Category} (I I' : Initial C) : I ≡ I'.
 Proof.
-  intros [im imu] [im' imu'].
-  exists (im i'); exists (im' i); trivial.
+  eapply (@Build_Isomorphism _ _ _ (i_morph _) (i_morph _)); apply i_morph_unique.
 Qed.
 
-Class Has_Initial (C : Category) : Type :=
-{
-  Init_of : Obj;
-  Init_of_init : Initial C Init_of;
-
-  I_morph := @i_morph _ _ Init_of_init
-}.
-
-Arguments Init_of C {_} : clear implicits.
-
-Existing Instance Init_of_init.
+Class Has_Initial (C : Category) : Type := has_initial : Initial C.
 
 
 

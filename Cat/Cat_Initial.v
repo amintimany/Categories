@@ -19,8 +19,9 @@ Program Instance Functor_From_Empty_Cat (C' : Category) : Functor 0%category C' 
 
 Local Hint Extern 1 => simpl in *.
 
-Program Instance Cat_Init : Initial Cat (0%category) :=
+Program Instance Cat_Init : Initial Cat :=
 {
+  initial := (0%category);
   i_morph := fun x => Functor_From_Empty_Cat x
 }.
 

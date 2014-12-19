@@ -13,9 +13,9 @@ Set Universe Polymorphism.
 
 Section Init_Prod.
 
-  Context {C : Category} {C_CCC : CCC C} {C_HI : Has_Initial C}.
+  Context {C : Category} {C_CCC : CCC C} {init : Has_Initial C}.
 
-  Program Instance Init_Prod_lr a : NatTrans (((Yoneda_emb C^op) _o) (Prod_of _o (Init_of C, a))) (((Yoneda_emb C^op) _o) (Init_of C)) :=
+  Program Instance Init_Prod_lr a : NatTrans (((Yoneda_emb C^op) _o) (Prod_Func _o (init, a))) (((Yoneda_emb C^op) _o) init) :=
   {
     Trans := fun b f => i_morph b
   }.
@@ -26,7 +26,7 @@ Section Init_Prod.
     apply i_morph_unique.
   Qed.
 
-  Program Instance Init_Prod_rl a : NatTrans (((Yoneda_emb C^op) _o) (Init_of C)) (((Yoneda_emb C^op) _o) (Prod_of _o (Init_of C, a))) :=
+  Program Instance Init_Prod_rl a : NatTrans (((Yoneda_emb C^op) _o) init) (((Yoneda_emb C^op) _o) (Prod_Func _o (init, a))) :=
 {
   Trans := fun c _ => ((i_morph c) ∘ Pi_1)
 }.
@@ -39,7 +39,7 @@ Section Init_Prod.
     apply i_morph_unique.
   Qed.
 
-  Theorem Init_Prod a : (Prod_of _o (Init_of C, a)) ≡ Init_of C.
+  Theorem Init_Prod a : (Prod_Func _o (@initial _ init, a)) ≡ init.
   Proof.
     apply (@CoIso (C^op)).
     Yoneda.
@@ -48,7 +48,7 @@ Section Init_Prod.
       intros c.
       extensionality g; simpl.
       rewrite id_unit_left.
-      apply (@i_morph_unique _ (Init_of C) (Init_of_init)).
+      apply i_morph_unique.
     }
     {
       intros c.

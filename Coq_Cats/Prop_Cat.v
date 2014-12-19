@@ -29,7 +29,7 @@ Program Instance Prop_Cat : Category :=
   id := fun A => fun x => x
 }.
 
-Program Instance False_init : Initial Prop_Cat False.
+Program Instance False_init : Initial Prop_Cat := {initial := False}.
 
 Next Obligation. (* i_morph *)
 Proof.
@@ -46,7 +46,7 @@ Qed.
 Program Instance Prop_Cat_Has_Init : Has_Initial Prop_Cat.
 
 
-Program Instance True_term : Terminal Prop_Cat True.
+Program Instance True_term : Terminal Prop_Cat := {terminal := True}.
 
 Next Obligation. (* t_morph_unique *)
 Proof.
@@ -55,9 +55,7 @@ Qed.
 
 (* Prop_term Proved! -- t_morph is proven by Program system :-) it could prove for us that from any premise we can conclude True! :-) *)
 
-Program Instance Prop_Cat_Has_Term : Has_Terminal Prop_Cat.
-
-Program Instance Conj_Product (P Q : Prop) : Product Prop_Cat P Q (P /\ Q).
+Program Instance Conj_Product (P Q : Prop) : Product P Q := {product := (P /\ Q)}.
 
 Next Obligation. (* Prod_morph_unique *)
 Proof.
@@ -71,7 +69,7 @@ Qed.
 
 Program Instance Prop_Cat_Has_Products : Has_Products Prop_Cat.
 
-Program Instance implication_exp (P Q : Prop) : Exponential Prop_Cat Prop_Cat_Has_Products P Q (P -> Q).
+Program Instance implication_exp (P Q : Prop) : Exponential P Q := {exponential := (P -> Q)}.
 
 Next Obligation. (* Exp_morph_com *)
 Proof.
@@ -92,7 +90,7 @@ Program Instance Prop_Cat_Has_Exponentials : Has_Exponentials Prop_Cat.
 Program Instance Prop_Cat_CCC : CCC Prop_Cat.
 
 
-Program Instance Disj_Sum (P Q : Prop) : Sum Prop_Cat P Q (P \/ Q).
+Program Instance Disj_Sum (P Q : Prop) : Sum P Q := {sum := (P \/ Q)}.
 
 Next Obligation. (* Sum_morph_ex *)
 Proof.
