@@ -80,29 +80,23 @@ Mod_NatTrans =\
 	NatTrans/NatTrans
 
 Mod_Yoneda =\
-	Yoneda/Y_emb\
-	Yoneda/Y_Left\
-	Yoneda/Y_Right\
-	Yoneda/Y_Left_Right\
-	Yoneda/Y_Right_Left\
-	Yoneda/Y_Lem\
-	Yoneda/Main
+	Yoneda/Yoneda
 
 Mod_Limits =\
 	Limits/Limit\
 	Limits/Main\
 	Limits/Gen_Prod_Eq_Limits\
 
-Mod_Categories =\
-	Categories/Discr\
-	Categories/Monoid_Cat\
-	Categories/Examples/List_Monoid_Cat
+Mod_Archetypal =\
+	Archetypal/Discr\
+	Archetypal/Monoid_Cat\
+	Archetypal/Examples/List_Monoid_Cat
 
 
 Mod_Demo =\
 	Demo/Demo
 
-Modules = $(Mod_Essentials) $(Mod_Category) $(Mod_Ext_Cons) $(Mod_Functor) $(Mod_Coq_Cats) $(Mod_Basic_Cons) $(Mod_Algebras) $(Mod_Cat) $(Mod_NatTrans) $(Mod_Yoneda) $(Mod_Limits) $(Mod_Categories) $(Mod_Demo)
+Modules = $(Mod_Essentials) $(Mod_Category) $(Mod_Ext_Cons) $(Mod_Functor) $(Mod_Coq_Cats) $(Mod_Basic_Cons) $(Mod_Algebras) $(Mod_Cat) $(Mod_NatTrans) $(Mod_Yoneda) $(Mod_Limits) $(Mod_Archetypal) $(Mod_Demo)
 
 
 

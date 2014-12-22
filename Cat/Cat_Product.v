@@ -1,5 +1,3 @@
-Require Import Coq.Logic.EqdepFacts.
-
 Require Import Category.Main.
 Require Import Functor.Main.
 Require Import Cat.Cat.
@@ -10,29 +8,6 @@ Set Primitive Projections.
 
 Set Universe Polymorphism.
 
-Program Instance Prod_Cat_proj1 (C C' : Category) : Functor (Prod_Cat C C') C :=
-{
-  FO := fun x => fst x;
-  FA := fun _ _ f => fst f
-}.
-
-(* Prod_Cat_Proj1 defined *)
-
-Program Instance Prod_Cat_proj2 (C C' : Category) : Functor (Prod_Cat C C') C' :=
-{
-  FO := fun x => snd x;
-  FA := fun _ _ f => snd f
-}.
-
-(* Prod_Cat_Proj2 defined *)
-
-
-Program Instance Prod_Cat_morph_ex (C C' C'': Category) (F : Functor C''  C) (G : Functor C'' C') : Functor C'' (Prod_Cat C C') :=
-{
-  FO := fun x => (F _o x, G _o x);
-  FA := fun _ _ f => (F _a _ _ f, G _a _ _ f)
-}.
-
 (* Prod_Cat_morph_ex defined *)
 
 Local Obligation Tactic := idtac.
@@ -41,11 +16,11 @@ Program Instance Cat_Products (C C' : Category) : @Product Cat C C' :=
 {
   product := (Prod_Cat C C');
 
-  Pi_1 := Prod_Cat_proj1 C C';
+  Pi_1 := Cat_Proj1 C C';
 
-  Pi_2 := Prod_Cat_proj2 C C';
+  Pi_2 := Cat_Proj2 C C';
 
-  Prod_morph_ex := fun P => fun F G => Prod_Cat_morph_ex C C' P F G
+  Prod_morph_ex := fun P => fun F G =>  Functor_compose (Diag_Func P) (Prod_Functor F G)
 }.
 
 Next Obligation. (* Prod_morph_com1 *)

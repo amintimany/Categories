@@ -1,7 +1,7 @@
 Require Import Category.Category.
 Require Import Ext_Cons.Arrow.
 Require Import Functor.Functor Functor.Functor_Ops Const_Func.
-Require Import Categories.Discr.
+Require Import Archetypal.Discr.
 
 Set Primitive Projections.
 

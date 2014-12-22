@@ -23,11 +23,11 @@ Class Category : Type :=
 
   (* associativity of composition: *)
   assoc : ∀ {a b c d : Obj} (f : Hom  a b) (g : Hom b c) (h : Hom c d),
-                     ((h ∘ g) ∘ f) = (h ∘ (g ∘ f));
+            ((h ∘ g) ∘ f) = (h ∘ (g ∘ f));
 
   (* symmetric form of associativity: *)
   assoc_sym : ∀ {a b c d : Obj} (f : Hom a b) (g : Hom b c) (h : Hom c d),
-                     ((h ∘ (g ∘ f) = (h ∘ g) ∘ f));
+                ((h ∘ (g ∘ f) = (h ∘ g) ∘ f));
 
   (* identity morphisms: *)
   id : ∀ {a : Obj}, Hom a a;
@@ -63,6 +63,7 @@ Proof.
   destruct (proof_irrelevance _ Ciur Ciur').
   reflexivity.
 Qed.
+
 
 (* basic tactics for categories *)
 
@@ -191,71 +192,6 @@ Tactic Notation "reveal_comp" constr(f) constr(g) := reveal_comp_in_goal f g.
 
 Tactic Notation "reveal_comp" constr(f) constr(g) "in" hyp(I) := reveal_comp_in_I f g I.
 
-(*
-Goal (∀ (C : Category) (a : C) (f g h i : Hom a a), (f ∘ (g ∘ (f ∘ g))) ∘ ((h ∘ i) ∘ (h ∘ i)) = f ∘ g ∘ f ∘ g ∘ h ∘ i ∘ h ∘ i).
-intros.
-reveal_comp g h.
-reveal_comp f g.
-reveal_comp g f.
-reveal_comp i h.
-reveal_comp h i.
-
-
-Unset Ltac Debug.
-rewrite $(reveal_prepare_equality_term g h (f ∘ g ∘ f ∘ g) ((h ∘ i) ∘ h ∘ i) )$.
-
-set (H := $(reveal_prepare_equality_term g h (f ∘ g ∘ f ∘ g) ((h ∘ i) ∘ h ∘ i) )$).
-clearbody H.
-*)
-
-
-(*
-Ltac reveal_comp_in_goal f g :=
-  match goal with
-    | [ |- context[f ∘ g] ] => idtac
-    | [ |- context[?B ∘ (?A ∘ f)] ] =>
-      rewrite <- (assoc f _ _)
-    | [ |- context[((g ∘ ?A) ∘ ?B)] ] =>
-      rewrite (assoc _ _ g)
-    | [ |- context[(?A ∘ f) ∘ (g ∘ ?B)] ] =>
-      rewrite <- (assoc _ g (_ ∘ f))
-    | [ |- context[((?A ∘ f) ∘ g)] ] =>
-      rewrite (assoc g f)
-    | [ |- context[(f ∘ (g ∘ ?B))] ] =>
-      rewrite <- (assoc _ g f)
-  end;
-  match goal with
-    | [ |- context[f ∘ g] ] => idtac
-    | _ => reveal_comp_in_goal f g
-  end
-.
-
-Ltac reveal_comp_in_I f g I :=
-  match type of I with
-    | context[f ∘ g] => idtac
-    | context[?B ∘ (?A ∘ f)] =>
-      let J := fresh "H" in
-      assert (J := assoc f A B); rewrite <- J in I; clear J
-    | context[((g ∘ ?A) ∘ ?B)] =>
-      let J := fresh "H" in
-      assert (J := assoc B A g); rewrite J in I; clear J
-    | context[(?A ∘ f) ∘ (g ∘ ?B)] =>
-      let J := fresh "H" in
-      assert (J := assoc B g (A ∘ f)); rewrite <- J in I; clear J
-    | context[((?A ∘ f) ∘ g)] =>
-      let J := fresh "H" in
-      assert (J := assoc g f A); rewrite J in I; clear J
-    | context[(f ∘ (g ∘ ?B))] =>
-      let J := fresh "H" in
-      assert (J := assoc B g f); rewrite <- J in I; clear J
-  end;
-  match type of I with
-    | context[f ∘ g] => idtac
-    | _ => reveal_comp_in_I f g
-  end
-.
-*)
-
 Ltac simpl_ids :=
   let id_detected B :=
       let J := fresh "H" in
@@ -311,5 +247,3 @@ match goal with
     [|- ?A = ?B :> ?Hom _ _] =>
     repeat rewrite assoc; trivial; fail
 end.
-
-

@@ -2,7 +2,7 @@ Require Import Category.Main.
 Require Import Functor.Main.
 Require Import Coq_Cats.Type_Cat.Type_Cat.
 Require Import Limits.Limit.
-Require Import Categories.Discr.
+Require Import Archetypal.Discr.
 Require Import Basic_Cons.Terminal.
 
 Set Primitive Projections.
