@@ -2,10 +2,6 @@ Require Import Category.Main.
 Require Import Category.Composable_Chain.
 Require Import Functor.Functor.
 
-Set Primitive Projections.
-
-Set Universe Polymorphism.
-
 Section Functor_Image.
   Context {C D : Category}
           (F : Functor C D).

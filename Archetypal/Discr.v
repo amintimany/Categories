@@ -4,10 +4,6 @@ Require Import Functor.Functor.
 Require Import Ext_Cons.Arrow.
 Require Import Coq_Cats.Type_Cat.Type_Cat.
 
-Set Primitive Projections.
-
-Set Universe Polymorphism.
-
 Section Discr.
   Context (Obj : Type).
 

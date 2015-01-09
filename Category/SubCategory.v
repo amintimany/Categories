@@ -1,9 +1,5 @@
 Require Import Category.Category.
 
-Set Primitive Projections.
-
-Set Universe Polymorphism.
-
 Section SubCategory.
   Context (C : Category)
           (Obj_Cri : Obj → Prop)

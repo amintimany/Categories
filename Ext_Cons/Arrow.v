@@ -1,10 +1,6 @@
 Require Import Category.Main.
 Require Import Coq_Cats.Type_Cat.Type_Cat.
 
-Set Primitive Projections.
-
-Set Universe Polymorphism.
-
 Section Arrow.
 
   Class Arrow (C : Category) :=
@@ -97,5 +93,5 @@ Defined.
 
 Lemma Arrow_OP_Iso (C : Category) : (Arrow C) ≡≡ (Arrow (C ^op)) ::> Type_Cat.
 Proof.
-  eapply (@Build_Isomorphism Type_Cat _ _ (Arrow_to_Arrow_OP C) (Arrow_to_Arrow_OP (C ^op))); auto.
+  eapply (Build_Isomorphism Type_Cat _ _ (Arrow_to_Arrow_OP C) (Arrow_to_Arrow_OP (C ^op))); auto.
 Qed.

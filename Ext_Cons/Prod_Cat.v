@@ -1,9 +1,6 @@
 Require Import Category.Main.
 Require Import Functor.Main.
-
-Set Primitive Projections.
-
-Set Universe Polymorphism.
+Require Import Cat.Cat.
 
 (* Product Category *)
 
@@ -34,6 +31,21 @@ Qed.
 
 Next Obligation.
   program_simpl.
+Qed.
+
+Theorem Prod_compose_id (C D : Category) (a b c : C) (d : D) (f : Hom a b) (g : Hom b c) : (g ∘ f, @id _ d) = @compose (Prod_Cat _ _) (_, _) (_, _) (_, _) (f, @id _ d) (g, @id _ d).
+Proof.
+  cbn; auto.
+Qed.
+
+Theorem Prod_id_compose (C D : Category) (a : C) (b c d : D) (f : Hom b c) (g : Hom c d) : (@id _ a, g ∘ f) = @compose (Prod_Cat _ _) (_, _) (_, _) (_, _) (@id _ a, f) (@id _ a, g).
+Proof.
+  cbn; auto.
+Qed.
+
+Theorem Prod_cross_compose (C D : Category) (a b : C) (c d : D) (f : Hom a b) (g : Hom c d) : @compose (Prod_Cat _ _) (_, _) (_, _) (_, _) (@id _ a, g) (f, @id _ d) = @compose (Prod_Cat _ _) (_, _) (_, _) (_, _) (f, @id _ c) (@id _ b, g).
+Proof.
+  cbn; auto.
 Qed.
 
 Program Instance Prod_Functor {C1 C2 C1' C2' : Category} (F : Functor C1 C2) (F' : Functor C1' C2') : Functor (Prod_Cat C1 C1') (Prod_Cat C2 C2') :=
@@ -131,3 +143,22 @@ Qed.
 Next Obligation.
   trivial.
 Qed.
+
+Instance ProdOp_Prod_of_Op (C D : Category) : Functor (Prod_Cat C D)^op (Prod_Cat C^op D^op) :=
+{
+  FO := fun x => x;
+  FA := fun _ _ x => x;
+  F_id := fun _ => eq_refl;
+  F_compose := fun _ _ _ _ _ => eq_refl
+}.
+
+Instance Prod_of_Op_ProdOp (C D : Category) : Functor (Prod_Cat C^op D^op) (Prod_Cat C D)^op :=
+{
+  FO := fun x => x;
+  FA := fun _ _ x => x;
+  F_id := fun _ => eq_refl;
+  F_compose := fun _ _ _ _ _ => eq_refl
+}.
+
+Program Instance Opposite_Prod (C D : Category) : (Prod_Cat C D)^op ≡≡ Prod_Cat C^op D^op ::> Cat :=
+  Build_Isomorphism _ _ _ (ProdOp_Prod_of_Op _ _) (Prod_of_Op_ProdOp _ _) eq_refl eq_refl.

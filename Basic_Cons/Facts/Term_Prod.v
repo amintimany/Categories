@@ -1,16 +1,11 @@
 Require Import Category.Main.
 Require Import Functor.Main.
 
-Require Import Basic_Cons.Initial.
 Require Import Basic_Cons.Terminal.
 Require Import Basic_Cons.Product.
 
 Require Import NatTrans.NatTrans.
 Require Import Yoneda.Yoneda.
-
-Set Primitive Projections.
-
-Set Universe Polymorphism.
 
 Section Term_Prod.
 
@@ -39,7 +34,7 @@ Section Term_Prod.
     apply t_morph_unique.
   Qed.
 
-  Theorem Term_Prod (a : Obj) : (Prod_Func _o (a, @terminal _ term)) ≡ a.
+  Theorem Term_Prod (a : Obj) : ((Prod_Func C) _o (a, @terminal _ term)) ≡ a.
   Proof.
     Yoneda.
     apply (NatIso _ _ (Term_Prod_lr a) (Term_Prod_rl a)).

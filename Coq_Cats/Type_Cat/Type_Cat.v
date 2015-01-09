@@ -1,9 +1,5 @@
 Require Import Category.Main.
 
-Set Primitive Projections.
-
-Set Universe Polymorphism.
-
 (* The category of Types (Coq's "Type")*)
 
 Program Instance Type_Cat : Category :=

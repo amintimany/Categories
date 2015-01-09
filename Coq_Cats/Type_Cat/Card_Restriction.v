@@ -1,10 +1,6 @@
 Require Import Category.Main.
 Require Import Coq_Cats.Type_Cat.Type_Cat.
 
-Set Primitive Projections.
-
-Set Universe Polymorphism.
-
 Class Card_Restriction : Type :=
 {
   Card_Rest : Type → Prop;

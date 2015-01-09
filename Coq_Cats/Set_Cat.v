@@ -1,11 +1,6 @@
 Require Import Category.Main.
 Require Export Essentials.Empty.
 
-
-Set Primitive Projections.
-
-Set Universe Polymorphism.
-
 (*
 **********************************************************
 ***************                          *****************

@@ -1,34 +1,29 @@
 Require Import Category.Main.
 Require Import Functor.Main.
 
-Require Import Basic_Cons.Initial.
 Require Import Basic_Cons.CCC.
 
 Require Import NatTrans.NatTrans.
 Require Import Yoneda.Yoneda.
 
-Set Primitive Projections.
-
-Set Universe Polymorphism.
-
 Section Init_Prod.
 
-  Context {C : Category} {C_CCC : CCC C} {init : Has_Initial C}.
+  Context {C : Category} {C_CCC : CCC C} {init : Initial C}.
 
-  Program Instance Init_Prod_lr a : NatTrans (((CoYoneda C) _o) (Prod_Func _o (init, a))) (((CoYoneda C) _o) init) :=
+  Program Instance Init_Prod_lr a : NatTrans (((CoYoneda C) _o) ((Prod_Func C) _o (@terminal _ init, a))) (((CoYoneda C) _o) init) :=
   {
-    Trans := fun b f => i_morph b
+    Trans := fun b f => @t_morph _ init b
   }.
 
   Next Obligation. (* Trans_com *)
   Proof.
     extensionality g.
-    apply i_morph_unique.
+    apply t_morph_unique.
   Qed.
 
-  Program Instance Init_Prod_rl a : NatTrans (((CoYoneda C) _o) init) (((CoYoneda C) _o) (Prod_Func _o (init, a))) :=
+  Program Instance Init_Prod_rl a : NatTrans (((CoYoneda C) _o) init) (((CoYoneda C) _o) ((Prod_Func C) _o (@terminal _ init, a))) :=
 {
-  Trans := fun c _ => ((i_morph c) ∘ Pi_1)
+  Trans := fun c g => compose C (Pi_1 (CCC_HC C init a)) (t_morph init c)
 }.
 
   Next Obligation. (* Trans_com *)
@@ -37,10 +32,10 @@ Section Init_Prod.
     simpl_ids.
     rewrite <- assoc.
     apply f_equal.
-    apply i_morph_unique.
+    apply (t_morph_unique init).
   Qed.
 
-  Theorem Init_Prod a : (Prod_Func _o (@initial _ init, a)) ≡ init.
+  Theorem Init_Prod a : ((Prod_Func C) _o (@terminal _ init, a)) ≡ init.
   Proof.
     apply (@CoIso (C^op)).
     CoYoneda.
@@ -49,7 +44,7 @@ Section Init_Prod.
       intros c.
       extensionality g; simpl.
       rewrite id_unit_left.
-      apply i_morph_unique.
+      apply (t_morph_unique init).
     }
     {
       intros c.
@@ -59,7 +54,7 @@ Section Init_Prod.
           erewrite <- uncurry_curry with (f := A); erewrite <- uncurry_curry with (f := B)
       end.
       apply f_equal.
-      apply i_morph_unique.
+      apply (t_morph_unique init).
     }
   Qed.
 

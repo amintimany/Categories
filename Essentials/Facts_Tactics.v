@@ -1,6 +1,11 @@
 Require Import Essentials.Notations.
+
+Require Export Coq.Program.Tactics.
+Require Export Coq.Program.Equality.
 Require Export Coq.Logic.FunctionalExtensionality.
 Require Export Coq.Logic.ProofIrrelevance.
+
+Set Universe Polymorphism.
 
 (* Equality on sigma type under proof irrelevance *)
 
@@ -13,15 +18,24 @@ Proof.
 Qed.
 
 Hint Extern 2 (exist ?A _ _ = exist ?A _ _) => apply sig_proof_irrelevance.
-(*
-Lemma JMeq_prod {A B C D: Type} {x : A} {y : B} {x' : C} {y' : D} : x ≃ x' → y ≃ y' → (x, y) ≃ (x', y').
+
+Lemma pair_JM_eq (A B C D : Type) (a : A * B) (c : C * D) : fst a ≃ fst c → snd a ≃ snd c → a ≃ c.
 Proof.
-  intros [] []; trivial.
+  intros H1 H2.
+  dependent destruction H1; dependent destruction H2.
+  cutrewrite (a = c); trivial.
+  destruct a; destruct c;
+  simpl in *;
+  repeat match goal with [H : _ = _|-_] => rewrite H end; trivial.
 Qed.
 
-Hint Extern 1 ((_, _) ≃ (_, _)) => apply JMeq_prod.
-
-*)
+Lemma pair_eq (A B : Type) (a b : A * B) : fst a = fst b → snd a = snd b → a = b.
+Proof.
+  intros H1 H2.
+  destruct a; destruct b;
+  simpl in *;
+  repeat match goal with [H : _ = _|-_] => rewrite H end; trivial.
+Qed.
 
 (* Tactics to apply a tactic to all hypothesis in an effiecient way. This is due to Jonathan's (jonikelee@gmail.com) message on coq-club *)
 

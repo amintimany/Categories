@@ -1,11 +1,5 @@
 Require Import Category.Main.
 Require Import Basic_Cons.CCC.
-Require Import Basic_Cons.Initial.
-Require Import Basic_Cons.Sum.
-
-Set Primitive Projections.
-
-Set Universe Polymorphism.
 
 (*
 **********************************************************
@@ -29,91 +23,62 @@ Program Instance Prop_Cat : Category :=
   id := fun A => fun x => x
 }.
 
-Program Instance False_init : Initial Prop_Cat := {initial := False}.
+Local Hint Extern 1 => contradiction.
 
-Next Obligation. (* i_morph *)
-Proof.
-  contradiction.
-Qed.
+Program Instance False_init : Initial Prop_Cat := {|terminal := False|}.
 
-Next Obligation. (* i_morph_unique *)
-Proof.
-  extensionality x; contradiction.
-Qed.
-
-(* Prop_init Proved! *)
-
-Program Instance Prop_Cat_Has_Init : Has_Initial Prop_Cat.
-
+Local Hint Extern 1 => match goal with |- ?A = ?B :> True => destruct A; destruct B end.
 
 Program Instance True_term : Terminal Prop_Cat := {terminal := True}.
 
-Next Obligation. (* t_morph_unique *)
-Proof.
-  extensionality x; destruct (f x); destruct (g x); reflexivity.
-Qed.
+Local Hint Extern 1 => match goal with |- ?A = ?B :> _ ∧ _ => destruct A; destruct B end.
 
-(* Prop_term Proved! -- t_morph is proven by Program system :-) it could prove for us that from any premise we can conclude True! :-) *)
-
-Program Instance Conj_Product (P Q : Prop) : Product P Q := {product := (P /\ Q)}.
+Program Instance Conj_Product (P Q : Prop) : Product P Q := {product := (P ∧ Q)}.
 
 Next Obligation. (* Prod_morph_unique *)
 Proof.
   extensionality x.
   apply (fun p => equal_f p x) in H1; apply (fun p => equal_f p x) in H2.
   simpl in H1, H2.
-  destruct (f x); destruct (g x); simpl in *; subst; trivial.
+  destruct (f x); destruct (g x); cbn in *; subst; trivial.
 Qed.
 
-(* Prop_Product is proven -- the rest of the obligations (e.g., projections, etc.) are defined and proven by Program system :-) *)
+Program Instance Prop_Cat_Has_Products : Has_Products Prop_Cat := fun _ _ => _.
 
-Program Instance Prop_Cat_Has_Products : Has_Products Prop_Cat.
+Local Hint Extern 1 => match goal with H : _ ∧ _ |- _ => destruct H end.
 
 Program Instance implication_exp (P Q : Prop) : Exponential P Q := {exponential := (P -> Q)}.
-
-Next Obligation. (* Exp_morph_com *)
-Proof.
-  extensionality a; destruct a; reflexivity.
-Qed.
 
 Next Obligation. (* Exp_morph_unique *)
 Proof.
   extensionality a; extensionality x.
   apply (fun p => equal_f p (conj a x)) in H0.
-  simpl in H0; trivial.
+  trivial.
 Qed.
 
 (* Category of Prop Universe is cartesian closed *)
 
-Program Instance Prop_Cat_Has_Exponentials : Has_Exponentials Prop_Cat.
+Program Instance Prop_Cat_Has_Exponentials : Has_Exponentials Prop_Cat := fun _ _ => _.
 
 Program Instance Prop_Cat_CCC : CCC Prop_Cat.
 
+Local Hint Extern 1 => tauto.
 
-Program Instance Disj_Sum (P Q : Prop) : Sum P Q := {sum := (P \/ Q)}.
+Local Hint Extern 1 => match goal with H : _ ∨ _ |- _ => destruct H end.
 
-Next Obligation. (* Sum_morph_ex *)
-Proof.
-  tauto.
-Defined.
+Program Instance Disj_Sum (P Q : Prop) : Sum P Q := {|product := (P ∨ Q)|}.
 
 Next Obligation. (* Sum_morph_unique *)
 Proof.
   extensionality x.
-  destruct x as [x1 | x2].
-  {
-    apply (fun p => equal_f p x1) in H1.
-    cbv in H1; auto.
-  }
-  {
-    apply (fun p => equal_f p x2) in H2.
-    cbv in H2; auto.
-  }
+  destruct x as [x1|x2].
+  + apply (fun p => equal_f p x1) in H1; auto.
+  + apply (fun p => equal_f p x2) in H2; auto.
 Qed.
 
 (* Prop_Sum is proven -- the rest of the obligations (e.g., injections, etc.) are proven by Program system :-) *)
 
-Program Instance Prop_Cat_Has_Sums : Has_Sums Prop_Cat.
+Program Instance Prop_Cat_Has_Sums : Has_Sums Prop_Cat := fun _ _ => _.
 
 
 

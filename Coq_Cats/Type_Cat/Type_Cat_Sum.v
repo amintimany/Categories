@@ -1,17 +1,13 @@
 Require Import Category.Main.
-Require Import Basic_Cons.Sum.
+Require Import Basic_Cons.Product.
 Require Import Coq_Cats.Type_Cat.Type_Cat.
-
-Set Primitive Projections.
-
-Set Universe Polymorphism.
 
 Local Obligation Tactic := program_simpl; auto 2.
 
 Program Instance sum_Sum (A B : Type) : Sum A B :=
-{
-  sum := (A + B)%type
-}.
+{|
+  product := (A + B)%type
+|}.
 
 Next Obligation. (* Sum_morph_ex *)
 Proof.
@@ -38,6 +34,6 @@ Qed.
 
 (* sum_Sum defined *)
 
-Program Instance Type_Cat_Has_Sums : Has_Sums Type_Cat.
+Program Instance Type_Cat_Has_Sums : Has_Sums Type_Cat := fun _ _ => _.
 
 

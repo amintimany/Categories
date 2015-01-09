@@ -1,10 +1,6 @@
 Require Import Category.Main.
 Require Import Functor.Main.
 
-Set Primitive Projections.
-
-Set Universe Polymorphism.
-
 Class CoAlgebra {C : Category} (T : Functor C C) : Type :=
 {
   CoAlg_Carrier : Obj;

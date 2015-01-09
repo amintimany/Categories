@@ -3,10 +3,6 @@ Require Import Ext_Cons.Arrow.
 Require Import Functor.Functor Functor.Functor_Ops Const_Func.
 Require Import Archetypal.Discr.
 
-Set Primitive Projections.
-
-Set Universe Polymorphism.
-
 Section Comma.
   Context (B C D : Category) (F : Functor B C) (G : Functor D C).
 
@@ -56,7 +52,7 @@ Section Slice_CoSlice.
 
    *)
 
-  Instance Slice : Category := Comma C C 1 Functor_id (Const_Func _ c).
+  Instance Slice : Category := Comma C C 1 (Functor_id _) (Const_Func _ c).
 
   (*
    The Slice of Category C with respect to c:
@@ -74,7 +70,7 @@ Section Slice_CoSlice.
 
    *)
 
-  Instance CoSlice : Category := Comma 1 C C (Const_Func _ c) Functor_id.
+  Instance CoSlice : Category := Comma 1 C C (Const_Func _ c) (Functor_id _).
 
 End Slice_CoSlice.
 
@@ -95,7 +91,7 @@ Section Arrow_Cat.
              h
    *)
 
-  Instance Arrow_Cat : Category := Comma C C C Functor_id Functor_id.
+  Instance Arrow_Cat : Category := Comma C C C (Functor_id _) (Functor_id _).
 
 End Arrow_Cat.
 

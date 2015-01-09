@@ -4,10 +4,6 @@ Require Import Basic_Cons.Terminal.
 Require Import Ext_Cons.Arrow.
 Require Import Coq_Cats.Type_Cat.Card_Restriction.
 
-Set Primitive Projections.
-
-Set Universe Polymorphism.
-
 Section Limit.
 
   Context {J C : Category} (D : Functor J C).

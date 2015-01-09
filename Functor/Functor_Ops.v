@@ -1,10 +1,5 @@
 Require Import Category.Main.
 Require Import Functor.Functor.
-Require Import Functor.Tactics.
-
-Set Primitive Projections.
-
-Set Universe Polymorphism.
 
 (* Opposite Functor *)
 Section Opposite_Functor.
@@ -13,9 +8,9 @@ Section Opposite_Functor.
   Program Instance Opposite_Functor : Functor C^op D^op :=
     {
       FO := F _o;
-      FA := λ a b h, F _a b a h;
-      F_id := λ a, @F_id _ _ F a;
-      F_compose := λ a b c f g, @F_compose _ _ F c b a g f
+      FA := λ _ _ h, F _a _ _ h;
+      F_id := λ a, F_id F a;
+      F_compose := λ _ _ _ f g, F_compose F g f
     }.
 
 End Opposite_Functor.
@@ -44,16 +39,14 @@ Section Functor_Assoc.
   Theorem Functor_assoc :
     (Functor_compose F (Functor_compose G H)) = (Functor_compose (Functor_compose F G) H).
   Proof.
-    apply Functor_eq_simplify.
-    reflexivity.
-    reflexivity.
+    apply Functor_eq_simplify; trivial.
   Qed.
 
 End Functor_Assoc.
 
 (* Identitiy functor *)
 
-Program Instance Functor_id `{C : Category} : Functor C C :=
+Program Instance Functor_id (C : Category) : Functor C C :=
   {
     FO := fun x => x;
     FA := fun c d f => f
@@ -64,12 +57,12 @@ Program Instance Functor_id `{C : Category} : Functor C C :=
 Section Functor_Identity_Unit.
   Context  (C C' : Category) (F : Functor C C').
 
-  Theorem Functor_id_unit_left : (Functor_compose F Functor_id) = F.
+  Theorem Functor_id_unit_left : (Functor_compose F (Functor_id _)) = F.
   Proof.
     apply Functor_eq_simplify; simpl; trivial.
   Qed.
 
-  Theorem Functor_id_unit_right : (Functor_compose Functor_id F) = F.
+  Theorem Functor_id_unit_right : (Functor_compose (Functor_id _) F) = F.
   Proof.
     apply Functor_eq_simplify; simpl; trivial.
   Qed.

@@ -5,10 +5,6 @@ Require Import Limits.Limit.
 Require Import Archetypal.Discr.
 Require Import Basic_Cons.Terminal.
 
-Set Primitive Projections.
-
-Set Universe Polymorphism.
-
 Section Type_Cat_Gen_Sum.
   Context (A : Type) (map : A → Type).
 

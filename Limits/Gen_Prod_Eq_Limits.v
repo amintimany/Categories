@@ -12,10 +12,6 @@ Require Import Categories.Discr.
 
 Require Import Limits.Limit.
 
-Set Primitive Projections.
-
-Set Universe Polymorphism.
-
 Section Gen_Prod_Eq_Complete.
   Context {C : Category}.
 

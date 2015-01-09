@@ -2,10 +2,6 @@ Require Import Category.Main.
 Require Import Archetypal.Monoid_Cat.
 Require Import Coq.Lists.List.
 
-Set Primitive Projections.
-
-Set Universe Polymorphism.
-
 Section List_Monoid_Cat.
   Context (A : Type).
   

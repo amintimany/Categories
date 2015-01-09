@@ -7,9 +7,6 @@ Require Import Algebras.Main.
 Require Import Ext_Cons.Prod_Cat.
 Require Import Cat.Facts.
 
-Set Primitive Projections.
-
-Set Universe Polymorphism.
 
 Program Instance term_id : Functor Type_Cat (Prod_Cat Type_Cat Type_Cat) :=
 {
@@ -17,7 +14,7 @@ Program Instance term_id : Functor Type_Cat (Prod_Cat Type_Cat Type_Cat) :=
   FA := fun a b f => (@id _ (@CCC_term Type_Cat _), f)
 }.
 
-Instance S_nat_func : Functor Type_Cat Type_Cat := (@Sum_Func Type_Cat _) ∘ term_id.
+Instance S_nat_func : Functor Type_Cat Type_Cat := Functor_compose term_id (@Sum_Func Type_Cat _).
 
 (* S_nat_func defined *)
 
@@ -59,10 +56,10 @@ Qed.
 (* nat_alg_morph defined *)
 
 Program Instance nat_alg_init : Initial S_nat_alg_cat :=
-{
-  initial := nat_alg;
-  i_morph := nat_alg_morph
-}.
+{|
+  terminal := nat_alg;
+  t_morph := nat_alg_morph
+|}.
 
 Next Obligation. (* i_morph_unique *)
 Proof.

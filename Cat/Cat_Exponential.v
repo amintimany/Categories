@@ -7,10 +7,6 @@ Require Import Basic_Cons.Exponential.
 Require Import NatTrans.NatTrans.
 Require Import Cat.Cat_Product.
 
-Set Primitive Projections.
-
-Set Universe Polymorphism.
-
 Local Obligation Tactic := idtac.
 
 Program Instance Exp_Cat_Eval (C C' : Category) : Functor (Prod_Cat (Func_Cat C C') C) C' :=
@@ -21,13 +17,13 @@ Program Instance Exp_Cat_Eval (C C' : Category) : Functor (Prod_Cat (Func_Cat C 
 
 Next Obligation. (* F_id *)
 Proof.
-  program_simpl.
+  cbn; auto.
 Qed.
 
 Next Obligation. (* F_compose *)
 Proof.
   intros C C' [a1 a2] [b1 b2] [c1 c2] [f1 f2] [g1 g2].
-  simpl.
+  cbn.
   repeat rewrite F_compose.
   repeat rewrite assoc.
   match goal with
@@ -59,14 +55,14 @@ Program Instance Exp_Cat_morph_ex {C C' C'' : Category} (F : Functor (Prod_Cat C
 
 Next Obligation. (* F_compose *)
 Proof.
-  apply NatTrans_eq_simplify; simpl.
+  apply NatTrans_eq_simplify; cbn.
   extensionality x.
-  rewrite <- F_compose; simpl; simpl_ids; trivial.
+  rewrite <- F_compose; cbn; auto.
 Qed.
 
 (* Exp_Cat_morph_ex *)
 
-Lemma Exp_cat_morph_ex_eval_id {C C' C'' : Category} (u : Functor C'' (Func_Cat C C')) : u = Exp_Cat_morph_ex (Exp_Cat_Eval C C' ∘ ((@Prod_Func _ Cat_Has_Products) _a (_, _) (_, _) (u, @id Cat C))).
+Lemma Exp_cat_morph_ex_eval_id {C C' C'' : Category} (u : Functor C'' (Func_Cat C C')) : u = Exp_Cat_morph_ex (Exp_Cat_Eval C C' ∘ ((Prod_Func _ Cat_Has_Products) _a (_, _) (_, _) (u, id Cat C))).
 Proof.
   match goal with
       |- ?A = ?B =>
@@ -98,16 +94,15 @@ Proof.
         end.
         apply (@JMeq_trans _ _ _ _ (Trans (u _a _ _ h) m)).
         destruct H4; trivial.
-        simpl; rewrite F_id; auto.
+        cbn; rewrite F_id; auto.
       }
     }
   }
   {
     extensionality x.
-    apply Functor_eq_simplify.
-    reflexivity.
+    apply Functor_eq_simplify; trivial.
     FA_extensionality a b f.
-    repeat (simpl; rewrite F_id); auto.
+    repeat (cbn; rewrite F_id); auto.
   }
 Qed.
 
@@ -143,7 +138,4 @@ Qed.
 
 (* Cat_Exponentials defined *)
 
-Program Instance Cat_Has_Exponentials : Has_Exponentials Cat :=
-{
-  has_exponentials := Cat_Exponential
-}.
+Program Instance Cat_Has_Exponentials : Has_Exponentials Cat := fun _ _ => _.

@@ -1,9 +1,5 @@
 Require Import Category.Main.
 
-Set Primitive Projections.
-
-Set Universe Polymorphism.
-
 Section Equalizer.
   Context {C : Category} {a b : Obj} (f g : Hom a b).
 
@@ -27,7 +23,7 @@ Section Equalizer.
 
   Theorem Equalizer_iso (e1 e2 : Equalizer) : e1 ≡ e2.
   Proof.
-    apply (@Build_Isomorphism _ _ _ (equalizer_morph_ex e1 equalizer_morph equalizer_morph_com) ((equalizer_morph_ex e2 equalizer_morph equalizer_morph_com)));
+    apply (Build_Isomorphism _ _ _ (equalizer_morph_ex e1 equalizer_morph equalizer_morph_com) ((equalizer_morph_ex e2 equalizer_morph equalizer_morph_com)));
     eapply equalizer_morph_unique; [| | simpl_ids; trivial| | |simpl_ids; trivial]; try apply equalizer_morph_com.
     rewrite <- assoc; repeat rewrite equalizer_morph_ex_com; auto.
     rewrite <- assoc; repeat rewrite equalizer_morph_ex_com; auto.
@@ -35,7 +31,24 @@ Section Equalizer.
 
 End Equalizer.
 
-Class Has_Equalizers (C : Category) : Type := has_equalizers : ∀ (a b : C) (f g : Hom a b), Equalizer f g.
+Arguments Equalizer _ {_ _} _ _, {_ _ _} _ _.
+
+Definition Has_Equalizers (C : Category) : Type := ∀ (a b : C) (f g : Hom a b), Equalizer f g.
+
+Existing Class Has_Equalizers.
+
+(* CoEqualizer is the dual of equalzier *)
+
+Definition CoEqualizer {C : Category} := @Equalizer C^op.
+
+Arguments CoEqualizer _ {_ _} _ _, {_ _ _} _ _.
+
+Existing Class CoEqualizer.
+
+Definition Has_CoEqualizers (C : Category) : Type := ∀ (a b : C) (f g : Hom a b), CoEqualizer f g.
+
+Existing Class Has_CoEqualizers.
+
 
 
 

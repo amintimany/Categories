@@ -1,14 +1,9 @@
-Require Export Coq.Program.Equality.
-Require Export Coq.Program.Tactics.
-Require Export Coq.Logic.FunctionalExtensionality.
-Require Export Coq.Logic.ProofIrrelevance.
-
 Require Export Essentials.Notations.
-Require Export Essentials.Tactics.
+Require Export Essentials.Facts_Tactics.
 
-Set Primitive Projections.
+Global Set Primitive Projections.
 
-Set Universe Polymorphism.
+Global Set Universe Polymorphism.
 
 Class Category : Type :=
 {
@@ -45,9 +40,15 @@ Bind Scope category_scope with Category.
 
 Bind Scope morphism_scope with Hom.
 
+Bind Scope object_scope with Obj.
+
 Coercion Obj : Category >-> Sortclass.
 
 Hint Resolve id_unit_left id_unit_right.
+
+Arguments id {_ _}, {_} _, _ _.
+Arguments Hom {_} _ _, _ _ _.
+Arguments compose {_} {_ _ _} _ _, _ {_ _ _} _ _, _ _ _ _ _ _.
 
 Lemma Category_eq_simplify (C C' : Category) : @Obj C = @Obj C' → @Hom C ≃ @Hom C' → @compose C ≃ @compose C' → @id C ≃ @id C' → C = C'.
 Proof.
@@ -162,13 +163,25 @@ Ltac reveal_comp_in_goal f g :=
   match goal with
     | [|- context[?term]] =>
       match term with
-        | f ∘ g => idtac
-        | ?A ∘ ?B =>
-          rewrite $(reveal_prepare_equality_term f g A B term)$
-        | f ∘ ?B =>
-          rewrite $(reveal_prepare_equality_term_left_explicit f g B term)$
-        | ?A ∘ g =>
-          rewrite $(reveal_prepare_equality_term_right_explicit f g A term)$
+          context [f] =>
+          match term with
+              context [g] =>
+              match term with
+                | f ∘ g => idtac
+                | ?A ∘ ?B =>
+                  match A with
+                      context [f] =>
+                      match B with
+                          context [g] =>
+                          rewrite $(reveal_prepare_equality_term f g A B term)$
+                      end
+                  end
+                | f ∘ ?B =>
+                  rewrite $(reveal_prepare_equality_term_left_explicit f g B term)$
+                | ?A ∘ g =>
+                  rewrite $(reveal_prepare_equality_term_right_explicit f g A term)$
+              end
+          end
       end
     | _ => fail
   end.
@@ -177,13 +190,25 @@ Ltac reveal_comp_in_I f g I :=
   match type of I with
     | context[?term] =>
       match term with
-        | f ∘ g => idtac
-        | ?A ∘ ?B =>
-          rewrite $(reveal_prepare_equality_term f g A B term)$ in I
-        | f ∘ ?B =>
-          rewrite $(reveal_prepare_equality_term_left_explicit f g B term)$ in I
-        | ?A ∘ g =>
-          rewrite $(reveal_prepare_equality_term_right_explicit f g A term)$ in I
+          context [f] =>
+          match term with
+              context [g] =>
+              match term with
+                | f ∘ g => idtac
+                | ?A ∘ ?B =>
+                  match A with
+                      context [f] =>
+                      match B with
+                          context [g] =>
+                          rewrite $(reveal_prepare_equality_term f g A B term)$ in I
+                      end
+                  end
+                | f ∘ ?B =>
+                  rewrite $(reveal_prepare_equality_term_left_explicit f g B term)$ in I
+                | ?A ∘ g =>
+                  rewrite $(reveal_prepare_equality_term_right_explicit f g A term)$ in I
+              end
+          end
       end
     | _ => fail
   end.
@@ -236,11 +261,11 @@ Hint Extern 3 => progress (dohyps (fun H => simpl_ids in H)).
 
 (* Automating use of functional_extensionality *)
 Hint Extern 1 => 
-match goal with
+progress (repeat match goal with
     [|- _ = _] =>
       let x := fresh "x" in
       extensionality x
-end.
+end).
 
 Hint Extern 3 =>
 match goal with

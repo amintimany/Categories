@@ -1,9 +1,5 @@
 Require Import Category.Main.
 
-Set Primitive Projections.
-
-Set Universe Polymorphism.
-
 Class PreOrder : Type :=
 {
   PreOrder_car : Type;

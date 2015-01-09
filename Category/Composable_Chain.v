@@ -1,9 +1,5 @@
 Require Import Category.Category.
 
-Set Primitive Projections.
-
-Set Universe Polymorphism.
-
 Inductive Composable_Chain (C : Category) (a b : C) : Type :=
 | Single : Hom a b → Composable_Chain C a b
 | Chain : ∀ (c : Obj), Hom a c → Composable_Chain C c b → Composable_Chain C a b

@@ -15,6 +15,10 @@ Class CCC (C : Category) : Type :=
   CCC_HE : Has_Exponentials C
 }.
 
+Arguments CCC_term _ {_}, {_ _}.
+Arguments CCC_HC _ {_} _ _, {_ _} _ _.
+Arguments CCC_HE _ {_} _ _, {_ _} _ _.
+
 Existing Instances CCC_term CCC_HC CCC_HE.
 
 

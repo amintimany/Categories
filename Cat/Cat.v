@@ -1,8 +1,6 @@
 Require Import Category.Main.
 Require Import Functor.Main.
 
-Set Universe Polymorphism.
-
 Instance Cat : Category :=
 {
   Obj := Category;
@@ -17,10 +15,10 @@ Instance Cat : Category :=
   assoc_sym := fun C D E F (G : Functor C D) (H : Functor D E) (I : Functor E F) =>
             eq_sym (@Functor_assoc _ _ _ _ G H I);
 
-  id := fun C => Functor_id;
+  id := fun C => Functor_id C;
 
-  id_unit_left := fun C D => @Functor_id_unit_left _ _;
+  id_unit_left := fun C D => @Functor_id_unit_left C D;
 
-  id_unit_right := fun C D => @Functor_id_unit_right _ _
+  id_unit_right := fun C D => @Functor_id_unit_right C D
            
 }.

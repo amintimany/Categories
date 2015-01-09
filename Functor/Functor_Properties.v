@@ -1,10 +1,5 @@
 Require Import Category.Main.
 Require Import Functor.Functor.
-Require Import Functor.Tactics.
-
-Set Primitive Projections.
-
-Set Universe Polymorphism.
 
 Section Functor_Properties.
   Context {C C' : Category} (F : Functor C C').
@@ -34,7 +29,7 @@ Section Functor_Properties.
                          | eq_refl => F _a _ _ (@id _ c)
                        end)
              ) as [V' HV].
-    apply (@Build_Isomorphism _ _ _ U' V');
+    apply (Build_Isomorphism _ _ _ U' V');
       apply F_Faithful; rewrite F_compose;
       rewrite HU, HV;
       repeat rewrite F_id; clear; destruct H; auto.
@@ -45,7 +40,7 @@ Section Functor_Properties.
     intros F_Faithful F_Full c c' [f g H1 H2].
     destruct (F_Full _ _ f) as [Ff Hf].
     destruct (F_Full _ _ g) as [Fg Hg].
-    apply (@Build_Isomorphism _ _ _ Ff Fg);
+    apply (Build_Isomorphism _ _ _ Ff Fg);
       apply F_Faithful;
       rewrite F_compose;
       rewrite Hf, Hg, F_id; trivial.
@@ -57,22 +52,22 @@ Section Embedding.
   Context (C C' : Category).
 
   (**
-    An embedding is a functor that is faully-faithful. Such a functor is necessarily essentially injective and conservative, i.e., if F __O c === F __O c' then c === c'.
+    An embedding is a functor that is faully-faithful. Such a functor is necessarily essentially injective and conservative, i.e., if F _O c === F _O c' then c === c'.
    *)
 
   Class Embedding : Type :=
     {
-      Embedding_Func : Functor C C';
+      Emb_Func : Functor C C';
 
-      F_Faithful : Faithful_Func Embedding_Func;
+      Emb_Faithful : Faithful_Func Emb_Func;
       
-      F_Full : Full_Func Embedding_Func;
-
-      F_Essentially_Injective := Fully_Faithful_Essentially_Injective Embedding_Func F_Faithful F_Full;
-
-      F_Conservative := Fully_Faithful_Conservative Embedding_Func F_Faithful F_Full
+      Emb_Full : Full_Func Emb_Func
     }.
 
-  Coercion Embedding_Func : Embedding >-> Functor.
+  Coercion Emb_Func : Embedding >-> Functor.
+
+  Definition Emb_Essent_Inj (E : Embedding) := Fully_Faithful_Essentially_Injective Emb_Func Emb_Faithful Emb_Full.
+  
+  Definition Emb_Conservative (E : Embedding) := Fully_Faithful_Conservative Emb_Func Emb_Faithful Emb_Full.
 
 End Embedding.
