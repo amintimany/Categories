@@ -6,31 +6,30 @@ Require Import Coq_Cats.Type_Cat.Card_Restriction.
 
 Section Limit.
 
-  Context `{J : Category Obj' Hom'}
-          `{C : Category Obj Hom} (D : Functor J C).
+  Context {J C : Category} (D : Functor J C).
   
   Class Cone : Type :=
     {
-      Cone_obj : Obj;
+      cone : C;
   
-      Cone_arrow : ∀ (c : Obj'), Hom Cone_obj (D _o c);
+      Cone_arrow : ∀ (c : J), Hom cone (D _o c);
 
-      Cone_com : ∀ (c d : Obj') (h : Hom' c d), (D _a _ _ h) ∘ (Cone_arrow c) = Cone_arrow d
+      Cone_com : ∀ (c d : J) (h : Hom c d), (D _a _ _ h) ∘ (Cone_arrow c) = Cone_arrow d
     }.
 
-  Coercion Cone_obj : Cone >-> Obj.
+  Coercion cone : Cone >-> Obj.
 
-  Class Cone_Morph (c c' : Cone) : Type :=
+  Class Cone_Hom (c c' : Cone) : Type :=
     {
-      Cone_Morph_arrow : Hom c c';
+      cone_hom : Hom c c';
 
-      Cone_Morph_com : ∀ (a : Obj'),  (@Cone_arrow c' a) ∘ Cone_Morph_arrow = (@Cone_arrow c a)
+      Cone_Hom_com : ∀ (a : J),  (@Cone_arrow c' a) ∘ cone_hom = (@Cone_arrow c a)
     }.
 
-  Coercion Cone_Morph_arrow : Cone_Morph >-> Hom.
+  Coercion cone_hom : Cone_Hom >-> Hom.
 
-  Lemma Cone_Morph_eq_simplify (c c' : Cone) (h h': Cone_Morph c c') :
-    (@Cone_Morph_arrow _ _ h) = (@Cone_Morph_arrow _ _ h') -> h = h'.
+  Lemma Cone_Morph_eq_simplify (c c' : Cone) (h h': Cone_Hom c c') :
+    h = h' :> Hom _ _ -> h = h'.
   Proof.
     intros H.
     destruct h as [ha hc]; destruct h' as [ha' hc']; simpl in *.
@@ -39,96 +38,101 @@ Section Limit.
     reflexivity.
   Qed.
 
-  Hint Extern 1 (?A = ?B :> Cone_Morph _ _) => apply Cone_Morph_eq_simplify; simpl.
+  Hint Extern 1 (?A = ?B :> Cone_Hom _ _) => apply Cone_Morph_eq_simplify; simpl.
 
-  Program Instance Cone_Morph_id (c : Cone) : Cone_Morph c c :=
+  Program Instance Cone_Hom_id (c : Cone) : Cone_Hom c c :=
     {
-      Cone_Morph_arrow := id
+      cone_hom := id
     }.
   
   (* Cone_Morph_id defined *)
 
 
-  Program Instance Cone_Morph_compose (c c' c'' : Cone) (h : Cone_Morph c c') (h' : Cone_Morph c' c'') : Cone_Morph c c'' :=
+  Program Instance Cone_Hom_compose (c c' c'' : Cone) (h : Cone_Hom c c') (h' : Cone_Hom c' c'') : Cone_Hom c c'' :=
     {
-      Cone_Morph_arrow := h' ∘ h
+      cone_hom := h' ∘ h
     }.
 
   Next Obligation. (* Cone_Morph_arrow *)
   Proof.
     rewrite <- assoc.
-    repeat rewrite Cone_Morph_com.
-    trivial.
+    repeat rewrite Cone_Hom_com; trivial.
   Qed.
 
   (* Cone_Morph_compose defined *)
 
-  Program Instance Cone_Cat : Category Cone Cone_Morph :=
+  Program Instance Cone_Cat : Category :=
     {
-      compose := Cone_Morph_compose;
-      id := Cone_Morph_id
+      Obj := Cone;
+      Hom := Cone_Hom;
+      compose := Cone_Hom_compose;
+      id := Cone_Hom_id
     }.
-
-  Existing Instance Cone_Cat.
 
   (* Cone_Cat defined *)
 
-  Class Limit (l : Cone) : Type := Lim_term : Terminal Cone_Cat l.
+  Class Limit : Type := limit : Terminal Cone_Cat.
+
+  (* Estabilishing new path in coercion graph to take limits directly to objects of the underlying category (C) instead of objects of Cone_Cat *)
+
+  Definition limit_to_obj (l : Limit) : C.
+  Proof.
+    apply l.
+  Defined.
+
+  Coercion limit_to_obj : Limit >-> Obj.
 
 End Limit.
 
-Arguments Cone_obj {_ _ _ _ _ _ _} _.
-Arguments Cone_arrow {_ _ _ _ _ _ _} _ _.
-Arguments Cone_com {_ _ _ _ _ _ _} _ {_ _} _.
+Theorem Limit_Cone_Cat_Iso {J C : Category} {D : Functor J C} (l l' : Limit D) : (@limit _ _ _ l) ≡≡ (@limit _ _ _ l') ::> Cone_Cat _.
+  apply (@Build_Isomorphism _ _ _ (@t_morph _ l' (@limit _ _ _ l)) (@t_morph _ l (@limit _ _ _ l'))); apply t_morph_unique.
+Qed.
 
-Arguments Cone_Morph_arrow {_ _ _ _ _ _ _ _ _} _.
-Arguments Cone_Morph_com {_ _ _ _ _ _ _ _ _} _ _.
+Theorem Limit_Iso {J C : Category} {D : Functor J C} (l l' : Limit D) : l ≡≡ l' ::> C.
+  apply (@Build_Isomorphism C _ _ (@iso_morphism _ _ _ (Limit_Cone_Cat_Iso l l')) (@inverse_morphism _ _ _ (Limit_Cone_Cat_Iso l l'))).
+  apply (f_equal (@cone_hom _ _ _ _ _) (@left_inverse _ _ _ (Limit_Cone_Cat_Iso l l'))).
+  apply (f_equal (@cone_hom _ _ _ _ _) (@right_inverse _ _ _ (Limit_Cone_Cat_Iso l l'))).
+Qed.
 
-Hint Extern 1 (?A = ?B :> Cone_Morph _ _ _) => apply Cone_Morph_eq_simplify; simpl.
+Arguments cone {_ _ _} _.
+Arguments Cone_arrow {_ _ _} _ _.
+Arguments Cone_com {_ _ _} _ {_ _} _.
 
-Class Has_Limit `{C : Category Obj Hom} `{J : Category Obj' Hom'} (D : Functor J C) :=
-{
-  HL_Lim : Cone D;
+Arguments cone_hom {_ _ _ _ _} _.
+Arguments Cone_Hom_com {_ _ _ _ _} _ _.
 
-  HL_Lim_Limit : Limit D HL_Lim
-}.
+Hint Extern 1 (?A = ?B :> Cone_Hom _ _ _) => apply Cone_Morph_eq_simplify; simpl.
 
-Existing Instance HL_Lim_Limit.
+Class Has_Restr_Limits (C : Category) (P : Card_Restriction) := has_restr_limits : ∀ {J : Category} (D : Functor J C), P J → P (Arrow J) → Limit D.
 
-Class Has_Restricted_Limits `(C : Category Obj Hom) (P : Card_Restriction) :=
-{
-  Restricted_Limit_of `{J : Category Obj' Hom'} (D : Functor J C) : (P Obj') → (P (Arrow J)) → Cone D;
-
-  Restricted_Limit_of_Limit `{J : Category Obj' Hom'} (D : Functor J C) (PO : P Obj') (PH : P (Arrow J)) : Limit D (Restricted_Limit_of D PO PH)
-}.
-
-Existing Instance Restricted_Limit_of_Limit.
-
-Class Complete `(C : Category Obj Hom) :=
-{
-  Limit_of `{J : Category Obj' Hom'} (D : Functor J C) : Cone D;
-
-  Limit_of_Limit `{J : Category Obj' Hom'} (D : Functor J C) : Limit D (Limit_of D)
-}.
-
-Existing Instance Limit_of_Limit.
+Class Complete (C : Category) := complete : ∀ {J : Category} (D : Functor J C), Limit D.
 
 Section Restricted_Limits_to_Complete.
-  Context `(C : Category Obj Hom) (P : Card_Restriction) {HRL : Has_Restricted_Limits C P} (All_Ps : ∀ t, P t).
+  Context (C : Category) (P : Card_Restriction) {HRL : Has_Restr_Limits C P} (All_Ps : ∀ t, P t).
   
   Instance No_Restriction_Complete : Complete C :=
     {
-      Limit_of := λ O H J D, Restricted_Limit_of D (All_Ps O) (All_Ps (Arrow J))
+      complete := λ J D, HRL _ D (All_Ps J) (All_Ps (Arrow J))
     }.
 
 End Restricted_Limits_to_Complete.
 
 Section Complete_to_Restricted_Limits.
-  Context `(C : Category Obj Hom) {CC : Complete C} (P : Card_Restriction).
+  Context (C : Category) {CC : Complete C} (P : Card_Restriction).
   
-  Instance Complete_Has_Restricted_Limits : Has_Restricted_Limits C P :=
+  Instance Complete_Has_Restricted_Limits : Has_Restr_Limits C P :=
     {
-      Restricted_Limit_of := λ _ _ J D _ _, Limit_of D
+      has_restr_limits := λ J D _ _, CC _ D
     }.
 
 End Complete_to_Restricted_Limits.
+
+Notation CoCone F := (Cone (Opposite_Functor F)) (only parsing).
+
+Notation CoCone_Hom F := (Cone_Hom (Opposite_Functor F)) (only parsing).
+
+Notation CoLimit F := (Limit (Opposite_Functor F)) (only parsing).
+
+Notation CoComplete C := (Complete C^op) (only parsing).
+
+Notation Has_Restr_CoLimits C P := (Has_Restr_Limits C^op P) (only parsing).

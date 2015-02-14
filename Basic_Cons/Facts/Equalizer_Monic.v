@@ -3,11 +3,11 @@ Require Import Category.Main.
 Require Import Basic_Cons.Equalizer.
 
 Section Equalizer_Monic.
-  Context `{C : Category Obj Hom} {a b e} (f g : Hom a b) {Eq : Equalizer C f g e}.
+  Context {C : Category} {a b} (f g : Hom a b) {e : Equalizer f g}.
 
   Program Instance Equalizer_Monic : e ≫–> a :=
     {
-      mono_morphism := equalizer_morph C f g
+      mono_morphism := equalizer_morph f g
     }.
 
   Next Obligation. (* mono_morphism_monomorphism *)

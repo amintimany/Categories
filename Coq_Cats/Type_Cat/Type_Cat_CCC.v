@@ -4,8 +4,9 @@ Require Import Coq_Cats.Type_Cat.Type_Cat.
 
 Local Obligation Tactic := program_simpl; auto 3.
 
-Program Instance unit_Type_term : Terminal Type_Cat unit :=
+Program Instance unit_Type_term : Terminal Type_Cat :=
 {
+  terminal := unit;
   t_morph := λ _ _, tt
 }.
 
@@ -15,32 +16,25 @@ Proof.
   destruct (f x); destruct (g x); reflexivity.
 Qed.
 
-(* Singleton_Type_term Proved! *)
-
-Program Instance Type_Cat_Has_Terminal : Has_Terminal Type_Cat :=
+Program Instance prod_Product (A B : Type) : Product A B :=
 {
-  HT_term := unit
+  product := (A * B)%type
 }.
-
-(* Type_Cat_Has_Terminal Proved! *)
-
-Program Instance prod_Product (A B : Type) : Product Type_Cat A B (A * B)%type.
 
 Next Obligation. (* Prod_morph_unique *)
 Proof.
   extensionality x.
   apply (fun p => equal_f p x) in H1; apply (fun p => equal_f p x) in H2.
-  simpl in H1, H2.
-  destruct (f x); destruct (g x); simpl in *; subst; trivial.
+  cbn in H1, H2.
+  destruct (f x); destruct (g x); cbn in *; subst; trivial.
 Qed.
 
-Program Instance Type_Cat_Has_Products : Has_Products Type_Cat :=
-{
-  HP_prod := fun A B => (A * B)%type;
-  HP_prod_prod := prod_Product
-}.
+Program Instance Type_Cat_Has_Products : Has_Products Type_Cat := fun _ _ => _.
 
-Program Instance fun_exp (A B : Type) : Exponential Type_Cat Type_Cat_Has_Products A B (A -> B).
+Program Instance fun_exp (A B : Type) : Exponential A B :=
+{
+  exponential := A -> B
+}.
 
 Next Obligation. (* Exp_morph_com *)
 Proof.
@@ -56,7 +50,7 @@ Qed.
 
 (* fun_exp defined *)
 
-Program Instance Type_Cat_Has_Exponentials : Has_Exponentials Type_Cat.
+Program Instance Type_Cat_Has_Exponentials : Has_Exponentials Type_Cat := fun _ _ => _.
 
 (* Category of Types is cartesian closed *)
 

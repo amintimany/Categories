@@ -20,8 +20,10 @@ Section Monoid_Cat.
 
   Hint Resolve Mon_unit_left Mon_unit_right Mon_assoc.
 
-  Program Instance Monoid_Cat : Category unit (λ _ _, @Mon_car M) :=
+  Program Instance Monoid_Cat : Category :=
     {
+      Obj := unit;
+      Hom := (λ _ _, @Mon_car M);
       compose := λ _ _ _, @Mon_op M;
       id := λ a, Mon_unit
     }.

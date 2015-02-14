@@ -1,15 +1,15 @@
 Require Import Category.Main.
 
-Class Functor `(C : Category Obj Hom) `(C' : Category Obj' Hom') : Type := 
+Class Functor (C C' : Category) : Type := 
 {
   (* Object map *)
-  FO : Obj → Obj';
+  FO : C → C';
 
   (* Arrow map *)
-  FA : ∀ {a b : Obj}, Hom a b → Hom' (FO a) (FO b);
+  FA : ∀ {a b}, Hom C a b → Hom C' (FO a) (FO b);
 
   (* Mapping of identities *)
-  F_id : ∀ {c : Obj}, FA (@id _ _ _ c) = @id _ _ _ (FO c);
+  F_id : ∀ c, FA (id c) = id (FO c);
   
   (* Functor commuting with composition *)
   F_compose : ∀ {a b c} (f : Hom a b) (g : Hom b c), FA (g ∘ f) = (FA g) ∘ (FA f)
@@ -17,17 +17,22 @@ Class Functor `(C : Category Obj Hom) `(C' : Category Obj' Hom') : Type :=
   (* F_id and F_compose together state the fact that functors are morphisms of categories (preserving the structure of categories!)*)
 }.
 
-Notation "F '_o'" := (@FO _ _ _ _ _ _ F).
+Arguments FO {_ _} _ _.
+Arguments FA {_ _} _ {_ _} _, {_ _} _ _ _ _.
+Arguments F_id {_ _} _ _.
+Arguments F_compose {_ _} _ {_ _ _} _ _.
 
-Notation "F '_a'" := (@FA _ _ _ _ _ _ F).
+Notation "F '_o'" := (FO F) : object_scope.
+
+Notation "F '_a'" := (@FA _ _ F) : morphism_scope.
 
 Hint Extern 2 => (apply F_id).
 
 Ltac Functor_Simplify :=
   match goal with
-    | [|- ?F _a _ _ ?A = @id _ _ _ (?F _o ?x)] =>
+    | [|- ?F _a _ _ ?A = id (?F _o ?x)] =>
       rewrite <- F_id; (simpl||idtac)
-    | [|- (@id _ _ _ (?F _o ?x)) = ?F _a _ _ ?A] =>
+    | [|- (id (?F _o ?x)) = ?F _a _ _ ?A] =>
       rewrite <- F_id; (simpl||idtac)
     | [|- ?F _a _ _ ?A ∘ ?F _a _ _ ?B = ?F _a _ _ ?C ∘ ?F _a _ _ ?D] =>
       repeat rewrite <- F_compose; (simpl||idtac)
@@ -46,12 +51,12 @@ Hint Extern 2 => Functor_Simplify.
 
 Section Functor_eq_simplification.
 
-  Context `{C : Category Obj Hom} `{C' : Category Obj' Hom'} (F G : Functor C C').
+  Context {C C' : Category} (F G : Functor C C').
 
   Lemma Functor_eq_simplify : (F _o = G _o) -> (F _a ≃ G  _a) -> F = G.
   Proof.
     intros H1 H2.
-    destruct F as [fO fA fid fco]; destruct G as [gO gA gid gco]; simpl in *.
+    destruct F as [fO fA fid fco]; destruct G as [gO gA gid gco]; cbn in *.
     destruct H1.
     dependent destruction H2.
     destruct (proof_irrelevance _ fid gid).
@@ -63,40 +68,11 @@ Section Functor_eq_simplification.
   Proof.
     intros Oeq H.
     destruct F as [fO fA f_id f_cmp]; destruct G as [gO gA g_id g_cmp]; simpl in *.
-    eapply (@JMeq_trans _ _ _ _ (
-                          fun (a b : Obj) (f : Hom a b) =>
-                            match 
-                              (match 
-                                  (match Oeq in (_ = u) return (fO a = u a) with
-                                       eq_refl => eq_refl
-                                   end)
-                                  in (_ = Y) return (Hom' (fO a) _ = Hom' Y _) with
-                                    eq_refl => 
-                                    (match
-                                        (match Oeq in (_ = u) return (fO b = u b) with
-                                             eq_refl => eq_refl
-                                         end)
-                                        in (_ = Y) return (Hom' _ (fO b) = Hom' _ Y) with
-                                          eq_refl => eq_refl
-                                      end)
-                                end) in (_ = Z) return Z with
-                                eq_refl => fA _ _ f
-                            end
-                        ) _).
-    {
-      destruct Oeq; trivial.
-    }
-    {
-      match goal with
-          [|- ?A ~= ?B] => let H := fresh "H" in cutrewrite(A = B); trivial
-      end.
-      extensionality x; extensionality y; extensionality f.
-      match goal with
-          [|- ?A = ?B] => let H := fresh "H" in cut(A ~= B); [intros H; rewrite H; trivial|]
-      end.
-      rewrite <- (H x y f).
-      destruct Oeq; trivial.
-    }
+    destruct Oeq.
+    match goal with
+        [|- ?A ~= ?B] => let H := fresh "H" in cutrewrite(A = B); trivial
+    end.
+    repeat (let x := fresh in extensionality x); rewrite H; trivial.
   Qed.
 
   Lemma Functor_extensionality : (∀ (x : Obj), F _o x = G _o x) -> (∀ (a b : Obj) (h : Hom a b), F _a _ _ h ~= G _a _ _ h) → F = G.
@@ -121,17 +97,28 @@ Section FA_equal_f.
 Lemma FA_equal_f : FO = GO -> FA ≃ GA → ∀ (a b : A) (f : B a b), FA _ _ f ≃ GA _ _ f.
 Proof.
   intros H1 H2 a b f.
-  symmetry in H1.
-  apply (fun P => @JMeq_trans _ _ _ P
-  (
-    match H1 in (_ = Y) return B' (Y a) (Y b) with
-        eq_refl => GA a b f
-    end
-  ) _).
-  dependent destruction H1.
-  dependent destruction H2.
-  reflexivity.
-  destruct H1; reflexivity.
+  destruct H1.
+  rewrite <- H2; trivial.
 Qed.
 
 End FA_equal_f.
+
+Hint Extern 2 => Functor_Simplify.
+
+Tactic Notation "FA_extensionality" ident(x) ident(y) ident(h) :=
+  apply FA_extensionality; [trivial|intros x y h]
+.
+
+Tactic Notation "Functor_extensionality" ident(x) ident(y) ident(h) :=
+  apply Functor_extensionality; [intros x|intros x y h]
+.
+
+Hint Extern 1 =>
+  match goal with
+      [|- ?F = ?G :> (Functor _ _)] =>
+      let x := fresh "x" in
+      let y := fresh "y" in
+      let f := fresh "f" in
+      Functor_extensionality x y f
+  end
+.

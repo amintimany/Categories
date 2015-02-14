@@ -1,96 +1,139 @@
 Require Import Category.Main.
 Require Import Functor.Main.
 
-Class NatTrans `{C : Category Obj Hom} `{C' : Category Obj' Hom'} (F F' : Functor C C') :=
+Section NatTrans.
+  Context {C C' : Category}.
+
+  Class NatTrans (F F' : Functor C C') :=
+    {
+      Trans (c : C) : Hom (F _o c) (F' _o c);
+      Trans_com {c c' : C} (h : Hom c c') : (Trans c') ∘ F _a _ _ h = F' _a _ _ h ∘ (Trans c)
+    }.
+
+  Arguments Trans {_ _} _ _.
+
+  (* NatTrans_Setoid defined *)
+
+  Lemma NatTrans_eq_simplify {F F' : Functor C C'} (N N' : NatTrans F F') : (@Trans _ _ N) = (@Trans _ _ N') -> N = N'.
+  Proof.
+    intros H1.
+    destruct N as [NT NC]; destruct N' as [NT' NC']; cbn in *.
+    destruct H1.
+    destruct (proof_irrelevance _ NC NC').
+    trivial.
+  Qed.
+
+  Program Instance NatTrans_compose {F F' F'' : Functor C C'} (tr : NatTrans F F') (tr' : NatTrans F' F'') : NatTrans F F'' :=
+    {
+      Trans := fun c : Obj => (Trans tr' c) ∘ (Trans tr c)
+    }.
+
+  Next Obligation. (* Trans_com*)
+  Proof.
+    rewrite assoc.
+    rewrite Trans_com.
+    match goal with [|- ?A ∘ ?B ∘ ?C = ?D] => reveal_comp A B end.
+    rewrite Trans_com; auto.
+  Qed.
+
+  (* NatTrans_compose defined *)
+
+  Program Instance NatTrans_id (F : Functor C C') : NatTrans F F :=
+    {
+      Trans := fun x : Obj => F _a _ _ id
+    }.
+
+  (* NatTrans_id defined *)
+
+End NatTrans.
+
+Arguments Trans {_ _ _ _} _ _.
+Arguments Trans_com {_ _ _ _} _ {_ _} _.
+
+Hint Resolve NatTrans_eq_simplify.
+
+Local Hint Extern 1 => apply NatTrans_eq_simplify; simpl.
+
+Program Instance Func_Cat (C C' : Category) : Category :=
 {
-  Trans (c : Obj) : Hom' (F _o c) (F' _o c);
-  Trans_com {c c' : Obj} (h : Hom c c') : (Trans c') ∘ F _a _ _ h = F' _a _ _ h ∘ (Trans c)
+  Obj := Functor C C';
+
+  Hom := NatTrans;
+
+  compose := @NatTrans_compose _ _;
+
+  id := @NatTrans_id _ _
 }.
 
-Arguments Trans {_ _ _ _ _ _} [_ _] _ _.
+Section NatIso.
+  Context {C C' : Category} (F G : Functor C C') (n : NatTrans F G) (n' : NatTrans G F).
 
-(* NatTrans_Setoid defined *)
+  Theorem NatIso : (∀ (c : Obj), (Trans n c) ∘ (Trans n' c) = G _a _ _ (@id _ c)) →
+                   (∀ (c : Obj), (Trans n' c) ∘ (Trans n c) = F _a _ _ (@id _ c)) →
+                   F ≡≡ G ::> Func_Cat _ _.
+  Proof.
+    intros H1 H2.
+    apply (Build_Isomorphism (Func_Cat _ _) _ _ n n'); auto.
+  Qed.
 
-Lemma NatTrans_eq_simplify `{C : Category Obj Hom} `{C' : Category Obj' Hom'} {F F' : Functor C C'} (N N' : NatTrans F F') : (@Trans _ _ _ _ _ _ _ _ N) = (@Trans _ _ _ _ _ _ _ _ N') -> N = N'.
-Proof.
-  intros H1.
-  destruct N as [NT NC]; destruct N' as [NT' NC']; simpl in *.
-  destruct H1.
-  destruct (proof_irrelevance _ NC NC').
-  trivial.
-Qed.
+End NatIso.
 
-Program Instance NatTrans_compose `{C : Category Obj Hom} `{C' : Category Obj' Hom'} {F F' F'' : Functor C C'} (tr : NatTrans F F') (tr' : NatTrans F' F'') : NatTrans F F'' :=
+(* Horizontal composition of natural transformations *)
+
+Program Instance NatTrans_hor_comp {C D E : Category} {F G : Functor C D} {F' G' : Functor D E} (tr : NatTrans F G) (tr' : NatTrans F' G') : NatTrans (Functor_compose F F') (Functor_compose G G') :=
 {
-  Trans := fun c : Obj => (Trans tr' c) ∘ (Trans tr c)
+  Trans := fun c : Obj => (G' _a _ _ (Trans tr c)) ∘ (Trans tr' (F _o c))
 }.
 
 Next Obligation. (* Trans_com*)
 Proof.
   rewrite assoc.
-  destruct tr as [trt trc]; destruct tr' as [trt' trc'].
-  unfold Trans.
-  assert(H := trc _ _ h).
-  rewrite H.
+  rewrite Trans_com.
   match goal with [|- ?A ∘ ?B ∘ ?C = ?D] => reveal_comp A B end.
-  assert (H' := trc' _ _ h).
-  rewrite H'.
-  rewrite assoc.
-  trivial.
+  rewrite <- F_compose.
+  rewrite Trans_com.
+  rewrite F_compose.
+  auto.
 Qed.
 
-(* NatTrans_compose defined *)
 
-Theorem NatTrans_compose_assoc `{C : Category Obj Hom} `{C' : Category Obj' Hom'} {F1 F2 F3 F4 : Functor C C'} (trf : NatTrans F1 F2) (trg : NatTrans F2 F3) (trh : NatTrans F3 F4) : (NatTrans_compose trf (NatTrans_compose trg trh)) = (NatTrans_compose (NatTrans_compose trf trg) trh).
-Proof.
-  apply NatTrans_eq_simplify; simpl.
-  extensionality x.
-  rewrite assoc; trivial.
-Qed.
-
-Program Instance NatTrans_id `{C : Category Obj Hom} `{C' : Category Obj' Hom'} {F : Functor C C'} : NatTrans F F :=
+Program Instance NatTrans_to_compose_id {C D : Category} (F : Functor C D) : NatTrans F (Functor_compose F (Functor_id _)) :=
 {
-  Trans := fun x : Obj => F _a _ _ id
+  Trans := fun c => id
 }.
 
-(* NatTrans_id defined *)
-
-Theorem NatTrans_id_unit_left `{C : Category Obj Hom} `{C' : Category Obj' Hom'} {F F' : Functor C C'} (tr : NatTrans F F') : (NatTrans_compose tr NatTrans_id) = tr.
-Proof.
-  apply NatTrans_eq_simplify; simpl.
-  extensionality x; auto.
-Qed.
-
-Theorem NatTrans_id_unit_right `{C : Category Obj Hom} `{C' : Category Obj' Hom'} {F F' : Functor C C'} (tr : NatTrans F F') : (NatTrans_compose NatTrans_id tr) = tr.
-Proof.
-  apply NatTrans_eq_simplify; simpl.
-  extensionality x; auto.
-Qed.
-
-Instance Func_Cat `(C : Category Obj Hom) `(C' : Category Obj' Hom') : Category (Functor C C') (λ F G, NatTrans F G) :=
+Program Instance NatTrans_from_compose_id {C D : Category} (F : Functor C D) : NatTrans (Functor_compose F (Functor_id _)) F :=
 {
-  compose := @NatTrans_compose _ _ _ _ _ _;
-
-  assoc := @NatTrans_compose_assoc _ _ _ _ _ _;
-
-  assoc_sym := fun _ _ _ _ _ _ _ => eq_sym (@NatTrans_compose_assoc _ _ _ _ _ _ _ _ _ _ _ _ _);
-
-  id := @NatTrans_id _ _ _ _ _ _;
-
-  id_unit_left := @NatTrans_id_unit_left _ _ _ _ _ _;
-
-  id_unit_right := @NatTrans_id_unit_right _ _ _ _ _ _
-               
+  Trans := fun c => id
 }.
 
-Theorem NatIso `{C : Category Obj Hom} `{C' : Category Obj' Hom'} (F G : Functor C C') (n : NatTrans F G) (n' : NatTrans G F) : (∀ (c : Obj), (Trans n c) ∘ (Trans n' c) = G _a _ _ (@id _ _ _ c)) -> (∀ (c : Obj), (Trans n' c) ∘ (Trans n c) = F _a _ _ (@id _ _ _ c))  -> F ≡ G.
-Proof.
-  intros H1 H2.
-  exists n; exists n'; apply NatTrans_eq_simplify; extensionality c; simpl; auto.
-Qed.
+Program Instance NatTrans_to_id_compose {C D : Category} (F : Functor C D) : NatTrans F (Functor_compose (Functor_id _) F) :=
+{
+  Trans := fun c => id
+}.
 
+Program Instance NatTrans_from_id_compose {C D : Category} (F : Functor C D) : NatTrans (Functor_compose (Functor_id _) F) F :=
+{
+  Trans := fun c => id
+}.
 
+Program Instance NatTrans_Functor_assoc {C1 C2 C3 C4 : Category}
+        (F : Functor C1 C2)
+        (G : Functor C2 C3)
+        (H : Functor C3 C4)
+: NatTrans (Functor_compose F (Functor_compose G H)) (Functor_compose (Functor_compose F G) H) :=
+{
+  Trans := fun c => id
+}.
 
+Program Instance NatTrans_Functor_assoc_sym {C1 C2 C3 C4 : Category}
+        (F : Functor C1 C2)
+        (G : Functor C2 C3)
+        (H : Functor C3 C4)
+: NatTrans (Functor_compose (Functor_compose F G) H) (Functor_compose F (Functor_compose G H)) :=
+{
+  Trans := fun c => id
+}.
 
 
 

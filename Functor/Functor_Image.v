@@ -3,8 +3,7 @@ Require Import Category.Composable_Chain.
 Require Import Functor.Functor.
 
 Section Functor_Image.
-  Context `{C : Category Obj Hom}
-          `{D : Category Obj' Hom'}
+  Context {C D : Category}
           (F : Functor C D).
 
   Program Definition Functor_Image :=
@@ -19,9 +18,9 @@ Section Functor_Image.
                       λ x y g,
                       ∃ (c d : Obj) (h : Hom c d)
                         (Fca : F _o c = x) (Fdb : F _o d = y),
-                        match Fca in (_ = Z) return Hom' Z _ with
+                        match Fca in (_ = Z) return Hom Z _ with
                             eq_refl =>
-                            match Fdb in (_ = Y) return Hom' _ Y with
+                            match Fdb in (_ = Y) return Hom _ Y with
                                 eq_refl => F _a _ _ h
                             end
                         end = g)

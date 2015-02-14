@@ -3,28 +3,26 @@ Require Import Functor.Main.
 
 (* Terminal Object *)
 
-Class Terminal `(C : Category Obj Hom) (term : Obj) : Type :=
+Class Terminal (C : Category) : Type :=
 {
-  t_morph : ∀ (d : Obj), Hom d term;
-  t_morph_unique : ∀ (d : Obj) (f g : Hom d term), f = g
+  terminal : C;
+  t_morph : ∀ (d : Obj), Hom d terminal;
+  t_morph_unique : ∀ (d : Obj) (f g : Hom d terminal), f = g
 }.
 
-Theorem Terminal_iso `{C : Category Obj Hom} (t t' : Obj) : Terminal C t → Terminal C t' → t ≡ t'.
+Arguments terminal {_} _.
+Arguments t_morph {_} _ _.
+Arguments t_morph_unique {_} _ _ _ _.
+
+Coercion terminal : Terminal >-> Obj.
+
+Theorem Terminal_iso {C : Category} (T T' : Terminal C) : T ≡ T'.
 Proof.
-  intros [tm tmu] [tm' tmu'].
-  exists (tm' t); exists (tm t'); trivial.
+  apply (Build_Isomorphism _ _ _ (t_morph _ _) (t_morph _ _)); apply t_morph_unique.
 Qed.
 
-Class Has_Terminal `(C : Category Obj Hom) : Type :=
-{
-  HT_term : Obj;
-  HT_term_term : Terminal C HT_term;
+(* Initial is the dual of Terminal. *)
 
-  T_morph := @t_morph _ _ _ _ HT_term_term
-}.
+Definition Initial (C : Category) := Terminal (C ^op).
 
-Existing Instance HT_term_term.
-
-Notation "'_T_' D" := (@HT_term _ _ D _).
-
-
+Existing Class Initial.

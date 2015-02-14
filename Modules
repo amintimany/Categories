@@ -1,10 +1,10 @@
 Mod_Essentials = \
 	Essentials/Notations\
-	Essentials/Empty
+	Essentials/Empty\
+	Essentials/Facts_Tactics
 
 Mod_Category = \
 	Category/Category\
-	Category/Tactics\
 	Category/Opposite\
 	Category/Morph\
 	Category/SubCategory\
@@ -12,21 +12,17 @@ Mod_Category = \
 	Category/Main
 
 Mod_Ext_Cons =\
-	Ext_Cons/Arrow\
-	Ext_Cons/Arrow_To\
-	Ext_Cons/Arrow_From\
-	Ext_Cons/Slice_Cat\
-	Ext_Cons/CoSlice_Cat\
-	Ext_Cons/Arrow_Cat\
 	Ext_Cons/Prod_Cat\
+	Ext_Cons/Arrow\
+	Ext_Cons/Comma\
 	Ext_Cons/Main
 
 Mod_Functor =\
 	Functor/Functor\
 	Functor/Functor_Ops\
 	Functor/Functor_Properties\
-	Functor/Tactics\
 	Functor/Functor_Image\
+	Functor/Const_Func\
 	Functor/Main\
 	Functor/Representable/Main\
 	Functor/Representable/Hom_Func
@@ -45,31 +41,19 @@ Mod_Coq_Cats =\
 	Coq_Cats/Main
 
 Mod_Basic_Cons =\
-	Basic_Cons/Initial\
 	Basic_Cons/Terminal\
 	Basic_Cons/Product\
-	Basic_Cons/Sum\
 	Basic_Cons/Exponential\
+	Basic_Cons/Exponential_Functor\
 	Basic_Cons/Facts\
 	Basic_Cons/Facts/Init_Prod\
 	Basic_Cons/Facts/Term_Prod\
 	Basic_Cons/Facts/Main\
 	Basic_Cons/Facts/Equalizer_Monic\
-	Basic_Cons/Facts/CoEqualizer_Epic\
-	Basic_Cons/Facts/Gen_Prod_as_Limit\
-	Basic_Cons/Facts/Gen_Sum_as_CoLimit\
-	Basic_Cons/Facts/Gen_Prod_Sum_Duality\
-	Basic_Cons/Facts/Equalizer_CoEqualizer_Duality\
-	Basic_Cons/Facts/Gen_Prod_Iso\
-	Basic_Cons/Facts/Gen_Sum_Iso\
 	Basic_Cons/Main\
 	Basic_Cons/CCC\
 	Basic_Cons/Equalizer\
-	Basic_Cons/CoEqualizer\
 	Basic_Cons/PullBack\
-	Basic_Cons/PushOut\
-	Basic_Cons/General_Product\
-	Basic_Cons/General_Sum
 
 Mod_Algebras =\
 	Algebras/Algebras\
@@ -89,33 +73,25 @@ Mod_NatTrans =\
 	NatTrans/NatTrans
 
 Mod_Yoneda =\
-	Yoneda/Y_emb\
-	Yoneda/Y_Left\
-	Yoneda/Y_Right\
-	Yoneda/Y_Left_Right\
-	Yoneda/Y_Right_Left\
-	Yoneda/Y_Lem\
-	Yoneda/CoYoneda\
-	Yoneda/Main
+	Yoneda/Yoneda
 
 Mod_Limits =\
 	Limits/Limit\
-	Limits/CoLimit\
-	Limits/Duality\
 	Limits/Main\
 	Limits/Gen_Prod_Eq_Limits\
-	Limits/Gen_Sum_CoEq_CoLimits
 
-Mod_Categories =\
-	Categories/Discr\
-	Categories/Monoid_Cat\
-	Categories/Examples/List_Monoid_Cat
+Mod_Archetypal =\
+	Archetypal/Discr\
+	Archetypal/Monoid_Cat\
+	Archetypal/Examples/List_Monoid_Cat
 
+Mod_Adjunction =\
+	Adjunction/Adjunction
 
 Mod_Demo =\
 	Demo/Demo
 
-Modules = $(Mod_Essentials) $(Mod_Category) $(Mod_Ext_Cons) $(Mod_Functor) $(Mod_Coq_Cats) $(Mod_Basic_Cons) $(Mod_Algebras) $(Mod_Cat) $(Mod_NatTrans) $(Mod_Yoneda) $(Mod_Limits) $(Mod_Categories) $(Mod_Demo)
+Modules = $(Mod_Essentials) $(Mod_Category) $(Mod_Ext_Cons) $(Mod_Functor) $(Mod_Coq_Cats) $(Mod_Basic_Cons) $(Mod_Algebras) $(Mod_Cat) $(Mod_NatTrans) $(Mod_Yoneda) $(Mod_Adjunction) $(Mod_Limits) $(Mod_Archetypal) $(Mod_Demo)
 
 
 
