@@ -88,10 +88,13 @@ Mod_Archetypal =\
 Mod_Adjunction =\
 	Adjunction/Adjunction
 
+Mod_KanExt =\
+	KanExt/KanExt
+
 Mod_Demo =\
 	Demo/Demo
 
-Modules = $(Mod_Essentials) $(Mod_Category) $(Mod_Ext_Cons) $(Mod_Functor) $(Mod_Coq_Cats) $(Mod_Basic_Cons) $(Mod_Algebras) $(Mod_Cat) $(Mod_NatTrans) $(Mod_Yoneda) $(Mod_Adjunction) $(Mod_Limits) $(Mod_Archetypal) $(Mod_Demo)
+Modules = $(Mod_Essentials) $(Mod_Category) $(Mod_Ext_Cons) $(Mod_Functor) $(Mod_Coq_Cats) $(Mod_Basic_Cons) $(Mod_Algebras) $(Mod_Cat) $(Mod_NatTrans) $(Mod_Yoneda) $(Mod_Adjunction) $(Mod_Limits) $(Mod_Archetypal) $(Mod_Demo) $(Mod_KanExt)
 
 
 

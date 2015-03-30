@@ -140,6 +140,6 @@ Section Adjunction.
 
 End Adjunction.
 
-Arguments adj_unit {_ _ _ _} _.
+Arguments adj_unit {_ _ _ _} _ : assert.
 Arguments adj_morph_ex {_ _ _ _} _ {_ _} _.
 Arguments adj_morph_com {_ _ _ _} _ {_ _} _.

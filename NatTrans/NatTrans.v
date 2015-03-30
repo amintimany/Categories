@@ -78,6 +78,17 @@ Section NatIso.
 
 End NatIso.
 
+Section Opposite_NatTrans.
+  Context {C D : Category} {F F' : Functor C D} (N : NatTrans F F').
+
+  Instance Opposite_NatTrans : NatTrans (Opposite_Functor F') (Opposite_Functor F) :=
+    {
+      Trans := Trans N;
+      Trans_com := fun c c' h => eq_sym (Trans_com N h)
+    }.
+  
+End Opposite_NatTrans.
+  
 (* Horizontal composition of natural transformations *)
 
 Program Instance NatTrans_hor_comp {C D E : Category} {F G : Functor C D} {F' G' : Functor D E} (tr : NatTrans F G) (tr' : NatTrans F' G') : NatTrans (Functor_compose F F') (Functor_compose G G') :=
