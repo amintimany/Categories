@@ -21,6 +21,12 @@ Section Init_Prod.
     apply t_morph_unique.
   Qed.
 
+  Next Obligation. (* Trans_com *)
+  Proof.
+    symmetry.
+    apply Init_Prod_lr_obligation_1.
+  Qed.
+
   Program Instance Init_Prod_rl a : NatTrans (((CoYoneda C) _o) init) (((CoYoneda C) _o) ((Prod_Func C) _o (@terminal _ init, a))) :=
 {
   Trans := fun c g => compose C (Pi_1 (CCC_HC C init a)) (t_morph init c)
@@ -35,6 +41,12 @@ Section Init_Prod.
     apply (t_morph_unique init).
   Qed.
 
+  Next Obligation. (* Trans_com *)
+  Proof.
+    symmetry.
+    apply Init_Prod_rl_obligation_1.
+  Qed.
+  
   Theorem Init_Prod a : ((Prod_Func C) _o (@terminal _ init, a)) ≡ init.
   Proof.
     apply (@CoIso (C^op)).

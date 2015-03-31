@@ -53,6 +53,12 @@ Proof.
   auto.
 Qed.
 
+Next Obligation.
+Proof.
+  symmetry.
+  apply Y_left_to_right_obligation_1.
+Qed.
+  
 Local Obligation Tactic := idtac.
 
 Program Instance Y_right_to_left_NT (C : Category) (c : Obj) (F : Functor C^op Type_Cat) (h : F _o c) : NatTrans ((Yoneda _) _o c) F :=
@@ -70,6 +76,12 @@ Proof.
       transitivity (((F _a _ _ Y) ∘ (F _a _ _ X)) Z); trivial
   end.
   rewrite <- F_compose; trivial.
+Qed.
+
+Next Obligation.
+Proof.
+  symmetry.
+  apply Y_right_to_left_NT_obligation_1.
 Qed.
 
 Program Instance Y_right_to_left (C : Category) : NatTrans (Y_right C) (Y_left C) :=
@@ -95,6 +107,12 @@ Proof.
       transitivity ((X ∘ Y) Z); trivial
   end.
   rewrite <- Trans_com; cbn; trivial.
+Qed.
+
+Next Obligation.
+Proof.
+  symmetry.
+  apply Y_right_to_left_obligation_1.
 Qed.
 
 Lemma Yoneda_Lemma (C : Category) : (Y_left C) ≡≡ (Y_right C) ::> (Func_Cat _ _).

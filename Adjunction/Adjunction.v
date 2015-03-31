@@ -39,7 +39,7 @@ Section Adjunction.
       Trans := fun c h => (G _a _ _ h) ∘ (Trans (adj_unit Adj) _)
     }.
 
-    Next Obligation.
+    Next Obligation. (* Trans_com *)
       intros [c1 d1] [c2 d2] [h1 h2].
       extensionality x; cbn in *.
       repeat rewrite F_compose.
@@ -49,6 +49,12 @@ Section Adjunction.
       apply (eq_sym (Trans_com (adj_unit Adj) h1)).
     Qed.
 
+    Next Obligation. (* Trans_com *)
+    Proof.
+      symmetry.
+      apply Adj_to_Hom_Adj_LR_obligation_1.
+    Qed.
+    
     Program Instance Adj_to_Hom_Adj_RL : NatTrans (Hom_Adj_Right _ _ F G) (Hom_Adj_Left _ _ F G) :=
     {
       Trans := fun c h => adj_morph_ex Adj h
@@ -67,6 +73,12 @@ Section Adjunction.
       refine (eq_trans _ (@f_equal _ _ (fun x => @compose _ _ _ _ x _) _ _ (Trans_com (adj_unit Adj) h1))).
       rewrite assoc_sym.
       rewrite <- adj_morph_com; trivial.
+    Qed.
+
+    Next Obligation. (* Trans_com *)
+    Proof.
+      symmetry.
+      apply Adj_to_Hom_Adj_RL_obligation_1.
     Qed.
 
     Program Instance Adj_to_Hom_Adj : Hom_Adjunct := NatIso _ _ Adj_to_Hom_Adj_LR Adj_to_Hom_Adj_RL _ _.
@@ -108,6 +120,12 @@ Section Adjunction.
       simpl_ids in H.
       simpl_ids in H'.
       rewrite <- H; trivial.
+    Qed.
+
+    Next Obligation. (* Trans_com *)
+    Proof.
+      symmetry.
+      apply Hom_Adj_to_Adj_obligation_1.
     Qed.
 
     Next Obligation.

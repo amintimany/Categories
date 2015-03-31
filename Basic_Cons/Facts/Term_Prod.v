@@ -34,6 +34,12 @@ Section Term_Prod.
     apply t_morph_unique.
   Qed.
 
+  Next Obligation. (* Trans_com *)
+  Proof.
+    symmetry.
+    apply Term_Prod_rl_obligation_1.
+  Qed.
+
   Theorem Term_Prod (a : Obj) : ((Prod_Func C) _o (a, @terminal _ term)) ≡ a.
   Proof.
     Yoneda.

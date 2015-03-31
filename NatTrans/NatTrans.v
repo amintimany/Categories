@@ -7,7 +7,8 @@ Section NatTrans.
   Class NatTrans (F F' : Functor C C') :=
     {
       Trans (c : C) : Hom (F _o c) (F' _o c);
-      Trans_com {c c' : C} (h : Hom c c') : (Trans c') ∘ F _a _ _ h = F' _a _ _ h ∘ (Trans c)
+      Trans_com {c c' : C} (h : Hom c c') : (Trans c') ∘ F _a _ _ h = F' _a _ _ h ∘ (Trans c);
+      Trans_com_sym {c c' : C} (h : Hom c c') : F' _a _ _ h ∘ (Trans c) = (Trans c') ∘ F _a _ _ h
     }.
 
   Arguments Trans {_ _} _ _.
@@ -17,9 +18,10 @@ Section NatTrans.
   Lemma NatTrans_eq_simplify {F F' : Functor C C'} (N N' : NatTrans F F') : (@Trans _ _ N) = (@Trans _ _ N') -> N = N'.
   Proof.
     intros H1.
-    destruct N as [NT NC]; destruct N' as [NT' NC']; cbn in *.
+    destruct N as [NT NC NCs]; destruct N' as [NT' NC' NCs']; cbn in *.
     destruct H1.
     destruct (proof_irrelevance _ NC NC').
+    destruct (proof_irrelevance _ NCs NCs').    
     trivial.
   Qed.
 
@@ -36,6 +38,15 @@ Section NatTrans.
     rewrite Trans_com; auto.
   Qed.
 
+  Next Obligation. (* Trans_com_sym *)
+  Proof.
+    symmetry.
+    rewrite assoc.
+    rewrite Trans_com.
+    match goal with [|- ?A ∘ ?B ∘ ?C = ?D] => reveal_comp A B end.
+    rewrite Trans_com; auto.
+  Qed.
+  
   (* NatTrans_compose defined *)
 
   Program Instance NatTrans_id (F : Functor C C') : NatTrans F F :=
@@ -84,7 +95,8 @@ Section Opposite_NatTrans.
   Instance Opposite_NatTrans : NatTrans (Opposite_Functor F') (Opposite_Functor F) :=
     {
       Trans := Trans N;
-      Trans_com := fun c c' h => eq_sym (Trans_com N h)
+      Trans_com := fun c c' h => (@Trans_com_sym _ _ _ _ N _ _ h);
+      Trans_com_sym := fun c c' h => (@Trans_com _ _ _ _ N _ _ h)
     }.
   
 End Opposite_NatTrans.
@@ -107,6 +119,17 @@ Proof.
   auto.
 Qed.
 
+Next Obligation. (* Trans_com*)
+Proof.
+  symmetry.
+  rewrite assoc.
+  rewrite Trans_com.
+  match goal with [|- ?A ∘ ?B ∘ ?C = ?D] => reveal_comp A B end.
+  rewrite <- F_compose.
+  rewrite Trans_com.
+  rewrite F_compose.
+  auto.
+Qed.
 
 Program Instance NatTrans_to_compose_id {C D : Category} (F : Functor C D) : NatTrans F (Functor_compose F (Functor_id _)) :=
 {
@@ -145,15 +168,3 @@ Program Instance NatTrans_Functor_assoc_sym {C1 C2 C3 C4 : Category}
 {
   Trans := fun c => id
 }.
-
-
-
-
-
-
-
-
-
-
-
-
