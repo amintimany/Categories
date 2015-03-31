@@ -8,9 +8,9 @@ Section Opposite_Functor.
   Program Instance Opposite_Functor : Functor C^op D^op :=
     {
       FO := F _o;
-      FA := λ _ _ h, F _a _ _ h;
-      F_id := λ a, F_id F a;
-      F_compose := λ _ _ _ f g, F_compose F g f
+      FA := fun _ _ h => F _a _ _ h;
+      F_id := fun a => F_id F a;
+      F_compose := fun _ _ _ f g => F_compose F g f
     }.
 
 End Opposite_Functor.

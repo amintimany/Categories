@@ -89,7 +89,9 @@ Mod_Adjunction =\
 	Adjunction/Adjunction
 
 Mod_KanExt =\
-	KanExt/KanExt
+	KanExt/Local\
+        KanExt/Global\
+        KanExt/Main
 
 Mod_Demo =\
 	Demo/Demo
