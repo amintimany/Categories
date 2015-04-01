@@ -53,3 +53,9 @@ Section KanExtension.
   End Global.
 
 End KanExtension.
+
+Arguments left_kan_ext {_ _ _ _} _.
+Arguments left_kan_ext_adj {_ _ _ _} _.
+
+Arguments right_kan_ext {_ _ _ _} _.
+Arguments right_kan_ext_adj {_ _ _ _} _.

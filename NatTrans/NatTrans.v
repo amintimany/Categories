@@ -41,10 +41,7 @@ Section NatTrans.
   Next Obligation. (* Trans_com_sym *)
   Proof.
     symmetry.
-    rewrite assoc.
-    rewrite Trans_com.
-    match goal with [|- ?A ∘ ?B ∘ ?C = ?D] => reveal_comp A B end.
-    rewrite Trans_com; auto.
+    apply NatTrans_compose_obligation_1.
   Qed.
   
   (* NatTrans_compose defined *)
@@ -100,7 +97,33 @@ Section Opposite_NatTrans.
     }.
   
 End Opposite_NatTrans.
-  
+
+(* Composition of opposite nat transes *)
+
+Section Compose_NOP.
+  Context {C D : Category} {F F' F'' : Functor C D} (N : NatTrans F F') (N' : NatTrans F' F'').
+
+  Theorem NatTrans_compose_Op : Opposite_NatTrans (NatTrans_compose N N') = NatTrans_compose (Opposite_NatTrans N') (Opposite_NatTrans N).
+  Proof.
+    apply NatTrans_eq_simplify.
+    trivial.
+  Qed.
+
+End Compose_NOP.
+
+(* Opposite of NatTrans_id *)
+
+Section NatTrans_id_Op.
+  Context {C D : Category} (F : Functor C D).
+
+  Theorem NatTrans_id_Op : Opposite_NatTrans (NatTrans_id F) = NatTrans_id (Opposite_Functor F).
+  Proof.
+    apply NatTrans_eq_simplify.
+    trivial.
+  Qed.
+
+End NatTrans_id_Op.
+
 (* Horizontal composition of natural transformations *)
 
 Program Instance NatTrans_hor_comp {C D E : Category} {F G : Functor C D} {F' G' : Functor D E} (tr : NatTrans F G) (tr' : NatTrans F' G') : NatTrans (Functor_compose F F') (Functor_compose G G') :=
@@ -122,14 +145,22 @@ Qed.
 Next Obligation. (* Trans_com*)
 Proof.
   symmetry.
-  rewrite assoc.
-  rewrite Trans_com.
-  match goal with [|- ?A ∘ ?B ∘ ?C = ?D] => reveal_comp A B end.
-  rewrite <- F_compose.
-  rewrite Trans_com.
-  rewrite F_compose.
-  auto.
+  apply NatTrans_hor_comp_obligation_1.
 Qed.
+
+Section Hor_Compose_NOP.
+  Context {C D E : Category} {F G : Functor C D} {F' G' : Functor D E} (N : NatTrans F G) (N' : NatTrans F' G').
+
+  Theorem NatTrans_hor_comp_Op : Opposite_NatTrans (NatTrans_hor_comp N N') = NatTrans_hor_comp (Opposite_NatTrans N) (Opposite_NatTrans N').
+  Proof.
+    apply NatTrans_eq_simplify.
+    simpl.
+    extensionality c.
+    rewrite Trans_com.
+    trivial.
+  Qed.
+
+End Hor_Compose_NOP.
 
 Program Instance NatTrans_to_compose_id {C D : Category} (F : Functor C D) : NatTrans F (Functor_compose F (Functor_id _)) :=
 {

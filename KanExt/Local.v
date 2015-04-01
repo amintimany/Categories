@@ -76,3 +76,21 @@ Section KanExtension.
   End Local.
 
 End KanExtension.
+
+Arguments cocone_apex {_ _ _ _ _} _.
+Arguments cocone_edge {_ _ _ _ _} _.
+Arguments LoKan_CoCone_Morph {_ _ _ _ _} _ _.
+Arguments cocone_morph {_ _ _ _ _ _ _} _.
+Arguments cocone_morph_com {_ _ _ _ _ _ _} _.
+Arguments LLKE {_ _ _ _ _} _.
+Arguments LLKE_morph_ex {_ _ _ _ _} _ _.
+Arguments LLKE_morph_unique {_ _ _ _ _} _ _ _ _.
+
+Arguments cone_apex {_ _ _ _ _} _.
+Arguments cone_edge {_ _ _ _ _} _.
+Arguments LoKan_Cone_Morph {_ _ _ _ _} _ _.
+Arguments cone_morph {_ _ _ _ _ _ _} _.
+Arguments cone_morph_com {_ _ _ _ _ _ _} _.
+Arguments LRKE {_ _ _ _ _} _.
+Arguments LRKE_morph_ex {_ _ _ _ _} _ _.
+Arguments LRKE_morph_unique {_ _ _ _ _} _ _ _ _.
