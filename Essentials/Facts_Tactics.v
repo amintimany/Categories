@@ -37,8 +37,14 @@ Proof.
   repeat match goal with [H : _ = _|-_] => rewrite H end; trivial.
 Qed.
 
-(* Tactics to apply a tactic to all hypothesis in an effiecient way. This is due to Jonathan's (jonikelee@gmail.com) message on coq-club *)
+Ltac JMeqToEq :=
+  match goal with
+    [|- ?A ~= ?B] =>
+    let H := fresh in
+    cut (A = B); [intros H; rewrite H; trivial|]
+  end.
 
+(* Tactics to apply a tactic to all hypothesis in an effiecient way. This is due to Jonathan's (jonikelee@gmail.com) message on coq-club *)
 
 Ltac revert_clearbody_all :=
  repeat lazymatch goal with H:_ |- _ => try clearbody H; revert H end.

@@ -11,8 +11,7 @@ Section Hom_Func_Twist.
   Proof.
     Functor_extensionality c c' f.
     trivial.
-    cbn.
-    match goal with |- ?A ~= ?B => let H := fresh "H" in cut (A = B); [intros H; rewrite H; trivial|auto] end.
+    cbn; auto.
   Qed.
 
 End Hom_Func_Twist.

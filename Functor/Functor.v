@@ -106,11 +106,11 @@ End FA_equal_f.
 Hint Extern 2 => Functor_Simplify.
 
 Tactic Notation "FA_extensionality" ident(x) ident(y) ident(h) :=
-  apply FA_extensionality; [trivial|intros x y h]
+  apply FA_extensionality; [trivial|intros x y h; try JMeqToEq]
 .
 
 Tactic Notation "Functor_extensionality" ident(x) ident(y) ident(h) :=
-  apply Functor_extensionality; [intros x|intros x y h]
+  apply Functor_extensionality; [intros x|intros x y h; try JMeqToEq]
 .
 
 Hint Extern 1 =>
