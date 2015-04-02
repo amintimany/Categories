@@ -1,7 +1,7 @@
 Require Import Category.Main.
 Require Import Ext_Cons.Prod_Cat.
 Require Import Functor.Main.
-Require Import Functor.Representable.Hom_Func.
+Require Import Functor.Representable.Hom_Func Functor.Representable.Hom_Func_Prop.
 Require Import NatTrans.NatTrans.
 
 Local Notation hcomp := NatTrans_hor_comp (only parsing).
@@ -122,7 +122,7 @@ Section Adjunction.
       rewrite <- H; trivial.
     Qed.
 
-    Next Obligation. (* Trans_com *)
+    Next Obligation.
     Proof.
       symmetry.
       apply Hom_Adj_to_Adj_obligation_1.

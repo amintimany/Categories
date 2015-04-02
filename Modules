@@ -25,7 +25,8 @@ Mod_Functor =\
 	Functor/Const_Func\
 	Functor/Main\
 	Functor/Representable/Main\
-	Functor/Representable/Hom_Func
+	Functor/Representable/Hom_Func\
+	Functor/Representable/Hom_Func_Prop
 
 Mod_Coq_Cats =\
 	Coq_Cats/Type_Cat/Type_Cat\
@@ -86,7 +87,9 @@ Mod_Archetypal =\
 	Archetypal/Examples/List_Monoid_Cat
 
 Mod_Adjunction =\
-	Adjunction/Adjunction
+	Adjunction/Adjunction\
+        Adjunction/Duality\
+        Adjunction/Main
 
 Mod_KanExt =\
 	KanExt/Local\

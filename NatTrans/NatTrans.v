@@ -199,3 +199,71 @@ Program Instance NatTrans_Functor_assoc_sym {C1 C2 C3 C4 : Category}
 {
   Trans := fun c => id
 }.
+
+Section NatTrans_id_Iso.
+  Context {C D : Category} (F : Functor C D).
+
+  Program Instance NatTrans_id_Iso : F ≡≡ F ::> Func_Cat _ _ :=
+    {
+      iso_morphism := NatTrans_id _;
+      inverse_morphism := NatTrans_id _
+    }.
+
+End NatTrans_id_Iso.
+
+Section NatTrans_comp_hor_comp.
+  Context {C D E  : Category} {F F' F'' : Functor C D} {G G' G'' : Functor D E} (N1 : NatTrans F F') (N2 : NatTrans G G') (N3 : NatTrans F' F'') (N4 : NatTrans G' G'').
+
+  Theorem NatTrans_comp_hor_comp : NatTrans_compose (NatTrans_hor_comp N1 N2) (NatTrans_hor_comp N3 N4) = NatTrans_hor_comp (NatTrans_compose N1 N3) (NatTrans_compose N2 N4).
+  Proof.
+    apply NatTrans_eq_simplify.
+    extensionality c.
+    cbn.
+    rewrite F_compose.
+    repeat rewrite assoc.
+    match goal with
+      [|- ?A ∘ ?B = ?A ∘ ?C] =>
+      let H := fresh in
+      cut (B = C); [intros H; rewrite H; trivial|]
+    end.
+    repeat rewrite assoc_sym.
+    match goal with
+      [|- ?A ∘ ?B = ?C ∘ ?B] =>
+      let H := fresh in
+      cut (A = C); [intros H; rewrite H; trivial|]
+    end.
+    apply Trans_com.
+  Qed.    
+
+End NatTrans_comp_hor_comp.
+    
+Section NatIso_hor_comp.
+  Context {C D E : Category} {F F' : Functor C D} {G G' : Functor D E} (N : F ≡≡ F' ::> Func_Cat _ _) (N' : G ≡≡ G' ::> Func_Cat _ _).
+
+  Local Obligation Tactic := idtac.
+
+  Program Instance NatIso_hor_comp : Functor_compose F G ≡≡ Functor_compose F' G' ::> Func_Cat _ _ :=
+    {
+      iso_morphism := NatTrans_hor_comp (iso_morphism N) (iso_morphism N');
+      inverse_morphism := NatTrans_hor_comp (inverse_morphism N) (inverse_morphism N')
+    }.
+
+  Next Obligation.
+  Proof.
+    cbn.
+    rewrite NatTrans_comp_hor_comp.
+    set (H := left_inverse N); cbn in H; rewrite H; clear H.
+    set (H := left_inverse N'); cbn in H; rewrite H; clear H.
+    auto.
+  Qed.
+
+  Next Obligation.
+  Proof.
+    cbn.
+    rewrite NatTrans_comp_hor_comp.
+    set (H := right_inverse N); cbn in H; rewrite H; clear H.
+    set (H := right_inverse N'); cbn in H; rewrite H; clear H.
+    auto.
+  Qed.
+
+End NatIso_hor_comp.

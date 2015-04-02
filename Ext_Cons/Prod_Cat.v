@@ -14,7 +14,7 @@ Program Instance Prod_Cat (C C' : Category) : Category :=
 
   compose := fun _ _ _ f g => (((fst g) ∘ (fst f)), ((snd g) ∘ (snd f)));
 
-  id := λ _, (id, id)
+  id := fun _ => (id, id)
 }.
 
 Next Obligation.
@@ -119,31 +119,29 @@ Qed.
 Program Instance Diag_Func (C : Category) : Functor C (Prod_Cat C C) :=
 {
   FO := fun a => (a, a);
-  FA := fun _ _ f => (f, f)
+  FA := fun _ _ f => (f, f);
+  F_id := fun _ => eq_refl;
+  F_compose := fun _ _ _ _ _ => eq_refl
 }.
-
-Next Obligation.
-  trivial.
-Qed.
-
-Next Obligation.
-  trivial.
-Qed.
 
 Program Instance Twist_Func (C C' : Category) : Functor (Prod_Cat C C') (Prod_Cat C' C) :=
 {
   FO := fun a => (snd a, fst a);
-  FA := fun _ _ f => (snd f, fst f)
+  FA := fun _ _ f => (snd f, fst f);
+  F_id := fun _ => eq_refl;
+  F_compose := fun _ _ _ _ _ => eq_refl
 }.
 
-Next Obligation.
-  trivial.
-Qed.
+Section Twist_Prod_Func_Twist.
+  Context {C C' : Category} (F : Functor C C') {D D' : Category} (G : Functor D D').
 
-Next Obligation.
-  trivial.
-Qed.
+  Theorem Twist_Prod_Func_Twist : Functor_compose (Twist_Func _ _) (Functor_compose (Prod_Functor F G) (Twist_Func _ _)) = Prod_Functor G F.
+  Proof.  
+    Functor_extensionality c c' f; trivial.    
+  Qed.
 
+End Twist_Prod_Func_Twist.
+  
 Instance ProdOp_Prod_of_Op (C D : Category) : Functor (Prod_Cat C D)^op (Prod_Cat C^op D^op) :=
 {
   FO := fun x => x;
