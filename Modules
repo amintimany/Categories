@@ -68,7 +68,8 @@ Mod_Cat =\
 	Cat/Cat_Product\
 	Cat/Cat_Exponential\
 	Cat/Cat_CCC\
-	Cat/Facts
+	Cat/Facts\
+	Cat/Cat_Iso
 
 Mod_NatTrans =\
 	NatTrans/NatTrans
@@ -88,14 +89,14 @@ Mod_Archetypal =\
 
 Mod_Adjunction =\
 	Adjunction/Adjunction\
-        Adjunction/Duality\
-        Adjunction/Main
+	Adjunction/Duality\
+	Adjunction/Main
 
 Mod_KanExt =\
 	KanExt/Local\
-        KanExt/Global\
+	KanExt/Global\
 	KanExt/LocalDuality\
-        KanExt/Main
+	KanExt/Main
 
 Mod_Demo =\
 	Demo/Demo

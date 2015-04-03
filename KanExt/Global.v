@@ -14,6 +14,10 @@ Section KanExtension.
   
   Section Global.
     Context (D : Category).
+
+    Local Hint Extern 1 => let x := fresh "x" in extensionality x; cbn.
+
+    Local Obligation Tactic := program_simpl; auto 10.
     
     Program Instance GExtend :
       Functor (Func_Cat C' D) (Func_Cat C D) :=
@@ -21,18 +25,6 @@ Section KanExtension.
         FO := fun F => FCOMP p F;
         FA := fun F F' N => HCOMP (NID p) N
       }.
-
-    Next Obligation.
-      apply NatTrans_eq_simplify.
-      extensionality y.
-      simpl; auto.
-    Qed.      
-
-    Next Obligation.
-      apply NatTrans_eq_simplify.
-      extensionality y.
-      simpl; auto.
-    Qed.
 
     Class Left_KanExt : Type :=
       {

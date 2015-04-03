@@ -1,5 +1,6 @@
 Require Import Category.Main.
 Require Import Functor.Main.
+Require Import Cat.Cat.
 
 Section NatTrans.
   Context {C C' : Category}.
@@ -267,3 +268,31 @@ Section NatIso_hor_comp.
   Qed.
 
 End NatIso_hor_comp.
+
+Section Opposite_Func_Cat.
+  Context (C D : Category).
+
+  Instance Op_Func_Cat_to_Func_Cat_Op : Functor (Func_Cat C D)^op (Func_Cat C^op D^op) :=
+    {
+      FO := Opposite_Functor;
+      FA := fun _ _ => Opposite_NatTrans;
+      F_id := fun _ => NatTrans_id_Op _;
+      F_compose := fun _ _ _ _ _ => NatTrans_compose_Op _ _ 
+    }.
+
+  Instance Func_Cat_Op_to_Op_Func_Cat : Functor (Func_Cat C^op D^op) (Func_Cat C D)^op :=
+    {
+      FO := Opposite_Functor;
+      FA := fun _ _ => Opposite_NatTrans;
+      F_id := fun F => NatTrans_id_Op F;
+      F_compose := fun _ _ _ N N' => NatTrans_compose_Op N N'
+    }.
+
+  Program Instance Func_Cat_Op_Iso : (Func_Cat C D)^op ≡≡ (Func_Cat C^op D^op) ::> Cat :=
+    {
+      iso_morphism := Op_Func_Cat_to_Func_Cat_Op;
+      inverse_morphism := Func_Cat_Op_to_Op_Func_Cat
+    }.
+
+End Opposite_Func_Cat.
+  
