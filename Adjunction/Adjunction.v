@@ -32,7 +32,7 @@ Section Adjunction.
   Existing Class Hom_Adjunct.
   
   Section Adj_Hom_Adj.
-    Context {Adj : Adjunct}.
+    Context (Adj : Adjunct).
 
     Program Instance Adj_to_Hom_Adj_LR : NatTrans (Hom_Adj_Left _ _ F G) (Hom_Adj_Right _ _ F G) :=
     {
@@ -102,7 +102,7 @@ Section Adjunction.
 
 
   Section Hom_Adj_Adj.
-    Context {Adj : Hom_Adjunct}.
+    Context (Adj : Hom_Adjunct).
 
     Program Instance Hom_Adj_to_Adj : Adjunct :=
       {
@@ -161,3 +161,7 @@ End Adjunction.
 Arguments adj_unit {_ _ _ _} _ : assert.
 Arguments adj_morph_ex {_ _ _ _} _ {_ _} _.
 Arguments adj_morph_com {_ _ _ _} _ {_ _} _.
+
+Arguments Adj_to_Hom_Adj {_ _ _ _} _.
+
+Arguments Hom_Adj_to_Adj {_ _ _ _} _.

@@ -6,7 +6,7 @@ Require Import NatTrans.NatTrans.
 Require Import Adjunction.Adjunction.
 
 Section Hom_Adj_Duality.
-  Context {C D : Category} (F : Functor C D) (G : Functor D C) (adj : Hom_Adjunct F G).
+  Context {C D : Category} {F : Functor C D} {G : Functor D C} (adj : Hom_Adjunct F G).
   
   Instance Hom_Adjunct_Duality : Hom_Adjunct (Opposite_Functor G) (Opposite_Functor F).
   Proof.
@@ -31,7 +31,7 @@ Section Hom_Adj_Duality.
 End Hom_Adj_Duality.
 
 Section Adj_Duality.
-  Context {C D : Category} (F : Functor C D) (G : Functor D C) (adj : Adjunct F G).
+  Context {C D : Category} {F : Functor C D} {G : Functor D C} (adj : Adjunct F G).
   
   Instance Adjunct_Duality : Adjunct (Opposite_Functor G) (Opposite_Functor F).
   Proof.
