@@ -98,6 +98,8 @@ Mod_KanExt =\
 	KanExt/Global\
 	KanExt/LocalDuality\
 	KanExt/GlobalDuality\
+	KanExt/LocalFacts\
+	KanExt/LocaltoGlobal\
 	KanExt/Main
 
 Mod_Demo =\

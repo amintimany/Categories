@@ -44,9 +44,14 @@ Section NatTrans.
     symmetry.
     apply NatTrans_compose_obligation_1.
   Qed.
-  
+
   (* NatTrans_compose defined *)
 
+  Theorem NatTrans_compose_assoc {F G H I : Functor C C'} (N : NatTrans F G) (N' : NatTrans G H) (N'' : NatTrans H I) : NatTrans_compose N (NatTrans_compose N' N'') = NatTrans_compose (NatTrans_compose N N') N''.
+  Proof.
+    apply NatTrans_eq_simplify; extensionality x; cbn; auto.
+  Qed.
+    
   Program Instance NatTrans_id (F : Functor C C') : NatTrans F F :=
     {
       Trans := fun x : Obj => F _a _ _ id
@@ -54,6 +59,16 @@ Section NatTrans.
 
   (* NatTrans_id defined *)
 
+  Theorem NatTrans_id_unit_left {F G : Functor C C'} (N : NatTrans F G) : NatTrans_compose N (NatTrans_id G) = N.
+  Proof.
+    apply NatTrans_eq_simplify; extensionality x; cbn; auto.
+  Qed.
+
+  Theorem NatTrans_id_unit_right {F G : Functor C C'} (N : NatTrans F G) : NatTrans_compose (NatTrans_id F) N = N.
+  Proof.
+    apply NatTrans_eq_simplify; extensionality x; cbn; auto.
+  Qed.
+  
 End NatTrans.
 
 Arguments Trans {_ _ _ _} _ _.
@@ -71,7 +86,15 @@ Program Instance Func_Cat (C C' : Category) : Category :=
 
   compose := @NatTrans_compose _ _;
 
-  id := @NatTrans_id _ _
+  id := @NatTrans_id _ _;
+
+  assoc := fun _ _ _ _ _ _ _ => @NatTrans_compose_assoc _ _ _ _ _ _ _ _ _;
+             
+  assoc_sym := fun _ _ _ _ _ _ _ => eq_sym (@NatTrans_compose_assoc _ _ _ _ _ _ _ _ _);
+
+  id_unit_right := @NatTrans_id_unit_right _ _;
+  
+  id_unit_left := @NatTrans_id_unit_left _ _
 }.
 
 Section NatIso.
@@ -148,6 +171,19 @@ Proof.
   symmetry.
   apply NatTrans_hor_comp_obligation_1.
 Qed.
+
+Section Hor_Compose_ids.
+  Context {C D E : Category} (F : Functor C D) (G : Functor D E).
+
+  Theorem NatTrans_hor_comp_ids : (NatTrans_hor_comp (NatTrans_id F) (NatTrans_id G)) = NatTrans_id (Functor_compose F G).
+  Proof.
+    apply NatTrans_eq_simplify.
+    cbn.
+    extensionality c.
+    rewrite F_id; simpl_ids; trivial.
+  Qed.
+
+End Hor_Compose_ids.
 
 Section Hor_Compose_NOP.
   Context {C D E : Category} {F G : Functor C D} {F' G' : Functor D E} (N : NatTrans F G) (N' : NatTrans F' G').
