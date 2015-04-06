@@ -164,6 +164,17 @@ Program Instance Opposite_Prod (C D : Category) : (Prod_Cat C D)^op ≡≡ Prod_
   Build_Isomorphism _ _ _ (ProdOp_Prod_of_Op _ _) (Prod_of_Op_ProdOp _ _) eq_refl eq_refl.
 
 
+Section Prod_Functor_compose.
+  Context {C D E: Category} (F : Functor C D) (G : Functor D E)
+          {C' D' E': Category} (F' : Functor C' D') (G' : Functor D' E').
+
+  Theorem Prod_Functor_compose : Functor_compose (Prod_Functor F F') (Prod_Functor G G') = Prod_Functor (Functor_compose F G) (Functor_compose F' G').
+  Proof.
+    auto.
+  Qed.    
+                                   
+End Prod_Functor_compose.
+
 Section Prod_Functor_NatTrans.
   Context {C D : Category} {F G : Functor C D} (N : NatTrans F G)
           {C' D' : Category} {F' G' : Functor C' D'} (N' : NatTrans F' G').
