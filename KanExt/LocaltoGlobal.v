@@ -56,6 +56,55 @@ Section Local_to_Global_Right.
     
   End Cone_Morph_conv.
 
+  Section Trivial_Cone.
+    Context (F : Functor C' D).
+
+    Instance Trivial_Cone : LoKan_Cone p (Functor_compose p F) :=
+      {
+        cone_apex := F;
+        cone_edge := NatTrans_hor_comp (NatTrans_id p) (NatTrans_id F)
+      }.
+
+  End Trivial_Cone.
+
+  Section Trivial_Cone_Morph.
+    Context {F G : Functor C' D} (N : NatTrans F G).
+    
+    Program Instance Trivial_Cone_Morph : LoKan_Cone_Morph (Cone_conv (NatTrans_hor_comp (NatTrans_id p) N) (Trivial_Cone F)) (Trivial_Cone G) :=
+      {
+        cone_morph := N
+      }.
+
+    Next Obligation.
+    Proof.
+      repeat rewrite NatTrans_hor_comp_ids.
+      rewrite NatTrans_id_unit_left.
+      rewrite NatTrans_id_unit_right.
+      trivial.
+    Qed.
+      
+  End Trivial_Cone_Morph.
+
+  Section Cone_Morph_to_other_Cone.
+    Context {L : Functor C' D} {F : Functor C D} (Cn : LoKan_Cone p F) (N : NatTrans L Cn).
+
+    Program Instance Cone_Morph_to_other_Cone :
+      LoKan_Cone_Morph
+        (Cone_conv
+           (NatTrans_compose (NatTrans_hor_comp (NatTrans_id p) N)
+                             Cn) (Trivial_Cone L)) Cn :=
+      {
+        cone_morph := N
+      }.
+
+    Next Obligation.
+      rewrite NatTrans_hor_comp_ids.
+      rewrite NatTrans_id_unit_right.
+      trivial.
+    Qed.
+    
+  End Cone_Morph_to_other_Cone.
+
   Local Obligation Tactic := idtac.
   
   Program Instance Local_to_Global_Right_Functor : Functor (Func_Cat C D) (Func_Cat C' D) :=
@@ -96,16 +145,26 @@ Section Local_to_Global_Right.
   Program Instance Local_to_Global_Right_adj_unit :
     NatTrans (Functor_id (Func_Cat C' D)) (Functor_compose (GExtend p D) Local_to_Global_Right_Functor) :=
     {
-      Trans := fun F => LRKE_morph_ex (rke (Functor_compose p F)) {| cone_apex := F; cone_edge := (NatTrans_hor_comp (NatTrans_id p) (NatTrans_id F))|};
-      Trans_com := fun F G N => _
+      Trans := fun F => LRKE_morph_ex (rke (Functor_compose p F)) (Trivial_Cone F)
     }.
 
   Next Obligation.
   Proof.
     intros F G N.
     cbn.
-    (* use the fact that G is the kan extension of pG along p and that kan extensions are unique upto natural isomorphism. *)
-    admit.
+    change N with (cone_morph (Trivial_Cone_Morph N)).
+    match goal with
+      [|- ?X = ?Y] =>
+      match X with
+        NatTrans_compose (cone_morph ?A) (cone_morph ?B) =>
+        change X with (cone_morph (@LoKan_Cone_Morph_compose _ _ _ _ _ _ _ _ A B))
+      end;
+        match Y with
+          NatTrans_compose (cone_morph ?A) (cone_morph ?B) =>
+            change Y with (cone_morph (@LoKan_Cone_Morph_compose _ _ _ _ _ _ _ _ (Cone_Morph_conv (NatTrans_hor_comp (NatTrans_id p) N) A) B))
+        end
+    end.
+    apply (LRKE_morph_unique (rke (Functor_compose p G)) (Cone_conv (NatTrans_hor_comp (NatTrans_id p) N) (Trivial_Cone F))).
   Qed.    
 
   Next Obligation.
@@ -130,14 +189,49 @@ Section Local_to_Global_Right.
     intros L F h.
     unfold Local_to_Global_Right_adj_morph_ex.
     cbn in *.
-    admit.
+    match goal with
+      [|- ?X = ?Y] =>
+        match Y with
+          NatTrans_compose (cone_morph ?A) (cone_morph ?B) =>
+          change Y with (cone_morph (@LoKan_Cone_Morph_compose _ _ _ _ _ _ _ _ (Cone_Morph_conv (NatTrans_compose (NatTrans_hor_comp (NatTrans_id p) h) (LRKE (rke F))) A) B))
+        end
+    end.
+    change h with (cone_morph (Cone_Morph_to_other_Cone (LRKE (rke F)) h)).
+    apply (LRKE_morph_unique (rke F) (Cone_conv
+                     (NatTrans_compose (NatTrans_hor_comp (NatTrans_id p) h)
+                                       (LRKE (rke F))) (Trivial_Cone L))).
   Qed.
 
   Next Obligation.
   Proof.
     intros L F h g g' H1 H2.
     cbn in *.
-    admit.
+    match type of H1 with
+      _ = ?X =>
+      match X with
+          NatTrans_compose (cone_morph ?A) (cone_morph ?B) =>
+          change X with (cone_morph (@LoKan_Cone_Morph_compose _ _ _ _ _ _ _ _ (Cone_Morph_conv g A) B)) in H1
+      end
+    end.
+    match type of H2 with
+      _ = ?X =>
+      match X with
+          NatTrans_compose (cone_morph ?A) (cone_morph ?B) =>
+          change X with (cone_morph (@LoKan_Cone_Morph_compose _ _ _ _ _ _ _ _ (Cone_Morph_conv g' A) B)) in H2
+      end
+    end.
+    match type of H1 with
+      _ = cone_morph ?X =>
+      set (H4 := cone_morph_com X); rewrite <- H1 in H4; cbn in H4;
+      match type of H2 with
+        _ = cone_morph ?Y =>
+        set (H3 := cone_morph_com Y); rewrite <- H2 in H3; cbn in H3
+      end;
+      rewrite <- H4 in H3; clear H4
+    end.
+    rewrite NatTrans_hor_comp_ids in H3.
+    repeat rewrite NatTrans_id_unit_right in H3.
+    symmetry; trivial.
   Qed.
 
 End Local_to_Global_Right.
