@@ -132,7 +132,6 @@ Proof.
       transitivity ((X ∘ Y) Z); trivial
     end.
     rewrite <- Trans_com.
-    rewrite (F_id F).
     cbn; auto.
   }
 Qed.

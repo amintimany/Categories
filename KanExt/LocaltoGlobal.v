@@ -127,16 +127,17 @@ Section Local_to_Global_Right.
 
   Next Obligation.
   Proof.
-      intros L F h.
-      cbn.
-      admit.
+    intros L F h.
+    unfold Local_to_Global_Right_adj_morph_ex.
+    cbn in *.
+    admit.
   Qed.
 
   Next Obligation.
   Proof.
     intros L F h g g' H1 H2.
-      cbn in *.
-      admit.
+    cbn in *.
+    admit.
   Qed.
 
 End Local_to_Global_Right.

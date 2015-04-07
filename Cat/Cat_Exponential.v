@@ -55,9 +55,12 @@ Program Instance Exp_Cat_morph_ex {C C' C'' : Category} (F : Functor (Prod_Cat C
 
 Next Obligation. (* F_compose *)
 Proof.
-  apply NatTrans_eq_simplify; cbn.
-  extensionality x.
-  rewrite <- F_compose; cbn; auto.
+  apply NatTrans_eq_simplify; cbn; auto.
+Qed.
+
+Next Obligation. (* F_id *)
+Proof.
+  apply NatTrans_eq_simplify; cbn; auto.
 Qed.
 
 (* Exp_Cat_morph_ex *)

@@ -93,7 +93,6 @@ Section Adjunction.
     Next Obligation.
       intros [c d].
       extensionality x; cbn in *.
-      rewrite F_id; simpl_ids.
       eapply adj_morph_unique; eauto.
       rewrite <- adj_morph_com; trivial.
     Qed.
@@ -147,7 +146,7 @@ Section Adjunction.
       cut (Trans (NatTrans_compose (iso_morphism Adj) (inverse_morphism Adj)) (_, _) g = Trans (NatTrans_compose (iso_morphism Adj) (inverse_morphism Adj)) (_, _) h); [intros H'|].
       + set (H'' := left_inverse Adj); cbn in H''.
         rewrite H'' in H'.
-        cbn in H'; rewrite F_id in H'; auto.
+        cbn in H'; auto.
       + set (Hg := @equal_f _ _ _ _ (@Trans_com _ _ _ _ (iso_morphism Adj) (c, F _o c) (c, d) (id, g)) id); cbn in Hg; rewrite F_id in Hg; simpl_ids in Hg.
         set (Hh := @equal_f _ _ _ _ (@Trans_com _ _ _ _ (iso_morphism Adj) (c, F _o c) (c, d) (id, h)) id); cbn in Hh; rewrite F_id in Hh; simpl_ids in Hh.
         cbn.

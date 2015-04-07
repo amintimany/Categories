@@ -54,7 +54,7 @@ Section NatTrans.
     
   Program Instance NatTrans_id (F : Functor C C') : NatTrans F F :=
     {
-      Trans := fun x : Obj => F _a _ _ id
+      Trans := fun x : Obj => id
     }.
 
   (* NatTrans_id defined *)
@@ -100,8 +100,8 @@ Program Instance Func_Cat (C C' : Category) : Category :=
 Section NatIso.
   Context {C C' : Category} (F G : Functor C C') (n : NatTrans F G) (n' : NatTrans G F).
 
-  Theorem NatIso : (∀ (c : Obj), (Trans n c) ∘ (Trans n' c) = G _a _ _ (@id _ c)) →
-                   (∀ (c : Obj), (Trans n' c) ∘ (Trans n c) = F _a _ _ (@id _ c)) →
+  Theorem NatIso : (∀ (c : Obj), (Trans n c) ∘ (Trans n' c) = (@id _ (G _o c))) →
+                   (∀ (c : Obj), (Trans n' c) ∘ (Trans n c) = (@id _ (F _o c))) →
                    F ≡≡ G ::> Func_Cat _ _.
   Proof.
     intros H1 H2.
@@ -273,7 +273,8 @@ Section NatTrans_comp_hor_comp.
   Qed.    
 
 End NatTrans_comp_hor_comp.
-    
+
+   
 Section NatIso_hor_comp.
   Context {C D E : Category} {F F' : Functor C D} {G G' : Functor D E} (N : F ≡≡ F' ::> Func_Cat _ _) (N' : G ≡≡ G' ::> Func_Cat _ _).
 

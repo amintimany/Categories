@@ -26,7 +26,6 @@ Section GlobalDuality.
     intros c c' h.
     apply NatTrans_eq_simplify; extensionality x; cbn.
     simpl_ids.
-    rewrite (F_id p).
     rewrite (F_id c).
     rewrite (F_id c').
     etransitivity; [apply (@id_unit_right D)| symmetry; apply (@id_unit_left D)].
@@ -62,7 +61,6 @@ Section GlobalDuality.
     intros c c' h.
     apply NatTrans_eq_simplify; extensionality x; cbn.
     simpl_ids.
-    rewrite (F_id p).
     rewrite (F_id c).
     rewrite (F_id c').
     etransitivity; [apply (@id_unit_left D)| symmetry; apply (@id_unit_right D)].

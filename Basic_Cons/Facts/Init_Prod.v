@@ -55,7 +55,6 @@ Section Init_Prod.
     {
       intros c.
       extensionality g; simpl.
-      rewrite id_unit_left.
       apply (t_morph_unique init).
     }
     {
