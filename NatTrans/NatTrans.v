@@ -13,7 +13,10 @@ Section NatTrans.
     }.
 
   Arguments Trans {_ _} _ _.
+  Arguments Trans_com {_ _ _ _} _ _.
+  Arguments Trans_com_sym {_ _ _ _} _ _.
 
+  
   (* NatTrans_Setoid defined *)
 
   Lemma NatTrans_eq_simplify {F F' : Functor C C'} (N N' : NatTrans F F') : (@Trans _ _ N) = (@Trans _ _ N') -> N = N'.
@@ -73,6 +76,7 @@ End NatTrans.
 
 Arguments Trans {_ _ _ _} _ _.
 Arguments Trans_com {_ _ _ _} _ {_ _} _.
+Arguments Trans_com_sym {_ _ _ _} _ {_ _} _.
 
 Hint Resolve NatTrans_eq_simplify.
 
@@ -394,3 +398,71 @@ Section NatIso_compose.
   Qed.
 
 End NatIso_compose.
+
+Section Embedding_mono.
+  Context {C C' : Category} (F : Embedding C C') {B : Category}.
+
+  Local Obligation Tactic := idtac.
+  
+  Section Embedding_mono_NT.
+    Context (G G' : Functor B C) (H : Functor_compose G F ≡≡ Functor_compose G' F ::> Func_Cat _ _).
+    
+    Program Instance Embedding_mono_NT :  NatTrans G G' :=
+      {
+        Trans := fun c => proj1_sig (Emb_Full _ (Trans (iso_morphism H) c))
+      }.
+
+    Next Obligation.
+      intros c c' h.
+      apply (Emb_Faithful F).
+      repeat rewrite F_compose.
+      set (W := proj2_sig (Emb_Full _ (Trans (iso_morphism H) c))); cbn in W; rewrite W; clear W.
+      set (W := proj2_sig (Emb_Full _ (Trans (iso_morphism H) c'))); cbn in W; rewrite W; clear W.
+      apply (@Trans_com _ _ _ _ (iso_morphism H) _ _ h).
+    Qed.
+
+    Next Obligation.
+    Proof.
+      symmetry.
+      apply Embedding_mono_NT_obligation_1.
+    Qed.
+
+  End Embedding_mono_NT.
+
+  Context (G G' : Functor B C) (H : Functor_compose G F ≡≡ Functor_compose G' F ::> Func_Cat _ _).
+  
+  Program Instance Embedding_mono : G ≡≡ G' ::> Func_Cat _ _  :=
+    {
+      iso_morphism := Embedding_mono_NT _ _ H;
+      inverse_morphism := Embedding_mono_NT _ _ (Inverse_Isomorphism H)
+    }.
+
+  Next Obligation.
+  Proof.
+    apply NatTrans_eq_simplify; extensionality c; cbn.
+    apply (Emb_Faithful F).
+    repeat rewrite F_compose.
+    set (W := proj2_sig (Emb_Full _ (Trans (iso_morphism H) c))); cbn in W; rewrite W; clear W.
+    set (W := proj2_sig (Emb_Full _ (Trans (inverse_morphism H) c))); cbn in W; rewrite W; clear W.
+    rewrite F_id.
+    change (Trans (inverse_morphism H) c ∘Trans (iso_morphism H) c) with
+    (Trans (NatTrans_compose (iso_morphism H) (inverse_morphism H)) c).
+    set (W := left_inverse H); cbn in W; rewrite W; clear W.
+    trivial.
+  Qed.
+
+  Next Obligation.
+  Proof.
+    apply NatTrans_eq_simplify; extensionality c; cbn.
+    apply (Emb_Faithful F).
+    repeat rewrite F_compose.
+    set (W := proj2_sig (Emb_Full _ (Trans (iso_morphism H) c))); cbn in W; rewrite W; clear W.
+    set (W := proj2_sig (Emb_Full _ (Trans (inverse_morphism H) c))); cbn in W; rewrite W; clear W.
+    rewrite F_id.
+    change (Trans (iso_morphism H) c ∘Trans (inverse_morphism H) c) with
+    (Trans (NatTrans_compose (inverse_morphism H) (iso_morphism H)) c).
+    set (W := right_inverse H); cbn in W; rewrite W; clear W.
+    trivial.
+  Qed.    
+
+End Embedding_mono.

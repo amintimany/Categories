@@ -1,5 +1,6 @@
 Require Import Category.Main.
 Require Import Functor.Functor.
+Require Import Functor.Functor_Ops.
 
 Section Functor_Properties.
   Context {C C' : Category} (F : Functor C C').
@@ -71,3 +72,7 @@ Section Embedding.
   Definition Emb_Conservative (E : Embedding) := Fully_Faithful_Conservative Emb_Func Emb_Faithful Emb_Full.
 
 End Embedding.
+
+Arguments Emb_Func {_ _} _.
+Arguments Emb_Faithful {_ _} _ {_ _} _ _ _.
+Arguments Emb_Full {_ _} _ {_ _} _.
