@@ -21,19 +21,15 @@ Section Global_to_Local_Right.
   Section Cone_Morph_to_Cone_for_LoKan.
     Context (Cn : LoKan_Cone p F).
 
-    Program Instance Cone_Morph_to_Cone_for_LoKan : LoKan_Cone_Morph Cn Cone_for_LoKan :=
-      {
-        cone_morph := NatTrans_compose (Trans (adj_unit (right_kan_ext_adj rke)) Cn) (rke _a _ _ (cone_edge Cn))
-      }.
-
-    Next Obligation.
+    Lemma Cone_Morph_to_Cone_for_LoKan_adj_unit_rke_id (morph : NatTrans Cn ((rke _o) F)) :
+      morph =
+      NatTrans_compose
+        (Trans (adj_unit (right_kan_ext_adj rke)) Cn)
+        ((rke _a) (Functor_compose p Cn) F
+                  (NatTrans_compose
+                     (NatTrans_hor_comp (NatTrans_id p) morph)
+                     (adj_morph_ex (right_kan_ext_adj rke) (NatTrans_id ((rke _o) F))))).
     Proof.
-      match goal with
-        [|- _ = NatTrans_compose (NatTrans_hor_comp _ ?X) ?Y] =>
-        set (morph := X)
-      end.
-      set (M := (@adj_morph_unique _ _ _ _ (right_kan_ext_adj rke)) _ _ morph);
-        cbn in M; apply M; trivial; clear M.
       rewrite (@F_compose _ _ rke); cbn.
       rewrite NatTrans_compose_assoc.
       set (V := @Trans_com _ _ _ _ (@adj_unit _ _ _ _ (right_kan_ext_adj rke)) _ _ morph);
@@ -45,6 +41,21 @@ Section Global_to_Local_Right.
       trivial.
     Qed.
 
+      
+    Program Instance Cone_Morph_to_Cone_for_LoKan : LoKan_Cone_Morph Cn Cone_for_LoKan :=
+      {
+        cone_morph := NatTrans_compose (Trans (adj_unit (right_kan_ext_adj rke)) Cn) (rke _a _ _ (cone_edge Cn))
+      }.
+
+    Next Obligation.
+    Proof.
+      match goal with
+        [|- _ = NatTrans_compose (NatTrans_hor_comp _ ?X) ?Y] =>
+        apply (@adj_morph_unique _ _ _ _ (right_kan_ext_adj rke) _ _ X); trivial
+      end.
+      apply Cone_Morph_to_Cone_for_LoKan_adj_unit_rke_id.
+    Qed.
+
   End Cone_Morph_to_Cone_for_LoKan.
 
   Section Cone_Morph_to_Cone_for_LoKan_Unique.
@@ -52,36 +63,10 @@ Section Global_to_Local_Right.
 
     Theorem Cone_Morph_to_Cone_for_LoKan_Unique : (M = M' :> NatTrans _ _).
     Proof.
-      set (H := cone_morph_com M'); rewrite (cone_morph_com M) in H; cbn in *.
-      set (H' := f_equal ((rke) _a _ _) H).
-      do 2 rewrite (@F_compose _ _ rke) in H'; cbn in H'; clear H.
-      set (H := f_equal (NatTrans_compose (Trans (adj_unit (right_kan_ext_adj rke)) Cn)) H'); clearbody H; clear H'.
-      repeat rewrite NatTrans_compose_assoc in H; cbn in H.
-
-      (* This separated part is performing two simple rewrites.
-         Coq's rewrite tactic refuses to rewrite simplification (cbn) of
-         (Trans_com (adj_unit (right_kan_ext_adj rke)) M) and
-         (Trans_com (adj_unit (right_kan_ext_adj rke)) M)
-       *)
-      set (V := Trans_com (adj_unit (right_kan_ext_adj rke)) M).
-      set (V' := f_equal (fun U => NatTrans_compose U ((rke _a) (Functor_compose p ((rke _o) F)) F
-           (adj_morph_ex (right_kan_ext_adj rke) (NatTrans_id ((rke _o) F))))) V).
-      cbn in V'; clearbody V'; clear V.
-      set (V'' := eq_trans V' H); clearbody V''; clear H V'.
-      set (V := Trans_com (adj_unit (right_kan_ext_adj rke)) M').
-      set (V' := f_equal (fun U => NatTrans_compose U ((rke _a) (Functor_compose p ((rke _o) F)) F
-           (adj_morph_ex (right_kan_ext_adj rke) (NatTrans_id ((rke _o) F))))) V).
-      cbn in V'; clearbody V'; clear V.
-      symmetry in V'.
-      set (H := eq_trans V'' V'); clearbody H; clear V' V''.
-      (* End of manual rewriting! *)
-
-      repeat rewrite <- NatTrans_compose_assoc in H; cbn in H.
-      set (W := (@adj_morph_com _ _ _ _ (right_kan_ext_adj rke)) _ _ (NatTrans_id ((rke _o) F)));
-        cbn in W.
-      repeat rewrite <- W in H.
-      repeat rewrite NatTrans_id_unit_left in H.
-      assumption.
+      rewrite (Cone_Morph_to_Cone_for_LoKan_adj_unit_rke_id Cn M).
+      rewrite (Cone_Morph_to_Cone_for_LoKan_adj_unit_rke_id Cn M').
+      do 2 apply f_equal.
+      set (H := cone_morph_com M'); rewrite (cone_morph_com M) in H; exact H.
     Qed.
       
   End Cone_Morph_to_Cone_for_LoKan_Unique.
