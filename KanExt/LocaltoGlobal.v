@@ -3,7 +3,7 @@ Require Import Functor.Functor Functor.Functor_Ops Functor.Representable.Hom_Fun
 Require Import Ext_Cons.Prod_Cat.
 Require Import NatTrans.NatTrans.
 Require Import Adjunction.Adjunction Adjunction.Duality Adjunction.Adj_Facts.
-Require Import KanExt.Global KanExt.Local KanExt.LocalFacts KanExt.LocalDuality KanExt.GlobalDuality.
+Require Import KanExt.Global KanExt.Local KanExt.LocalFacts KanExt.GlobalDuality.
 
 Section Local_to_Global_Right.
   Context {C C' : Category} (p : Functor C C') (D : Category).
@@ -241,7 +241,7 @@ Section Local_to_Global_Left.
 
   Context (lke : ∀ F : Functor C D,  Local_Left_KanExt p F).
 
-  Let rke := fun (F : Functor C^op D^op) => (Local_Right_KanExt_of_Local_Left_KanExt (lke (Opposite_Functor F))).
+  Let rke := fun (F : Functor C^op D^op) => (lke (Opposite_Functor F)).
 
   Let Local_to_Global_Right_Dual := Local_to_Global_Right _ _ rke.
 

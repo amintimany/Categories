@@ -96,7 +96,6 @@ Mod_Adjunction =\
 Mod_KanExt =\
 	KanExt/Local\
 	KanExt/Global\
-	KanExt/LocalDuality\
 	KanExt/GlobalDuality\
 	KanExt/LocalFacts\
 	KanExt/GlobalFacts\

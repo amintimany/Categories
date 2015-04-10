@@ -1,1 +1,1 @@
-Require Export KanExt.Global KanExt.Local KanExt.LocalDuality KanExt.GlobalDuality.
+Require Export KanExt.Global KanExt.Local KanExt.GlobalDuality.
