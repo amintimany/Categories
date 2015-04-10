@@ -171,3 +171,57 @@ Section Exp_Cat_morph_ex_compose.
   Qed.
 
 End Exp_Cat_morph_ex_compose.
+
+Section Exp_Cat_morph_ex_NT.
+  Context {C C' C'' : Category} {F F' : Functor (Prod_Cat C'' C)  C'} (N : NatTrans F F').
+  Program Instance Exp_Cat_morph_ex_NT : NatTrans (Exp_Cat_morph_ex F) (Exp_Cat_morph_ex F') :=
+    {
+      Trans := fun d =>
+                 {|
+                   Trans := fun c => Trans N (d, c);
+                   Trans_com := fun c c' h => @Trans_com _ _ _ _ N (d, c) (d ,c') (id,  h);
+                   Trans_com_sym := fun c c' h => @Trans_com_sym _ _ _ _ N (d, c) (d ,c') (id,  h)
+                 |}
+    }.
+
+  Next Obligation.
+  Proof.  
+    intros c c' h; cbn.
+    apply NatTrans_eq_simplify; extensionality x; cbn.
+    apply Trans_com.
+  Qed.    
+
+  Next Obligation.
+  Proof.
+    symmetry.
+    apply Exp_Cat_morph_ex_NT_obligation_1.
+  Qed.
+
+End Exp_Cat_morph_ex_NT.
+
+Section Exp_Cat_morph_ex_Iso.
+  Context {C C' C'' : Category} {F F' : Functor (Prod_Cat C'' C)  C'} (N : F ≡≡ F' ::> Func_Cat _ _).
+
+  Program Instance Exp_Cat_morph_ex_Iso : Exp_Cat_morph_ex F ≡≡ Exp_Cat_morph_ex F' ::> Func_Cat _ _ :=
+    {
+      iso_morphism := Exp_Cat_morph_ex_NT (iso_morphism N);
+      inverse_morphism := Exp_Cat_morph_ex_NT (inverse_morphism N)
+    }.
+
+  Next Obligation.
+  Proof.
+    apply NatTrans_eq_simplify; extensionality x; cbn.
+    apply NatTrans_eq_simplify; extensionality y; cbn.
+    change (Trans N ⁻¹ (x, y) ∘ Trans (iso_morphism N) (x, y)) with (Trans (N⁻¹ ∘ N) (x, y)).
+    rewrite left_inverse; trivial.
+  Qed.
+
+  Next Obligation.
+  Proof.
+    apply NatTrans_eq_simplify; extensionality x; cbn.
+    apply NatTrans_eq_simplify; extensionality y; cbn.
+    change (Trans (iso_morphism N) (x, y) ∘ Trans N⁻¹ (x, y)) with (Trans (N ∘ N⁻¹) (x, y)).
+    rewrite right_inverse; trivial.
+  Qed.
+
+End Exp_Cat_morph_ex_Iso.
