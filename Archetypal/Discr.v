@@ -3,6 +3,47 @@ Require Import Functor.Functor.
 Require Import Ext_Cons.Arrow.
 Require Import Coq_Cats.Type_Cat.Type_Cat.
 
+(* empty and singleton categories *)
+
+Instance EmptyCat : Category :=
+  {
+    Obj := Empty;
+    Hom := fun _ _ => Empty;
+    compose := fun _ _ _ _ _ => Empty_rect _ _;
+    assoc := fun _ _ _ _ _ _ _ => eq_refl;
+    assoc_sym := fun _ _ _ _ _ _ _ => eq_refl;
+    id := fun _ => Empty_rect _ _;
+    id_unit_left := fun _ _ h => Empty_rect _ _;
+    id_unit_right := fun _ _ h => Empty_rect _ _
+  }.
+
+Instance SingletonCat : Category :=
+  {
+    Obj := unit;
+    Hom := fun _ _ => unit;
+    compose := fun _ _ _ _ _ => tt;
+    assoc := fun _ _ _ _ _ _ _ => eq_refl;
+    assoc_sym := fun _ _ _ _ _ _ _ => eq_refl;
+    id := fun _ => tt;
+    id_unit_left :=
+      fun _ _ h =>
+        match h as u return (tt = u) with
+        | tt => eq_refl
+        end;
+    id_unit_right :=
+      fun _ _ h =>
+        match h as u return (tt = u) with
+        | tt => eq_refl
+        end
+  }.
+
+  
+Notation "0" := (EmptyCat) : category_scope.
+Notation "1" := (SingletonCat) : category_scope.
+
+
+(* discrete categories in general *)
+
 Section Discr.
   Context (Obj : Type).
 
@@ -27,7 +68,7 @@ Section Discr.
       Obj := Obj;
       Hom := Discr_Hom;
       compose := Discr_Hom_compose;
-      id := λ a, Discr_id a
+      id := fun a => Discr_id a
     }.
 
 End Discr.
@@ -36,9 +77,6 @@ Hint Extern 1 =>
   match goal with
       [H : Discr_Hom _ _ _ |- _] => destruct H
   end.
-
-Notation "0" := (Discr_Cat Empty) : category_scope.
-Notation "1" := (Discr_Cat unit) : category_scope.
 
 Inductive S_Type (T : Type) : Type :=
 | NEW : unit → S_Type T

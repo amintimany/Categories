@@ -44,6 +44,8 @@ Section KanExtension.
         LRKE_morph_ex : ∀ (Cn : LoKan_Cone), LoKan_Cone_Morph Cn LRKE;
         LRKE_morph_unique : ∀ (Cn : LoKan_Cone) (h h' : LoKan_Cone_Morph Cn LRKE), h = h' :> NatTrans _ _
       }.
+
+    Coercion LRKE : Local_Right_KanExt >-> LoKan_Cone.
     
   End Right.
   
@@ -55,7 +57,7 @@ Section Left.
   Definition Local_Left_KanExt := Local_Right_KanExt (FOP p) (FOP F).
 
   Existing Class Local_Left_KanExt.
-
+  
 End Left.
   
 Arguments cone_apex {_ _ _ _ _} _.

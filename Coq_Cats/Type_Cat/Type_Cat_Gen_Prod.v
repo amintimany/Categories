@@ -11,27 +11,53 @@ Section Type_Cat_Gen_Prod.
   Local Notation Fm := (Discrete_Functor Type_Cat map) (only parsing).
 
   Program Instance Type_Cat_Gen_Prod_Cone : Cone Fm :=
-    {
-      cone := ∀ x : A, Fm _o x
-    }.
+    {|
+      cone_apex := {|FO := fun _ => ∀ x : A, Fm _o x; FA := fun _ _ _ h => h|};
+      cone_edge := {|Trans := fun x y => y x |}
+    |}.
 
-  Program Instance Type_Cat_Gen_Prod : Limit Fm :=
-    {
-      limit := {| terminal := Type_Cat_Gen_Prod_Cone |}
-    }.
+  Program Instance Type_Cat_Gen_Sum : Limit Fm :=
+    {|
+      LRKE := Type_Cat_Gen_Prod_Cone;
+      LRKE_morph_ex :=
+        fun Cn =>
+          {|
+            cone_morph :=
+              {|Trans :=
+                  fun c X x  =>
+                    match c as u return ((Cn _o) u → map x) with
+                    | tt => fun X : (Cn _o) tt => Trans Cn x X
+                    end X
+              |}
+          |}
+    |}.
 
-  Next Obligation. (* t_morph *)
+  Next Obligation.
   Proof.
-    eapply (@Build_Cone_Hom _ _ Fm _ Type_Cat_Gen_Prod_Cone (fun v x => Cone_arrow d x v)); trivial.
+    destruct c; destruct c'; destruct h.
+    extensionality x; extensionality y.
+    set (H := equal_f ((@Trans_com _ _ _ _ Cn) y y (Discr_id _ _)) x).
+    trivial.
   Qed.
 
-  Next Obligation. (* Gen_Prod_morph_unique *)
+  Next Obligation.
   Proof.
-    apply Cone_Morph_eq_simplify.
-    let u := fresh "u" in
-    let a := fresh "a" in
-    extensionality u; extensionality a; transitivity (Cone_arrow d a u);
-    [rewrite <- (Cone_Hom_com f)| rewrite <- (Cone_Hom_com g)]; trivial.
+    symmetry.
+    apply Type_Cat_Gen_Sum_obligation_1.
   Qed.
+
+  Next Obligation.
+  Proof.
+    apply NatTrans_eq_simplify.
+    extensionality x; extensionality y; extensionality z.
+    destruct x.
+    set (hc := (cone_morph_com h')).
+    rewrite (cone_morph_com h) in hc.
+    set (hc' := (f_equal (fun w : NatTrans
+                  (Functor_compose (Functor_To_1_Cat (Discr_Cat A)) Cn)
+                  (Discrete_Functor Type_Cat map) =>
+           Trans w z y) hc)); clearbody hc'; clear hc.
+    trivial.
+  Qed.    
 
 End Type_Cat_Gen_Prod.

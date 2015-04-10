@@ -11,35 +11,57 @@ Section Type_Cat_Gen_Sum.
   Local Notation Fm := (Discrete_Functor Type_Cat map) (only parsing).
 
   Program Instance Type_Cat_Gen_Sum_CoCone : CoCone Fm :=
-    {
-      cone := {x : A & Fm _o x}
-    }.
+    {|
+      cone_apex := {|FO := fun _ => {x : A & Fm _o x}; FA := fun _ _ _ h => h|};
+      cone_edge := {|Trans := fun x => existT _ x |}
+    |}.
 
-  Next Obligation. (* CoCone_morph *)
+   Program Instance Type_Cat_Gen_Sum : CoLimit Fm :=
+    {|
+      LRKE := Type_Cat_Gen_Sum_CoCone;
+      LRKE_morph_ex :=
+        fun Cn =>
+          {|
+            cone_morph :=
+              {|Trans :=
+                  fun c h =>
+                    match c as u return ((Cn _o) u) with
+                    | tt => Trans Cn (projT1 h) (projT2 h)
+                    end
+              |}
+          |}
+    |}.
+   
+  Next Obligation.
   Proof.
-    match goal with
-        [x : A |- _] =>
-        exists x; trivial
-               end.
-  Defined.
-
-  Program Instance Type_Cat_Gen_Sum : CoLimit Fm :=
-    {
-      limit := {| terminal := Type_Cat_Gen_Sum_CoCone |}
-    }.
-
-  Next Obligation. (* t_morph *)
-  Proof.
-    eapply (@Build_Cone_Hom _ _ (Opposite_Functor Fm) _ Type_Cat_Gen_Sum_CoCone (fun v => match v with existT _ x fox => Cone_arrow d x fox end)); trivial.
+    extensionality x.
+    destruct c; destruct c'; destruct h.
+    set (H := equal_f (@Trans_com _ _ _ _ Cn (projT1 x) (projT1 x) (Discr_id _ _))).
+    apply H.
   Qed.
 
-  Next Obligation. (* Gen_Prod_morph_unique *)
+  Next Obligation.
   Proof.
-    apply Cone_Morph_eq_simplify.
-    let u := fresh "u" in
-    let a := fresh "a" in
-    extensionality u; destruct u as [a u]; transitivity (Cone_arrow d a u);
-    [rewrite <- (Cone_Hom_com f)| rewrite <- (Cone_Hom_com g)]; trivial.
+    symmetry.
+    apply Type_Cat_Gen_Sum_obligation_1.
+  Qed.    
+
+  Next Obligation.
+  Proof.
+    apply NatTrans_eq_simplify.
+    extensionality x; extensionality y.
+    destruct x.
+    destruct y as [y1 y2].
+    cbn in *.
+    set (hc := (cone_morph_com h')).
+    rewrite (cone_morph_com h) in hc.
+    set (hc' := (f_equal (fun w : NatTrans
+                 (Functor_compose
+                    (Opposite_Functor (Functor_To_1_Cat (Discr_Cat A))) Cn)
+                 (Opposite_Functor (Discrete_Functor Type_Cat map)) =>
+           Trans w y1 y2) hc)); clearbody hc'; clear hc.
+    cbn in *.
+    apply hc'.
   Qed.
 
 End Type_Cat_Gen_Sum.

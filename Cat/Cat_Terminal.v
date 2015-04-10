@@ -7,7 +7,9 @@ Require Import Archetypal.Discr.
 Program Instance Functor_To_1_Cat (C' : Category) : Functor C' 1%category :=
 {
   FO := fun x => tt;
-  FA := fun a b f => Discr_id _ _
+  FA := fun a b f => tt;
+  F_id := fun _ => eq_refl;
+  F_compose := fun _ _ _ _ _ => eq_refl
 }.
 
 (* Functor_To_Singleton_Cat defined *)
