@@ -39,7 +39,18 @@ Section Functor_Assoc.
   Theorem Functor_assoc :
     (Functor_compose F (Functor_compose G H)) = (Functor_compose (Functor_compose F G) H).
   Proof.
-    apply Functor_eq_simplify; trivial.
+    match goal with
+      [|- ?A = ?B] =>
+      cut(A _o = B _o); [intros W; apply (Functor_eq_simplify _ _ W)|]; try destruct W; trivial
+    end.
+    extensionality x; extensionality y; extensionality f.
+    match goal with
+      [|- match _ in _ = V return _ with eq_refl => ?A end f = ?B] =>
+      transitivity (match W in _ = V return Hom (V x) (V y) with eq_refl => A f end)
+    end.
+    destruct W; trivial.
+    apply JMeq_eq.
+    destruct W; trivial.
   Qed.
 
 End Functor_Assoc.
@@ -59,12 +70,34 @@ Section Functor_Identity_Unit.
 
   Theorem Functor_id_unit_left : (Functor_compose F (Functor_id _)) = F.
   Proof.
-    apply Functor_eq_simplify; simpl; trivial.
+    match goal with
+      [|- ?A = ?B] =>
+      cut(A _o = B _o); [intros W; apply (Functor_eq_simplify _ _ W)|]; trivial
+    end.
+    extensionality x; extensionality y; extensionality f.
+    match goal with
+      [|- match _ in _ = V return _ with eq_refl => ?A end f = ?B] =>
+      transitivity (match W in _ = V return Hom (V x) (V y) with eq_refl => A f end)
+    end.
+    destruct W; trivial.
+    apply JMeq_eq.
+    destruct W; trivial.
   Qed.
 
   Theorem Functor_id_unit_right : (Functor_compose (Functor_id _) F) = F.
   Proof.
-    apply Functor_eq_simplify; simpl; trivial.
+    match goal with
+      [|- ?A = ?B] =>
+      cut(A _o = B _o); [intros W; apply (Functor_eq_simplify _ _ W)|]; trivial
+    end.
+    extensionality x; extensionality y; extensionality f.
+    match goal with
+      [|- match _ in _ = V return _ with eq_refl => ?A end f = ?B] =>
+      transitivity (match W in _ = V return Hom (V x) (V y) with eq_refl => A f end)
+    end.
+    destruct W; trivial.
+    apply JMeq_eq.
+    destruct W; trivial.
   Qed.
 
 End Functor_Identity_Unit.

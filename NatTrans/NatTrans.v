@@ -335,6 +335,38 @@ Section Opposite_Func_Cat.
       inverse_morphism := Func_Cat_Op_to_Op_Func_Cat
     }.
 
+  Next Obligation.
+  Proof.
+    match goal with
+      [|- ?A = ?B] =>
+      cut(A _o = B _o); [intros W; apply (Functor_eq_simplify _ _ W)|]; trivial
+    end.
+    extensionality x; extensionality y; extensionality f.
+    match goal with
+      [|- match _ in _ = V return _ with eq_refl => ?A end f = ?B] =>
+      transitivity (match W in _ = V return Hom (V x) (V y) with eq_refl => A f end)
+    end.
+    destruct W; trivial.
+    apply JMeq_eq.
+    destruct W; trivial.
+  Qed.
+
+  Next Obligation.
+  Proof.
+    match goal with
+      [|- ?A = ?B] =>
+      cut(A _o = B _o); [intros W; apply (Functor_eq_simplify _ _ W)|]; trivial
+    end.
+    extensionality x; extensionality y; extensionality f.
+    match goal with
+      [|- match _ in _ = V return _ with eq_refl => ?A end f = ?B] =>
+      transitivity (match W in _ = V return Hom (V x) (V y) with eq_refl => A f end)
+    end.
+    destruct W; trivial.
+    apply JMeq_eq.
+    destruct W; trivial.
+  Qed.
+  
 End Opposite_Func_Cat.
 
 Section Opposite_NatIso.

@@ -1,5 +1,4 @@
 Require Import Category.Main.
-Require Export Essentials.Empty.
 
 (*
 **********************************************************

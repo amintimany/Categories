@@ -10,13 +10,13 @@ Local Obligation Tactic := idtac.
 
 Program Instance Prod_Cat (C C' : Category) : Category :=
 {
-  Obj := (C * C')%type;
+  Obj := C * C';
+              
+  Hom := fun a b => ((Hom (fst a) (fst b)) * (Hom (snd a) (snd b)))%type;
 
-  Hom:= fun a b => ((Hom (fst a) (fst b)) * (Hom (snd a) (snd b))) % type;
+  compose := fun a b c f g => (((fst g) ∘ (fst f)), ((snd g) ∘ (snd f)));
 
-  compose := fun _ _ _ f g => (((fst g) ∘ (fst f)), ((snd g) ∘ (snd f)));
-
-  id := fun _ => (id, id)
+  id := fun c => (id, id)
 }.
 
 Next Obligation.
@@ -126,6 +126,22 @@ Program Instance Diag_Func (C : Category) : Functor C (Prod_Cat C C) :=
   F_compose := fun _ _ _ _ _ => eq_refl
 }.
 
+Theorem Prod_Functor_Cat_Proj {C D D' : Category} (F : Functor C (Prod_Cat D D')) : Functor_compose (Diag_Func C) (Prod_Functor (Functor_compose F (Cat_Proj1 _ _)) (Functor_compose F (Cat_Proj2 _ _))) = F.
+Proof.
+  match goal with
+    [|- ?A = ?B] =>
+    cut(A _o = B _o); [intros W; apply (Functor_eq_simplify _ _ W)|]; trivial
+  end.
+  extensionality x; extensionality y; extensionality f.
+  match goal with
+    [|- match _ in _ = V return _ with eq_refl => ?A end f = ?B] =>
+    transitivity (match W in _ = V return Hom (V x) (V y) with eq_refl => A f end)
+  end.
+  destruct W; trivial.
+  apply JMeq_eq.
+  destruct W; trivial.
+Qed.  
+
 Program Instance Twist_Func (C C' : Category) : Functor (Prod_Cat C C') (Prod_Cat C' C) :=
 {
   FO := fun a => (snd a, fst a);
@@ -139,7 +155,18 @@ Section Twist_Prod_Func_Twist.
 
   Theorem Twist_Prod_Func_Twist : Functor_compose (Twist_Func _ _) (Functor_compose (Prod_Functor F G) (Twist_Func _ _)) = Prod_Functor G F.
   Proof.  
-    Functor_extensionality c c' f; trivial.    
+    match goal with
+      [|- ?A = ?B] =>
+      cut(A _o = B _o); [intros W; apply (Functor_eq_simplify _ _ W)|]; trivial
+    end.
+    extensionality x; extensionality y; extensionality f.
+    match goal with
+      [|- match _ in _ = V return _ with eq_refl => ?A end f = ?B] =>
+      transitivity (match W in _ = V return Hom (V x) (V y) with eq_refl => A f end)
+    end.
+    destruct W; trivial.
+    apply JMeq_eq.
+    destruct W; trivial.
   Qed.
 
 End Twist_Prod_Func_Twist.
@@ -170,7 +197,18 @@ Section Prod_Functor_compose.
 
   Theorem Prod_Functor_compose : Functor_compose (Prod_Functor F F') (Prod_Functor G G') = Prod_Functor (Functor_compose F G) (Functor_compose F' G').
   Proof.
-    auto.
+    match goal with
+      [|- ?A = ?B] =>
+      cut(A _o = B _o); [intros W; apply (Functor_eq_simplify _ _ W)|]; trivial
+    end.
+    extensionality x; extensionality y; extensionality f.
+    match goal with
+      [|- match _ in _ = V return _ with eq_refl => ?A end f = ?B] =>
+      transitivity (match W in _ = V return Hom (V x) (V y) with eq_refl => A f end)
+    end.
+    destruct W; trivial.
+    apply JMeq_eq.
+    destruct W; trivial.
   Qed.    
                                    
 End Prod_Functor_compose.

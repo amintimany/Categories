@@ -11,8 +11,11 @@ Section Hom_Func_Twist.
   
   Theorem Hom_Func_Twist : (Hom_Func C^op) = Functor_compose (Twist_Func C C^op) (Hom_Func C).
   Proof.
-    Functor_extensionality c c' f.
-    trivial.
+    match goal with
+      [|- ?A = ?B] =>
+      set (Oeq := eq_refl : A _o = B _o); apply (Functor_eq_simplify _ _ Oeq)
+    end.    
+    extensionality x; extensionality y; extensionality f; extensionality g.
     cbn; auto.
   Qed.
 

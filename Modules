@@ -1,6 +1,6 @@
 Mod_Essentials = \
 	Essentials/Notations\
-	Essentials/Empty\
+	Essentials/Types\
 	Essentials/Facts_Tactics
 
 Mod_Category = \

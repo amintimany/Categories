@@ -1,9 +1,6 @@
 Require Export Essentials.Notations.
+Require Export Essentials.Types.
 Require Export Essentials.Facts_Tactics.
-
-Global Set Primitive Projections.
-
-Global Set Universe Polymorphism.
 
 Class Category : Type :=
 {

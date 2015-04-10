@@ -72,43 +72,31 @@ Proof.
       cut (A _o = B _o); [intros H4|]
   end.
   {
-    apply Functor_eq_simplify.
-    assumption.
-    {
-      apply FA_extensionality; trivial.
-      {
-        intros a b h.
-        set (V := (u _o)).
-        match type of H4 with
-            ?A = ?B =>
-            set (Va := eq_ind_r (λ f0 : Obj → Functor C C', f0 a = B a) eq_refl H4);
-              set (Vb := eq_ind_r (λ f0 : Obj → Functor C C', f0 b = B b) eq_refl H4)
-        end.
-        hnf in Va, Vb.
-        match goal with
-            |- ?A ~= ?B =>
-            cut (match Va in (_ = t) return @Hom (Func_Cat _ _) t _ with eq_refl => match Vb in (_ = t') return @Hom (Func_Cat _ _) _ t' with eq_refl => A end end = B); [intros H5; rewrite <- H5; clear H5; destruct H4; trivial|]
-        end.
-        apply NatTrans_eq_simplify.
-        extensionality m.
-        match goal with
-            |- ?A = ?B =>
-            cut (A ≃ B); [intros H5; rewrite H5; trivial|]
-        end.
-        apply (@JMeq_trans _ _ _ _ (Trans (u _a _ _ h) m)).
-        destruct H4; trivial.
-        cbn; rewrite F_id; auto.
-      }
-    }
-  }
+    apply (Functor_eq_simplify _ _ H4).
+    extensionality a; extensionality b; extensionality h.
+    cbn.
+    apply NatTrans_eq_simplify.
+    extensionality m.
+    match goal with
+      |- ?A = ?B =>
+      cut (A ≃ B); [intros H5; rewrite H5; trivial|]
+    end.
+    apply (@JMeq_trans _ _ _ _ (Trans (u _a _ _ h) m)).
+    destruct H4; trivial.
+    cbn; rewrite F_id; auto.
+  }    
   {
     extensionality x.
-    apply Functor_eq_simplify; trivial.
-    FA_extensionality a b f.
-    repeat (cbn; rewrite F_id); auto.
+    
+    match goal with
+      [|- ?A = ?B] =>
+      set (W := eq_refl : A _o = B _o); apply (Functor_eq_simplify _ _ W); trivial
+    end.
+    extensionality a; extensionality b; extensionality f.
+    cbn in *; rewrite F_id; cbn; auto.
   }
 Qed.
-
+    
 Local Obligation Tactic := idtac.
 
 Program Instance Cat_Exponential (C C' : Category) : Exponential C C' :=
@@ -123,12 +111,19 @@ Program Instance Cat_Exponential (C C' : Category) : Exponential C C' :=
 Next Obligation. (* Exp_morph_com *)
 Proof.
   intros C C' z f.
-  Functor_extensionality a b F.
-  destruct a; trivial.
-  simpl.
-  rewrite <- F_compose.
-  simpl; simpl_ids.
-  destruct a; destruct b; destruct F; simpl; trivial.
+  match goal with
+    [|- ?A = ?B] =>
+    cut(A _o = B _o); [intros W; apply (Functor_eq_simplify _ _ W)|]; trivial
+  end.
+  extensionality x; extensionality y; extensionality h.
+  match goal with
+    [|- match _ in _ = V return _ with eq_refl => ?A end h = ?B] =>
+    transitivity (match W in _ = V return Hom (V x) (V y) with eq_refl => A h end)
+  end.
+  destruct W; trivial.
+  apply JMeq_eq.
+  destruct W; trivial.
+  cbn; auto.
 Qed.
 
 Next Obligation. (* Exp_morph_unique *)
@@ -142,3 +137,37 @@ Qed.
 (* Cat_Exponentials defined *)
 
 Program Instance Cat_Has_Exponentials : Has_Exponentials Cat := fun _ _ => _.
+
+Section Exp_Cat_morph_ex_compose.
+  Context {C C' C'' : Category} (F : Functor (Prod_Cat C'' C)  C') {B : Category} (G : Functor B C'').
+
+  Theorem Exp_Cat_morph_ex_compose : Exp_Cat_morph_ex (Functor_compose (Prod_Functor G (Functor_id C)) F) = Functor_compose G (Exp_Cat_morph_ex F).
+  Proof.
+    match goal with
+      [|- ?A = ?B] =>
+      cut(A _o = B _o); [intros W; apply (Functor_eq_simplify _ _ W)|]; trivial
+    end.
+    {
+      extensionality x; extensionality y; extensionality h.
+      match goal with
+        [|- match _ in _ = V return _ with eq_refl => ?A end h = ?B] =>
+        transitivity (match W in _ = V return Hom (V x) (V y) with eq_refl => A h end)
+      end.
+      destruct W; trivial.
+      apply NatTrans_eq_simplify.
+      apply JMeq_eq.
+      destruct W; trivial.
+    }
+    {
+      extensionality x.
+      match goal with
+        [|- ?A = ?B] =>
+        set(W := eq_refl : A _o = B _o); apply (Functor_eq_simplify _ _ W)
+      end.
+      extensionality z; extensionality y; extensionality h.
+      cbn.
+      rewrite F_id; trivial.
+    }
+  Qed.
+
+End Exp_Cat_morph_ex_compose.

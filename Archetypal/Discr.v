@@ -1,5 +1,4 @@
 Require Import Category.Main.
-Require Import Essentials.Empty.
 Require Import Functor.Functor.
 Require Import Ext_Cons.Arrow.
 Require Import Coq_Cats.Type_Cat.Type_Cat.

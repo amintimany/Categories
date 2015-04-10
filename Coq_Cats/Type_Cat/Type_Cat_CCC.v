@@ -18,7 +18,10 @@ Qed.
 
 Program Instance prod_Product (A B : Type) : Product A B :=
 {
-  product := (A * B)%type
+  product := (A * B)%type;
+  Pi_1 := fst;
+  Pi_2 := snd;
+  Prod_morph_ex := fun p x y z => (x z, y z)
 }.
 
 Next Obligation. (* Prod_morph_unique *)
@@ -33,13 +36,10 @@ Program Instance Type_Cat_Has_Products : Has_Products Type_Cat := fun _ _ => _.
 
 Program Instance fun_exp (A B : Type) : Exponential A B :=
 {
-  exponential := A -> B
+  exponential := A -> B;
+  eval := fun x => (fst x) (snd x);
+  Exp_morph_ex := fun h z u v=>  z (u, v)
 }.
-
-Next Obligation. (* Exp_morph_com *)
-Proof.
-  extensionality x; destruct x; reflexivity.
-Qed.
 
 Next Obligation. (* Exp_morph_unique *)
 Proof.

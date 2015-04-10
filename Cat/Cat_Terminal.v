@@ -21,16 +21,21 @@ Program Instance Cat_Term : Terminal Cat :=
 
 Next Obligation. (* t_morph_unique *)
 Proof.
-  Functor_extensionality a b F.
   match goal with
-      [|- ?A = ?B] =>
-      destruct A; destruct B; trivial
+    [|- ?A = ?B] =>
+    cut(A _o = B _o); [intros W; apply (Functor_eq_simplify _ _ W)|]; trivial
   end.
+  extensionality x; extensionality y; extensionality h.
+  apply JMeq_eq.
   match goal with
-      [|- ?A ~= ?B] =>
-      destruct A as [[]]; destruct B as [[]]; trivial
+    [|- ?A ~= ?B] => destruct A as [[]]; destruct B as [[]]; trivial
   end.
-Qed.
+  extensionality x.
+  apply JMeq_eq.
+  match goal with
+    [|- ?A ~= ?B] => destruct A as [[]]; destruct B as [[]]; trivial
+  end.
+Qed.  
 
 (* Cat_term defined *)
 
