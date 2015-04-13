@@ -37,6 +37,7 @@ Mod_Coq_Cats =\
 	Coq_Cats/Type_Cat/Type_Cat_Gen_Prod\
 	Coq_Cats/Type_Cat/Facts\
 	Coq_Cats/Type_Cat/Card_Restriction\
+	Coq_Cats/Type_Cat/Type_Cat_Equalizer\
 	Coq_Cats/Set_Cat\
 	Coq_Cats/Prop_Cat\
 	Coq_Cats/Main
