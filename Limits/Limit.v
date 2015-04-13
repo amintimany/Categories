@@ -22,9 +22,13 @@ Section Limit.
 
   Existing Class Limit.
 
-  Definition limit_to_obj (l : Limit) : C := (cone_apex (LRKE l)) _o tt.
+  Definition limit_to_cone (l : Limit) : Cone := (LRKE l).
 
-  Coercion limit_to_obj : Limit >-> Obj.
+  Coercion limit_to_cone : Limit >-> Cone.
+  
+  Definition cone_to_obj (cn : Cone) : C := (cone_apex cn) _o tt.
+
+  Coercion cone_to_obj : Cone >-> Obj.
 
 End Limit.
 

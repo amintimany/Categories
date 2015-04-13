@@ -41,6 +41,15 @@ Qed.
 
 (* Cat_term defined *)
 
+Section From_Term_Cat.
+  Context {C : Category} (F : Functor 1 C).
 
+  Theorem From_Term_Cat : ∀ h, F _a tt tt h = id.
+  Proof.
+    destruct h.
+    change tt with (id 1 tt).
+    rewrite F_id.
+    trivial.
+  Qed.
 
-
+End From_Term_Cat.

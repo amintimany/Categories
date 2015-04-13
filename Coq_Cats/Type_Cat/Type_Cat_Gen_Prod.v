@@ -8,7 +8,7 @@ Require Import Basic_Cons.Terminal.
 Section Type_Cat_Gen_Prod.
   Context (A : Type) (map : A → Type).
 
-  Local Notation Fm := (Discrete_Functor Type_Cat map) (only parsing).
+  Local Notation Fm := (Discr_Func Type_Cat map) (only parsing).
 
   Program Instance Type_Cat_Gen_Prod_Cone : Cone Fm :=
     {|
@@ -55,7 +55,7 @@ Section Type_Cat_Gen_Prod.
     rewrite (cone_morph_com h) in hc.
     set (hc' := (f_equal (fun w : NatTrans
                   (Functor_compose (Functor_To_1_Cat (Discr_Cat A)) Cn)
-                  (Discrete_Functor Type_Cat map) =>
+                  Fm =>
            Trans w z y) hc)); clearbody hc'; clear hc.
     trivial.
   Qed.    

@@ -8,7 +8,7 @@ Require Import Basic_Cons.Terminal.
 Section Type_Cat_Gen_Sum.
   Context (A : Type) (map : A → Type).
 
-  Local Notation Fm := (Discrete_Functor Type_Cat map) (only parsing).
+  Local Notation Fm := (Discr_Func Type_Cat map) (only parsing).
 
   Program Instance Type_Cat_Gen_Sum_CoCone : CoCone Fm :=
     {|
@@ -58,7 +58,7 @@ Section Type_Cat_Gen_Sum.
     set (hc' := (f_equal (fun w : NatTrans
                  (Functor_compose
                     (Opposite_Functor (Functor_To_1_Cat (Discr_Cat A))) Cn)
-                 (Opposite_Functor (Discrete_Functor Type_Cat map)) =>
+                 (Opposite_Functor Fm) =>
            Trans w y1 y2) hc)); clearbody hc'; clear hc.
     cbn in *.
     apply hc'.

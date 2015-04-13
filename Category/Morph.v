@@ -97,7 +97,7 @@ Arguments mono_morphism_monomorphic {_ _ _} _ _ _ _ _.
 
 Notation "a ≫–> b" := (Monic a b).
 
-Definition Epic {C : Category} := @Monic (C^op).
+Definition Epic {C : Category} (a b : C) := @Monic (C^op) b a.
 
 Existing Class Epic.
 
@@ -122,7 +122,7 @@ Section Iso_Mono_Epi.
     end.
   Qed.
 
-  Program Instance Ismorphism_Epic : a –≫ b :=
+  Program Instance Ismorphism_Epic : b –≫ a :=
     {|
       mono_morphism := inverse_morphism I
     |}.

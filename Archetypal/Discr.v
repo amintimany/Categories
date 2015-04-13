@@ -2,6 +2,7 @@ Require Import Category.Main.
 Require Import Functor.Functor.
 Require Import Ext_Cons.Arrow.
 Require Import Coq_Cats.Type_Cat.Type_Cat.
+Require Import NatTrans.
 
 (* empty and singleton categories *)
 
@@ -95,9 +96,9 @@ Notation "'Discr_n' n" := (Discr_Cat (Type_n n)) (at level 200, n bigint) : cate
 
 (* Discrete Functor *)
 Section Discr_Func.
-  Context (C : Category) {A : Type} (Omap : A → C).
+  Context {C : Category} {A : Type} (Omap : A → C).
 
-  Program Instance Discrete_Functor : Functor (Discr_Cat A) C :=
+  Program Instance Discr_Func : Functor (Discr_Cat A) C :=
     {
       FO := Omap;
       
@@ -109,6 +110,8 @@ Section Discr_Func.
 
 End Discr_Func.
 
+Arguments Discr_Func {_ _} _, _ {_} _.
+
 Local Hint Extern 1 => let z := fresh in extensionality z.
 Local Hint Extern 1 => match goal with [z : Arrow (Discr_Cat _) |- _] => destruct z as [? ? []] end.
 
@@ -117,3 +120,13 @@ Instance Discr_Hom_Iso (A : Type) : A ≡≡ Arrow (Discr_Cat A) ::> Type_Cat.
 Proof.
   eapply (Build_Isomorphism Type_Cat _ _ (λ a, (Build_Arrow (Discr_Cat A) _ _ (Discr_id A a))) (λ a : (Arrow (Discr_Cat _)), Orig a)); auto.
 Qed.
+
+Section Discretize.
+  Context {C D : Category} {F G : Functor C D} (N : NatTrans F G).
+
+  Program Instance Discretize : NatTrans (Discr_Func (F _o)) (Discr_Func (G _o)) :=
+    {
+      Trans := Trans N
+    }.
+
+End Discretize.

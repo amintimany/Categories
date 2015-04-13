@@ -7,7 +7,7 @@ Section Equalizer_Monic.
 
   Program Instance Equalizer_Monic : e ≫–> a :=
     {
-      mono_morphism := equalizer_morph f g
+      mono_morphism := equalizer_morph e
     }.
 
   Next Obligation. (* mono_morphism_monomorphism *)

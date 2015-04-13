@@ -31,6 +31,12 @@ Section Equalizer.
 
 End Equalizer.
 
+Arguments equalizer_morph {_ _ _ _ _} _.
+Arguments equalizer_morph_com {_ _ _ _ _} _.
+Arguments equalizer_morph_ex {_ _ _ _ _} _ {_ _} _.
+Arguments equalizer_morph_ex_com {_ _ _ _ _} _ {_ _} _.
+Arguments equalizer_morph_unique {_ _ _ _ _} _ {_ _ _} _ _ _ _.
+
 Arguments Equalizer _ {_ _} _ _, {_ _ _} _ _.
 
 Definition Has_Equalizers (C : Category) : Type := ∀ (a b : C) (f g : Hom a b), Equalizer f g.
