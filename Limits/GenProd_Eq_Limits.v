@@ -7,15 +7,16 @@ Require Import Basic_Cons.Facts.Equalizer_Monic.
 Require Import Coq_Cats.Type_Cat.Card_Restriction.
 Require Import Archetypal.Discr.
 
+Require Import Limits.GenProd_GenSum.
 Require Import Limits.Limit.
 
-Section Gen_Prod_Eq_Complete.
+Section GenProd_Eq_Complete.
   Context {C : Category}.
 
-  Section Gen_Prod_Eq_Limits.
+  Section GenProd_Eq_Limits.
     Context {J : Category}.
 
-    Context {OProd : ∀ (map : J → C), Limit (Discr_Func map)} {HProd : ∀ (map : (Arrow J) → C), Limit (Discr_Func map)} {Eqs : Has_Equalizers C}.
+    Context {OProd : ∀ (map : J → C), GenProd map} {HProd : ∀ (map : (Arrow J) → C), GenProd map} {Eqs : Has_Equalizers C}.
 
     Section Limits_Exist.
       Context (D : Functor J C).
@@ -51,13 +52,13 @@ Section Gen_Prod_Eq_Complete.
       Proof.
         simpl_ids.
         set (W := f_equal (fun t : NatTrans
-             (Functor_compose (Functor_To_1_Cat (Discr_Cat (Arrow J)))
-                (Const_Func 1 (((OProd (D _o)) _o) tt)))
-             (DF DTarg) => (Trans t {|Arr := h|}) ∘ (equalizer_morph (Eqs _ _ Projs D_imgs))) (cone_morph_com (LRKE_morph_ex HPR D_imgs_Cone))).
+                                     (Functor_compose (Functor_To_1_Cat (Discr_Cat (Arrow J)))
+                                                      (Const_Func 1 (((OProd (D _o)) _o) tt)))
+                                     (DF DTarg) => (Trans t {|Arr := h|}) ∘ (equalizer_morph (Eqs _ _ Projs D_imgs))) (cone_morph_com (LRKE_morph_ex HPR D_imgs_Cone))).
         set (W' := f_equal (fun t : NatTrans
-             (Functor_compose (Functor_To_1_Cat (Discr_Cat (Arrow J)))
-                (Const_Func 1 (((OProd (D _o)) _o) tt)))
-             (DF DTarg) => Trans t {|Arr := h|} ∘ (equalizer_morph (Eqs _ _ Projs D_imgs))) (cone_morph_com (LRKE_morph_ex HPR Projs_Cone))).
+                                      (Functor_compose (Functor_To_1_Cat (Discr_Cat (Arrow J)))
+                                                       (Const_Func 1 (((OProd (D _o)) _o) tt)))
+                                      (DF DTarg) => Trans t {|Arr := h|} ∘ (equalizer_morph (Eqs _ _ Projs D_imgs))) (cone_morph_com (LRKE_morph_ex HPR Projs_Cone))).
         clearbody W W'.
         rewrite (assoc_sym _ _ ((D _a) c c' h)).
         cbn in *.
@@ -80,7 +81,7 @@ Section Gen_Prod_Eq_Complete.
 
       Section Every_Cone_Equalizes.
         Context (Cn : Cone D).
-      
+        
         Program Instance Cone_to_DF_DCone : Cone (DF (D _o)) :=
           {|
             cone_apex := Cn;
@@ -170,7 +171,7 @@ Section Gen_Prod_Eq_Complete.
           cbn.
           unfold D_imgs, From_Cone_to_OPR.
           set (H := f_equal (fun w : NatTrans
-                (Functor_compose (Functor_To_1_Cat (Discr_Cat (Arrow J))) D_imgs_Cone) (DF DTarg) => (Trans w x) ∘ (Trans (LRKE_morph_ex (OProd (D _o)) Cone_to_DF_DCone) tt)) (cone_morph_com (LRKE_morph_ex (HProd (λ f : Arrow J, (D _o) (Targ f))) D_imgs_Cone))); clearbody H; cbn in H.
+                                       (Functor_compose (Functor_To_1_Cat (Discr_Cat (Arrow J))) D_imgs_Cone) (DF DTarg) => (Trans w x) ∘ (Trans (LRKE_morph_ex (OProd (D _o)) Cone_to_DF_DCone) tt)) (cone_morph_com (LRKE_morph_ex (HProd (λ f : Arrow J, (D _o) (Targ f))) D_imgs_Cone))); clearbody H; cbn in H.
           repeat rewrite assoc_sym in H.
           repeat rewrite assoc_sym.
           etransitivity; [|apply H]; clear H.
@@ -182,7 +183,7 @@ Section Gen_Prod_Eq_Complete.
           set (W := @Trans_com _ _ _ _ Cn); cbn in W; rewrite <- W; clear W.
           rewrite From_Term_Cat; auto.
         Qed.
-          
+        
         Lemma From_Cone_to_Obj_Prod_Equalizes : Projs ∘ From_Cone_to_OPR = D_imgs ∘ From_Cone_to_OPR.
         Proof.
           match goal with
@@ -301,21 +302,54 @@ Section Gen_Prod_Eq_Complete.
       Qed.        
 
     End Limits_Exist.
-  End Gen_Prod_Eq_Limits.
+  End GenProd_Eq_Limits.
 
   Section Restricted_Limits.
-    Context (P : Card_Restriction) {CHRP : ∀ (A : Type) (map : A → C), (P A) → Limit (Discr_Func map)} {HE : Has_Equalizers C}.
+    Context (P : Card_Restriction) {CHRP : ∀ (A : Type) (map : A → C), (P A) → GenProd map} {HE : Has_Equalizers C}.
 
-    Instance Restr_Gen_Prod_Eq_Restr_Limits : Has_Restr_Limits C P :=
+    Instance Restr_GenProd_Eq_Restr_Limits : Has_Restr_Limits C P :=
       fun J D PJ PA => @Lim_Cone_is_Limit J (fun map => CHRP J map PJ) (fun map => CHRP (Arrow J) map PA) HE D.
     
   End Restricted_Limits.
 
-    Section Complete.
-    Context {CHAP : ∀ (A : Type) (map : A → C), Limit (Discr_Func map)} {HE : Has_Equalizers C}.
+  Section Complete.
+    Context {CHAP : ∀ (A : Type) (map : A → C), GenProd map} {HE : Has_Equalizers C}.
     
-    Instance Gen_Prod_Eq_Complete : Complete C := fun J => Local_to_Global_Right _ _ (fun D => @Lim_Cone_is_Limit J (CHAP J) (CHAP (Arrow J)) HE D).
-   
+    Instance GenProd_Eq_Complete : Complete C := fun J => Local_to_Global_Right _ _ (fun D => @Lim_Cone_is_Limit J (CHAP J) (CHAP (Arrow J)) HE D).
+    
   End Complete.
 
-End Gen_Prod_Eq_Complete.
+End GenProd_Eq_Complete.
+
+Section GenSum_CoEq_Complete.
+  Context {C : Category}.
+
+  Section GenSum_CoEq_CoLimits.
+    Context {J : Category}.
+
+    Context {OSum : ∀ (map : J → C), GenSum map} {HSum : ∀ (map : (Arrow J^op) → C), GenSum map} {Eqs : Has_CoEqualizers C}.
+
+    Section Limits_Exist.
+      Context (D : Functor J C).
+
+      Instance CoLim_CoCone_is_CoLimit : CoLimit D := @Lim_Cone_is_Limit C^op J^op (fun map => GenSum_to_GenProd (OSum map)) (fun map => GenSum_to_GenProd (HSum map)) Eqs (Opposite_Functor D).
+      
+    End Limits_Exist.
+  End GenSum_CoEq_CoLimits.
+
+  Section Restricted_CoLimits.
+    Context (P : Card_Restriction) {CHRP : ∀ (A : Type) (map : A → C), (P A) → GenSum map} {HE : Has_CoEqualizers C}.
+    
+    Instance Restr_GenSum_CoEq_Restr_CoLimits : Has_Restr_CoLimits C P :=
+      fun J D PJ PA => @CoLim_CoCone_is_CoLimit J (fun map => CHRP J map PJ) (fun map => CHRP (Arrow J^op) map (Card_Rest_Respect _ _ (Arrow_OP_Iso J) PA)) HE D.
+    
+  End Restricted_CoLimits.
+
+  Section CoComplete.
+    Context {CHAP : ∀ (A : Type) (map : A → C), GenSum map} {HE : Has_CoEqualizers C}.
+    
+    Instance GenSum_CoEq_CoComplete : CoComplete C := fun J => Local_to_Global_Left _ _ (fun D => @CoLim_CoCone_is_CoLimit J (CHAP J) (CHAP (Arrow J^op)) HE D).
+    
+  End CoComplete.
+
+End GenSum_CoEq_Complete.

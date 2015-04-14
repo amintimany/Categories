@@ -1,24 +1,24 @@
 Require Import Category.Main.
 Require Import Functor.Main.
 Require Import Coq_Cats.Type_Cat.Type_Cat.
-Require Import Limits.Limit.
+Require Import Limits.Limit Limits.GenProd_GenSum.
 Require Import Archetypal.Discr.
 Require Import Basic_Cons.Terminal.
 
-Section Type_Cat_Gen_Sum.
+Section Type_Cat_GenSum.
   Context (A : Type) (map : A → Type).
 
   Local Notation Fm := (Discr_Func Type_Cat map) (only parsing).
 
-  Program Instance Type_Cat_Gen_Sum_CoCone : CoCone Fm :=
+  Program Instance Type_Cat_GenSum_CoCone : CoCone Fm :=
     {|
       cone_apex := {|FO := fun _ => {x : A & Fm _o x}; FA := fun _ _ _ h => h|};
       cone_edge := {|Trans := fun x => existT _ x |}
     |}.
 
-   Program Instance Type_Cat_Gen_Sum : CoLimit Fm :=
+   Program Instance Type_Cat_GenSum : @GenSum _ Type_Cat map :=
     {|
-      LRKE := Type_Cat_Gen_Sum_CoCone;
+      LRKE := Type_Cat_GenSum_CoCone;
       LRKE_morph_ex :=
         fun Cn =>
           {|
@@ -43,7 +43,7 @@ Section Type_Cat_Gen_Sum.
   Next Obligation.
   Proof.
     symmetry.
-    apply Type_Cat_Gen_Sum_obligation_1.
+    apply Type_Cat_GenSum_obligation_1.
   Qed.    
 
   Next Obligation.
@@ -64,4 +64,4 @@ Section Type_Cat_Gen_Sum.
     apply hc'.
   Qed.
 
-End Type_Cat_Gen_Sum.
+End Type_Cat_GenSum.

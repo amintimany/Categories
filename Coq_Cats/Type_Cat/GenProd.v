@@ -1,24 +1,24 @@
 Require Import Category.Main.
 Require Import Functor.Main.
 Require Import Coq_Cats.Type_Cat.Type_Cat.
-Require Import Limits.Limit.
+Require Import Limits.Limit Limits.GenProd_GenSum.
 Require Import Archetypal.Discr.
 Require Import Basic_Cons.Terminal.
 
-Section Type_Cat_Gen_Prod.
+Section Type_Cat_GenProd.
   Context (A : Type) (map : A → Type).
 
   Local Notation Fm := (Discr_Func Type_Cat map) (only parsing).
 
-  Program Instance Type_Cat_Gen_Prod_Cone : Cone Fm :=
+  Program Instance Type_Cat_GenProd_Cone : Cone Fm :=
     {|
       cone_apex := {|FO := fun _ => ∀ x : A, Fm _o x; FA := fun _ _ _ h => h|};
       cone_edge := {|Trans := fun x y => y x |}
     |}.
 
-  Program Instance Type_Cat_Gen_Sum : Limit Fm :=
+  Program Instance Type_Cat_GenProd : @GenProd _ Type_Cat map :=
     {|
-      LRKE := Type_Cat_Gen_Prod_Cone;
+      LRKE := Type_Cat_GenProd_Cone;
       LRKE_morph_ex :=
         fun Cn =>
           {|
@@ -43,7 +43,7 @@ Section Type_Cat_Gen_Prod.
   Next Obligation.
   Proof.
     symmetry.
-    apply Type_Cat_Gen_Sum_obligation_1.
+    apply Type_Cat_GenProd_obligation_1.
   Qed.
 
   Next Obligation.
@@ -60,4 +60,4 @@ Section Type_Cat_Gen_Prod.
     trivial.
   Qed.    
 
-End Type_Cat_Gen_Prod.
+End Type_Cat_GenProd.

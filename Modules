@@ -30,14 +30,15 @@ Mod_Functor =\
 
 Mod_Coq_Cats =\
 	Coq_Cats/Type_Cat/Type_Cat\
-	Coq_Cats/Type_Cat/Type_Cat_Initial\
-	Coq_Cats/Type_Cat/Type_Cat_CCC\
-	Coq_Cats/Type_Cat/Type_Cat_Sum\
-	Coq_Cats/Type_Cat/Type_Cat_Gen_Sum\
-	Coq_Cats/Type_Cat/Type_Cat_Gen_Prod\
+	Coq_Cats/Type_Cat/Initial\
+	Coq_Cats/Type_Cat/CCC\
+	Coq_Cats/Type_Cat/Sum\
+	Coq_Cats/Type_Cat/GenSum\
+	Coq_Cats/Type_Cat/GenProd\
 	Coq_Cats/Type_Cat/Facts\
 	Coq_Cats/Type_Cat/Card_Restriction\
-	Coq_Cats/Type_Cat/Type_Cat_Equalizer\
+	Coq_Cats/Type_Cat/Equalizer\
+	Coq_Cats/Type_Cat/Complete\
 	Coq_Cats/Set_Cat\
 	Coq_Cats/Prop_Cat\
 	Coq_Cats/Main
@@ -81,7 +82,8 @@ Mod_Yoneda =\
 Mod_Limits =\
 	Limits/Limit\
 	Limits/Main\
-	Limits/Gen_Prod_Eq_Limits\
+	Limits/GenProd_GenSum\
+	Limits/GenProd_Eq_Limits\
 
 Mod_Archetypal =\
 	Archetypal/Discr\

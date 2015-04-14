@@ -51,7 +51,7 @@ Arguments CoEqualizer _ {_ _} _ _, {_ _ _} _ _.
 
 Existing Class CoEqualizer.
 
-Definition Has_CoEqualizers (C : Category) : Type := ∀ (a b : C) (f g : Hom a b), CoEqualizer f g.
+Definition Has_CoEqualizers (C : Category) : Type := Has_Equalizers C^op.
 
 Existing Class Has_CoEqualizers.
 
