@@ -10,15 +10,15 @@ Require Export Cat.Cat_Terminal.
 Section Limit.
   Context {J C : Category} (D : Functor J C).
 
-  Definition Cone := LoKan_Cone (Functor_To_1_Cat J) D.
+  SubClass Cone := LoKan_Cone (Functor_To_1_Cat J) D.
 
   Existing Class Cone.
 
-  Definition Cone_Morph := @LoKan_Cone_Morph _ _ (Functor_To_1_Cat J) _ D.
+  SubClass Cone_Morph Cn Cn' := @LoKan_Cone_Morph _ _ (Functor_To_1_Cat J) _ D Cn Cn'.
   
   Existing Class Cone_Morph.
   
-  Definition Limit : Type := Local_Right_KanExt (Functor_To_1_Cat J) D.
+  SubClass Limit : Type := Local_Right_KanExt (Functor_To_1_Cat J) D.
 
   Existing Class Limit.
 
@@ -72,15 +72,15 @@ End Complete_to_Restricted_Limits.
 
 (* CoLimit *)
 
-Definition CoCone {J C : Category} (D : Functor J C) := LoKan_Cone (Functor_To_1_Cat J^op) (Opposite_Functor D).
+SubClass CoCone {J C : Category} (D : Functor J C) := LoKan_Cone (Functor_To_1_Cat J^op) (Opposite_Functor D).
 
 Existing Class CoCone.
 
-Definition CoCone_Morph {J C : Category} (D : Functor J C) := @LoKan_Cone_Morph _ _ (Functor_To_1_Cat J^op) _ (Opposite_Functor D).
+SubClass CoCone_Morph {J C : Category} (D : Functor J C) Cn Cn' := @LoKan_Cone_Morph _ _ (Functor_To_1_Cat J^op) _ (Opposite_Functor D) Cn Cn'.
 
 Existing Class CoCone_Morph.
 
-Definition CoLimit {J C : Category} (D : Functor J C) := Local_Left_KanExt (Functor_To_1_Cat J) D.
+SubClass CoLimit {J C : Category} (D : Functor J C) := Local_Left_KanExt (Functor_To_1_Cat J) D.
 
 Existing Class CoLimit.
 
