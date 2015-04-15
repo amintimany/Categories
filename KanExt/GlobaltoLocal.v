@@ -1,7 +1,7 @@
 Require Import Category.Main.
 Require Import Functor.Functor Functor.Functor_Ops Functor.Representable.Hom_Func_Prop.
-Require Import Ext_Cons.Prod_Cat.
-Require Import NatTrans.NatTrans.
+Require Import Ext_Cons.Prod_Cat.Prod_Cat.
+Require Import NatTrans.NatTrans NatTrans.Operations.
 Require Import Adjunction.Adjunction Adjunction.Duality Adjunction.Adj_Facts.
 Require Import KanExt.Global KanExt.Local KanExt.LocalFacts KanExt.GlobalDuality.
 

@@ -1,54 +1,9 @@
 Require Import Category.Main.
 Require Import Functor.Main.
 Require Import Cat.Cat.
-Require Import NatTrans.NatTrans.
-Require Import Cat.Cat.
-
-(* Product Category *)
+Require Import Ext_Cons.Prod_Cat.Prod_Cat.
 
 Local Obligation Tactic := idtac.
-
-Program Instance Prod_Cat (C C' : Category) : Category :=
-{
-  Obj := C * C';
-              
-  Hom := fun a b => ((Hom (fst a) (fst b)) * (Hom (snd a) (snd b)))%type;
-
-  compose := fun a b c f g => (((fst g) ∘ (fst f)), ((snd g) ∘ (snd f)));
-
-  id := fun c => (id, id)
-}.
-
-Next Obligation.
-  intros ? ? [? ?] [? ?] [? ?] [? ?] [? ?] [? ?] [? ?]; cbn in *; repeat rewrite assoc; trivial.
-Qed.
-
-Next Obligation.
-  intros; rewrite Prod_Cat_obligation_1; reflexivity.
-Qed.
-
-Next Obligation.
-  program_simpl.
-Qed.
-
-Next Obligation.
-  program_simpl.
-Qed.
-
-Theorem Prod_compose_id (C D : Category) (a b c : C) (d : D) (f : Hom a b) (g : Hom b c) : (g ∘ f, @id _ d) = @compose (Prod_Cat _ _) (_, _) (_, _) (_, _) (f, @id _ d) (g, @id _ d).
-Proof.
-  cbn; auto.
-Qed.
-
-Theorem Prod_id_compose (C D : Category) (a : C) (b c d : D) (f : Hom b c) (g : Hom c d) : (@id _ a, g ∘ f) = @compose (Prod_Cat _ _) (_, _) (_, _) (_, _) (@id _ a, f) (@id _ a, g).
-Proof.
-  cbn; auto.
-Qed.
-
-Theorem Prod_cross_compose (C D : Category) (a b : C) (c d : D) (f : Hom a b) (g : Hom c d) : @compose (Prod_Cat _ _) (_, _) (_, _) (_, _) (@id _ a, g) (f, @id _ d) = @compose (Prod_Cat _ _) (_, _) (_, _) (_, _) (f, @id _ c) (@id _ b, g).
-Proof.
-  cbn; auto.
-Qed.
 
 Program Instance Prod_Functor {C1 C2 C1' C2' : Category} (F : Functor C1 C2) (F' : Functor C1' C2') : Functor (Prod_Cat C1 C1') (Prod_Cat C2 C2') :=
 {
@@ -96,26 +51,6 @@ Qed.
 
 Next Obligation.
   intros; cbn; repeat rewrite <- F_compose; simpl; simpl_ids; trivial.
-Qed.
-
-Program Instance Cat_Proj1 (C C' : Category) : Functor (Prod_Cat C C') C := {FO := fst; FA := fun _ _ f => fst f}.
-
-Next Obligation.
-  trivial.
-Qed.
-
-Next Obligation.
-  trivial.
-Qed.
-
-Program Instance Cat_Proj2 (C C' : Category) : Functor (Prod_Cat C C') C' := {FO := snd; FA := fun _ _ f => snd f}.
-
-Next Obligation.
-  trivial.
-Qed.
-
-Next Obligation.
-  trivial.
 Qed.
 
 Program Instance Diag_Func (C : Category) : Functor C (Prod_Cat C C) :=
@@ -212,77 +147,3 @@ Section Prod_Functor_compose.
   Qed.    
                                    
 End Prod_Functor_compose.
-
-Section Prod_Functor_NatTrans.
-  Context {C D : Category} {F G : Functor C D} (N : NatTrans F G)
-          {C' D' : Category} {F' G' : Functor C' D'} (N' : NatTrans F' G').
-
-  Program Instance Prod_Functor_NatTrans : NatTrans (Prod_Functor F F') (Prod_Functor G G') :=
-    {
-      Trans := fun c => (Trans N (fst c), Trans N' (snd c))
-    }.
-
-  Next Obligation.
-    intros c c' h.
-    cbn.
-    do 2 rewrite Trans_com; trivial.
-  Qed.
-
-  Next Obligation.
-    symmetry.
-    apply Prod_Functor_NatTrans_obligation_1.
-  Qed.
-
-End Prod_Functor_NatTrans.
-
-Section Prod_Functor_NatTrans_id.
-  Context {C D : Category} (F : Functor C D)
-          {C' D' : Category} {F' : Functor C' D'}.
-
-  Theorem Prod_Functor_NatTrans_id : Prod_Functor_NatTrans (NatTrans_id F) (NatTrans_id F') = NatTrans_id (Prod_Functor F F').
-  Proof.
-    apply NatTrans_eq_simplify; trivial.
-  Qed.    
-
-End Prod_Functor_NatTrans_id.
-
-Section Prod_Functor_NatTrans_compose.
-  Context {C D : Category} {F G H : Functor C D} (N1 : NatTrans F G) (N2 : NatTrans G H)
-          {C' D' : Category} {F' G' H' : Functor C' D'} (N1' : NatTrans F' G') (N2' : NatTrans G' H').
-
-  Theorem Prod_Functor_NatTrans_compose : NatTrans_compose (Prod_Functor_NatTrans N1 N1') (Prod_Functor_NatTrans N2 N2') = Prod_Functor_NatTrans (NatTrans_compose N1 N2) (NatTrans_compose N1' N2').
-  Proof.
-    apply NatTrans_eq_simplify; trivial.
-  Qed.
-
-End Prod_Functor_NatTrans_compose.
-
-Section Prod_Functor_NatIso.
-  Context {C D : Category} {F G : Functor C D} (N : F ≡≡ G ::> Func_Cat _ _)
-          {C' D' : Category} {F' G' : Functor C' D'} (N' : F' ≡≡ G' ::> Func_Cat _ _).
-
-  Program Instance Prod_Functor_NatIso : (Prod_Functor F F') ≡≡ (Prod_Functor G G') ::> Func_Cat _ _ :=
-    {
-      iso_morphism := Prod_Functor_NatTrans (iso_morphism N) (iso_morphism N');
-      inverse_morphism := Prod_Functor_NatTrans (inverse_morphism N) (inverse_morphism N')
-    }.
-
-  Next Obligation.
-    cbn.
-    rewrite Prod_Functor_NatTrans_compose.
-    change (NatTrans_compose (iso_morphism N) N ⁻¹) with (N⁻¹ ∘ N).
-    change (NatTrans_compose (iso_morphism N') N' ⁻¹) with (N'⁻¹ ∘ N').
-    do 2 rewrite (left_inverse).
-    apply Prod_Functor_NatTrans_id.
-  Qed.
-
-  Next Obligation.
-    cbn.
-    rewrite Prod_Functor_NatTrans_compose.
-    change (NatTrans_compose N ⁻¹ (iso_morphism N)) with (N ∘ N⁻¹).
-    change (NatTrans_compose N' ⁻¹ (iso_morphism N')) with (N' ∘ N'⁻¹).
-    do 2 rewrite (right_inverse).
-    apply Prod_Functor_NatTrans_id.
-  Qed.
-
-End Prod_Functor_NatIso.

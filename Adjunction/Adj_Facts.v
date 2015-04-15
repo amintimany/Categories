@@ -1,8 +1,8 @@
 Require Import Category.Main.
-Require Import Ext_Cons.Prod_Cat.
+Require Import Ext_Cons.Prod_Cat.Prod_Cat Ext_Cons.Prod_Cat.Nat_Facts.
 Require Import Functor.Main.
 Require Import Functor.Representable.Hom_Func Functor.Representable.Hom_Func_Prop.
-Require Import NatTrans.NatTrans.
+Require Import NatTrans.NatTrans NatTrans.Func_Cat NatTrans.NatIso.
 Require Import Adjunction.Adjunction Adjunction.Duality.
 Require Import Cat.Cat Cat.Cat_Exponential.
 Require Import Yoneda.Yoneda.

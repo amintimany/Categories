@@ -3,8 +3,8 @@ Require Import Cat.Facts.
 Require Import Functor.Main.
 Require Import Coq_Cats.Type_Cat.Type_Cat.
 Require Import Functor.Representable.Hom_Func.
-Require Import Ext_Cons.Prod_Cat.
-Require Import NatTrans.NatTrans.
+Require Import Ext_Cons.Prod_Cat.Prod_Cat Ext_Cons.Prod_Cat.Operations.
+Require Import NatTrans.NatTrans NatTrans.Func_Cat NatTrans.NatIso.
 
 Section Y_emb.
   Context (C : Category).

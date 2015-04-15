@@ -4,7 +4,7 @@ Require Import Functor.Main.
 Require Import Basic_Cons.Terminal.
 Require Import Basic_Cons.Product.
 
-Require Import NatTrans.NatTrans.
+Require Import NatTrans.NatTrans NatTrans.NatIso.
 Require Import Yoneda.Yoneda.
 
 Section Term_Prod.

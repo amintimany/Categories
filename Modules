@@ -12,7 +12,10 @@ Mod_Category = \
 	Category/Main
 
 Mod_Ext_Cons =\
-	Ext_Cons/Prod_Cat\
+	Ext_Cons/Prod_Cat/Prod_Cat\
+	Ext_Cons/Prod_Cat/Operations\
+	Ext_Cons/Prod_Cat/Nat_Facts\
+	Ext_Cons/Prod_Cat/Main\
 	Ext_Cons/Arrow\
 	Ext_Cons/Comma\
 	Ext_Cons/Main
@@ -74,7 +77,11 @@ Mod_Cat =\
 	Cat/Cat_Iso
 
 Mod_NatTrans =\
-	NatTrans/NatTrans
+	NatTrans/NatTrans\
+	NatTrans/Operations\
+	NatTrans/NatIso\
+	NatTrans/Func_Cat\
+	NatTrans/Main
 
 Mod_Yoneda =\
 	Yoneda/Yoneda

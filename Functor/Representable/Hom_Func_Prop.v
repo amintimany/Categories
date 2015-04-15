@@ -1,10 +1,10 @@
 Require Import Category.Main.
 Require Import Functor.Functor Functor.Functor_Ops.
 Require Import Coq_Cats.Type_Cat.Type_Cat.
-Require Import Ext_Cons.Prod_Cat.
+Require Import Ext_Cons.Prod_Cat.Prod_Cat Ext_Cons.Prod_Cat.Operations.
 Require Import Functor.Representable.Hom_Func.
 Require Import Cat.Cat Cat.Cat_Iso.
-Require Import NatTrans.NatTrans.
+Require Import NatTrans.NatTrans NatTrans.Func_Cat.
 
 Section Hom_Func_Twist.
   Context (C : Category).

@@ -1,5 +1,5 @@
 Require Import Category.Main.
-Require Import Ext_Cons.Prod_Cat.
+Require Import Ext_Cons.Prod_Cat.Prod_Cat.
 Require Import Functor.Main.
 Require Import Basic_Cons.Product.
 Require Import Basic_Cons.Exponential.

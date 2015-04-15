@@ -1,6 +1,6 @@
 Require Import Category.Main.
 Require Import Functor.Functor Functor.Functor_Ops.
-Require Import NatTrans.NatTrans.
+Require Import NatTrans.NatTrans NatTrans.Operations.
 Require Import Adjunction.Adjunction.
 Require Import KanExt.Local.
 Require Import Basic_Cons.Terminal.

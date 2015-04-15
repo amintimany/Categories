@@ -1,5 +1,5 @@
 Require Import Category.Main.
-Require Import Ext_Cons.Prod_Cat.
+Require Import Ext_Cons.Prod_Cat.Prod_Cat Ext_Cons.Prod_Cat.Operations.
 Require Import Functor.Main.
 
 (* Product Object *)

@@ -4,7 +4,7 @@ Require Import Basic_Cons.Main.
 Require Import Coq_Cats.Type_Cat.Type_Cat.
 Require Import Coq_Cats.Type_Cat.Facts.
 Require Import Algebras.Main.
-Require Import Ext_Cons.Prod_Cat.
+Require Import Ext_Cons.Prod_Cat.Prod_Cat.
 Require Import Cat.Facts.
 
 

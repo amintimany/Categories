@@ -1,7 +1,7 @@
 Require Import Category.Main.
 Require Import Functor.Functor Functor.Functor_Ops Functor.Representable.Hom_Func_Prop.
-Require Import Ext_Cons.Prod_Cat.
-Require Import NatTrans.NatTrans.
+Require Import Ext_Cons.Prod_Cat.Prod_Cat Ext_Cons.Prod_Cat.Operations.
+Require Import NatTrans.NatTrans NatTrans.Func_Cat NatTrans.NatIso.
 Require Import Adjunction.Adjunction Adjunction.Duality Adjunction.Adj_Facts.
 Require Import KanExt.Global.
 
@@ -106,7 +106,7 @@ Section GlobalDuality.
 
     Next Obligation.
     Proof.
-      set (V := NatIso_hor_comp (NatTrans_id_Iso (Prod_Functor (Opposite_Functor (inverse_morphism (Func_Cat_Op_Iso C' D))) (inverse_morphism (Func_Cat_Op_Iso C D)))) (NatIso_compose (NatIso_hor_comp (NatTrans_id_Iso (Prod_Cat.Prod_Functor (Opposite_Functor (Opposite_Functor (GExtend p D))) (Functor_id (Func_Cat C D) ^op))) (Inverse_Isomorphism (Hom_Func_Cat_Iso (Func_Cat_Op_Iso C D)))) (NatIso_compose (Hom_Adjunct_Duality (Adj_to_Hom_Adj (left_kan_ext_adj lke))) (NatIso_hor_comp (NatTrans_id_Iso (Prod_Cat.Prod_Functor (Functor_id ((Func_Cat C' D) ^op) ^op) (Opposite_Functor lke))) (Hom_Func_Cat_Iso (Func_Cat_Op_Iso C' D)))))).
+      set (V := NatIso_hor_comp (NatTrans_id_Iso (Prod_Functor (Opposite_Functor (inverse_morphism (Func_Cat_Op_Iso C' D))) (inverse_morphism (Func_Cat_Op_Iso C D)))) (NatIso_compose (NatIso_hor_comp (NatTrans_id_Iso (Prod_Functor (Opposite_Functor (Opposite_Functor (GExtend p D))) (Functor_id (Func_Cat C D) ^op))) (Inverse_Isomorphism (Hom_Func_Cat_Iso (Func_Cat_Op_Iso C D)))) (NatIso_compose (Hom_Adjunct_Duality (Adj_to_Hom_Adj (left_kan_ext_adj lke))) (NatIso_hor_comp (NatTrans_id_Iso (Prod_Functor (Functor_id ((Func_Cat C' D) ^op) ^op) (Opposite_Functor lke))) (Hom_Func_Cat_Iso (Func_Cat_Op_Iso C' D)))))).
       cbn in V.
       repeat rewrite Functor_assoc in V.
       repeat rewrite Prod_Functor_compose in V.

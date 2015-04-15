@@ -3,7 +3,7 @@ Require Import Functor.Main.
 
 Require Import Basic_Cons.CCC.
 
-Require Import NatTrans.NatTrans.
+Require Import NatTrans.NatTrans NatTrans.NatIso.
 Require Import Yoneda.Yoneda.
 
 Section Init_Prod.

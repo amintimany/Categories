@@ -1,7 +1,7 @@
 Require Import Category.Main.
 Require Import Functor.Functor Functor.Functor_Ops.
 Require Import Coq_Cats.Type_Cat.Type_Cat.
-Require Import Ext_Cons.Prod_Cat.
+Require Import Ext_Cons.Prod_Cat.Prod_Cat.
 Require Import Cat.Cat.
 Require Import NatTrans.NatTrans.
 
