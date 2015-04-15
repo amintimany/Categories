@@ -327,12 +327,12 @@ Section GenSum_CoEq_Complete.
   Section GenSum_CoEq_CoLimits.
     Context {J : Category}.
 
-    Context {OSum : ∀ (map : J → C), GenSum map} {HSum : ∀ (map : (Arrow J^op) → C), GenSum map} {Eqs : Has_CoEqualizers C}.
+    Context {OSum : ∀ (map : J → C), GenSum map} {HSum : ∀ (map : (Arrow J) → C), GenSum map} {Eqs : Has_CoEqualizers C}.
 
     Section Limits_Exist.
       Context (D : Functor J C).
 
-      Instance CoLim_CoCone_is_CoLimit : CoLimit D := @Lim_Cone_is_Limit C^op J^op (fun map => GenSum_to_GenProd (OSum map)) (fun map => GenSum_to_GenProd (HSum map)) Eqs (Opposite_Functor D).
+      Instance CoLim_CoCone_is_CoLimit : CoLimit D := @Lim_Cone_is_Limit C^op J^op (fun map => GenSum_to_GenProd (OSum map)) (fun map => GenSum_to_GenProd (@GenSum_IsoType _ _ (Arrow_OP_Iso J) _ HSum map)) Eqs (Opposite_Functor D).
       
     End Limits_Exist.
   End GenSum_CoEq_CoLimits.
@@ -341,14 +341,14 @@ Section GenSum_CoEq_Complete.
     Context (P : Card_Restriction) {CHRP : ∀ (A : Type) (map : A → C), (P A) → GenSum map} {HE : Has_CoEqualizers C}.
     
     Instance Restr_GenSum_CoEq_Restr_CoLimits : Has_Restr_CoLimits C P :=
-      fun J D PJ PA => @CoLim_CoCone_is_CoLimit J (fun map => CHRP J map PJ) (fun map => CHRP (Arrow J^op) map (Card_Rest_Respect _ _ (Arrow_OP_Iso J) PA)) HE D.
+      fun J D PJ PA => @CoLim_CoCone_is_CoLimit J (fun map => CHRP J map PJ) (fun map => CHRP (Arrow J) map PA) HE D.
     
   End Restricted_CoLimits.
 
   Section CoComplete.
     Context {CHAP : ∀ (A : Type) (map : A → C), GenSum map} {HE : Has_CoEqualizers C}.
     
-    Instance GenSum_CoEq_CoComplete : CoComplete C := fun J => Local_to_Global_Left _ _ (fun D => @CoLim_CoCone_is_CoLimit J (CHAP J) (CHAP (Arrow J^op)) HE D).
+    Instance GenSum_CoEq_CoComplete : CoComplete C := fun J => Local_to_Global_Left _ _ (fun D => @CoLim_CoCone_is_CoLimit J (CHAP J) (CHAP (Arrow J)) HE D).
     
   End CoComplete.
 
