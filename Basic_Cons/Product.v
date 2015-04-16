@@ -27,7 +27,7 @@ Arguments Pi_1 {_ _ _ _}, {_ _ _} _.
 Arguments Pi_2 {_ _ _ _}, {_ _ _} _.
 Arguments Prod_morph_ex {_ _ _} _ _ _ _.
 Arguments Prod_morph_com_1 {_ _ _} _ _ _ _.
-Arguments Prod_morph_com_1 {_ _ _} _ _ _ _.
+Arguments Prod_morph_com_2 {_ _ _} _ _ _ _.
 Arguments Prod_morph_unique {_ _ _} _ _ _ _ _ _ _ _ _ _.
 
 Coercion product : Product >-> Obj.

@@ -42,6 +42,7 @@ Mod_Coq_Cats =\
 	Coq_Cats/Type_Cat/Card_Restriction\
 	Coq_Cats/Type_Cat/Equalizer\
 	Coq_Cats/Type_Cat/Complete\
+	Coq_Cats/Type_Cat/PullBack\
 	Coq_Cats/Set_Cat\
 	Coq_Cats/Prop_Cat\
 	Coq_Cats/Main
@@ -58,6 +59,7 @@ Mod_Basic_Cons =\
 	Basic_Cons/Facts/Equalizer_Monic\
 	Basic_Cons/Main\
 	Basic_Cons/CCC\
+	Basic_Cons/LCCC\
 	Basic_Cons/Equalizer\
 	Basic_Cons/PullBack\
 

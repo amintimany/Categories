@@ -29,7 +29,7 @@ Section Init_Prod.
 
   Program Instance Init_Prod_rl a : NatTrans (((CoYoneda C) _o) init) (((CoYoneda C) _o) ((Prod_Func C) _o (@terminal _ init, a))) :=
 {
-  Trans := fun c g => compose C (Pi_1 (CCC_HC C init a)) (t_morph init c)
+  Trans := fun c g => compose C (Pi_1 (CCC_HP C init a)) (t_morph init c)
 }.
 
   Next Obligation. (* Trans_com *)

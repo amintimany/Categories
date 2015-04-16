@@ -52,7 +52,7 @@ Arguments PullBack _ {_ _ _} _ _, {_ _ _ _} _ _.
 
 Arguments pullback {_ _ _ _ _ _} _.
 Arguments pullback_morph_1 {_ _ _ _ _ _} _.
-Arguments pullback_morph_1 {_ _ _ _ _ _} _.
+Arguments pullback_morph_2 {_ _ _ _ _ _} _.
 Arguments pullback_morph_com {_ _ _ _ _ _} _.
 Arguments pullback_morph_ex {_ _ _ _ _ _} _ _ _ _ _.
 Arguments pullback_morph_ex_com_1 {_ _ _ _ _ _} _ _ _ _ _.

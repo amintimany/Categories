@@ -3,22 +3,18 @@ Require Export Basic_Cons.Terminal.
 Require Export Basic_Cons.Product.
 Require Export Basic_Cons.Exponential.
 
-Set Primitive Projections.
-
-Set Universe Polymorphism.
-
 (* Cartesian Closed Category : one that has terminal element, binary products (all finite products) and exponential *)
 Class CCC (C : Category) : Type :=
 {
   CCC_term : Terminal C;
-  CCC_HC : Has_Products C;
-  CCC_HE : Has_Exponentials C
+  CCC_HP : Has_Products C;
+  CCC_HEXP : Has_Exponentials C
 }.
 
 Arguments CCC_term _ {_}, {_ _}.
-Arguments CCC_HC _ {_} _ _, {_ _} _ _.
-Arguments CCC_HE _ {_} _ _, {_ _} _ _.
+Arguments CCC_HP _ {_} _ _, {_ _} _ _.
+Arguments CCC_HEXP _ {_} _ _, {_ _} _ _.
 
-Existing Instances CCC_term CCC_HC CCC_HE.
+Existing Instances CCC_term CCC_HP CCC_HEXP.
 
 
