@@ -44,12 +44,37 @@ Section PullBack.
 
 End PullBack.
 
+Section is_PullBack.
+  Context {C : Category} {a b x pb : C} (p1 : Hom pb a) (p2 : Hom pb b) (f : Hom a x) (g : Hom b x).
+  
+  Class is_PullBack : Type :=
+    {
+      is_pullback_morph_com : f ∘ p1 = g ∘ p2;
+
+      is_pullback_morph_ex (p' : Obj) (pm1 : Hom p' a) (pm2 : Hom p' b) : f ∘ pm1 = g ∘ pm2 → Hom p' pb;
+
+      is_pullback_morph_ex_com_1 (p' : Obj) (pm1 : Hom p' a) (pm2 : Hom p' b) (pmc : f ∘ pm1 = g ∘ pm2) :
+        p1 ∘ (is_pullback_morph_ex p' pm1 pm2 pmc) = pm1;
+
+      is_pullback_morph_ex_com_2 (p' : Obj) (pm1 : Hom p' a) (pm2 : Hom p' b) (pmc : f ∘ pm1 = g ∘ pm2) :
+        p2 ∘ (is_pullback_morph_ex p' pm1 pm2 pmc) = pm2;
+
+      is_pullback_morph_ex_unique
+        (p' : Obj) (pm1 : Hom p' a) (pm2 : Hom p' b)
+        (pmc : f ∘ pm1 = g ∘ pm2) (u u' : Hom p' pb) :
+        p1 ∘ u = pm1 →
+        p2 ∘ u = pm2 →
+        p1 ∘ u' = pm1 →
+        p2 ∘ u' = pm2 → u = u'
+    }.
+
+End is_PullBack.
+
 Definition Has_PullBacks (C : Category) : Type := ∀ (a b c : C) (f : Hom a c) (g : Hom b c), PullBack f g.
 
 Existing Class Has_PullBacks.
 
 Arguments PullBack _ {_ _ _} _ _, {_ _ _ _} _ _.
-
 Arguments pullback {_ _ _ _ _ _} _.
 Arguments pullback_morph_1 {_ _ _ _ _ _} _.
 Arguments pullback_morph_2 {_ _ _ _ _ _} _.
@@ -59,6 +84,45 @@ Arguments pullback_morph_ex_com_1 {_ _ _ _ _ _} _ _ _ _ _.
 Arguments pullback_morph_ex_com_2 {_ _ _ _ _ _} _ _ _ _ _.
 Arguments pullback_morph_ex_unique {_ _ _ _ _ _} _ _ _ _ _ _ _ _ _ _ _.
 
+Arguments is_PullBack _ { _ _ _ _} _ _ _ _, {_ _ _ _ _ } _ _ _ _.
+
+Arguments is_pullback_morph_com {_ _ _ _ _ _ _ _ _} _.
+Arguments is_pullback_morph_ex {_ _ _ _ _ _ _ _ _} _ _ _ _ _.
+Arguments is_pullback_morph_ex_com_1 {_ _ _ _ _ _ _ _ _} _ _ _ _ _.
+Arguments is_pullback_morph_ex_com_2 {_ _ _ _ _ _ _ _ _} _ _ _ _ _.
+Arguments is_pullback_morph_ex_unique {_ _ _ _ _ _ _ _ _} _ _ _ _ _ _ _ _ _ _ _.
+
+Section is_PullBack_PullBack.
+   Context {C : Category} {a b x pb : C} {p1 : Hom pb a} {p2 : Hom pb b} {f : Hom a x} {g : Hom b x} (iPB : is_PullBack p1 p2 f g).
+  
+  Instance is_PullBack_PullBack : PullBack f g :=
+    {
+      pullback := pb;
+      pullback_morph_1 := p1;
+      pullback_morph_2 := p2;
+      pullback_morph_com := is_pullback_morph_com iPB;
+      pullback_morph_ex := fun p' pm1 pm2 => is_pullback_morph_ex iPB p' pm1 pm2;
+      pullback_morph_ex_com_1 := fun p' pm1 pm2 pmc => is_pullback_morph_ex_com_1 iPB p' pm1 pm2 pmc;
+      pullback_morph_ex_com_2 := fun p' pm1 pm2 pmc => is_pullback_morph_ex_com_2 iPB p' pm1 pm2 pmc;
+      pullback_morph_ex_unique := fun p' pm1 pm2 pmc u u' => is_pullback_morph_ex_unique iPB p' pm1 pm2 pmc u u'
+    }.
+
+End is_PullBack_PullBack.
+
+Section PullBack_is_PullBack.
+  Context {C : Category} {a b x : C} {f : Hom a x} {g : Hom b x} (PB : PullBack f g).
+  
+  Instance PullBack_is_PullBack : is_PullBack (pullback_morph_1 PB) (pullback_morph_2 PB) f g :=
+    {
+      is_pullback_morph_com := pullback_morph_com PB;
+      is_pullback_morph_ex := fun p' pm1 pm2 => pullback_morph_ex PB p' pm1 pm2;
+      is_pullback_morph_ex_com_1 := fun p' pm1 pm2 pmc => pullback_morph_ex_com_1 PB p' pm1 pm2 pmc;
+      is_pullback_morph_ex_com_2 := fun p' pm1 pm2 pmc => pullback_morph_ex_com_2 PB p' pm1 pm2 pmc;
+      is_pullback_morph_ex_unique := fun p' pm1 pm2 pmc u u' => pullback_morph_ex_unique PB p' pm1 pm2 pmc u u'
+    }.
+
+End PullBack_is_PullBack.
+  
 (* PushOut is the dual of PullBack *)
 
 Definition PushOut (C : Category) := @PullBack (C^op).

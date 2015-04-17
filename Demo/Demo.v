@@ -40,7 +40,7 @@ Proof.
   exact(
       (fix m (n : nat) :=
         match n with
-          | O => algcons' (inl tt)
+          | O => algcons' (inl TT)
           | S n' => algcons' (inr (m n'))
         end) H
     ).
@@ -50,7 +50,9 @@ Next Obligation. (* alg_map_com *)
 Proof.
   destruct alg' as [algc' algcons'].
   extensionality x.
-  destruct x as [[]|x]; simpl; trivial.
+  destruct x as [x|x]; simpl; trivial.
+  replace x with TT; trivial.
+  apply UNIT_SINGLETON.
 Qed.
 
 (* nat_alg_morph defined *)
@@ -72,8 +74,8 @@ Proof.
   simpl.
   induction x.
   {
-    assert(H1 := equal_f f_com (inl tt)); cbv in H1; rewrite <- H1.
-    assert(H2 := equal_f g_com (inl tt)); cbv in H2; rewrite <- H2.
+    assert(H1 := equal_f f_com (inl TT)); cbv in H1; rewrite <- H1.
+    assert(H2 := equal_f g_com (inl TT)); cbv in H2; rewrite <- H2.
     trivial.
   }
   {
@@ -117,7 +119,7 @@ Instance CoNat_coalg : CoAlgebra S_nat_func :=
   Destructors :=
     fun x =>
       match x with
-        | CoO => inl tt
+        | CoO => inl TT
         | CoS n => inr n
       end
 }.
@@ -139,7 +141,9 @@ Proof.
   extensionality x.
   destruct coalg' as [coalgc' coalgdest'].
   simpl.
-  destruct (coalgdest' x) as [[]|x']; trivial.
+  destruct (coalgdest' x) as [x'|x']; trivial.
+  replace x' with TT; trivial.
+  apply UNIT_SINGLETON.
 Qed.
 
 (* CoNat_coalg_morph defined *)

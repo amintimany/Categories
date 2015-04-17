@@ -4,6 +4,9 @@ Require Import Coq_Cats.Type_Cat.Type_Cat.
 
 Local Obligation Tactic := program_simpl; auto 3.
 
+(* if we use (unit : set) as terminal object then the level of arrows in Type_Cat is brought down to set which cuases problems in working with Type_Cat, e.g., for showing Type_Cat has a subobject classifier. *)
+
+(*
 Program Instance unit_Type_term : Terminal Type_Cat :=
 {
   terminal := unit;
@@ -14,6 +17,25 @@ Next Obligation. (* t_morph_unique *)
 Proof.
   extensionality x.
   destruct (f x); destruct (g x); reflexivity.
+Qed.
+ *)
+
+Parameter UNIT : Type.
+
+Parameter TT : UNIT.
+
+Axiom UNIT_SINGLETON : ∀ x y : UNIT, x = y.
+
+Program Instance unit_Type_term : Terminal Type_Cat :=
+{
+  terminal := UNIT;
+  t_morph := λ _ _, TT
+}.
+
+Next Obligation. (* t_morph_unique *)
+Proof.
+  extensionality x.
+  apply UNIT_SINGLETON.
 Qed.
 
 Program Instance prod_Product (A B : Type) : Product A B :=
