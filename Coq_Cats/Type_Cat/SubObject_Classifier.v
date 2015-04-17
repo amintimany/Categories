@@ -18,24 +18,15 @@ Section Type_Cat_characteristic_function_unique.
     apply PropExt; split.
     {
       intros Hx.
-      set (M := fun w : (A + UNIT)%type =>
-                   match w with
-                   | inl m => mono_morphism F m
-                   | inr _ => x
-                   end).
-      cut ((fun x => h (M x)) = (fun _ => True)).
+      cut ((fun _ : UNIT => h x) = (fun _ => True)).
       {
         intros H.
-        set (W := equal_f (is_pullback_morph_ex_com_1 hpb (A + UNIT)%type M (fun _ => TT) H) (inr TT)).
+        set (W := equal_f (is_pullback_morph_ex_com_1 hpb UNIT (fun _ => x) (fun _ => TT) H) TT).
         cbn in W.
         eexists; exact W.
       }
-      extensionality y; destruct y as [y|]; cbn.
-      {      
-        apply (equal_f (is_pullback_morph_com hpb)).
-      }
       {
-        apply PropExt; split; trivial.
+        extensionality y; apply PropExt; split; trivial.
       }
     }
     {
