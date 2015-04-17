@@ -43,6 +43,7 @@ Mod_Coq_Cats =\
 	Coq_Cats/Type_Cat/Equalizer\
 	Coq_Cats/Type_Cat/Complete\
 	Coq_Cats/Type_Cat/PullBack\
+	Coq_Cats/Type_Cat/LCCC\
 	Coq_Cats/Set_Cat\
 	Coq_Cats/Prop_Cat\
 	Coq_Cats/Main

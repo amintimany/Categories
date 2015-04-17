@@ -37,9 +37,9 @@ Section PullBack_Slice_Prod.
       Pi_2 := {|CMH_left := pullback_morph_2 PB; CMH_right := match (CMO_trg g) as u return Hom 1 u tt with tt => id end|};
       Prod_morph_ex :=
         fun _ r1 r2 =>
-          Build_Comma_Hom _ _ _ (CA ((CMO_hom f) ∘ pullback_morph_1 PB)) (pullback_morph_ex PB _ (CMH_left r1) (CMH_left r2) (eq_trans (eq_sym (CMH_com r1)) (CMH_com r2))) tt (eq_sym (eq_trans (assoc  _ _ _) (eq_trans (f_equal (fun x => compose x (CMO_hom f)) (pullback_morph_ex_com_1 PB _ (CMH_left r1) (CMH_left r2) (eq_trans (eq_sym (CMH_com r1)) (CMH_com r2)))) (eq_sym (CMH_com r1)))))
+          Build_Comma_Hom _ _ _ (CA ((CMO_hom f) ∘ pullback_morph_1 PB)) (pullback_morph_ex PB _ (CMH_left r1) (CMH_left r2) _) tt _
     }.
-
+  
   Local Obligation Tactic := idtac.  
   
   Next Obligation.
@@ -47,6 +47,19 @@ Section PullBack_Slice_Prod.
     cbn; simpl_ids; apply pullback_morph_com.
   Qed.    
 
+  Next Obligation.
+  Proof.
+    intros p r1 r2.
+    exact (eq_trans (eq_sym (CMH_com r1)) (CMH_com r2)).
+  Qed.
+
+  Next Obligation.
+  Proof.  
+    intros p r1 r2.
+    cbn.
+    exact (eq_sym (eq_trans (assoc  _ _ _) (eq_trans (f_equal (fun x => compose x (CMO_hom f)) (pullback_morph_ex_com_1 PB _ (CMH_left r1) (CMH_left r2) (PullBack_Slice_Prod_obligation_3 p r1 r2))) (eq_sym (CMH_com r1))))).
+  Qed.
+  
   Next Obligation.
   Proof.
     intros p r1 r2.
@@ -96,7 +109,7 @@ Section Slice_Prod_PullBack.
       pullback := (CMO_src (@product _ _ _ PR));
       pullback_morph_1 := CMH_left (Pi_1 PR);
       pullback_morph_2 := CMH_left (Pi_2 PR);
-      pullback_morph_ex := fun p r1 r2 H => CMH_left (Prod_morph_ex PR (CA ((CMO_hom f) ∘ r1)) (Build_Comma_Hom _ _ (CA ((CMO_hom f) ∘ r1)) f r1 tt (id_unit_left _ _ _)) (Build_Comma_Hom _ _ (CA ((CMO_hom f) ∘ r1)) g r2 tt (eq_trans (id_unit_left _ _ _) H)))
+      pullback_morph_ex := fun p r1 r2 H => CMH_left (Prod_morph_ex PR (CA ((CMO_hom f) ∘ r1)) (Build_Comma_Hom _ _ (CA ((CMO_hom f) ∘ r1)) f r1 tt _) (Build_Comma_Hom _ _ (CA ((CMO_hom f) ∘ r1)) g r2 tt _))
     }.
 
   Local Obligation Tactic := idtac.  
@@ -175,5 +188,5 @@ End Slice_Has_Prod_Has_PullBack.
     
 (* Locally Cartesian Closed Category : one in which all slices are cartesian closed *)
 Definition LCCC (C : Category) : Type := ∀ (c : C), CCC (Slice C c).
-
+Existing Class LCCC.
 

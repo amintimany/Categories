@@ -8,15 +8,20 @@ Section PullBack.
   Local Hint Extern 1 => match goal with [x : sig _ |- _ ] => let H := fresh "H" in destruct x as [x H] end.
   
   Program Instance Type_Cat_PullBack : @PullBack Type_Cat _ _ _ f g :=
-    {|
+    {
       pullback := {x : A * B| f (fst x) = g (snd x)};
       pullback_morph_1 := fun z => (fst (proj1_sig z));
       pullback_morph_2 := fun z => (snd (proj1_sig z));
-      pullback_morph_ex := fun x p1 p2 H x => (exist _ (p1 x, p2 x) (equal_f H x))
-    |}.
+      pullback_morph_ex := fun x p1 p2 H x' => (exist _ (p1 x', p2 x') _)
+    }.
+
+  Next Obligation.
+  Proof.  
+    exact (equal_f H x').
+  Qed.    
 
   Local Obligation Tactic := idtac.
-  
+
   Next Obligation.
   Proof.  
     intros X p1 p2 H u u' H1 H2 H3 H4.
@@ -29,8 +34,10 @@ Section PullBack.
       [|- ?A = ?B] => destruct A as [[a1 a2] Ha]; destruct B as [[b1 b2] Hb]
     end.
     cbn in *.
-    apply sig_proof_irrelevance.
+    apply sig_proof_irrelevance; cbn.
     rewrite H1x; rewrite H2x; trivial.
-  Qed.    
+  Qed.
 
 End PullBack.
+
+Instance Type_Cat_Has_PullBacks : Has_PullBacks Type_Cat := fun a b c f g => Type_Cat_PullBack f g.

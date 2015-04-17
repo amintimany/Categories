@@ -156,14 +156,14 @@ Section CoEqualizer.
         ?C = ?D => cutrewrite (A = C); [cutrewrite (B = D)|]; trivial
       end
     end.
-    {    
-      erewrite sig_proof_irrelevance.
-      reflexivity.
+    {
+      apply f_equal.
+      apply sig_proof_irrelevance; cbn.
       extensionality y; apply PropExt; trivial.
     }
     {
-      erewrite sig_proof_irrelevance.
-      reflexivity.
+      apply f_equal.
+      apply sig_proof_irrelevance; cbn.
       extensionality y; apply PropExt; trivial.
     }
   Qed.

@@ -9,11 +9,13 @@ Set Universe Polymorphism.
 
 (* Equality on sigma type under proof irrelevance *)
 
-Lemma sig_proof_irrelevance {A : Type} (P : A → Prop) (x y : A) (Px : P x) (Py : P y) : x = y → exist P x Px = exist P y Py.
+Lemma sig_proof_irrelevance {A : Type} (P : A → Prop) (X Y : sig P) : proj1_sig X = proj1_sig Y → X = Y.
 Proof.
   intros H.
+  destruct X as [X1 X2]; destruct Y as [Y1 Y2].
+  cbn in H.
   destruct H.
-  destruct (proof_irrelevance _ Px Py).
+  destruct (proof_irrelevance _ X2 Y2).
   reflexivity.
 Qed.
 
