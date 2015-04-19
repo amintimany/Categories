@@ -143,7 +143,7 @@ Section Local_to_Global_Right.
   Qed.
 
   Program Instance Local_to_Global_Right_adj_unit :
-    NatTrans (Functor_id (Func_Cat C' D)) (Functor_compose (GExtend p D) Local_to_Global_Right_Functor) :=
+    NatTrans (Functor_id (Func_Cat C' D)) (Functor_compose (Functor_Extender p D) Local_to_Global_Right_Functor) :=
     {
       Trans := fun F => LRKE_morph_ex (rke (Functor_compose p F)) (Trivial_Cone F)
     }.

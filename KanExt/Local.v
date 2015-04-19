@@ -1,7 +1,9 @@
 Require Import Category.Main.
-Require Import Functor.Functor Functor.Functor_Ops.
+Require Import Functor.Functor Functor.Functor_Ops Functor.Representable.Hom_Func.
+Require Import Ext_Cons.Prod_Cat.Prod_Cat Ext_Cons.Prod_Cat.Operations.
 Require Import NatTrans.NatTrans NatTrans.Operations NatTrans.Func_Cat.
 Require Import Adjunction.Adjunction.
+Require Export KanExt.Functor_Extender.
 
 Local Notation FCOMP := Functor_compose (only parsing).
 Local Notation FOP := Opposite_Functor (only parsing).
@@ -68,3 +70,24 @@ Arguments cone_morph_com {_ _ _ _ _ _ _} _.
 Arguments LRKE {_ _ _ _ _} _.
 Arguments LRKE_morph_ex {_ _ _ _ _} _ _.
 Arguments LRKE_morph_unique {_ _ _ _ _} _ _ _ _.
+
+Section HomKanExtension.
+  Context {C C' : Category} (p : Functor C C').
+
+  Section Right.
+    Context {D : Category} (F : Functor C D).
+
+    Class Hom_Local_Right_KanExt :=
+      {
+        HLRKE : Functor C' D;
+        HLRKE_Iso : (FCOMP (FOP (Functor_Extender p D)) (@Fix_Bi_Func_2 _ (Func_Cat C D) _ F (Hom_Func (Func_Cat C D)))) ≡≡ (@Fix_Bi_Func_2 _ (Func_Cat C' D) _ HLRKE (Hom_Func (Func_Cat C' D))) ::> Func_Cat _ _
+      }.
+
+    Coercion HLRKE : Hom_Local_Right_KanExt >-> Functor.
+    
+  End Right.
+  
+End HomKanExtension.
+
+Arguments HLRKE {_ _ _ _ _} _.
+Arguments HLRKE_Iso {_ _ _ _ _} _.

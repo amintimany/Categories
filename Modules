@@ -108,6 +108,7 @@ Mod_Adjunction =\
 	Adjunction/Adj_Facts
 
 Mod_KanExt =\
+	KanExt/Functor_Extender\
 	KanExt/Local\
 	KanExt/Global\
 	KanExt/GlobalDuality\

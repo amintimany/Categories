@@ -2,6 +2,7 @@ Require Import Category.Main.
 Require Import Functor.Functor Functor.Functor_Ops.
 Require Import NatTrans.NatTrans NatTrans.Operations NatTrans.Func_Cat.
 Require Import Adjunction.Adjunction.
+Require Export KanExt.Functor_Extender.
 
 Section KanExtension.
   Context {C C' : Category} (p : Functor C C').
@@ -15,21 +16,10 @@ Section KanExtension.
   Section Global.
     Context (D : Category).
 
-    Local Hint Extern 1 => let x := fresh "x" in extensionality x; cbn.
-
-    Local Obligation Tactic := program_simpl; auto 10.
-    
-    Program Instance GExtend :
-      Functor (Func_Cat C' D) (Func_Cat C D) :=
-      {
-        FO := fun F => FCOMP p F;
-        FA := fun F F' N => HCOMP (NID p) N
-      }.
-
     Class Left_KanExt : Type :=
       {
         left_kan_ext : Functor (FCAT C D) (FCAT C' D);
-        left_kan_ext_adj : Adjunct left_kan_ext GExtend
+        left_kan_ext_adj : Adjunct left_kan_ext (Functor_Extender p D)
       }.
 
     Coercion left_kan_ext : Left_KanExt >-> Functor.
@@ -37,7 +27,7 @@ Section KanExtension.
     Class Right_KanExt : Type :=
       {
         right_kan_ext : Functor (FCAT C D) (FCAT C' D);
-        right_kan_ext_adj : Adjunct GExtend right_kan_ext
+        right_kan_ext_adj : Adjunct (Functor_Extender p D) right_kan_ext
       }.
 
     Coercion right_kan_ext : Right_KanExt >-> Functor.
