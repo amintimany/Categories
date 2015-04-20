@@ -26,6 +26,7 @@ Section Adjunction.
   Arguments adj_unit : clear implicits.
   Arguments adj_morph_ex _ {_ _} _.
   Arguments adj_morph_com _ {_ _} _.
+  Arguments adj_morph_unique _ {_ _} _ _ _ _ _.
 
   Definition Hom_Adjunct := Hom_Adj_Left _ _ F G ≡≡ Hom_Adj_Right _ _ F G ::> Func_Cat _ _.
 
@@ -160,7 +161,9 @@ End Adjunction.
 Arguments adj_unit {_ _ _ _} _ : assert.
 Arguments adj_morph_ex {_ _ _ _} _ {_ _} _.
 Arguments adj_morph_com {_ _ _ _} _ {_ _} _.
+Arguments adj_morph_unique {_ _ _ _} _ {_ _} _ _ _ _ _.
 
 Arguments Adj_to_Hom_Adj {_ _ _ _} _.
 
 Arguments Hom_Adj_to_Adj {_ _ _ _} _.
+

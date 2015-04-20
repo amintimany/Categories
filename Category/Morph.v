@@ -63,6 +63,16 @@ Hint Extern 3 => progress simpl_isos.
 
 Hint Extern 3 => progress (dohyps (fun H => simpl_isos in H)).
 
+Theorem Isomorphism_eq_simplify {C : Category} {a b : C} (I I' : a ≡ b) : (iso_morphism I = iso_morphism I') → (inverse_morphism I = inverse_morphism I') → I = I'.
+Proof.
+  intros H1 H2.
+  destruct I as [iI inI Il Ir]; destruct I' as [iI' inI' Il' Ir'].
+  cbn in *.
+  destruct H1; destruct H2.
+  destruct (proof_irrelevance _ Il Il').
+  destruct (proof_irrelevance _ Ir Ir').
+  trivial.  
+Qed.  
 
 (* Isomorphism is an equivalence relation *)
 

@@ -1,10 +1,10 @@
 Require Import Category.Main.
-Require Import Ext_Cons.Prod_Cat.Prod_Cat Ext_Cons.Prod_Cat.Nat_Facts.
+Require Import Ext_Cons.Prod_Cat.Prod_Cat Ext_Cons.Prod_Cat.Nat_Facts Ext_Cons.Prod_Cat.Operations.
 Require Import Functor.Main.
 Require Import Functor.Representable.Hom_Func Functor.Representable.Hom_Func_Prop.
 Require Import NatTrans.NatTrans NatTrans.Func_Cat NatTrans.NatIso.
 Require Import Adjunction.Adjunction Adjunction.Duality.
-Require Import Cat.Cat Cat.Cat_Exponential.
+Require Import Cat.Cat Cat.Cat_Exponential Cat.Cat_Exponential_Facts.
 Require Import Yoneda.Yoneda.
 
 Section Hom_Adjunct_left_iso.
@@ -88,3 +88,57 @@ Section Adjunct_right_unique.
   Qed.
 
 End Adjunct_right_unique.
+
+Section Adjoint_Compose.
+  Context {C D E : Category}
+          {F : Functor C D} {G : Functor D C} (adj : Adjunct F G)
+          {F' : Functor D E} {G' : Functor E D} (adj' : Adjunct F' G').
+  
+  Program Instance Adjunct_Compose : Adjunct (Functor_compose F F') (Functor_compose G' G) :=
+    {
+      adj_unit := {|Trans := fun c => (G _a _ _ (Trans (adj_unit adj') (F _o c))) ∘ (Trans (adj_unit adj) c) |};
+      adj_morph_ex := fun _ _ f => adj_morph_ex adj' (adj_morph_ex adj f)
+    }.
+
+  Next Obligation.
+  Proof.
+    rewrite assoc.
+    set (W := (Trans_com (adj_unit adj) h)); cbn in W; rewrite W; clear W.
+    rewrite assoc_sym.
+    set (W := f_equal (G _a _ _) (Trans_com (adj_unit adj') ((F _a) _ _ h)));
+      cbn in W; rewrite F_compose in W; rewrite W.
+    repeat rewrite F_compose.
+    auto.
+  Qed.    
+
+  Next Obligation.
+  Proof.
+    symmetry.
+    apply Adjunct_Compose_obligation_1.
+  Qed.    
+
+  Next Obligation.
+  Proof.
+    rewrite assoc_sym.
+    set (W := f_equal (G _a _ _) (adj_morph_com adj' (adj_morph_ex adj f)));
+      rewrite F_compose in W; cbn in W; rewrite <- W; clear W.
+    apply (adj_morph_com adj f).
+  Qed.    
+
+  Local Obligation Tactic := idtac.
+  
+  Next Obligation.
+  Proof.
+    intros c d f g h H1 H2.
+    cbn in *.
+    rewrite assoc_sym in H1, H2.
+    rewrite <- F_compose in H1, H2.
+    set (W := @adj_morph_unique _ _ _ _ adj _ _ f _ _ H1 H2).
+    cbn in W.
+    match type of W with
+      ?A = ?B =>
+      apply (@adj_morph_unique _ _ _ _ adj' _ _ A _ _ eq_refl W)
+    end.
+  Qed.
+
+End Adjoint_Compose.

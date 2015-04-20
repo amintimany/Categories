@@ -76,6 +76,7 @@ Mod_Cat =\
 	Cat/Cat_Terminal\
 	Cat/Cat_Product\
 	Cat/Cat_Exponential\
+	Cat/Cat_Exponential_Facts\
 	Cat/Cat_CCC\
 	Cat/Facts\
 	Cat/Cat_Iso
