@@ -3,7 +3,7 @@ Require Import Functor.Functor Functor.Functor_Ops Functor.Representable.Hom_Fun
 Require Import Ext_Cons.Prod_Cat.Prod_Cat Ext_Cons.Prod_Cat.Operations.
 Require Import NatTrans.NatTrans NatTrans.Operations NatTrans.Func_Cat.
 Require Import Adjunction.Adjunction.
-Require Export KanExt.Functor_Extender.
+Require Export Functor.Functor_Extender.
 
 Local Notation FCOMP := Functor_compose (only parsing).
 Local Notation FOP := Opposite_Functor (only parsing).
@@ -80,7 +80,7 @@ Section HomKanExtension.
     Class Hom_Local_Right_KanExt :=
       {
         HLRKE : Functor C' D;
-        HLRKE_Iso : (FCOMP (FOP (Functor_Extender p D)) (@Fix_Bi_Func_2 _ (Func_Cat C D) _ F (Hom_Func (Func_Cat C D)))) ≡≡ (@Fix_Bi_Func_2 _ (Func_Cat C' D) _ HLRKE (Hom_Func (Func_Cat C' D))) ::> Func_Cat _ _
+        HLRKE_Iso : (FCOMP (FOP (Left_Functor_Extender p D)) (@Fix_Bi_Func_2 _ (Func_Cat C D) _ F (Hom_Func (Func_Cat C D)))) ≡≡ (@Fix_Bi_Func_2 _ (Func_Cat C' D) _ HLRKE (Hom_Func (Func_Cat C' D))) ::> Func_Cat _ _
       }.
 
     Coercion HLRKE : Hom_Local_Right_KanExt >-> Functor.

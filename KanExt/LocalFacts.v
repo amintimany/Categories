@@ -143,7 +143,7 @@ Section Local_Right_KanExt_to_Hom_Local_Right_KanExt.
           {D : Category} {F : Functor C D}
           (lrke : Local_Right_KanExt p F).
 
-  Program Instance Local_Right_KanExt_to_Hom_Local_Right_KanExt_Iso_LR : NatTrans (FCOMP (FOP (Functor_Extender p D)) (@Fix_Bi_Func_2 _ (Func_Cat C D) _ F (Hom_Func (Func_Cat C D)))) (@Fix_Bi_Func_2 _ (Func_Cat C' D) _ lrke (Hom_Func (Func_Cat C' D))) :=
+  Program Instance Local_Right_KanExt_to_Hom_Local_Right_KanExt_Iso_LR : NatTrans (FCOMP (FOP (Left_Functor_Extender p D)) (@Fix_Bi_Func_2 _ (Func_Cat C D) _ F (Hom_Func (Func_Cat C D)))) (@Fix_Bi_Func_2 _ (Func_Cat C' D) _ lrke (Hom_Func (Func_Cat C' D))) :=
     {
       Trans :=  fun c h => LRKE_morph_ex lrke {|cone_apex := c; cone_edge := h|}
     }.
@@ -168,7 +168,7 @@ Section Local_Right_KanExt_to_Hom_Local_Right_KanExt.
     apply Local_Right_KanExt_to_Hom_Local_Right_KanExt_Iso_LR_obligation_1.
   Qed.
 
-  Program Instance Local_Right_KanExt_to_Hom_Local_Right_KanExt_Iso_RL : NatTrans (@Fix_Bi_Func_2 _ (Func_Cat C' D) _ lrke (Hom_Func (Func_Cat C' D))) (FCOMP (FOP (Functor_Extender p D)) (@Fix_Bi_Func_2 _ (Func_Cat C D) _ F (Hom_Func (Func_Cat C D)))) :=
+  Program Instance Local_Right_KanExt_to_Hom_Local_Right_KanExt_Iso_RL : NatTrans (@Fix_Bi_Func_2 _ (Func_Cat C' D) _ lrke (Hom_Func (Func_Cat C' D))) (FCOMP (FOP (Left_Functor_Extender p D)) (@Fix_Bi_Func_2 _ (Func_Cat C D) _ F (Hom_Func (Func_Cat C D)))) :=
     {
       Trans :=  fun c h => NCOMP (HCOMP (NID p) h) lrke
     }.
@@ -245,7 +245,7 @@ Section Hom_Local_Right_KanExt_to_Local_Right_KanExt.
 
     Next Obligation.
     Proof.
-      set (W := f_equal (fun w : NatTrans (FCOMP (FOP (Functor_Extender p D)) (@Fix_Bi_Func_2 _ (Func_Cat _ _) _ F (Hom_Func _))) (FCOMP (FOP (Functor_Extender p D)) (@Fix_Bi_Func_2 _ (Func_Cat _ _) _ F (Hom_Func _))) => Trans w Cn) (left_inverse (HLRKE_Iso hlrke))).
+      set (W := f_equal (fun w : NatTrans (FCOMP (FOP (Left_Functor_Extender p D)) (@Fix_Bi_Func_2 _ (Func_Cat _ _) _ F (Hom_Func _))) (FCOMP (FOP (Left_Functor_Extender p D)) (@Fix_Bi_Func_2 _ (Func_Cat _ _) _ F (Hom_Func _))) => Trans w Cn) (left_inverse (HLRKE_Iso hlrke))).
       cbn in W.
       match goal with
         [|- ?A = ?B] =>

@@ -21,6 +21,7 @@ Mod_Ext_Cons =\
 	Ext_Cons/Main
 
 Mod_Functor =\
+	Functor/Functor_Extender\
 	Functor/Functor\
 	Functor/Functor_Ops\
 	Functor/Functor_Properties\
@@ -110,7 +111,6 @@ Mod_Adjunction =\
 	Adjunction/Adj_Cat
 
 Mod_KanExt =\
-	KanExt/Functor_Extender\
 	KanExt/Local\
 	KanExt/Global\
 	KanExt/GlobalDuality\

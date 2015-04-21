@@ -11,10 +11,10 @@ Section GlobalDuality.
 
   Local Notation GEXOP := (Functor_compose
                  (Functor_compose (Func_Cat_Op_to_Op_Func_Cat C' D)
-                    (Opposite_Functor (Functor_Extender p D)))
+                    (Opposite_Functor (Left_Functor_Extender p D)))
                  (Op_Func_Cat_to_Func_Cat_Op C D)) (only parsing).
 
-  Program Instance GExtend_Duality_lr : NatTrans (Functor_Extender (Opposite_Functor p) D ^op) GEXOP :=
+  Program Instance GExtend_Duality_lr : NatTrans (Left_Functor_Extender (Opposite_Functor p) D ^op) GEXOP :=
     {
       Trans :=  fun h => {|Trans := fun d => id |}
     }.
@@ -37,7 +37,7 @@ Section GlobalDuality.
     apply GExtend_Duality_lr_obligation_3.
   Qed.
 
-  Program Instance GExtend_Duality_rl : NatTrans GEXOP (Functor_Extender (Opposite_Functor p) D ^op) :=
+  Program Instance GExtend_Duality_rl : NatTrans GEXOP (Left_Functor_Extender (Opposite_Functor p) D ^op) :=
     {
       Trans :=  fun h => {|Trans := fun d => id |}
     }.
@@ -72,7 +72,7 @@ Section GlobalDuality.
     apply GExtend_Duality_rl_obligation_3.
   Qed.
 
-  Program Instance GExtend_Duality : (Functor_Extender (Opposite_Functor p) D ^op) ≡≡ GEXOP ::> Func_Cat _ _ :=
+  Program Instance GExtend_Duality : (Left_Functor_Extender (Opposite_Functor p) D ^op) ≡≡ GEXOP ::> Func_Cat _ _ :=
     {
       iso_morphism := GExtend_Duality_lr;
       inverse_morphism := GExtend_Duality_rl
@@ -106,7 +106,7 @@ Section GlobalDuality.
 
     Next Obligation.
     Proof.
-      set (V := NatIso_hor_comp (NatTrans_id_Iso (Prod_Functor (Opposite_Functor (inverse_morphism (Func_Cat_Op_Iso C' D))) (inverse_morphism (Func_Cat_Op_Iso C D)))) (NatIso_compose (NatIso_hor_comp (NatTrans_id_Iso (Prod_Functor (Opposite_Functor (Opposite_Functor (Functor_Extender p D))) (Functor_id (Func_Cat C D) ^op))) (Inverse_Isomorphism (Hom_Func_Cat_Iso (Func_Cat_Op_Iso C D)))) (NatIso_compose (Hom_Adjunct_Duality (Adj_to_Hom_Adj (left_kan_ext_adj lke))) (NatIso_hor_comp (NatTrans_id_Iso (Prod_Functor (Functor_id ((Func_Cat C' D) ^op) ^op) (Opposite_Functor lke))) (Hom_Func_Cat_Iso (Func_Cat_Op_Iso C' D)))))).
+      set (V := NatIso_hor_comp (NatTrans_id_Iso (Prod_Functor (Opposite_Functor (inverse_morphism (Func_Cat_Op_Iso C' D))) (inverse_morphism (Func_Cat_Op_Iso C D)))) (NatIso_compose (NatIso_hor_comp (NatTrans_id_Iso (Prod_Functor (Opposite_Functor (Opposite_Functor (Left_Functor_Extender p D))) (Functor_id (Func_Cat C D) ^op))) (Inverse_Isomorphism (Hom_Func_Cat_Iso (Func_Cat_Op_Iso C D)))) (NatIso_compose (Hom_Adjunct_Duality (Adj_to_Hom_Adj (left_kan_ext_adj lke))) (NatIso_hor_comp (NatTrans_id_Iso (Prod_Functor (Functor_id ((Func_Cat C' D) ^op) ^op) (Opposite_Functor lke))) (Hom_Func_Cat_Iso (Func_Cat_Op_Iso C' D)))))).
       cbn in V.
       repeat rewrite Functor_assoc in V.
       repeat rewrite Prod_Functor_compose in V.
@@ -114,12 +114,12 @@ Section GlobalDuality.
       change (Functor_compose
               (Functor_compose
                  (Opposite_Functor (Func_Cat_Op_to_Op_Func_Cat C' D))
-                 (Opposite_Functor (Opposite_Functor (Functor_Extender p D))))
+                 (Opposite_Functor (Opposite_Functor (Left_Functor_Extender p D))))
               (Opposite_Functor (Op_Func_Cat_to_Func_Cat_Op C D)))
              with (Opposite_Functor (Functor_compose
               (Functor_compose
                  (Func_Cat_Op_to_Op_Func_Cat C' D)
-                 (Opposite_Functor (Functor_Extender p D)))
+                 (Opposite_Functor (Left_Functor_Extender p D)))
               (Op_Func_Cat_to_Func_Cat_Op C D))) in V.
       change (Functor_compose
                  (Opposite_Functor (Func_Cat_Op_to_Op_Func_Cat C' D))
@@ -149,7 +149,7 @@ Section GlobalDuality.
     
     Next Obligation.
     Proof.
-      set (V := NatIso_hor_comp (NatTrans_id_Iso (Prod_Functor (Opposite_Functor (inverse_morphism (Func_Cat_Op_Iso C D))) (inverse_morphism (Func_Cat_Op_Iso C' D)))) (NatIso_compose (NatIso_hor_comp (NatTrans_id_Iso (Prod_Functor (Opposite_Functor (Opposite_Functor rke)) (Functor_id (Func_Cat C' D) ^op))) (Inverse_Isomorphism (Hom_Func_Cat_Iso (Func_Cat_Op_Iso C' D)))) (NatIso_compose (Hom_Adjunct_Duality (Adj_to_Hom_Adj (right_kan_ext_adj rke))) (NatIso_hor_comp (NatTrans_id_Iso (Prod_Functor (Functor_id ((Func_Cat C D) ^op) ^op) (Opposite_Functor (Functor_Extender p D)))) (Hom_Func_Cat_Iso (Func_Cat_Op_Iso C D)))))).
+      set (V := NatIso_hor_comp (NatTrans_id_Iso (Prod_Functor (Opposite_Functor (inverse_morphism (Func_Cat_Op_Iso C D))) (inverse_morphism (Func_Cat_Op_Iso C' D)))) (NatIso_compose (NatIso_hor_comp (NatTrans_id_Iso (Prod_Functor (Opposite_Functor (Opposite_Functor rke)) (Functor_id (Func_Cat C' D) ^op))) (Inverse_Isomorphism (Hom_Func_Cat_Iso (Func_Cat_Op_Iso C' D)))) (NatIso_compose (Hom_Adjunct_Duality (Adj_to_Hom_Adj (right_kan_ext_adj rke))) (NatIso_hor_comp (NatTrans_id_Iso (Prod_Functor (Functor_id ((Func_Cat C D) ^op) ^op) (Opposite_Functor (Left_Functor_Extender p D)))) (Hom_Func_Cat_Iso (Func_Cat_Op_Iso C D)))))).
       cbn in V.
       repeat rewrite Functor_assoc in V.
       repeat rewrite Prod_Functor_compose in V.

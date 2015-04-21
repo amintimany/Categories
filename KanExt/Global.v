@@ -2,7 +2,7 @@ Require Import Category.Main.
 Require Import Functor.Functor Functor.Functor_Ops.
 Require Import NatTrans.NatTrans NatTrans.Operations NatTrans.Func_Cat.
 Require Import Adjunction.Adjunction.
-Require Export KanExt.Functor_Extender.
+Require Export Functor.Functor_Extender.
 
 Section KanExtension.
   Context {C C' : Category} (p : Functor C C').
@@ -19,7 +19,7 @@ Section KanExtension.
     Class Left_KanExt : Type :=
       {
         left_kan_ext : Functor (FCAT C D) (FCAT C' D);
-        left_kan_ext_adj : Adjunct left_kan_ext (Functor_Extender p D)
+        left_kan_ext_adj : Adjunct left_kan_ext (Left_Functor_Extender p D)
       }.
 
     Coercion left_kan_ext : Left_KanExt >-> Functor.
@@ -27,7 +27,7 @@ Section KanExtension.
     Class Right_KanExt : Type :=
       {
         right_kan_ext : Functor (FCAT C D) (FCAT C' D);
-        right_kan_ext_adj : Adjunct (Functor_Extender p D) right_kan_ext
+        right_kan_ext_adj : Adjunct (Left_Functor_Extender p D) right_kan_ext
       }.
 
     Coercion right_kan_ext : Right_KanExt >-> Functor.
