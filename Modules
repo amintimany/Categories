@@ -106,7 +106,8 @@ Mod_Adjunction =\
 	Adjunction/Adjunction\
 	Adjunction/Duality\
 	Adjunction/Main\
-	Adjunction/Adj_Facts
+	Adjunction/Adj_Facts\
+	Adjunction/Adj_Cat
 
 Mod_KanExt =\
 	KanExt/Functor_Extender\

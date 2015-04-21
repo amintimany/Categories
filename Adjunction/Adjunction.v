@@ -28,6 +28,23 @@ Section Adjunction.
   Arguments adj_morph_com _ {_ _} _.
   Arguments adj_morph_unique _ {_ _} _ _ _ _ _.
 
+  Theorem Adjunct_eq_simplify (adj adj' : Adjunct) : adj_unit adj = @adj_unit adj' → @adj_morph_ex adj = @adj_morph_ex adj' → adj = adj'.
+  Proof.
+    intros H1 H2.
+    destruct adj as [u ex cm uq]; destruct adj' as [u' ex' cm' uq'].
+    cbn in *.
+    destruct H1; destruct H2.
+    cutrewrite (cm = cm'); [cutrewrite (uq = uq'); trivial|].
+    {
+      extensionality c; extensionality c'; extensionality f.
+      apply proof_irrelevance.
+    }
+    {
+      extensionality c; extensionality c'; extensionality f.
+      apply proof_irrelevance.
+    }
+  Qed.    
+
   Definition Hom_Adjunct := Hom_Adj_Left _ _ F G ≡≡ Hom_Adj_Right _ _ F G ::> Func_Cat _ _.
 
   Existing Class Hom_Adjunct.
