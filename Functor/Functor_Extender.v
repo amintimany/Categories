@@ -1,6 +1,6 @@
 Require Import Category.Main.
 Require Import Functor.Functor Functor.Functor_Ops.
-Require Import NatTrans.NatTrans NatTrans.Operations NatTrans.Func_Cat.
+Require Import NatTrans.Main.
 
 Local Notation FCOMP := Functor_compose (only parsing).
 Local Notation HCOMP := NatTrans_hor_comp (only parsing).
@@ -37,3 +37,18 @@ Section Right_Functor_Extender.
       }.
 
 End Right_Functor_Extender.
+
+Section Right_Left_Functor_Extension_Iso.
+  Context {B C D E : Category} (F : Functor B C) (G : Functor D E).
+
+  Local Hint Extern 1 => apply NatTrans_eq_simplify; cbn.
+  
+  Program Instance Right_Left_Functor_Extension_Iso : (Functor_compose (Left_Functor_Extender F D) (Right_Functor_Extender G B)) ≡≡ (Functor_compose (Right_Functor_Extender G C) (Left_Functor_Extender F E)) ::> Func_Cat _ _ :=
+    {
+      iso_morphism := {|Trans := fun h => NatTrans_Functor_assoc_sym F h G |};
+      inverse_morphism := {|Trans := fun h => NatTrans_Functor_assoc F h G |}
+    }.
+
+End Right_Left_Functor_Extension_Iso.
+
+  

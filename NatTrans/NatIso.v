@@ -189,3 +189,14 @@ Section Embedding_mono.
   Qed.    
 
 End Embedding_mono.
+
+Section NatIso_Functor_assoc.
+  Context {C1 C2 C3 C4 : Category} (F : Functor C1 C2) (G : Functor C2 C3) (H : Functor C3 C4).
+  
+  Program Instance NatIso_Functor_assoc : (Functor_compose F (Functor_compose G H)) ≡≡ (Functor_compose (Functor_compose F G) H) ::> Func_Cat _ _ :=
+    {
+      iso_morphism := NatTrans_Functor_assoc F G H;
+      inverse_morphism := NatTrans_Functor_assoc_sym F G H
+    }.
+
+End NatIso_Functor_assoc.

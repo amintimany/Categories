@@ -118,6 +118,7 @@ Mod_KanExt =\
 	KanExt/GlobalFacts\
 	KanExt/LocaltoGlobal\
 	KanExt/GlobaltoLocal\
+	KanExt/Preservation\
 	KanExt/Main\
 	KanExt/Facts
 
