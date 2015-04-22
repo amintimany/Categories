@@ -30,7 +30,8 @@ Mod_Functor =\
 	Functor/Main\
 	Functor/Representable/Main\
 	Functor/Representable/Hom_Func\
-	Functor/Representable/Hom_Func_Prop
+	Functor/Representable/Hom_Func_Prop\
+	Functor/Representable/Representable\
 
 Mod_Coq_Cats =\
 	Coq_Cats/Type_Cat/Type_Cat\
