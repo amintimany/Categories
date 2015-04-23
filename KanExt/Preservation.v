@@ -2,7 +2,7 @@ Require Import Category.Main.
 Require Import Functor.Functor Functor.Functor_Ops Functor.Representable.Hom_Func.
 Require Import NatTrans.Main.
 Require Import Ext_Cons.Prod_Cat.Main.
-Require Import Adjunction.Adjunction Adjunction.Adj_Facts.
+Require Import Adjunction.Adjunction Adjunction.Duality Adjunction.Adj_Facts.
 Require Import KanExt.Local KanExt.LocalFacts.
 
 Local Notation FCOMP := Functor_compose (only parsing).
@@ -51,6 +51,22 @@ Section Right_Adjoint_Preserves_Local_Right_KanExt.
   Context {C C' : Category} (p : Functor C C') {D : Category} (F : Functor C D) (lrke : Local_Right_KanExt p F) {E : Category} {L : Functor E D} {R : Functor D E} (adj : UCU_Adjunct L R).
   
   Instance Right_Adjoint_Preserves_Local_Right_KanExt : Local_Right_KanExt p (Functor_compose F R) :=
-    Hom_Local_Right_KanExt_to_Local_Right_KanExt (Right_Adjoint_Preserves_Hom_Local_Right_KanExt _ _ (Local_Right_KanExt_to_Hom_Local_Right_KanExt lrke) _).
+    Hom_Local_Right_KanExt_to_Local_Right_KanExt (Right_Adjoint_Preserves_Hom_Local_Right_KanExt _ _ (Local_Right_KanExt_to_Hom_Local_Right_KanExt lrke) adj).
   
 End Right_Adjoint_Preserves_Local_Right_KanExt.
+
+Section Left_Adjoint_Preserves_Hom_Local_Left_KanExt.
+  Context {C C' : Category} (p : Functor C C') {D : Category} (F : Functor C D) (hllke : Hom_Local_Left_KanExt p F) {E : Category} {L : Functor D E} {R : Functor E D} (adj : UCU_Adjunct L R).
+  
+  Instance Left_Adjoint_Preserves_Hom_Local_Left_KanExt : Hom_Local_Left_KanExt p (Functor_compose F L) :=
+    Right_Adjoint_Preserves_Hom_Local_Right_KanExt _ _ hllke (Adj_to_UCU_Adj _ _ (Adjunct_Duality (UCU_Adj_to_Adj _ _ adj))).
+  
+End Left_Adjoint_Preserves_Hom_Local_Left_KanExt.
+
+Section Left_Adjoint_Preserves_Local_Left_KanExt.
+  Context {C C' : Category} (p : Functor C C') {D : Category} (F : Functor C D) (hllke : Local_Left_KanExt p F) {E : Category} {L : Functor D E} {R : Functor E D} (adj : UCU_Adjunct L R).
+  
+  Instance Left_Adjoint_Preserves_Local_Left_KanExt : Local_Left_KanExt p (Functor_compose F L) :=
+    Right_Adjoint_Preserves_Local_Right_KanExt _ _ hllke (Adj_to_UCU_Adj _ _ (Adjunct_Duality (UCU_Adj_to_Adj _ _ adj))).
+  
+End Left_Adjoint_Preserves_Local_Left_KanExt.

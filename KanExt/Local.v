@@ -71,11 +71,8 @@ Arguments LRKE {_ _ _ _ _} _.
 Arguments LRKE_morph_ex {_ _ _ _ _} _ _.
 Arguments LRKE_morph_unique {_ _ _ _ _} _ _ _ _.
 
-Section HomKanExtension.
-  Context {C C' : Category} (p : Functor C C').
-
-  Section Right.
-    Context {D : Category} (F : Functor C D).
+Section Hom_Local_Right_KanExt.
+  Context {C C' : Category} (p : Functor C C') {D : Category} (F : Functor C D).
 
     Class Hom_Local_Right_KanExt :=
       {
@@ -84,10 +81,17 @@ Section HomKanExtension.
       }.
 
     Coercion HLRKE : Hom_Local_Right_KanExt >-> Functor.
-    
-  End Right.
   
-End HomKanExtension.
+End Hom_Local_Right_KanExt.
+
+Section Hom_Local_Left_KanExt.
+  Context {C C' : Category} (p : Functor C C') {D : Category} (F : Functor C D).
+
+  Definition Hom_Local_Left_KanExt := Hom_Local_Right_KanExt (FOP p) (FOP F).
+
+  Existing Class Hom_Local_Left_KanExt.
+  
+End Hom_Local_Left_KanExt.
 
 Arguments HLRKE {_ _ _ _ _} _.
 Arguments HLRKE_Iso {_ _ _ _ _} _.
