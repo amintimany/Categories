@@ -87,41 +87,6 @@ Section Opposite_NatIso.
 
 End Opposite_NatIso.
 
-Section NatIso_compose.
-  Context {C D : Category} {F G H : Functor C D} (N : F ≡≡ G ::> Func_Cat _ _) (N' : G ≡≡ H ::> Func_Cat _ _).
-
-  Local Obligation Tactic := idtac.
-
-  Program Instance NatIso_compose : F ≡≡ H ::> Func_Cat _ _ :=
-    {
-      iso_morphism := (NatTrans_compose (iso_morphism N) (iso_morphism N'));
-      inverse_morphism := (NatTrans_compose (inverse_morphism N') (inverse_morphism N))
-    }.
-
-  Next Obligation.
-  Proof.
-    change (NatTrans_compose (iso_morphism N) (iso_morphism N')) with (N' ∘ N).
-    change (NatTrans_compose N'⁻¹ N⁻¹) with (N⁻¹ ∘ N'⁻¹).
-    rewrite assoc.
-    rewrite (assoc_sym N _ _).
-    rewrite left_inverse.
-    simpl_ids.
-    apply left_inverse.
-  Qed.
-
-  Next Obligation.
-  Proof.
-    change (NatTrans_compose (iso_morphism N) (iso_morphism N')) with (N' ∘ N).
-    change (NatTrans_compose N'⁻¹ N⁻¹) with (N⁻¹ ∘ N'⁻¹).
-    rewrite assoc.
-    rewrite (assoc_sym _ _ N).
-    rewrite right_inverse.
-    simpl_ids.
-    apply right_inverse.
-  Qed.
-
-End NatIso_compose.
-
 Section Embedding_mono.
   Context {C C' : Category} (F : Embedding C C') {B : Category}.
 

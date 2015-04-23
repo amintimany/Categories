@@ -11,7 +11,7 @@ Require Import Functor.Functor_Extender.
 Section Hom_Adjunct_left_iso.
   Context {C D : Category} {F F' : Functor C D} (N : F' ≡≡ F ::> Func_Cat _ _) {G : Functor D C} (adj : Hom_Adjunct F G).
 
-  Definition Hom_Adjunct_left_iso : Hom_Adjunct F' G := NatIso_compose (NatIso_hor_comp (Prod_Functor_NatIso (Opposite_NatIso N) (NatTrans_id_Iso (Functor_id D))) (NatTrans_id_Iso (Hom_Func D))) adj.
+  Definition Hom_Adjunct_left_iso : Hom_Adjunct F' G := Isomorphism_Compose (NatIso_hor_comp (Prod_Functor_NatIso (Opposite_NatIso N) (NatTrans_id_Iso (Functor_id D))) (NatTrans_id_Iso (Hom_Func D))) adj.
 
 End Hom_Adjunct_left_iso.
 
