@@ -1,5 +1,5 @@
 Require Import Category.Main.
-Require Import Functor.Main.
+Require Import Functor.Functor.
 Require Import Cat.Cat.
 
 Section NatTrans.

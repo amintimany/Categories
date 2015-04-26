@@ -27,11 +27,12 @@ Mod_Functor =\
 	Functor/Functor_Properties\
 	Functor/Functor_Image\
 	Functor/Const_Func\
+	Functor/Const_Func_Functor\
 	Functor/Main\
 	Functor/Representable/Main\
 	Functor/Representable/Hom_Func\
 	Functor/Representable/Hom_Func_Prop\
-	Functor/Representable/Representable\
+	Functor/Representable/Representable
 
 Mod_Coq_Cats =\
 	Coq_Cats/Type_Cat/Type_Cat\
@@ -61,6 +62,7 @@ Mod_Basic_Cons =\
 	Basic_Cons/Facts/Term_Prod\
 	Basic_Cons/Facts/Main\
 	Basic_Cons/Facts/Equalizer_Monic\
+	Basic_Cons/Facts/Adjuncts\
 	Basic_Cons/Main\
 	Basic_Cons/CCC\
 	Basic_Cons/LCCC\
