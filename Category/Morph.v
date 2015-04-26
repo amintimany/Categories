@@ -102,6 +102,8 @@ Class Monic {C : Category} (a b : Obj) :=
   mono_morphism_monomorphic : ∀ (c : Obj) (g h : Hom c a), mono_morphism ∘ g = mono_morphism ∘ h → g = h
 }.
 
+Coercion mono_morphism : Monic >-> Hom.
+
 Arguments mono_morphism {_ _ _} _.
 Arguments mono_morphism_monomorphic {_ _ _} _ _ _ _ _.
 
@@ -112,6 +114,24 @@ Definition Epic {C : Category} (a b : C) := @Monic (C^op) b a.
 Existing Class Epic.
 
 Notation "a –≫ b" := (Epic a b).
+
+Section Mono_compose.
+  Context {C : Category} {a b c : C} (M : a ≫–> b) (M' : b ≫–> c).
+
+  Program Instance Mono_compose : a ≫–> c :=
+    {
+      mono_morphism := M' ∘ M
+    }.
+
+  Next Obligation.
+  Proof.
+    apply (mono_morphism_monomorphic M).
+    apply (mono_morphism_monomorphic M').
+    repeat rewrite assoc_sym.
+    trivial.
+  Qed.
+    
+End Mono_compose.
 
 Section Iso_Mono_Epi.
   Context {C : Category} {a b : Obj} (I : a ≡ b).

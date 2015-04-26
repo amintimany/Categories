@@ -1,7 +1,7 @@
 Require Import Category.Main.
 Require Import Functor.Functor Functor.Functor_Ops Functor.Representable.Hom_Func.
-Require Import NatTrans.NatTrans NatTrans.Operations NatTrans.Func_Cat.
-Require Import Ext_Cons.Prod_Cat.Prod_Cat Ext_Cons.Prod_Cat.Operations.
+Require Import NatTrans.NatTrans NatTrans.Operations NatTrans.Func_Cat NatTrans.NatIso.
+Require Import Ext_Cons.Prod_Cat.Prod_Cat Ext_Cons.Prod_Cat.Operations Ext_Cons.Prod_Cat.Nat_Facts.
 Require Import Adjunction.Adjunction.
 Require Import KanExt.Local.
 Require Import Basic_Cons.Terminal.
@@ -128,6 +128,29 @@ Section Facts.
     Proof (Terminal_iso (Local_Right_KanExt_terminal rke) (Local_Right_KanExt_terminal rke')).
       
   End Local_Right_KanExt_unique.
+
+  Section LoKan_Cone_Iso_object_Iso.
+    Context {Cn Cn' : LoKan_Cone p F} (N : Cn ≡≡ Cn' ::> LoKan_Cone_Cat).
+
+    Program Instance LoKan_Cone_Iso_object_Iso : ∀ (c : C'), Cn _o c ≡ Cn' _o c :=
+      {
+        iso_morphism := Trans (iso_morphism N) c;
+        inverse_morphism := Trans (inverse_morphism N) c
+      }.
+
+    Next Obligation.
+    Proof.
+      change (Trans (inverse_morphism N) c ∘ Trans (iso_morphism N) c) with (Trans (NatTrans_compose (iso_morphism N) (inverse_morphism N)) c).
+      set (W := f_equal (cone_morph) (left_inverse N)); cbn in W; rewrite W; trivial.
+    Qed.
+
+    Next Obligation.
+    Proof.
+      change (Trans (iso_morphism N) c ∘ Trans (inverse_morphism N) c) with (Trans (NatTrans_compose (inverse_morphism N) (iso_morphism N)) c).
+      set (W := f_equal (cone_morph) (right_inverse N)); cbn in W; rewrite W; trivial.
+    Qed.
+
+  End LoKan_Cone_Iso_object_Iso.
 
 End Facts.
 
@@ -296,5 +319,24 @@ Section Hom_Local_Right_KanExt_to_Local_Right_KanExt.
     
 End Hom_Local_Right_KanExt_to_Local_Right_KanExt.
 
+Section Hom_Local_Right_KanExt_Iso.
+  Context {C C' : Category} {p : Functor C C'}
+          {D : Category} {F F' : Functor C D} (N : F' ≡≡ F ::> Func_Cat _ _)
+          (hlrke : Hom_Local_Right_KanExt p F).
 
-    
+  Instance Hom_Local_Right_KanExt_Iso : Hom_Local_Right_KanExt p F' :=
+    {
+      HLRKE := hlrke;
+      HLRKE_Iso := Isomorphism_Compose (NatIso_hor_comp (NatTrans_id_Iso (FOP (Left_Functor_Extender p D))) (Fix_Bi_Func_2_object_NatIso (Hom_Func (Func_Cat C D)) N)) (HLRKE_Iso hlrke)
+    }.
+
+End Hom_Local_Right_KanExt_Iso.
+
+Section Local_Right_KanExt_Iso.
+  Context {C C' : Category} {p : Functor C C'}
+          {D : Category} {F F' : Functor C D} (N : F' ≡≡ F ::> Func_Cat _ _)
+          (hlrke : Local_Right_KanExt p F).
+
+  Instance Local_Right_KanExt_Iso : Local_Right_KanExt p F' := Hom_Local_Right_KanExt_to_Local_Right_KanExt (Hom_Local_Right_KanExt_Iso N (Local_Right_KanExt_to_Hom_Local_Right_KanExt hlrke)).
+
+End Local_Right_KanExt_Iso.

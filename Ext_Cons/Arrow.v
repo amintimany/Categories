@@ -95,3 +95,57 @@ Lemma Arrow_OP_Iso (C : Category) : (Arrow C) ≡≡ (Arrow (C ^op)) ::> Type_Ca
 Proof.
   eapply (Build_Isomorphism Type_Cat _ _ (Arrow_to_Arrow_OP C) (Arrow_to_Arrow_OP (C ^op))); auto.
 Qed.
+
+Definition Arrow_Conv {C : Category} (a b : Arrow C) (HO : Orig a = Orig b) (HT : Targ a = Targ b) :=
+  {|
+    Orig := Orig b;
+    Targ := Targ b;
+    Arr :=
+      match HO in _ = u return Hom u _
+      with eq_refl =>
+           match HT in _ = v return Hom _ v
+           with
+             eq_refl => (Arr a)
+           end
+      end
+  |}.
+
+Theorem Arrow_Conv_eq {C : Category} (a b : Arrow C) (HO : Orig a = Orig b) (HT : Targ a = Targ b) (H : a = b) : (Arrow_Conv a b HO HT) = b.
+Proof.
+  destruct H.
+  unfold Arrow_Conv.
+  apply JMeq_eq.
+  destruct HO.
+  destruct HT.
+  trivial.
+Qed.
+
+Theorem Arrow_Conv_Arr_eq {C : Category} (a b : Arrow C) (HO : Orig a = Orig b) (HT : Targ a = Targ b) (H : a = b) : Arr (Arrow_Conv a b HO HT) = Arr b.
+Proof.
+  destruct H.
+  unfold Arrow_Conv.
+  cbn.
+  apply JMeq_eq.
+  destruct HO.
+  destruct HT.
+  trivial.
+Qed.
+             
+Local Obligation Tactic := idtac.
+
+Program Instance Arrow_Inclusion_Monic (C : Category) (x y : C) : @Monic Type_Cat (Hom x y) (Arrow C) :=
+  {
+    mono_morphism := fun w => {|Arr := w|}
+  }.
+
+Next Obligation.
+Proof.
+  intros C x y c g h H.
+  cbn in H.
+  extensionality m.
+  set (W := (equal_f H m)); clearbody W; clear H; cbn in W.
+  match type of W with
+    ?A = ?B =>
+    apply (Arrow_Conv_Arr_eq A B eq_refl eq_refl W)
+  end.
+Qed.

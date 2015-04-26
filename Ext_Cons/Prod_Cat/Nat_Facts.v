@@ -270,3 +270,153 @@ Section Func_Prod_of_ids_NatIso.
     }.
 
 End Func_Prod_of_ids_NatIso.
+
+Section Fix_Bi_Func_1_object_NatTrans.
+  Context {B C D E : Category} (F : Functor (Prod_Cat (Func_Cat C D) B) E)
+          {G G' : Functor C D} (N : NatTrans G G').
+
+  Program Instance Fix_Bi_Func_1_object_NatTrans : NatTrans (@Fix_Bi_Func_1 (Func_Cat _ _) _ _ G F) (@Fix_Bi_Func_1 (Func_Cat _ _) _ _ G' F) :=
+    {
+      Trans := fun c => F _a (G, c) (G', c) (N, id)
+    }.
+
+  Next Obligation.
+  Proof.
+    intros c c' h.
+    cbn.
+    repeat rewrite <- F_compose.
+    cbn.
+    rewrite NatTrans_id_unit_left, NatTrans_id_unit_right.
+    auto.
+  Qed.
+
+  Next Obligation.
+  Proof.
+    symmetry.
+    apply Fix_Bi_Func_1_object_NatTrans_obligation_1.
+  Qed.
+
+End Fix_Bi_Func_1_object_NatTrans.
+
+Section Fix_Bi_Func_1_object_NatIso.
+  Context {B C D E : Category} (F : Functor (Prod_Cat (Func_Cat C D) B) E)
+          {G G' : Functor C D} (N : G ≡≡ G' ::> Func_Cat _ _).
+
+  Program Instance Fix_Bi_Func_1_object_NatIso : (@Fix_Bi_Func_1 (Func_Cat _ _) _ _ G F) ≡≡ (@Fix_Bi_Func_1 (Func_Cat _ _) _ _ G' F) ::> Func_Cat _ _ :=
+    {
+      iso_morphism := Fix_Bi_Func_1_object_NatTrans F (iso_morphism N);
+      inverse_morphism := Fix_Bi_Func_1_object_NatTrans F (inverse_morphism N)
+    }.
+
+  Next Obligation.
+  Proof.
+    apply NatTrans_eq_simplify; extensionality c.
+    cbn.
+    rewrite <- F_compose.
+    cbn.
+    (*
+for some strange reason the following fails! this would allow to finish the proof by auto.
+    set (W := left_inverse N); cbn in W; rewrite W.
+     *)
+    rewrite <- F_id; cbn.
+    apply f_equal.
+    match goal with
+      [ |- (?A, _) = (?B, _)] => cutrewrite(A = B); auto
+    end.
+    apply (left_inverse N).
+  Qed.
+
+  Next Obligation.
+  Proof.
+    apply NatTrans_eq_simplify; extensionality c.
+    cbn.
+    rewrite <- F_compose.
+    cbn.
+    (*
+for some strange reason the following fails! this would allow to finish the proof by auto.
+    set (W := right_inverse N); cbn in W; rewrite W.
+     *)
+    rewrite <- F_id; cbn.
+    apply f_equal.
+    match goal with
+      [ |- (?A, _) = (?B, _)] => cutrewrite(A = B); auto
+    end.
+    apply (right_inverse N).
+  Qed.
+
+End Fix_Bi_Func_1_object_NatIso.
+
+Section Fix_Bi_Func_2_object_NatTrans.
+  Context {B C D E : Category} (F : Functor (Prod_Cat B (Func_Cat C D)) E)
+          {G G' : Functor C D} (N : NatTrans G G').
+
+  Program Instance Fix_Bi_Func_2_object_NatTrans : NatTrans (@Fix_Bi_Func_2 _ (Func_Cat _ _) _ G F) (@Fix_Bi_Func_2 _ (Func_Cat _ _) _ G' F) :=
+    {
+      Trans := fun c => F _a (c, G) (c, G') (id, N)
+    }.
+
+  Next Obligation.
+  Proof.
+    intros c c' h.
+    cbn.
+    repeat rewrite <- F_compose.
+    cbn.
+    rewrite NatTrans_id_unit_left, NatTrans_id_unit_right.
+    auto.
+  Qed.
+
+  Next Obligation.
+  Proof.
+    symmetry.
+    apply Fix_Bi_Func_2_object_NatTrans_obligation_1.
+  Qed.
+
+End Fix_Bi_Func_2_object_NatTrans.
+
+Section Fix_Bi_Func_2_object_NatIso.
+  Context {B C D E : Category} (F : Functor (Prod_Cat B (Func_Cat C D)) E)
+          {G G' : Functor C D} (N : G ≡≡ G' ::> Func_Cat _ _).
+
+  Program Instance Fix_Bi_Func_2_object_NatIso : (@Fix_Bi_Func_2 _ (Func_Cat _ _) _ G F) ≡≡ (@Fix_Bi_Func_2 _ (Func_Cat _ _) _ G' F) ::> Func_Cat _ _ :=
+    {
+      iso_morphism := Fix_Bi_Func_2_object_NatTrans F (iso_morphism N);
+      inverse_morphism := Fix_Bi_Func_2_object_NatTrans F (inverse_morphism N)
+    }.
+
+  Next Obligation.
+  Proof.
+    apply NatTrans_eq_simplify; extensionality c.
+    cbn.
+    rewrite <- F_compose.
+    cbn.
+    (*
+for some strange reason the following fails! this would allow to finish the proof by auto.
+    set (W := left_inverse N); cbn in W; rewrite W.
+     *)
+    rewrite <- F_id; cbn.
+    apply f_equal.
+    match goal with
+      [ |- (_, ?A) = (_, ?B)] => cutrewrite(A = B); auto
+    end.
+    apply (left_inverse N).
+  Qed.
+
+  Next Obligation.
+  Proof.
+    apply NatTrans_eq_simplify; extensionality c.
+    cbn.
+    rewrite <- F_compose.
+    cbn.
+    (*
+for some strange reason the following fails! this would allow to finish the proof by auto.
+    set (W := right_inverse N); cbn in W; rewrite W.
+     *)
+    rewrite <- F_id; cbn.
+    apply f_equal.
+    match goal with
+      [ |- (_, ?A) = (_, ?B)] => cutrewrite(A = B); auto
+    end.
+    apply (right_inverse N).
+  Qed.
+
+End Fix_Bi_Func_2_object_NatIso.

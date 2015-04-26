@@ -98,7 +98,8 @@ Mod_Limits =\
 	Limits/Main\
 	Limits/GenProd_GenSum\
 	Limits/GenProd_Eq_Limits\
-	Limits/Pointwise
+	Limits/Pointwise\
+	Limits/Complete_Preorder
 
 Mod_Archetypal =\
 	Archetypal/Discr\
