@@ -36,8 +36,7 @@ Section Type_Cat_GenSum.
   Proof.
     extensionality x.
     destruct c; destruct c'; destruct h.
-    set (H := equal_f (@Trans_com _ _ _ _ Cn (projT1 x) (projT1 x) (Discr_id _ _))).
-    apply H.
+    apply (equal_f (@Trans_com _ _ _ _ Cn (projT1 x) (projT1 x) eq_refl)).
   Qed.
 
   Next Obligation.

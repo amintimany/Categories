@@ -81,6 +81,8 @@ Section GenProd_Eq_Complete.
 
       Section Every_Cone_Equalizes.
         Context (Cn : Cone D).
+
+        Local Hint Extern 1 => cbn.
         
         Program Instance Cone_to_DF_DCone : Cone (DF (D _o)) :=
           {|

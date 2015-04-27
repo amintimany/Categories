@@ -48,49 +48,17 @@ Notation "1" := (SingletonCat) : category_scope.
 Section Discr.
   Context (Obj : Type).
 
-  Inductive Discr_Hom : Obj → Obj → Type :=
-    Discr_id : ∀ (x : Obj), Discr_Hom x x
-  .
-
-  Hint Constructors Discr_Hom.
-
-  Hint Extern 1 =>
-  match goal with
-      [H : Discr_Hom _ _ |- _] => destruct H
-  end.
-
-  Definition Discr_Hom_compose (a b c : Obj) (f : Discr_Hom a b) (g : Discr_Hom b c) : Discr_Hom a c.
-  Proof.
-    auto.
-  Defined.
-
   Program Instance Discr_Cat : Category :=
     {
       Obj := Obj;
-      Hom := Discr_Hom;
-      compose := Discr_Hom_compose;
-      id := fun a => Discr_id a
+      Hom := fun a b => a = b;
+      compose := @eq_trans _;
+      id := fun a => eq_refl
     }.
 
 End Discr.
 
-Hint Extern 1 =>
-  match goal with
-      [H : Discr_Hom _ _ _ |- _] => destruct H
-  end.
-
-Inductive S_Type (T : Type) : Type :=
-| NEW : unit → S_Type T
-| OLD : T → S_Type T
-.
-
-Fixpoint Type_n (n : nat) {struct n} : Type :=
-  match n with
-    | O => Empty
-    | S O => unit
-    | S n' => S_Type (Type_n n')
-  end
-.
+Definition Type_n (n : nat) : Type := {x : nat| x < n}.
 
 Notation "'Discr_n' n" := (Discr_Cat (Type_n n)) (at level 200, n bigint) : category_scope.
 
@@ -98,16 +66,18 @@ Notation "'Discr_n' n" := (Discr_Cat (Type_n n)) (at level 200, n bigint) : cate
 Section Discr_Func.
   Context {C : Category} {A : Type} (Omap : A → C).
 
+  Local Hint Extern 1 => cbn.
+  
   Program Instance Discr_Func : Functor (Discr_Cat A) C :=
     {
       FO := Omap;
       
-      FA := fun (a b : A) (X : Discr_Hom A a b) =>
-            match X in (Discr_Hom _ y y0) return (Hom (Omap y) (Omap y0)) with
-              | Discr_id _ _ => id
+      FA := fun (a b : A) (h : a = b) =>
+            match h in _ = y return (Hom (Omap y) (Omap y)) with
+              | eq_refl => id
             end
-    }.
-
+    }.    
+  
 End Discr_Func.
 
 Arguments Discr_Func {_ _} _, _ {_} _.
@@ -118,15 +88,17 @@ Local Hint Extern 1 => match goal with [z : Arrow (Discr_Cat _) |- _] => destruc
 (* The fact that in discrete category object type and arrow type are isomorphic *)
 Instance Discr_Hom_Iso (A : Type) : A ≡≡ Arrow (Discr_Cat A) ::> Type_Cat.
 Proof.
-  eapply (Build_Isomorphism Type_Cat _ _ (λ a, (Build_Arrow (Discr_Cat A) _ _ (Discr_id A a))) (λ a : (Arrow (Discr_Cat _)), Orig a)); auto.
+  eapply (Build_Isomorphism Type_Cat _ _ (λ a, (Build_Arrow (Discr_Cat A) _ _ (eq_refl a))) (λ a : (Arrow (Discr_Cat _)), Orig a)); auto.
 Qed.
 
 Section Discretize.
   Context {C D : Category} {F G : Functor C D} (N : NatTrans F G).
 
+  Local Hint Extern 1 => cbn.
+  
   Program Instance Discretize : NatTrans (Discr_Func (F _o)) (Discr_Func (G _o)) :=
     {
       Trans := Trans N
     }.
-
+    
 End Discretize.

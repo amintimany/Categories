@@ -36,8 +36,7 @@ Section Type_Cat_GenProd.
   Proof.
     destruct c; destruct c'; destruct h.
     extensionality x; extensionality y.
-    set (H := equal_f ((@Trans_com _ _ _ _ Cn) y y (Discr_id _ _)) x).
-    trivial.
+    apply (equal_f ((@Trans_com _ _ _ _ Cn) y y eq_refl) x).
   Qed.
 
   Next Obligation.

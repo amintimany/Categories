@@ -34,6 +34,8 @@ Section Complete_Preorder.
 
   Local Definition GenProd_of_const_Hom_x_y := Type_Cat_GenProd _ ((FCOMP (Discr_Func Arr_y) (@Fix_Bi_Func_1 C^op _ _ x (Hom_Func.Hom_Func C))) _o).
 
+  Local Hint Extern 1 => cbn.
+
   Local Program Definition Func_Iso : (Discr_Func ((Functor_compose (Discr_Func Arr_y) (@Fix_Bi_Func_1 C^op _ _ x (Hom_Func.Hom_Func C))) _o)) ≡≡ (Functor_compose (Discr_Func Arr_y) (@Fix_Bi_Func_1 C^op _ _ x (Hom_Func.Hom_Func C))) ::> Func_Cat _ _ :=
     {|
       iso_morphism := {|Trans := fun c h => h|};

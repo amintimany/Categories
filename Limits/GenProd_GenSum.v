@@ -24,46 +24,26 @@ Section Conversion.
   Section CoCone_to_CoCone_1.
     Context (Cn : @LoKan_Cone _ _ (Functor_To_1_Cat (Discr_Cat A)) _ (@Discr_Func C^op _ map)).
 
+    Local Hint Extern 1 => cbn.
+
     Program Instance CoCone_to_CoCone_1 : @LoKan_Cone _ _ (Functor_To_1_Cat (Discr_Cat A)^op) _ (Opposite_Functor (Discr_Func map)) :=
       {
         cone_apex := (cone_apex Cn);
         cone_edge := {|Trans := fun c => Trans ((cone_edge Cn)) c |}
       }.
 
-    Next Obligation.
-    Proof.
-      destruct h.
-      apply (@Trans_com _ _ _ _ Cn x x id).
-    Qed.
-
-    Next Obligation.
-    Proof.
-      destruct h.
-      apply (@Trans_com_sym _ _ _ _ Cn x x id).
-    Qed.
-
   End CoCone_to_CoCone_1.
 
   Section CoCone_to_CoCone_2.
     Context (Cn : @LoKan_Cone _ _ (Functor_To_1_Cat (Discr_Cat A)^op) _ (Opposite_Functor (Discr_Func map))).
 
+    Local Hint Extern 1 => cbn.
+    
     Program Instance CoCone_to_CoCone_2 : @LoKan_Cone _ _ (Functor_To_1_Cat (Discr_Cat A)) _ (@Discr_Func C^op _ map) :=
       {
         cone_apex := (cone_apex Cn);
         cone_edge := {|Trans := fun c => Trans ((cone_edge Cn)) c |}
       }.
-
-    Next Obligation.
-    Proof.
-      destruct h.
-      apply (@Trans_com _ _ _ _ Cn x x id).
-    Qed.
-
-    Next Obligation.
-    Proof.
-      destruct h.
-      apply (@Trans_com_sym _ _ _ _ Cn x x id).
-    Qed.
 
   End CoCone_to_CoCone_2.
 
