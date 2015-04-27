@@ -128,7 +128,8 @@ Mod_KanExt =\
 	KanExt/Facts
 
 Mod_Topos =\
-	Topos/SubObject_Classifier
+	Topos/SubObject_Classifier\
+	Topos/Topos
 
 Mod_Demo =\
 	Demo/Demo
