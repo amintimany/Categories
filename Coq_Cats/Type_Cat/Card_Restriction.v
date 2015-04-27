@@ -9,3 +9,15 @@ Class Card_Restriction : Type :=
 }.
 
 Coercion Card_Rest : Card_Restriction >-> Funclass.
+
+Program Definition Finite : Card_Restriction :=
+  {|
+    Card_Rest := fun A => inhabited {n : nat & A ≡≡ {x : nat | x < n} ::> Type_Cat}
+  |}.
+
+Next Obligation.
+Proof.
+  destruct H as [[n I]].
+  eexists.
+  refine (existT _ n (Isomorphism_Compose (Inverse_Isomorphism X) I)).
+Qed.
