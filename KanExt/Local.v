@@ -48,6 +48,27 @@ Section KanExtension.
       }.
 
     Coercion LRKE : Local_Right_KanExt >-> LoKan_Cone.
+
+    Class is_Local_Right_KanExt (Cn_apex : Functor C' D) :=
+      {
+        isLRKE_Cn_edge : NatTrans (FCOMP p Cn_apex) F;
+        isLRKE_morph_ex : ∀ (Cn : LoKan_Cone), LoKan_Cone_Morph Cn {|cone_apex := Cn_apex; cone_edge := isLRKE_Cn_edge|};
+        isLRKE_morph_unique : ∀ (Cn : LoKan_Cone) (h h' : LoKan_Cone_Morph Cn {|cone_apex := Cn_apex; cone_edge := isLRKE_Cn_edge|}), h = h' :> NatTrans _ _
+      }.
+
+    Definition is_Local_Right_KanExt_Local_Right_KanExt {Cn_apex : Functor C' D} (ilrke : is_Local_Right_KanExt Cn_apex) : Local_Right_KanExt :=
+      {|
+        LRKE := {|cone_apex := Cn_apex; cone_edge := @isLRKE_Cn_edge _ ilrke|};
+        LRKE_morph_ex := @isLRKE_morph_ex _ ilrke;
+        LRKE_morph_unique := @isLRKE_morph_unique _ ilrke
+      |}.
+
+    Definition Local_Right_KanExt_is_Local_Right_KanExt (lrke : Local_Right_KanExt) : is_Local_Right_KanExt lrke :=
+      {|
+        isLRKE_Cn_edge := lrke;
+        isLRKE_morph_ex := @LRKE_morph_ex lrke;
+        isLRKE_morph_unique := @LRKE_morph_unique lrke
+      |}.
     
   End Right.
   
@@ -58,7 +79,10 @@ Section Left.
 
   Definition Local_Left_KanExt := Local_Right_KanExt (FOP p) (FOP F).
 
+  Definition is_Local_Left_KanExt (Cn_apex : Functor C' D) := is_Local_Right_KanExt (FOP p) (FOP F) (FOP Cn_apex).
+
   Existing Class Local_Left_KanExt.
+  Existing Class is_Local_Left_KanExt.
   
 End Left.
   
@@ -74,13 +98,15 @@ Arguments LRKE_morph_unique {_ _ _ _ _} _ _ _ _.
 Section Hom_Local_Right_KanExt.
   Context {C C' : Category} (p : Functor C C') {D : Category} (F : Functor C D).
 
-    Class Hom_Local_Right_KanExt :=
-      {
-        HLRKE : Functor C' D;
-        HLRKE_Iso : (FCOMP (FOP (Left_Functor_Extender p D)) (@Fix_Bi_Func_2 _ (Func_Cat C D) _ F (Hom_Func (Func_Cat C D)))) ≡≡ (@Fix_Bi_Func_2 _ (Func_Cat C' D) _ HLRKE (Hom_Func (Func_Cat C' D))) ::> Func_Cat _ _
-      }.
-
-    Coercion HLRKE : Hom_Local_Right_KanExt >-> Functor.
+  Definition Hom_Local_Right_KanExt_Iso (HLRKE : Functor C' D) := (FCOMP (FOP (Left_Functor_Extender p D)) (@Fix_Bi_Func_2 _ (Func_Cat C D) _ F (Hom_Func (Func_Cat C D)))) ≡≡ (@Fix_Bi_Func_2 _ (Func_Cat C' D) _ HLRKE (Hom_Func (Func_Cat C' D))) ::> Func_Cat _ _.
+  
+  Class Hom_Local_Right_KanExt := 
+    {
+      HLRKE : Functor C' D;
+      HLRKE_Iso : Hom_Local_Right_KanExt_Iso HLRKE
+    }.
+  
+  Coercion HLRKE : Hom_Local_Right_KanExt >-> Functor.
   
 End Hom_Local_Right_KanExt.
 
