@@ -15,4 +15,7 @@ Section Representable.
 
 End Representable.
 
+Arguments representer {_ _} _.
+Arguments representation_Iso {_ _} _.
+
 SubClass CoRepresentable {C : Category} (F : Functor C^op Type_Cat) := @Representable C^op F.

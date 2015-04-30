@@ -42,7 +42,7 @@ Section Complete_Preorder.
       inverse_morphism := {|Trans := fun c h => h|}
     |}.
 
-  Local Definition Local_Right_KanExt_Iso_Limits_Pointwise_LimOf_Arr_y__ISO__GenProd_of_const_Hom_x_y : Local_Right_KanExt_Iso Func_Iso (Limits_Pointwise _ x LimOf_Arr_y) ≡≡ GenProd_of_const_Hom_x_y ::> LoKan_Cone_Cat _ _ := Local_Right_KanExt_unique _ _ _ _.
+  Local Definition Local_Right_KanExt_Iso_Limits_Pointwise_LimOf_Arr_y__ISO__GenProd_of_const_Hom_x_y : Local_Right_KanExt_Iso Func_Iso (Rep_Preserve_Limits _ x LimOf_Arr_y) ≡≡ GenProd_of_const_Hom_x_y ::> LoKan_Cone_Cat _ _ := Local_Right_KanExt_unique _ _ _ _.
   
   Local Definition Hom_x_LimOf_Arr_y_ISO_Arrow_C_to_Hom_x_y : (Hom x ((LimOf_Arr_y _o) tt)) ≡≡ (Arrow C → Hom x y) ::> Type_Cat :=
     LoKan_Cone_Iso_object_Iso _ _ Local_Right_KanExt_Iso_Limits_Pointwise_LimOf_Arr_y__ISO__GenProd_of_const_Hom_x_y tt.

@@ -340,3 +340,25 @@ Section Local_Right_KanExt_Iso.
   Instance Local_Right_KanExt_Iso : Local_Right_KanExt p F' := Hom_Local_Right_KanExt_to_Local_Right_KanExt (Hom_Local_Right_KanExt_Iso N (Local_Right_KanExt_to_Hom_Local_Right_KanExt hlrke)).
 
 End Local_Right_KanExt_Iso.
+
+Section Iso_Hom_Local_Right_KanExt.
+  Context {C C' : Category} {p : Functor C C'}
+          {D : Category} {F : Functor C D} {hlrke hlrke' : Functor C' D} (N : hlrke ≡≡ hlrke' ::> Func_Cat _ _)
+          (ihlrke : Hom_Local_Right_KanExt_Isomorphism p F hlrke).
+  
+  Instance Iso_Hom_Local_Right_KanExt : Hom_Local_Right_KanExt p F :=
+    {
+      HLRKE := hlrke';
+      HLRKE_Iso := Isomorphism_Compose ihlrke (Fix_Bi_Func_2_object_NatIso (Hom_Func (Func_Cat C' D)) N)
+    }.
+
+End Iso_Hom_Local_Right_KanExt.
+
+Section Iso_Local_Right_KanExt.
+  Context {C C' : Category} {p : Functor C C'}
+          {D : Category} {F : Functor C D} {hlrke hlrke' : Functor C' D} (N : hlrke ≡≡ hlrke' ::> Func_Cat _ _)
+          (ihlrke : is_Local_Right_KanExt p F hlrke).
+
+  Instance Iso_Local_Right_KanExt : is_Local_Right_KanExt p F hlrke' := Local_Right_KanExt_is_Local_Right_KanExt _ _ (Hom_Local_Right_KanExt_to_Local_Right_KanExt (Iso_Hom_Local_Right_KanExt N (HLRKE_Iso (Local_Right_KanExt_to_Hom_Local_Right_KanExt (is_Local_Right_KanExt_Local_Right_KanExt _ _ ihlrke))))).
+
+End Iso_Local_Right_KanExt.

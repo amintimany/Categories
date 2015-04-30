@@ -125,6 +125,7 @@ Mod_KanExt =\
 	KanExt/LocaltoGlobal\
 	KanExt/GlobaltoLocal\
 	KanExt/Preservation\
+	KanExt/Pointwise\
 	KanExt/Main\
 	KanExt/Facts
 
