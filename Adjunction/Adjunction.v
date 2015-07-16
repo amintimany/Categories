@@ -21,7 +21,13 @@ Local Obligation Tactic := idtac.
 Section Adjunction.
   Context {C D : Category} (F : Functor C D) (G : Functor D C).
 
-  (** This is the definition of adjunctions taken as them main definition in this development. Functor F : C -> D is the left adjoint to functor G : D -> C if there is a natural transformation η : (Functor_id C) -> (G ∘ F) and for any arrow f : c -> (G _o d) there is a unique arrow f̂ : (F _o c) d such that the following diagram commutes:
+  (** This is the definition of adjunctions taken as them main definition in this development. 
+Functor F : C -> D is the left adjoint to functor G : D -> C if there is a natural transformation
+η : (Functor_id C) -> (G ∘ F) and for any arrow f : c -> (G _o d) there is a unique arrow
+ f̂ : (F _o c) d such that the following diagram commutes:
+
+#
+<pre>
 
               f
          c —————————–> (G _o d)
@@ -32,6 +38,8 @@ Section Adjunction.
          ↓       /
    (G _o (F _o c))
 
+</pre>
+#
 *)
   Record Adjunct : Type :=
   {
@@ -67,13 +75,16 @@ Section Adjunction.
   Definition Hom_Adjunct := (Hom_Adj_Left _ _ F G ≡≡ Hom_Adj_Right _ _ F G ::> Func_Cat _ _)%morphism.
 
   
-  (** The unit-counit definition of adjunctions. F : C -> D is the left adjoint to G : D -> C if there are two natural transformations η : (Functor_id C) -> (G ∘ F) and ε : (F ∘ G) -> (Functor_id D) such that we have the following two equalities hold:
+  (** The unit-counit definition of adjunctions. F : C -> D is the left adjoint to G : D -> C if there
+are two natural transformations η : (Functor_id C) -> (G ∘ F) and ε : (F ∘ G) -> (Functor_id D) such that
+ we have the following two equalities hold:
 
   (ε ∘_h (NatTrans_id F)) ∘ ((NatTrans_id F) ∘_h η) = (NatTrans_id F)
 
   ((NatTrans_id FG) ∘_h ε) ∘ (η ∘_h (NatTrans_id G)) = (NatTrans_id G)
 
-  In practice, we have compose some other natural transformations within the above equalities to correct the types. Therefore, we have:
+  In practice, we have compose some other natural transformations within the above equalities to correct
+the types. Therefore, we have:
 *)
   Record UCU_Adjunct :=
     {

@@ -72,19 +72,21 @@ Qed.
 
 (**
 Graphically:
-
+#
+<pre>
     C      C             C              C       
     |  N   |             |              |
   F | ===> | G           |              |
     |      |             |              |
-    ∨      ∨             |   N' ∘_h N    |
+    ∨      ∨             |   N' ∘_h N   |
     D      D        F'∘F | ===========> |
     |  N'  |             |              |
  F' | ===> | G'          |              |
     |      |             |              |
     ∨      ∨             ∨              ∨
     E      E             E              E
-
+</pre>
+#
 *)
 
 Notation "N ∘_h N'" := (NatTrans_hor_comp N' N) : nattrans_scope.
@@ -164,22 +166,25 @@ Program Definition NatTrans_Functor_assoc_sym {C1 C2 C3 C4 : Category}
 
 (**
 The following theorem states that the two natural transformations of the diagram in the middle are equal.
-
+#
+<pre>
     F                       G ∘ F                      G
  C —————––>D   D —————————–—————————————————–—–—–> E   D —–————–> E
      ||           ||                           ||          ||
      ||N1         ||                           ||          ||N2
      ||           ||                           ||          ||
      \/           ||                           ||          \/
-    F'            ||                           ||         G'
+     F'           ||                           ||          G'
  C ————–—–>D      ||(N4 ∘ N2) ∘_h (N3 ∘ N1)    ||      D ———–——–> E
      ||           ||                           ||          ||
      || N3        ||                           ||          ||N4
      ||           ||  (N4 ∘_h N3) ∘ (N2 ∘_h N1)||          ||
-     \/           ||                           ||         \/
-    F''           \/                           \/         G''
+     \/           ||                           ||          \/
+     F''          \/                           \/          G''
  C ————–—–> D  D ——–—————————————————————————–——–> E   D————–——–> E
                             G'' ∘ F''
+</pre>
+#
 *)
 Section NatTrans_comp_hor_comp.
   Context {C D E  : Category} {F F' F'' : Functor C D} {G G' G'' : Functor D E} (N1 : NatTrans F F') (N2 : NatTrans G G') (N3 : NatTrans F' F'') (N4 : NatTrans G' G'').

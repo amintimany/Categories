@@ -6,11 +6,17 @@ Require Import Functor.Main.
 (**
 Given two objects a and b, their product a×b is an object such that there are two projections from it to a and b:
 
+#
+<pre>
+
                     π₁        π₂
                 a <—–——– a×b ———–—> b
-
+</pre>
+#
 such that for any object z with two projections to a and b, there is a unique arrow h that makes the following diagram commute:
 
+#
+<pre>
                     π₁        π₂
                 a <—–——–– a×b –———–—> b
                  ↖         ↑        ↗
@@ -21,6 +27,8 @@ such that for any object z with two projections to a and b, there is a unique ar
                       \    |   /
                        \   |  /
                            z
+</pre>
+#
 *)
 Record Product {C : Category} (c d : C) : Type :=
 {

@@ -99,9 +99,9 @@ CoInductive CoNat_eq : CoNat -> CoNat -> Prop :=
 
 Axiom CoNat_eq_eq : forall (n n' : CoNat), CoNat_eq n n' -> n = n'.
 
-Definition S_nat_coalg_cat := @CoAlgebra_Cat Type_Cat S_nat_func^op.
+Definition S_nat_coalg_cat := @CoAlgebra_Cat Type_Cat S_nat_func.
 
-Program Definition CoNat_coalg : @CoAlgebra Type_Cat S_nat_func^op :=
+Program Definition CoNat_coalg : @CoAlgebra Type_Cat S_nat_func :=
 {|
   Alg_Carrier := CoNat;
   Constructors :=
@@ -113,7 +113,7 @@ Program Definition CoNat_coalg : @CoAlgebra Type_Cat S_nat_func^op :=
 |}.
 
 (* morphism from another alg to CoNat_coalg *)
-Program Definition CoNat_coalg_morph coalg' : CoAlgebra_Hom _ CoNat_coalg coalg' :=
+Program Definition CoNat_coalg_morph coalg' : CoAlgebra_Hom CoNat_coalg coalg' :=
   {|
     Alg_map :=
       cofix f (x : Alg_Carrier coalg') : CoNat :=

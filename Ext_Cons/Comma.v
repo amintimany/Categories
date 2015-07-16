@@ -5,11 +5,17 @@ Require Import Archetypal.Discr.Discr.
 
 (**
 A comma category for Functors F : B → C and G : D → C is a category whose objects are arrows in C
-   
+
+#
+<pre>   
    F _o x ———————–> G _o y
+</pre>
+#
 
 for x an object of B and y an object of D. Arrows of comma are commutative diagrams in C:
 
+#
+<pre>
          F _o x ———————–> G _o y
            |                |
            |                |
@@ -18,6 +24,8 @@ for x an object of B and y an object of D. Arrows of comma are commutative diagr
            |                |
            ↓                ↓
          F _o x' ———————–> G _o y'
+</pre>
+#
 
 for h : x → x' an arrow in B and h' : y → y' an arrow in G.
  
@@ -133,6 +141,9 @@ Section Slice_CoSlice.
      Objects : Arrows of C ending in c
      Arrows: for g : a → c and h : b → c, an arrow from g to h is a pair of arrows f : a → b s.t. the ollowing commutes:
 
+#
+<pre>
+
            g
          a –––→ c
          |     ↗
@@ -141,7 +152,8 @@ Section Slice_CoSlice.
          |  /
          ↓ /
          b 
-
+</pre>
+#
    *)
 
   Definition Slice : Category := Comma (Functor_id _) (Const_Func 1 c).
@@ -151,6 +163,8 @@ Section Slice_CoSlice.
      Objects : Arrows of C ending in c
      Arrows: for g : a → c and h : b → c, an arrow from g to h is a pair of arrows f : a → b s.t. the ollowing commutes:
 
+#
+<pre>
             g
          c ←––– a
          ↑     /
@@ -159,7 +173,8 @@ Section Slice_CoSlice.
          |  /
          | ↙
          b 
-
+</pre>
+#
    *)
 
   Definition CoSlice : Category := Comma (Const_Func 1 c) (Functor_id _).
@@ -174,6 +189,9 @@ Section Arrow_Cat.
      Objects : Arrows of C
      Arrows: for g : a → b and h : c → d, an arrow from g to h is a pair of arrows (f,f') s.t. the ollowing commutes:
 
+#
+<pre>
+
              g
          a ––––→ b
          ∣       ∣
@@ -181,6 +199,8 @@ Section Arrow_Cat.
          ↓       ↓
          c –——–→ d
              h
+</pre>
+#
    *)
 
   Definition Arrow_Cat : Category := Comma (Functor_id C) (Functor_id C).

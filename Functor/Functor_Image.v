@@ -7,22 +7,28 @@ Require Import Functor.Functor.
 those may not form a category. Consider the following example.
 
   category C:
-
+#
+<pre>
              f
        x1 ——————–> y1
 
        x2 ——————–> y2
              g
-
+</pre>
+#
    category D:
-
+#
+<pre>
              h1        h2  
        x ——————–> y ————————> z
 
        u ——————–> v
             m
-
+</pre>
+#
     functor F where:
+#
+<pre>
        F _o x1 = x
        F _o y1 = y
        F _o x2 = y
@@ -30,6 +36,8 @@ those may not form a category. Consider the following example.
 
        F _a f = h1
        F _a g = h2
+</pre>
+#
 
 Here we have not drawn identity arrows and compositions of arrows in categories and
 their mappings by the functor as these are trivial details.
@@ -101,4 +109,3 @@ Section Functor_Image.
   Qed.
 
 End Functor_Image.
-

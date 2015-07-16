@@ -1,6 +1,7 @@
 Require Import Category.Main.
 
-Class PreOrder : Type :=
+(** Every pre-order relation is a category. *)
+Record PreOrder : Type :=
 {
   PreOrder_car : Type;
   

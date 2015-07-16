@@ -9,7 +9,8 @@ There is a one to one correspondence between subobjects of an object a i.e., mon
 Ω together with ⊤ : 1 → Ω (1 is the terminal object) is a subobject classifier if we have
 for any monomorphism m : a ≫–> b there is a unique morphism χₘ : b → Ω such that the
 following diagram is a pullback:
-
+#
+<pre>
                 !
         a ————————————–> 1
         |__|             |
@@ -19,6 +20,8 @@ following diagram is a pullback:
         ↓                ↓
         b ————————————–> Ω
                χₘ  
+</pre>
+#
 
 Where ! is the unique arrow to the terminal object.
 *)

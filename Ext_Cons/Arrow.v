@@ -19,7 +19,8 @@ Section Arrow.
   Coercion Arr : Arrow >-> Hom.
   
   (** An arrow (in the appropriate category, e.g., comma) from arrow f : a -> b to arrow g : c -> d is a pair of arrows h1 : a -> c and h2 : b -> d that makes the following diagram commute:
-
+#
+<pre>
           f
    a ———————————> b
    |              |
@@ -28,6 +29,8 @@ h1 |              | h2
    ↓              ↓
    c ———————————> d
           g
+</pre>
+#
  *)
   Record Arrow_Hom {C : Category} (a b : Arrow C) :=
     {
@@ -60,7 +63,8 @@ h1 |              | h2
     Context {x y z} (h : Arrow_Hom x y) (h' : Arrow_Hom y z).
 
     (** Composition of arrow homomorphisms. We basicall need to show that in the following diagram, the bigger diagram commutes if the smaller ones do.
-
+#
+<pre>
            f
     a ———————————> b
     |              |
@@ -74,6 +78,8 @@ h1' |              | h2'
     ↓              ↓
     c ———————————> d
            h
+</pre>
+#
 *)
     Program Definition Arrow_Hom_compose : Arrow_Hom x z :=
       {|
@@ -92,7 +98,8 @@ h1' |              | h2'
     Qed.
 
     (** The identity arrow morphism. We simply need to show that the following diagram commutes:
-
+#
+<pre>
           f
    a ———————————> b
    |              |
@@ -101,6 +108,8 @@ id |              | id
    ↓              ↓
    a ———————————> b
           f
+</pre>
+#
 which is trivial.
  *)
     Program Definition Arrow_id : Arrow_Hom x x :=

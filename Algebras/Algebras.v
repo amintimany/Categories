@@ -16,6 +16,9 @@ U is an object of C and h : T _o U → U is an arrow in C. *)
   (** A T-Algebra homomorphism from (U, h) to (U', h') is an arrow g : U → U'
 such that the following diagram commutes:
 
+#
+<pre>
+
               T _a g
    T _o U ——————————————> T _o U'
      |                      |
@@ -27,6 +30,8 @@ such that the following diagram commutes:
      ↓                      ↓
      U ————–——————————————> U
                 g
+</pre>
+#
  *)
   Record Algebra_Hom (alg alg' : Algebra) : Type :=
     {
@@ -134,13 +139,13 @@ Arguments Algebra_Hom_id {_ _} _.
 Section CoAlgebras.
   Context {C : Category}.
 
-  Definition CoAlgebra := @Algebra C^op.
+  Definition CoAlgebra (T : Functor C C) := @Algebra C^op T^op.
   
-  Definition CoAlgebra_Hom :=
-      @Algebra_Hom C^op.
+  Definition CoAlgebra_Hom {T : Functor C C} := 
+      @Algebra_Hom C^op T^op.
 
-  Definition CoAlgebra_Hom_id := @Algebra_Hom_id  C^op.
+  Definition CoAlgebra_Hom_id {T : Functor C C} := @Algebra_Hom_id  C^op T^op.
 
-  Definition CoAlgebra_Cat := @Algebra_Cat C^op.
+  Definition CoAlgebra_Cat (T : Functor C C) := @Algebra_Cat C^op T^op.
 
 End CoAlgebras.

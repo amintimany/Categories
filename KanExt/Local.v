@@ -11,7 +11,8 @@ Local Notation FCAT := Func_Cat (only parsing).
 
 (**
 Given a functor p : C -> C' and a functor F : C -> D, the local right kan extension of F along p is functor G : C' -> D together with natural transformation η : G ∘ p -> F:
-
+#
+<pre>
           F
       C ——————–————> D
       | \          ↗
@@ -21,9 +22,12 @@ Given a functor p : C -> C' and a functor F : C -> D, the local right kan extens
       |    /
       ↓  / 
       C'
+</pre>
+#
 
 such that for any G' : C' -> D and η' : G' ∘ p -> F we have a unique natrual transformation ε : G' → G such that the following diagram (natural transformations η, η' and ε) commute:
- 
+ #
+<pre>
           F
       C —————–——————–——–——————————–> D
       | \ \       _______________↗  ↗
@@ -37,6 +41,8 @@ such that for any G' : C' -> D and η' : G' ∘ p -> F we have a unique natrual 
       |  /   /
       ↓ / / 
       C'
+</pre>
+#
 
 In the follwing, we separate this notion into three parts:
   1. Local Kan extension Cones (LoKan_Cone)
@@ -49,6 +55,7 @@ In the follwing, we separate this notion into three parts:
      is in principle the terminal cone in the category† defined above (objects are cones and arrows are cone morphisms).
 
 ______________________
+# <br> <br/> #
 †) We separately show that these cones and cone morphisms create a category. We will use this to show that local kan extensions (as terminal objects of this category) are unique.
 
 *)

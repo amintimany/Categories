@@ -51,6 +51,8 @@ Coq's universe polymorphism implies (Discr_Cat A), (Discr_Cat B) and C must be a
 universe levels which is inconsistent when used to prove cocompleteness of
 Type_Cat. *)
 (**
+#
+<pre>
 Section GenSum_IsoType.
   Context {A B : Type} (Iso : (A ≡≡ B ::> Type_Cat)%morphism) {C : Category}
           (SM : forall f : A → C, GenSum f).
@@ -118,7 +120,8 @@ Section GenSum_IsoType.
       ).
 
 End GenSum_IsoType.
-
+</pre>
+#
 *)
 
 (** This alternative proof is a direct one and thus does not impose undesirable

@@ -8,6 +8,8 @@ Given two objects a and b the exponential (bᵃ, denoted 'Exponential a b' below
 
 Definition: bᵃ is an object equipped with an evaluation function eval: bᵃ×a -> b such that for any other object z with arrow f : z×a -> b, we have a unique arrow f̂ that makes the following diagram commute:
 
+#
+<pre>
                eval
         bᵃ×a ——————————> b
          ↑             ↗
@@ -23,7 +25,8 @@ Definition: bᵃ is an object equipped with an evaluation function eval: bᵃ×a
          |   /
          |  /
          z×a
-
+</pre>
+#
 where <f, g> is the arrow map of the product functor.
 *)
 Record Exponential {C : Category} {HP : Has_Products C} (c d : Obj) : Type :=

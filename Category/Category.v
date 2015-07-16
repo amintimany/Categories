@@ -56,7 +56,9 @@ Hint Resolve id_unit_left id_unit_right.
 
 (** We can't write reveal_comp tactic more efficiently without a mechanism to match
 with a pattern and get back also the matched term. This is currently impossible in Coq. *)
-(*
+(**
+#
+<pre>
 Ltac reveal_make_rightmost f term :=
   let rec RMR termx :=
       lazymatch termx with
@@ -205,6 +207,9 @@ Ltac reveal_comp_in_I f g I :=
 Tactic Notation "reveal_comp" constr(f) constr(g) := reveal_comp_in_goal f g.
 
 Tactic Notation "reveal_comp" constr(f) constr(g) "in" hyp(I) := reveal_comp_in_I f g I.
+
+</pre>
+#
  *)
 
 Ltac simpl_ids :=

@@ -5,6 +5,8 @@ Section Equalizer.
 
   (** given two parallel arrows f,g : a -> b, their equalizer is an object e together with an arrow eq : e -> a such that f ∘ eq = g ∘ eq such that for any other object z and eqz : z -> a that we have f ∘ eqz = g ∘ eqz, there is a unique arrow h : z -> e that makes the following fiagram commute:
 
+#
+<pre>
 
           eqz
 /—————————————————\     f
@@ -12,6 +14,8 @@ Section Equalizer.
 z ———–> e ——————> a          b
    ∃!h      eq       ———–——–>
                         g
+</pre>
+#
  *)
 
   Local Open Scope morphism_scope.

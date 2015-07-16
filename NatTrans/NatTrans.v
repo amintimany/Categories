@@ -10,6 +10,8 @@ For categories C and C' and functors F : C -> C' and F' : C -> C', a natural tra
 
 In addition, for all arrows h : c → c' the following diagram must commute (Trans_com):
 
+#
+<pre>
              F _a h
 F _o c ————————————————––> F _o c'
  |                          |
@@ -21,7 +23,8 @@ F _o c ————————————————––> F _o c'
  ∨                          ∨
 F' _o c ————————————————–> F' _o c'
             F' _a h
-
+</pre>
+#
 Trans_com_sym is the symmetric form of Trans_com.
 *)
   Record NatTrans (F F' : Functor C C') :=
@@ -54,7 +57,8 @@ Section NatTrans_Compose.
   (** Natural transformations are composable. The arrow family of the result is just the composition of corresponding components in each natural transformation.
 
 Graphically:
-
+#
+<pre>
          F                            F
    C ———————————————–> D        C ———————————————–> D 
            ||                           ||
@@ -69,6 +73,8 @@ Graphically:
            \/                           \/
    C ———————————————–> D        C ———————————————–> D 
          H                            H
+</pre>
+#
 
 This kind of composition is sometimes also called vertical composition of natural transformations.
 *)

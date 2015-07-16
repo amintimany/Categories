@@ -8,6 +8,8 @@ Section PullBack.
   (**
 Given two arrows f : a -> x and g : b -> x, their pullback is an object p together with two arrows π₁ : p -> a and π₂ : p -> b such that the follwoing diagram commutes:
 
+#
+<pre>
         π₂   
    p ————————–> b
    |            |
@@ -16,9 +18,13 @@ Given two arrows f : a -> x and g : b -> x, their pullback is an object p togeth
    ↓            ↓
    a —————————> x
         f
+</pre>
+#
 
 Provided that for any object q and arrows p1 : q -> a and p2 : q -> b that the following diagram commutes:
 
+#
+<pre>
         p2   
    q ————————–> b
    |            |
@@ -27,9 +33,13 @@ p1 |            | g
    ↓            ↓
    a —————————> x
         f
+</pre>
+#
 
 there is a unique arrow h : q -> p that makes the following diagram commute:
 
+#
+<pre>
                 p2
       q ———————————————————–
       |  \                   |
@@ -43,9 +53,12 @@ there is a unique arrow h : q -> p that makes the following diagram commute:
       |         ↓            ↓
        ——————–> a —————————> x
                     f
+</pre>
+#
 
 We usually use a half square in the corner of p to denote p is the pullback of f and g. Like so:
-
+#
+<pre>
         π₂   
    p ————————–> b
    |__|         |
@@ -54,7 +67,8 @@ We usually use a half square in the corner of p to denote p is the pullback of f
    ↓            ↓
    a —————————> x
         f
-
+</pre>
+#
 *)
   Record PullBack : Type :=
     {
