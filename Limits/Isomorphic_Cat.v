@@ -2,7 +2,7 @@ Require Import Category.Main.
 Require Import Functor.Main.
 Require Import Cat.Cat Cat.Cat_Terminal.
 Require Import Limits.Limit.
-Require Import KanExt.LocalFacts.NatIso.
+Require Import KanExt.LocalFacts.From_Iso_Cat.
 Require Import Cat.Cat_Iso.
 
 (** Given I : C ≡ D for C and D categories we have limit of (F ∘ I) if we have limit of F. *)

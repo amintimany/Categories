@@ -127,6 +127,7 @@ KanExt/LocalFacts/Uniqueness.v
 KanExt/LocalFacts/ConesToHom.v
 KanExt/LocalFacts/HomToCones.v
 KanExt/LocalFacts/NatIso.v
+KanExt/LocalFacts/From_Iso_Cat.v
 KanExt/LocalFacts/Main.v
 KanExt/GlobalFacts.v
 KanExt/LocaltoGlobal.v
