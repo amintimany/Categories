@@ -70,7 +70,7 @@ Proof.
 Qed.
 
 (** The exponential for category of categories (functor categories). *)
-Program Definition Cat_Exponential (C C' : Category) : Exponential C C' :=
+Program Definition Cat_Exponential (C C' : Category) : @Exponential Cat _ C C' :=
 {|
   exponential := Func_Cat C C';
 

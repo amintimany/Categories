@@ -1,8 +1,14 @@
 Require Import Category.Main.
 Require Import Functor.Functor Functor.Functor_Ops.
 
-Instance Cat : Category :=
-{
+(** Cat, the category of (small) categories, is a category whose objects are (small) categories
+and morphisms are functors.
+
+In this development, the (relative) smallness/largeness is represented by universe levels and
+universe polymorphism of Coq.
+*)
+Definition Cat : Category :=
+{|
   Obj := Category;
 
   Hom := Functor;
@@ -19,6 +25,5 @@ Instance Cat : Category :=
 
   id_unit_left := fun C D => @Functor_id_unit_left C D;
 
-  id_unit_right := fun C D => @Functor_id_unit_right C D
-           
-}.
+  id_unit_right := fun C D => @Functor_id_unit_right C D          
+|}.
