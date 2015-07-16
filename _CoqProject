@@ -109,6 +109,7 @@ Limits/Isomorphic_Cat.v
 Archetypal/Discr/Discr.v
 Archetypal/Discr/NatFacts.v
 Archetypal/Monoid_Cat.v
+Archetypal/PreOrder_Cat.v
 Archetypal/Examples/List_Monoid_Cat.v
 
 #Adjunction:
