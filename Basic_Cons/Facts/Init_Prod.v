@@ -6,33 +6,43 @@ Require Import Basic_Cons.CCC.
 Require Import NatTrans.NatTrans NatTrans.NatIso.
 Require Import Yoneda.Yoneda.
 
+(** 0 × a ≡ 0. where 0 is the initial object *)
 Section Init_Prod.
-
   Context {C : Category} {C_CCC : CCC C} {init : Initial C}.
 
-  Program Instance Init_Prod_lr a : NatTrans (((CoYoneda C) _o) ((Prod_Func C) _o (@terminal _ init, a))) (((CoYoneda C) _o) init) :=
-  {
-    Trans := fun b f => @t_morph _ init b
-  }.
+  (** Natural transformations to be used with Yoneda. *)
+  
+  Program Definition Init_Prod_lr a :
+    NatTrans
+      (((CoYoneda C) _o) ((Prod_Func C) _o (@terminal _ init, a)))%object
+      (((CoYoneda C) _o) init)%object
+    :=
+      {|
+        Trans := fun b f => @t_morph _ init b
+      |}.
 
-  Next Obligation. (* Trans_com *)
+  Next Obligation.
   Proof.
     extensionality g.
     apply t_morph_unique.
   Qed.
 
-  Next Obligation. (* Trans_com *)
+  Next Obligation.
   Proof.
     symmetry.
     apply Init_Prod_lr_obligation_1.
   Qed.
 
-  Program Instance Init_Prod_rl a : NatTrans (((CoYoneda C) _o) init) (((CoYoneda C) _o) ((Prod_Func C) _o (@terminal _ init, a))) :=
-{
-  Trans := fun c g => compose C (Pi_1 (CCC_HP C init a)) (t_morph init c)
-}.
-
-  Next Obligation. (* Trans_com *)
+  Program Definition Init_Prod_rl a :
+    NatTrans
+      (((CoYoneda C) _o) init)%object
+      (((CoYoneda C) _o) ((Prod_Func C) _o (@terminal _ init, a)))%object
+    :=
+      {|
+        Trans := fun c g => compose C (Pi_1 (CCC_HP C init a)) (t_morph init c)
+      |}.
+  
+  Next Obligation.
   Proof.
     extensionality g.
     simpl_ids.
@@ -41,13 +51,14 @@ Section Init_Prod.
     apply (t_morph_unique init).
   Qed.
 
-  Next Obligation. (* Trans_com *)
+  Next Obligation.
   Proof.
     symmetry.
     apply Init_Prod_rl_obligation_1.
   Qed.
-  
-  Theorem Init_Prod a : ((Prod_Func C) _o (@terminal _ init, a)) ≡ init.
+
+  Theorem Init_Prod a :
+    (((Prod_Func C) _o (@terminal _ init, a)) ≡ init)%morphism.
   Proof.
     apply (@CoIso (C^op)).
     CoYoneda.
@@ -62,7 +73,8 @@ Section Init_Prod.
       eapply functional_extensionality; intros g; simpl; simpl_ids.
       match goal with
           [|- ?A = ?B] =>
-          erewrite <- uncurry_curry with (f := A); erewrite <- uncurry_curry with (f := B)
+          erewrite <- uncurry_curry with(f := A);
+            erewrite <- uncurry_curry with (f := B)
       end.
       apply f_equal.
       apply (t_morph_unique init).

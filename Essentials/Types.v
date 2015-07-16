@@ -2,7 +2,8 @@ Global Set Primitive Projections.
 
 Global Set Universe Polymorphism.
 
-Inductive Empty : Set :=.
+(** The Empty Type. *)
+Inductive Empty : Type :=.
 
 Hint Extern 1 =>
 let tac := (repeat intros ?); match goal with [H : Empty |- _] => contradict H end in
@@ -12,7 +13,8 @@ match goal with
 end
 .
 
-Class prod (A B : Type) := {fst : A; snd : B}.
+(** The product type, defined as a record to enjoy eta rule for records. *)
+Record prod (A B : Type) := {fst : A; snd : B}.
 
 Arguments fst {_ _ } _.
 Arguments snd {_ _ } _.

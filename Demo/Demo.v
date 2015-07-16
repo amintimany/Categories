@@ -8,20 +8,20 @@ Require Import Ext_Cons.Prod_Cat.Prod_Cat.
 Require Import Cat.Facts.
 
 
-Program Instance term_id : Functor Type_Cat (Prod_Cat Type_Cat Type_Cat) :=
-{
+Program Definition term_id : Functor Type_Cat (Prod_Cat Type_Cat Type_Cat) :=
+{|
   FO := fun a => (@CCC_term Type_Cat _, a);
   FA := fun a b f => (@id _ (@CCC_term Type_Cat _), f)
-}.
+|}.
 
-Instance S_nat_func : Functor Type_Cat Type_Cat := Functor_compose term_id (@Sum_Func Type_Cat _).
+Definition S_nat_func : Functor Type_Cat Type_Cat := Functor_compose term_id (@Sum_Func Type_Cat _).
 
 (* S_nat_func defined *)
 
 Definition S_nat_alg_cat := Algebra_Cat S_nat_func.
 
-Instance nat_alg : Algebra S_nat_func :=
-{
+Program Definition nat_alg : Algebra S_nat_func :=
+{|
   Alg_Carrier := nat;
   Constructors :=
     fun x =>
@@ -29,46 +29,39 @@ Instance nat_alg : Algebra S_nat_func :=
         | inl a => 0
         | inr n => S n
       end
-}.
+|}.
 
 (* morphism from nat_alg to another alg *)
-Program Instance nat_alg_morph alg' : Algebra_Hom nat_alg alg'.
-
-Next Obligation. (* alg_map *)
-Proof.
-  destruct alg' as [algc' algcons'].
-  exact(
-      (fix m (n : nat) :=
+Program Definition nat_alg_morph alg' : Algebra_Hom nat_alg alg' :=
+  {|
+    Alg_map :=
+      fun x =>
+        (fix f (n : nat) :=
         match n with
-          | O => algcons' (inl TT)
-          | S n' => algcons' (inr (m n'))
-        end) H
-    ).
-Defined.
+        | O => (Constructors alg') (inl TT)
+        | S n' => (Constructors alg') (inr (f n'))
+        end) x
+  |}.
 
 Next Obligation. (* alg_map_com *)
 Proof.
-  destruct alg' as [algc' algcons'].
   extensionality x.
-  destruct x as [x|x]; simpl; trivial.
-  replace x with TT; trivial.
+  destruct x as [|[]]; cbn; trivial.
+  repeat apply f_equal.
   apply UNIT_SINGLETON.
 Qed.
 
-(* nat_alg_morph defined *)
+Program Definition nat_alg_init : Initial S_nat_alg_cat :=
+  {|
+    terminal := nat_alg;
+    t_morph := nat_alg_morph
+  |}.
 
-Program Instance nat_alg_init : Initial S_nat_alg_cat :=
-{|
-  terminal := nat_alg;
-  t_morph := nat_alg_morph
-|}.
-
-Next Obligation. (* i_morph_unique *)
+Next Obligation.
 Proof.
   destruct d as [algc algcons].
   destruct f as [f_morph f_com].
   destruct g as [g_morph g_com].
-  cbv.
   apply Algebra_Hom_eq_simplify.
   extensionality x.
   simpl.
@@ -86,7 +79,6 @@ Proof.
   }
 Qed.
 
-(* nat_alg_init Proved! :-) *)
 
 
 
@@ -95,9 +87,7 @@ Qed.
 
 
 
-
-
-CoInductive CoNat : Type :=
+CoInductive CoNat : Set :=
   | CoO : CoNat
   | CoS : CoNat -> CoNat
 .
@@ -109,68 +99,59 @@ CoInductive CoNat_eq : CoNat -> CoNat -> Prop :=
 
 Axiom CoNat_eq_eq : forall (n n' : CoNat), CoNat_eq n n' -> n = n'.
 
+Definition S_nat_coalg_cat := @CoAlgebra_Cat Type_Cat S_nat_func^op.
 
-
-Definition S_nat_coalg_cat := CoAlgebra_Cat S_nat_func.
-
-Instance CoNat_coalg : CoAlgebra S_nat_func :=
-{
-  CoAlg_Carrier := CoNat;
-  Destructors :=
-    fun x =>
-      match x with
-        | CoO => inl TT
-        | CoS n => inr n
-      end
-}.
+Program Definition CoNat_coalg : @CoAlgebra Type_Cat S_nat_func^op :=
+{|
+  Alg_Carrier := CoNat;
+  Constructors :=
+    fun x : CoNat =>
+       match x return UNIT + CoNat  with
+       | CoO => inl TT
+       | CoS x' => inr x'
+       end
+|}.
 
 (* morphism from another alg to CoNat_coalg *)
-Program Instance CoNat_coalg_morph coalg' : CoAlgebra_Hom coalg' CoNat_coalg :=
-{
-  coalg_map :=
-    λ (H : @CoAlg_Carrier _ _ coalg'),
-    (cofix m (x : @CoAlg_Carrier _ _ coalg') : CoNat :=
-       match @Destructors _ _ coalg' x with
-         | inl _ => CoO
-         | inr x' => CoS (m x')
-       end) H
-}.
+Program Definition CoNat_coalg_morph coalg' : CoAlgebra_Hom _ CoNat_coalg coalg' :=
+  {|
+    Alg_map :=
+      cofix f (x : Alg_Carrier coalg') : CoNat :=
+        match Constructors coalg' x return CoNat with
+        | inl _ => CoO
+        | inr s => CoS (f s)
+        end
+|}.
 
 Next Obligation. (* coalg_map_com *)
 Proof.
-  extensionality x.
-  destruct coalg' as [coalgc' coalgdest'].
-  simpl.
-  destruct (coalgdest' x) as [x'|x']; trivial.
+  extensionality x; cbn.
+  destruct (Constructors coalg' x) as [x'|x']; cbn; trivial.
   replace x' with TT; trivial.
   apply UNIT_SINGLETON.
 Qed.
 
 (* CoNat_coalg_morph defined *)
 
-Program Instance CoNat_alg_term : Terminal S_nat_coalg_cat :=
-{
+Program Definition CoNat_alg_term : Initial S_nat_coalg_cat :=
+{|
   terminal := CoNat_coalg;
   t_morph := CoNat_coalg_morph
-}.
+|}.
 
-Next Obligation. (* t_morph_unique *)
+Next Obligation.
 Proof.
-  apply CoAlgebra_Hom_eq_simplify.
+  apply Algebra_Hom_eq_simplify.
   extensionality x; simpl.
   apply CoNat_eq_eq; revert x.
   cofix H.
   intros x.
-  assert(H1 := equal_f (@coalg_map_com _ _ _ _ f) x); cbv -[coalg_map Destructors] in H1.
-  assert(H2 := equal_f (@coalg_map_com _ _ _ _ g) x); cbv -[coalg_map Destructors] in H2.
-  destruct (@Destructors _ _ d x); destruct ((@coalg_map _ _ _ _ f) x); destruct ((@coalg_map _ _ _ _ g) x); try discriminate; try constructor.
+  assert(H1 := equal_f (@Alg_map_com _ _ _ _ f) x); cbn in H1.
+  assert(H2 := equal_f (@Alg_map_com _ _ _ _ g) x); cbn in H2.
+  destruct (Constructors d x); destruct ((Alg_map f) x); destruct ((Alg_map g) x); try discriminate; try constructor.
   inversion H1; inversion H2.
-  apply H.
+  trivial.
 Qed.
-
-(* CoNat_coalg_term Proved! *)
-
-
 
 
 

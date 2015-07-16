@@ -1,103 +1,78 @@
 Require Import Category.Main.
 Require Import Functor.Functor.
 
-(* Opposite Functor *)
+(** 
+Opposite of a functor F : C -> D is a functor F^op : C^op -> D^op with the same object and arrow maps.
+ *)
 Section Opposite_Functor.
   Context {C D : Category} (F : Functor C D).
-
-  Program Instance Opposite_Functor : Functor C^op D^op :=
-    {
+  
+  Local Open Scope morphism_scope.
+  Local Open Scope object_scope.
+    
+  Program Definition Opposite_Functor : Functor C^op D^op :=
+    {|
       FO := F _o;
-      FA := fun _ _ h => F _a _ _ h;
+      FA := fun _ _ h => F @_a _ _ h;
       F_id := fun a => F_id F a;
       F_compose := fun _ _ _ f g => F_compose F g f
-    }.
+    |}.
 
 End Opposite_Functor.
 
-(* Functor composition *)
+Notation "F '^op'" := (Opposite_Functor F) (at level 9, no associativity) : functor_scope.
 
+(* We can compose functors. The object and arrow maps are simply function compositions of object and arrow maps. *)
 Section Functor_Compose.
-
   Context {C C' C'' : Category} (F : Functor C C') (F' : Functor C' C'').
 
-  Program Instance Functor_compose : Functor C C'' :=
-    {
-      FO := fun c => F' _o (F _o c);
-      FA := fun c d f => F' _a _ _ (F _a _ _ f)
-    }.
+  Local Open Scope morphism_scope.
+  Local Open Scope object_scope.
   
-(* Functor_compose defined. *)
-
+  Program Definition Functor_compose : Functor C C'' :=
+    {|
+      FO := fun c => F' _o (F _o c);
+      FA := fun c d f => F' _a (F _a f)
+    |}.
+  
 End Functor_Compose.
 
-(* Associativity of functor composition *)
+Notation "F ∘ G" := (Functor_compose G F) : functor_scope. 
 
+(** Associativity of functor composition *)
 Section Functor_Assoc.
-    Context {C1 C2 C3 C4 : Category} (F : Functor C1 C2) (G : Functor C2 C3) (H : Functor C3 C4).
+  Context {C1 C2 C3 C4 : Category} (F : Functor C1 C2) (G : Functor C2 C3) (H : Functor C3 C4).
 
-  Theorem Functor_assoc :
-    (Functor_compose F (Functor_compose G H)) = (Functor_compose (Functor_compose F G) H).
+  Local Open Scope functor_scope.
+    
+  Theorem Functor_assoc : (H ∘ G) ∘ F = H ∘ (G ∘ F).
   Proof.
-    match goal with
-      [|- ?A = ?B] =>
-      cut(A _o = B _o); [intros W; apply (Functor_eq_simplify _ _ W)|]; try destruct W; trivial
-    end.
-    extensionality x; extensionality y; extensionality f.
-    match goal with
-      [|- match _ in _ = V return _ with eq_refl => ?A end f = ?B] =>
-      transitivity (match W in _ = V return Hom (V x) (V y) with eq_refl => A f end)
-    end.
-    destruct W; trivial.
-    apply JMeq_eq.
-    destruct W; trivial.
+    Func_eq_simpl; trivial.
   Qed.
 
 End Functor_Assoc.
 
-(* Identitiy functor *)
+(** The identitiy functor *)
 
-Program Instance Functor_id (C : Category) : Functor C C :=
-  {
+Program Definition Functor_id (C : Category) : Functor C C :=
+  {|
     FO := fun x => x;
     FA := fun c d f => f
-  }.
-
-  (* Functor_id defined -- the rest of the obligations are taken care of by Program system *)
+  |}.
 
 Section Functor_Identity_Unit.
   Context  (C C' : Category) (F : Functor C C').
 
-  Theorem Functor_id_unit_left : (Functor_compose F (Functor_id _)) = F.
+  (** Fucntor_id is the left ididntity of functor composition. *)
+  Theorem Functor_id_unit_left : ((Functor_id C') ∘ F)%functor = F.
   Proof.
-    match goal with
-      [|- ?A = ?B] =>
-      cut(A _o = B _o); [intros W; apply (Functor_eq_simplify _ _ W)|]; trivial
-    end.
-    extensionality x; extensionality y; extensionality f.
-    match goal with
-      [|- match _ in _ = V return _ with eq_refl => ?A end f = ?B] =>
-      transitivity (match W in _ = V return Hom (V x) (V y) with eq_refl => A f end)
-    end.
-    destruct W; trivial.
-    apply JMeq_eq.
-    destruct W; trivial.
+    Func_eq_simpl; trivial.
   Qed.
 
+  (** Functor_id is the right identity of functor composition. *)
   Theorem Functor_id_unit_right : (Functor_compose (Functor_id _) F) = F.
   Proof.
-    match goal with
-      [|- ?A = ?B] =>
-      cut(A _o = B _o); [intros W; apply (Functor_eq_simplify _ _ W)|]; trivial
-    end.
-    extensionality x; extensionality y; extensionality f.
-    match goal with
-      [|- match _ in _ = V return _ with eq_refl => ?A end f = ?B] =>
-      transitivity (match W in _ = V return Hom (V x) (V y) with eq_refl => A f end)
-    end.
-    destruct W; trivial.
-    apply JMeq_eq.
-    destruct W; trivial.
+    Func_eq_simpl; trivial.
   Qed.
 
 End Functor_Identity_Unit.

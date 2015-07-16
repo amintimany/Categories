@@ -6,15 +6,17 @@ Require Import NatTrans.NatTrans NatTrans.NatIso.
 Require Import Adjunction.Adjunction.
 
 Section Hom_Adj_Duality.
-  Context {C D : Category} {F : Functor C D} {G : Functor D C} (adj : Hom_Adjunct F G).
-  
-  Instance Hom_Adjunct_Duality : Hom_Adjunct (Opposite_Functor G) (Opposite_Functor F) := (Prod_Func_Hom_Func (Inverse_Isomorphism adj)).
+  Context {C D : Category} {F : Functor C D} {G : Functor D C} (adj : (F ⊣_hom G)%functor).
+
+  (** Duality for hom adjunctions. *)
+  Definition Hom_Adjunct_Duality : (G^op ⊣_hom F^op)%functor := (Prod_Func_Hom_Func (Inverse_Isomorphism adj)).
 
 End Hom_Adj_Duality.
 
 Section Adj_Duality.
-  Context {C D : Category} {F : Functor C D} {G : Functor D C} (adj : Adjunct F G).
-  
-  Instance Adjunct_Duality : Adjunct (Opposite_Functor G) (Opposite_Functor F) := (Hom_Adj_to_Adj (Hom_Adjunct_Duality (Adj_to_Hom_Adj adj))).
+  Context {C D : Category} {F : Functor C D} {G : Functor D C} (adj : (F ⊣ G)%functor).
+
+  (** Duality for adjunctions. It follows from Hom_Adjunct_Duality. *)
+  Definition Adjunct_Duality : (G^op ⊣ F^op)%functor := (Hom_Adj_to_Adj (Hom_Adjunct_Duality (Adj_to_Hom_Adj adj))).
 
 End Adj_Duality.

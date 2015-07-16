@@ -3,7 +3,7 @@ Require Export Basic_Cons.Terminal.
 Require Export Basic_Cons.Product.
 Require Export Basic_Cons.Exponential.
 
-(* Cartesian Closed Category : one that has terminal element, binary products (all finite products) and exponential *)
+(** Cartesian Closed Category : one that has terminal element, binary products (all finite products) and exponential *)
 Class CCC (C : Category) : Type :=
 {
   CCC_term : Terminal C;

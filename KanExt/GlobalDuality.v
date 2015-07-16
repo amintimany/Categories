@@ -5,19 +5,24 @@ Require Import NatTrans.NatTrans NatTrans.Func_Cat NatTrans.NatIso.
 Require Import Adjunction.Adjunction Adjunction.Duality Adjunction.Adj_Facts.
 Require Import KanExt.Global.
 
+(** In this module we establish the dualit of kan extensions.
+That is, the left kan extension along p is just the right kan extension along pᵒᵖ and vice versa.
 
+ *)
 Section GlobalDuality.
   Context {C C' : Category} (p : Functor C C') (D : Category).
 
-  Local Notation GEXOP := (Functor_compose
-                 (Functor_compose (Func_Cat_Op_to_Op_Func_Cat C' D)
-                    (Opposite_Functor (Left_Functor_Extender p D)))
-                 (Op_Func_Cat_to_Func_Cat_Op C D)) (only parsing).
+  (** We establish this duality though hom functor definition of adjunction. *)
+  
+  Local Notation GEXOP :=
+    ((Op_Func_Cat_to_Func_Cat_Op C D) ∘
+     ((Left_Functor_Extender p D)^op ∘ (Func_Cat_Op_to_Op_Func_Cat C' D))
+    )%functor (only parsing).
 
-  Program Instance GExtend_Duality_lr : NatTrans (Left_Functor_Extender (Opposite_Functor p) D ^op) GEXOP :=
-    {
+  Program Definition GExtend_Duality_lr : NatTrans (Left_Functor_Extender p^op D ^op) GEXOP :=
+    {|
       Trans :=  fun h => {|Trans := fun d => id |}
-    }.
+    |}.
 
   Local Obligation Tactic := idtac.
 
@@ -37,10 +42,10 @@ Section GlobalDuality.
     apply GExtend_Duality_lr_obligation_3.
   Qed.
 
-  Program Instance GExtend_Duality_rl : NatTrans GEXOP (Left_Functor_Extender (Opposite_Functor p) D ^op) :=
-    {
+  Program Definition GExtend_Duality_rl : NatTrans GEXOP (Left_Functor_Extender p^op D ^op) :=
+    {|
       Trans :=  fun h => {|Trans := fun d => id |}
-    }.
+    |}.
 
   Local Obligation Tactic := idtac.
 
@@ -72,11 +77,11 @@ Section GlobalDuality.
     apply GExtend_Duality_rl_obligation_3.
   Qed.
 
-  Program Instance GExtend_Duality : (Left_Functor_Extender (Opposite_Functor p) D ^op) ≡≡ GEXOP ::> Func_Cat _ _ :=
-    {
+  Program Definition GExtend_Duality : ((Left_Functor_Extender p^op D ^op) ≡≡ GEXOP ::> Func_Cat _ _)%morphism :=
+    {|
       iso_morphism := GExtend_Duality_lr;
       inverse_morphism := GExtend_Duality_rl
-    }.
+    |}.
 
   Next Obligation.
   Proof.
@@ -97,38 +102,30 @@ Section GlobalDuality.
   Section Left_to_Right.
     Context (lke : Left_KanExt p D).
 
-    Program Instance KanExt_Left_to_Right : Right_KanExt (Opposite_Functor p) D^op :=
-      {
-        right_kan_ext := Functor_compose
-                           (Functor_compose (Func_Cat_Op_to_Op_Func_Cat C D)
-                                            (Opposite_Functor lke)) (Op_Func_Cat_to_Func_Cat_Op C' D)
-      }.
+    Program Definition KanExt_Left_to_Right : Right_KanExt  p^op D^op :=
+      {|
+        right_kan_ext :=
+          ((Op_Func_Cat_to_Func_Cat_Op C' D) ∘
+          (lke^op ∘ (Func_Cat_Op_to_Op_Func_Cat C D)))%functor
+      |}.
 
     Next Obligation.
     Proof.
-      set (V := NatIso_hor_comp (NatTrans_id_Iso (Prod_Functor (Opposite_Functor (inverse_morphism (Func_Cat_Op_Iso C' D))) (inverse_morphism (Func_Cat_Op_Iso C D)))) (Isomorphism_Compose (NatIso_hor_comp (NatTrans_id_Iso (Prod_Functor (Opposite_Functor (Opposite_Functor (Left_Functor_Extender p D))) (Functor_id (Func_Cat C D) ^op))) (Inverse_Isomorphism (Hom_Func_Cat_Iso (Func_Cat_Op_Iso C D)))) (Isomorphism_Compose (Hom_Adjunct_Duality (Adj_to_Hom_Adj (left_kan_ext_adj lke))) (NatIso_hor_comp (NatTrans_id_Iso (Prod_Functor (Functor_id ((Func_Cat C' D) ^op) ^op) (Opposite_Functor lke))) (Hom_Func_Cat_Iso (Func_Cat_Op_Iso C' D)))))).
+      set (V := NatIso_hor_comp (NatTrans_id_Iso (Prod_Functor ((inverse_morphism (Func_Cat_Op_Iso C' D))^op) (inverse_morphism (Func_Cat_Op_Iso C D)))) (Isomorphism_Compose (NatIso_hor_comp (NatTrans_id_Iso (Prod_Functor (Left_Functor_Extender p D) (Functor_id (Func_Cat C D) ^op))) (Inverse_Isomorphism (Hom_Func_Cat_Iso (Func_Cat_Op_Iso C D)))) (Isomorphism_Compose (Hom_Adjunct_Duality (Adj_to_Hom_Adj (left_kan_ext_adj lke))) (NatIso_hor_comp (NatTrans_id_Iso (Prod_Functor (Functor_id ((Func_Cat C' D) ^op) ^op) lke^op)) (Hom_Func_Cat_Iso (Func_Cat_Op_Iso C' D)))))).
       cbn in V.
       repeat rewrite Functor_assoc in V.
       repeat rewrite Prod_Functor_compose in V.
       do 2 rewrite Functor_id_unit_left in V.
-      change (Functor_compose
-              (Functor_compose
-                 (Opposite_Functor (Func_Cat_Op_to_Op_Func_Cat C' D))
-                 (Opposite_Functor (Opposite_Functor (Left_Functor_Extender p D))))
-              (Opposite_Functor (Op_Func_Cat_to_Func_Cat_Op C D)))
-             with (Opposite_Functor (Functor_compose
-              (Functor_compose
-                 (Func_Cat_Op_to_Op_Func_Cat C' D)
-                 (Opposite_Functor (Left_Functor_Extender p D)))
-              (Op_Func_Cat_to_Func_Cat_Op C D))) in V.
-      change (Functor_compose
-                 (Opposite_Functor (Func_Cat_Op_to_Op_Func_Cat C' D))
-                 (Opposite_Functor (Op_Func_Cat_to_Func_Cat_Op C' D)))
-             with (Opposite_Functor (Functor_compose
-                     (Func_Cat_Op_to_Op_Func_Cat C' D)
-                     (Op_Func_Cat_to_Func_Cat_Op C' D))) in V.
-      set (J := right_inverse (Func_Cat_Op_Iso C D)); cbn in J; rewrite J in V; clear J.
-      set (K := right_inverse (Func_Cat_Op_Iso C' D)); cbn in K; rewrite K in V; clear K.
+      change ((Op_Func_Cat_to_Func_Cat_Op C D)^op ∘
+              (((Left_Functor_Extender p D)) ∘
+              (Func_Cat_Op_to_Op_Func_Cat C' D)^op))%functor
+             with (((Op_Func_Cat_to_Func_Cat_Op C D) ∘
+                  ((Left_Functor_Extender p D)^op ∘
+                  (Func_Cat_Op_to_Op_Func_Cat C' D)))^op)%functor in V.
+      change ((Op_Func_Cat_to_Func_Cat_Op C' D)^op ∘ (Func_Cat_Op_to_Op_Func_Cat C' D)^op)%functor
+             with (((Op_Func_Cat_to_Func_Cat_Op C' D) ∘ (Func_Cat_Op_to_Op_Func_Cat C' D))^op)%functor in V.
+      cbn_rewrite (right_inverse (Func_Cat_Op_Iso C D)) in V.
+      cbn_rewrite (right_inverse (Func_Cat_Op_Iso C' D)) in V.
       apply (Adjunct_left_iso _ _ GExtend_Duality).
       apply Hom_Adj_to_Adj.
       exact V.
@@ -140,38 +137,27 @@ Section GlobalDuality.
   Section Right_to_Left.
     Context (rke : Right_KanExt p D).
 
-    Program Instance KanExt_Right_to_Left : Left_KanExt (Opposite_Functor p) D^op :=
-      {
-        left_kan_ext := Functor_compose
-                           (Functor_compose (Func_Cat_Op_to_Op_Func_Cat C D)
-                                            (Opposite_Functor rke)) (Op_Func_Cat_to_Func_Cat_Op C' D)
-      }.
+    Program Definition KanExt_Right_to_Left : Left_KanExt p^op D^op :=
+      {|
+        left_kan_ext := ((Op_Func_Cat_to_Func_Cat_Op C' D) ∘ (rke^op ∘ (Func_Cat_Op_to_Op_Func_Cat C D)))%functor
+      |}.
     
     Next Obligation.
     Proof.
-      set (V := NatIso_hor_comp (NatTrans_id_Iso (Prod_Functor (Opposite_Functor (inverse_morphism (Func_Cat_Op_Iso C D))) (inverse_morphism (Func_Cat_Op_Iso C' D)))) (Isomorphism_Compose (NatIso_hor_comp (NatTrans_id_Iso (Prod_Functor (Opposite_Functor (Opposite_Functor rke)) (Functor_id (Func_Cat C' D) ^op))) (Inverse_Isomorphism (Hom_Func_Cat_Iso (Func_Cat_Op_Iso C' D)))) (Isomorphism_Compose (Hom_Adjunct_Duality (Adj_to_Hom_Adj (right_kan_ext_adj rke))) (NatIso_hor_comp (NatTrans_id_Iso (Prod_Functor (Functor_id ((Func_Cat C D) ^op) ^op) (Opposite_Functor (Left_Functor_Extender p D)))) (Hom_Func_Cat_Iso (Func_Cat_Op_Iso C D)))))).
+      set (V := NatIso_hor_comp (NatTrans_id_Iso (Prod_Functor (inverse_morphism (Func_Cat_Op_Iso C D))^op (inverse_morphism (Func_Cat_Op_Iso C' D)))) (Isomorphism_Compose (NatIso_hor_comp (NatTrans_id_Iso (Prod_Functor rke (Functor_id (Func_Cat C' D) ^op))) (Inverse_Isomorphism (Hom_Func_Cat_Iso (Func_Cat_Op_Iso C' D)))) (Isomorphism_Compose (Hom_Adjunct_Duality (Adj_to_Hom_Adj (right_kan_ext_adj rke))) (NatIso_hor_comp (NatTrans_id_Iso (Prod_Functor (Functor_id ((Func_Cat C D) ^op) ^op) (Left_Functor_Extender p D)^op)) (Hom_Func_Cat_Iso (Func_Cat_Op_Iso C D)))))).
       cbn in V.
       repeat rewrite Functor_assoc in V.
       repeat rewrite Prod_Functor_compose in V.
       do 2 rewrite Functor_id_unit_left in V.
-      change (Functor_compose
-              (Functor_compose
-                 (Opposite_Functor (Func_Cat_Op_to_Op_Func_Cat C D))
-                 (Opposite_Functor (Opposite_Functor rke)))
-              (Opposite_Functor (Op_Func_Cat_to_Func_Cat_Op C' D)))
-             with (Opposite_Functor (Functor_compose
-              (Functor_compose
-                 (Func_Cat_Op_to_Op_Func_Cat C D)
-                 (Opposite_Functor rke))
-              (Op_Func_Cat_to_Func_Cat_Op C' D))) in V.
-      change  (Functor_compose
-                 (Opposite_Functor (Func_Cat_Op_to_Op_Func_Cat C D))
-                 (Opposite_Functor (Op_Func_Cat_to_Func_Cat_Op C D)))
-             with (Opposite_Functor (Functor_compose
-                 (Func_Cat_Op_to_Op_Func_Cat C D)
-                 (Op_Func_Cat_to_Func_Cat_Op C D))) in V.
-      set (J := right_inverse (Func_Cat_Op_Iso C D)); cbn in J; rewrite J in V; clear J.
-      set (K := right_inverse (Func_Cat_Op_Iso C' D)); cbn in K; rewrite K in V; clear K.
+      change ((Op_Func_Cat_to_Func_Cat_Op C' D)^op ∘
+              (rke ∘ (Func_Cat_Op_to_Op_Func_Cat C D)^op))%functor
+             with (((Op_Func_Cat_to_Func_Cat_Op C' D) ∘
+              (rke^op ∘ (Func_Cat_Op_to_Op_Func_Cat C D)))^op)%functor in V.
+      change  ((Op_Func_Cat_to_Func_Cat_Op C D)^op ∘
+                 (Func_Cat_Op_to_Op_Func_Cat C D)^op)%functor
+             with (((Op_Func_Cat_to_Func_Cat_Op C D) ∘ (Func_Cat_Op_to_Op_Func_Cat C D))^op)%functor in V.
+      cbn_rewrite (right_inverse (Func_Cat_Op_Iso C D)) in V.
+      cbn_rewrite (right_inverse (Func_Cat_Op_Iso C' D)) in V.
       apply (Adjunct_right_iso _ _ _ (Inverse_Isomorphism GExtend_Duality)).
       apply Hom_Adj_to_Adj.
       exact V.

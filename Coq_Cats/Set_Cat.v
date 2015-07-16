@@ -1,5 +1,6 @@
 Require Import Category.Main.
-
+Require Import Coq_Cats.Coq_Cat.
+  
 (*
 **********************************************************
 ***************                          *****************
@@ -9,16 +10,7 @@ Require Import Category.Main.
 *)
 
 
-(* The category of types in Set universe (Coq's "Set")*)
+(** The category of types in Set universe (Coq's "Set")*)
 
-Program Instance Set_Cat : Category :=
-{
-  Obj := Set;
-
-  Hom := (λ A B, A → B);
-
-  compose := fun A B C (g : A -> B) (h : B -> C) => fun (x : A) => h (g x);
-
-  id := fun A => fun x => x
-}.
+Program Definition Set_Cat : Category := Coq_Cat Set.
 

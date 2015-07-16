@@ -2,22 +2,35 @@ Require Import Category.Main.
 Require Import Basic_Cons.CCC Basic_Cons.PullBack.
 Require Import Coq_Cats.Type_Cat.Type_Cat.
 
+(** Type_Cat has pullbacks. The pullback of two functions f : a → b and g : c → b is
+{(x, y) | f x = g y} *)
 Section PullBack.
   Context {A B C : Type} (f : A → C) (g : B → C).
 
-  Local Hint Extern 1 => match goal with [x : sig _ |- _ ] => let H := fresh "H" in destruct x as [x H] end.
+  Local Hint Extern 1 =>
+  match goal with
+    [x : sig _ |- _ ] =>
+    let H := fresh "H" in
+    destruct x as [x H]
+  end.
   
-  Program Instance Type_Cat_PullBack : @PullBack Type_Cat _ _ _ f g :=
-    {
+  Program Definition Type_Cat_PullBack : @PullBack Type_Cat _ _ _ f g :=
+    {|
       pullback := {x : A * B| f (fst x) = g (snd x)};
       pullback_morph_1 := fun z => (fst (proj1_sig z));
       pullback_morph_2 := fun z => (snd (proj1_sig z));
       pullback_morph_ex := fun x p1 p2 H x' => (exist _ (p1 x', p2 x') _)
-    }.
+    |}.
 
   Next Obligation.
-  Proof.  
-    exact (equal_f H x').
+  Proof.
+    match goal with
+      [|- ?A1 (?A2 ?x) = ?B1 (?B2 ?x)] =>
+      match goal with
+        [H : (fun w => A1 (A2 w)) = (fun w' => B1 (B2 w'))  |- _] =>
+        apply (equal_f H)
+      end
+    end.
   Qed.    
 
   Local Obligation Tactic := idtac.

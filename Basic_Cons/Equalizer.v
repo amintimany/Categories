@@ -3,7 +3,20 @@ Require Import Category.Main.
 Section Equalizer.
   Context {C : Category} {a b : Obj} (f g : Hom a b).
 
-  Class Equalizer : Type :=
+  (** given two parallel arrows f,g : a -> b, their equalizer is an object e together with an arrow eq : e -> a such that f ∘ eq = g ∘ eq such that for any other object z and eqz : z -> a that we have f ∘ eqz = g ∘ eqz, there is a unique arrow h : z -> e that makes the following fiagram commute:
+
+
+          eqz
+/—————————————————\     f
+|                 ↓  ———————>
+z ———–> e ——————> a          b
+   ∃!h      eq       ———–——–>
+                        g
+ *)
+
+  Local Open Scope morphism_scope.
+  
+  Record Equalizer : Type :=
     {
       equalizer : C;
 
@@ -20,12 +33,12 @@ Section Equalizer.
     }.
 
   Coercion equalizer : Equalizer >-> Obj.
-
+  
+  (** Equalizers are unique up to isomorphism. *)
   Theorem Equalizer_iso (e1 e2 : Equalizer) : e1 ≡ e2.
   Proof.
-    apply (Build_Isomorphism _ _ _ (equalizer_morph_ex e1 equalizer_morph equalizer_morph_com) ((equalizer_morph_ex e2 equalizer_morph equalizer_morph_com)));
-    eapply equalizer_morph_unique; [| | simpl_ids; trivial| | |simpl_ids; trivial]; try apply equalizer_morph_com.
-    rewrite <- assoc; repeat rewrite equalizer_morph_ex_com; auto.
+    apply (Build_Isomorphism _ _ _ (equalizer_morph_ex e2 _ (equalizer_morph e1) (equalizer_morph_com e1)) ((equalizer_morph_ex e1 _ (equalizer_morph e2) (equalizer_morph_com e2))));
+    eapply equalizer_morph_unique; [| | simpl_ids; trivial| | |simpl_ids; trivial]; try apply equalizer_morph_com;
     rewrite <- assoc; repeat rewrite equalizer_morph_ex_com; auto.
   Qed.
 
@@ -43,13 +56,10 @@ Definition Has_Equalizers (C : Category) : Type := ∀ (a b : C) (f g : Hom a b)
 
 Existing Class Has_Equalizers.
 
-(* CoEqualizer is the dual of equalzier *)
-
+(** CoEqualizer is the dual of equalzier *)
 Definition CoEqualizer {C : Category} := @Equalizer C^op.
 
 Arguments CoEqualizer _ {_ _} _ _, {_ _ _} _ _.
-
-Existing Class CoEqualizer.
 
 Definition Has_CoEqualizers (C : Category) : Type := Has_Equalizers C^op.
 

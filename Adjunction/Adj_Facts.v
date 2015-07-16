@@ -8,109 +8,122 @@ Require Import Cat.Cat Cat.Cat_Exponential Cat.Cat_Exponential_Facts.
 Require Import Yoneda.Yoneda.
 Require Import Functor.Functor_Extender.
 
-Section Hom_Adjunct_left_iso.
-  Context {C D : Category} {F F' : Functor C D} (N : F' ≡≡ F ::> Func_Cat _ _) {G : Functor D C} (adj : Hom_Adjunct F G).
+Local Open Scope functor_scope.
 
-  Definition Hom_Adjunct_left_iso : Hom_Adjunct F' G := Isomorphism_Compose (NatIso_hor_comp (Prod_Functor_NatIso (Opposite_NatIso N) (NatTrans_id_Iso (Functor_id D))) (NatTrans_id_Iso (Hom_Func D))) adj.
+Section Hom_Adjunct_left_iso.
+  Context {C D : Category} {F F' : Functor C D} (N : (F' ≡≡ F ::> Func_Cat _ _)%morphism) {G : Functor D C} (adj : F ⊣_hom G).
+
+
+  (** If F ≡ F' and (F ⊣_hom G) then (F' ⊣_hom G) *)
+  Definition Hom_Adjunct_left_iso : F' ⊣_hom G := Isomorphism_Compose (NatIso_hor_comp (Prod_Functor_NatIso (Opposite_NatIso N) (NatTrans_id_Iso (Functor_id D))) (NatTrans_id_Iso (Hom_Func D))) adj.
 
 End Hom_Adjunct_left_iso.
 
 Section Hom_Adjunct_right_iso.
-  Context {C D : Category} {F : Functor C D} {G G' : Functor D C} (N : G ≡≡ G' ::> Func_Cat _ _) (adj : Hom_Adjunct F G).
+  Context {C D : Category} {F : Functor C D} {G G' : Functor D C} (N : (G ≡≡ G' ::> Func_Cat _ _)%morphism) (adj : F ⊣_hom G).
 
-  Definition Hom_Adjunct_right_iso : Hom_Adjunct F G' := Hom_Adjunct_Duality (Hom_Adjunct_left_iso (Inverse_Isomorphism (Opposite_NatIso N)) (Hom_Adjunct_Duality adj)).
+  (** If G ≡ G' and (F ⊣_hom G) then (F ⊣_hom G') *)
+  Definition Hom_Adjunct_right_iso : F ⊣_hom G' := Hom_Adjunct_Duality (Hom_Adjunct_left_iso (Inverse_Isomorphism (Opposite_NatIso N)) (Hom_Adjunct_Duality adj)).
 
 End Hom_Adjunct_right_iso.
 
 Section Adjunct_left_iso.
-  Context {C D : Category} (F F' : Functor C D) (N : F' ≡≡ F ::> Func_Cat _ _) (G : Functor D C) (adj : Adjunct F G).
+  Context {C D : Category} (F F' : Functor C D) (N : (F' ≡≡ F ::> Func_Cat _ _)%morphism) (G : Functor D C) (adj : F ⊣ G).
 
-  Definition Adjunct_left_iso : Adjunct F' G := Hom_Adj_to_Adj (Hom_Adjunct_left_iso N (Adj_to_Hom_Adj adj)).
+  (** If F ≡ F' and (F ⊣ G) then (F' ⊣ G) *)
+  Definition Adjunct_left_iso : F' ⊣ G := Hom_Adj_to_Adj (Hom_Adjunct_left_iso N (Adj_to_Hom_Adj adj)).
 
 End Adjunct_left_iso.
 
 Section Adjunct_right_iso.
-  Context {C D : Category} (F : Functor C D) (G G' : Functor D C) (N : G ≡≡ G' ::> Func_Cat _ _) (adj : Adjunct F G).
+  Context {C D : Category} (F : Functor C D) (G G' : Functor D C) (N : (G ≡≡ G' ::> Func_Cat _ _)%morphism) (adj : F ⊣ G).
 
-  Definition Adjunct_right_iso : Adjunct F G' := Hom_Adj_to_Adj (Hom_Adjunct_right_iso N (Adj_to_Hom_Adj adj)).
+  (** If G ≡ G' and (F ⊣ G) then (F ⊣ G') *)
+  Definition Adjunct_right_iso : F ⊣ G' := Hom_Adj_to_Adj (Hom_Adjunct_right_iso N (Adj_to_Hom_Adj adj)).
 
 End Adjunct_right_iso.
 
 Section Hom_Adjunct_left_unique.
-  Context {C D : Category} {F F' : Functor C D} {G : Functor D C} (adj : Hom_Adjunct F G) (adj' : Hom_Adjunct F' G).
+  Context {C D : Category} {F F' : Functor C D} {G : Functor D C} (adj : F ⊣_hom G) (adj' : F' ⊣_hom G).
 
-  Theorem Hom_Adjunct_left_unique : F ≡≡ F' ::> Func_Cat _ _.
+
+  (** If F ⊣_hom G and F' ⊣_hom G then F ≡ F' *)
+  Definition Hom_Adjunct_left_unique : (F ≡≡ F' ::> Func_Cat _ _)%morphism.
   Proof.
-    apply (@Opposite_NatIso _ _ (Opposite_Functor F) (Opposite_Functor F')).
+    apply (@Opposite_NatIso _ _ F^op F'^op).
     eapply (Embedding_mono (Yoneda_Emb D^op)).
-    cbn; unfold Yoneda; cbn.
-    do 2 rewrite <- Exp_Cat_morph_ex_compose.
-    apply Inverse_Isomorphism in adj';
-      set (equiv := Isomorphism_Compose adj adj'); clearbody equiv; clear adj adj'.
+    eapply Isomorphism_Compose;
+      [eapply Inverse_Isomorphism; apply Exp_Cat_morph_ex_compose_Iso |].
+    eapply Isomorphism_Compose; [|apply Exp_Cat_morph_ex_compose_Iso].
     apply Exp_Cat_morph_ex_Iso.
-    assumption.
-  Qed.    
+    eapply Isomorphism_Compose.
+    apply adj.
+    eapply Inverse_Isomorphism.
+    apply adj'.
+  Defined.
 
 End Hom_Adjunct_left_unique.
 
-Section Hom_Adjunct_right_unique.
-  Context {C D : Category} {F : Functor C D} {G G' : Functor D C} (adj : Hom_Adjunct F G) (adj' : Hom_Adjunct F G').
 
-  Theorem Hom_Adjunct_right_unique : G ≡≡ G' ::> Func_Cat _ _.
+Section Hom_Adjunct_right_unique.
+  Context {C D : Category} {F : Functor C D} {G G' : Functor D C} (adj : F ⊣_hom G) (adj' : F ⊣_hom G').
+
+  (** If F ⊣_hom G and F ⊣_hom G' then G ≡ G' *)
+  Theorem Hom_Adjunct_right_unique : (G ≡≡ G' ::> Func_Cat _ _)%morphism.
   Proof.
     apply Hom_Adjunct_Duality in adj.
     apply Hom_Adjunct_Duality in adj'.
     apply (@Opposite_NatIso _ _ (Opposite_Functor G) (Opposite_Functor G')).
     apply (Hom_Adjunct_left_unique adj adj').
-  Qed.
+  Defined.
 
 End Hom_Adjunct_right_unique.
 
 Section Adjunct_left_unique.
-  Context {C D : Category} {F F' : Functor C D} {G : Functor D C} (adj : Adjunct F G) (adj' : Adjunct F' G).
+  Context {C D : Category} {F F' : Functor C D} {G : Functor D C} (adj : F ⊣ G) (adj' : F' ⊣ G).
 
-  Theorem Adjunct_left_unique : F ≡≡ F' ::> Func_Cat _ _.
+  (** If F ⊣ G and F' ⊣ G then F ≡ F' *)
+  Theorem Adjunct_left_unique : (F ≡≡ F' ::> Func_Cat _ _)%morphism.
   Proof.
     apply Adj_to_Hom_Adj in adj.
     apply Adj_to_Hom_Adj in adj'.
-    apply Hom_Adjunct_left_unique; trivial.
-  Qed.    
+    eapply Hom_Adjunct_left_unique; eassumption.
+  Defined.
 
 End Adjunct_left_unique.
 
 Section Adjunct_right_unique.
-  Context {C D : Category} {F : Functor C D} {G G' : Functor D C} (adj : Adjunct F G) (adj' : Adjunct F G').
+  Context {C D : Category} {F : Functor C D} {G G' : Functor D C} (adj : F ⊣ G) (adj' : F ⊣ G').
 
-  Theorem Adjunct_right_unique : G ≡≡ G' ::> Func_Cat _ _.
+  (** If F ⊣ G and F ⊣ G' then G ≡ G' *)
+  Theorem Adjunct_right_unique : (G ≡≡ G' ::> Func_Cat _ _)%morphism.
   Proof.
     apply Adj_to_Hom_Adj in adj.
     apply Adj_to_Hom_Adj in adj'.
-    apply Hom_Adjunct_right_unique; trivial.
-  Qed.
+    eapply Hom_Adjunct_right_unique; eassumption.
+  Defined.
 
 End Adjunct_right_unique.
 
+(** If F ⊣_ucu G then Hom_{Func_Cat B D}(Fᵒᵖ ∘ –, –) ≡ Hom_{Func_Cat B C}(–, G ∘ —)
+ *)
 Section Hom_Adjunct_Lifted.
-  Context {C D : Category} {F : Functor C D} {G : Functor D C} (adj : UCU_Adjunct F G) (B : Category).
+  Context {C D : Category} {F : Functor C D} {G : Functor D C} (adj : F ⊣_ucu G) (B : Category).
 
-  Local Notation FCOMP := Functor_compose (only parsing).
-  Local Notation FOP := Opposite_Functor (only parsing).
-  Local Notation NCOMP := NatTrans_compose (only parsing).
-  Local Notation HCOMP := NatTrans_hor_comp (only parsing).
   Local Notation NID := NatTrans_id (only parsing).
   Local Notation FCAT := Func_Cat (only parsing).
 
-  Local Notation LEFT := (FCOMP (Prod_Functor (Opposite_Functor (Right_Functor_Extender F B)) (Functor_id (Func_Cat B D))) (Hom_Func (Func_Cat B D))) (only parsing).
+  Local Notation LEFT := ((Hom_Func (Func_Cat B D)) ∘ (Prod_Functor (Right_Functor_Extender F B)^op (Functor_id (Func_Cat B D)))) (only parsing).
 
-  Local Notation RIGHT := (FCOMP (Prod_Functor (Functor_id (Func_Cat B C)^op) (Right_Functor_Extender G B)) (Hom_Func (Func_Cat B C))) (only parsing).
+  Local Notation RIGHT := ((Hom_Func (Func_Cat B C)) ∘ (Prod_Functor (Functor_id (Func_Cat B C)^op%category) (Right_Functor_Extender G B))) (only parsing).
 
   Local Obligation Tactic := idtac.
   
-  Program Instance Hom_Adjunct_Lifted_LR : NatTrans LEFT RIGHT :=
-    {
+  Program Definition Hom_Adjunct_Lifted_LR : NatTrans LEFT RIGHT :=
+    {|
       Trans := fun c h =>
-                 NCOMP (NatTrans_to_compose_id _) (NCOMP (NCOMP (HCOMP (NatTrans_id (fst c)) (ucu_adj_unit adj)) (NatTrans_Functor_assoc (fst c) F G)) (HCOMP h (NatTrans_id G)))
-    }.
+                 ((((NatTrans_id G) ∘_h h) ∘ ((NatTrans_Functor_assoc (fst c) F G) ∘ ((ucu_adj_unit adj) ∘_h (NatTrans_id (fst c))))) ∘ (NatTrans_to_compose_id _))%nattrans
+    |}.
 
   Next Obligation.
     intros [c1 c2] [c1' c2'] [h1 h2].
@@ -120,10 +133,8 @@ Section Hom_Adjunct_Lifted.
     cbn in *.
     repeat rewrite F_id; simpl_ids.
     repeat rewrite F_compose.
-    set (W := @Trans_com _ _ _ _ (ucu_adj_unit adj) _ _ (Trans h1 x)).
-    cbn in W.
     repeat rewrite assoc.
-    rewrite W.
+    cbn_rewrite (@Trans_com _ _ _ _ (ucu_adj_unit adj) _ _ (Trans h1 x)).
     trivial.
   Qed.    
 
@@ -132,10 +143,10 @@ Section Hom_Adjunct_Lifted.
     apply Hom_Adjunct_Lifted_LR_obligation_1.
   Qed.
 
-  Program Instance Hom_Adjunct_Lifted_RL : NatTrans RIGHT LEFT :=
-    {
-      Trans := fun c h => NCOMP (NCOMP (HCOMP h (NatTrans_id F)) (NCOMP (NatTrans_Functor_assoc_sym (snd c) G F) (HCOMP (NatTrans_id (snd c)) (ucu_adj_counit adj)))) (NatTrans_from_compose_id _)
-    }.
+  Program Definition Hom_Adjunct_Lifted_RL : NatTrans RIGHT LEFT :=
+    {|
+      Trans := fun c h => ((NatTrans_from_compose_id _) ∘ ((((ucu_adj_counit adj) ∘_h (NatTrans_id (snd c))) ∘ (NatTrans_Functor_assoc_sym (snd c) G F)) ∘ ((NatTrans_id F) ∘_h h)))%nattrans
+    |}.
     
   Next Obligation.
     intros [c1 c2] [c1' c2'] [h1 h2].
@@ -145,10 +156,8 @@ Section Hom_Adjunct_Lifted.
     cbn in *.
     repeat rewrite F_id; simpl_ids.
     repeat rewrite F_compose.
-    set (W := @Trans_com _ _ _ _ (ucu_adj_counit adj) _ _ (Trans h2 x)).
-    cbn in W.
     repeat rewrite assoc_sym.
-    rewrite <- W.
+    cbn_rewrite (@Trans_com _ _ _ _ (ucu_adj_counit adj) _ _ (Trans h2 x)).
     trivial.
   Qed.    
 
@@ -157,11 +166,11 @@ Section Hom_Adjunct_Lifted.
     apply Hom_Adjunct_Lifted_RL_obligation_1.
   Qed.
 
-  Program Instance Hom_Adjunct_Lifted : LEFT ≡≡ RIGHT ::> Func_Cat _ _ :=
-    {
+  Program Definition Hom_Adjunct_Lifted : (LEFT ≡≡ RIGHT ::> Func_Cat _ _)%morphism :=
+    {|
       iso_morphism := Hom_Adjunct_Lifted_LR;
       inverse_morphism := Hom_Adjunct_Lifted_RL
-    }.
+    |}.
 
   Next Obligation.
   Proof.
@@ -174,7 +183,7 @@ Section Hom_Adjunct_Lifted.
     simpl_ids.
     rewrite F_compose.
     rewrite assoc_sym.
-    set (W := Trans_com (ucu_adj_counit adj) (Trans h y)); cbn in W; rewrite W; clear W.
+    cbn_rewrite (Trans_com (ucu_adj_counit adj) (Trans h y)). 
     rewrite assoc.
     simpl_ids; trivial.
     set (W := f_equal (fun w : NatTrans F F => Trans w (c1 _o y)) (ucu_adj_left_id adj)); cbn in W; simpl_ids in W; apply W.
@@ -191,7 +200,7 @@ Section Hom_Adjunct_Lifted.
     simpl_ids.
     rewrite F_compose.
     rewrite assoc.
-    set (W := Trans_com (ucu_adj_unit adj) (Trans h y)); cbn in W; rewrite <- W; clear W.
+    cbn_rewrite <- (Trans_com (ucu_adj_unit adj) (Trans h y)).
     rewrite assoc_sym.
     simpl_ids; trivial.
     set (W := f_equal (fun w : NatTrans G G => Trans w (c2 _o y)) (ucu_adj_right_id adj)); cbn in W;

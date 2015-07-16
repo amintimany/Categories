@@ -11,27 +11,25 @@ Require Import NatTrans.Main.
 Require Import Cat.Cat_Terminal.
 Require Import Functor.Representable.Representable.
 
-Local Notation FCOMP := Functor_compose (only parsing).
-Local Notation FOP := Opposite_Functor (only parsing).
-Local Notation NCOMP := NatTrans_compose (only parsing).
-Local Notation HCOMP := NatTrans_hor_comp (only parsing).
 Local Notation NID := NatTrans_id (only parsing).
 Local Notation FCAT := Func_Cat (only parsing).
 
+
+(** Limits – as local kan extensions – are pointwise. *)
 Section Rep_Preserve_Limits.
   Context {J C : Category} (D : Functor J C) (x : C).
 
   Local Notation REPx := (@Fix_Bi_Func_1 C^op _ _ x (Hom_Func C)) (only parsing).
 
-  Local Notation REPxComp U := (FCOMP U REPx) (only parsing).
+  Local Notation REPxComp U := (REPx ∘ U)%functor (only parsing).
   
   Section Rep_Preserve_Limits_Cone_Cov.
     Context (Cn : Cone D).
 
-    Instance Rep_Preserve_Limits_Cone_Cov : Cone (REPxComp D) :=
+    Definition Rep_Preserve_Limits_Cone_Cov : Cone (REPxComp D) :=
       {|
         cone_apex := (REPxComp Cn);
-        cone_edge := NCOMP (NatTrans_Functor_assoc _ _ _) (HCOMP (cone_edge Cn) (NID REPx))
+        cone_edge := (((NID REPx) ∘_h (cone_edge Cn)) ∘ (NatTrans_Functor_assoc _ _ _))%nattrans
       |}.
 
   End Rep_Preserve_Limits_Cone_Cov.
@@ -39,9 +37,9 @@ Section Rep_Preserve_Limits.
   Local Notation LPCC := Rep_Preserve_Limits_Cone_Cov.
 
   Section Rep_Preserve_Limits_Cone_Cov_Back.
-    Context (Cn : Cone (REPxComp D)) (w : Cn _o tt).
+    Context (Cn : Cone (REPxComp D)) (w : (Cn _o tt)%object).
 
-    Program Instance Rep_Preserve_Limits_Cone_Cov_Back : Cone D :=
+    Program Definition Rep_Preserve_Limits_Cone_Cov_Back : Cone D :=
       {|
         cone_apex := Const_Func Discr.SingletonCat x;
         cone_edge :=  {|Trans := fun c => Trans (cone_edge Cn) c w |}
@@ -66,15 +64,17 @@ Section Rep_Preserve_Limits.
   Section Rep_Preserve_Limits_Cone_Morph_Cov.
     Context {Cn Cn' : Cone D} (h : Cone_Morph D Cn Cn').
 
-    Program Instance Rep_Preserve_Limits_Cone_Morph_Cov : Cone_Morph (REPxComp D) (LPCC Cn) (LPCC Cn') :=
+    Program Definition Rep_Preserve_Limits_Cone_Morph_Cov :
+      Cone_Morph (REPxComp D) (LPCC Cn) (LPCC Cn') :=
       {|
-        cone_morph := HCOMP (cone_morph h) (NID REPx)
+        cone_morph := ((NID REPx) ∘_h (cone_morph h))%nattrans
       |}.
 
     Next Obligation.
     Proof.
       apply NatTrans_eq_simplify; extensionality f; extensionality y.
-      set (W := f_equal (fun w : NatTrans (FCOMP (Functor_To_1_Cat J) Cn) D => Trans w f) (cone_morph_com h)); cbn in *; rewrite W.
+      cbn in *.
+      cbn_rewrite (f_equal (fun w : NatTrans (Cn ∘ (Functor_To_1_Cat J)) D => Trans w f) (cone_morph_com h)).
       auto.
     Qed.
       
@@ -87,13 +87,13 @@ Section Rep_Preserve_Limits.
   Section Rep_Preserve_Limits_Cone_Morph_to_LPCC_Limit.
     Context (Cn : Cone (REPxComp D)).
 
-    Program Instance Rep_Preserve_Limits_Cone_Morph_to_LPCC_Limit : Cone_Morph (REPxComp D) Cn (LPCC L) :=
+    Program Definition Rep_Preserve_Limits_Cone_Morph_to_LPCC_Limit : Cone_Morph (REPxComp D) Cn (LPCC L) :=
       {|
         cone_morph :=
           {|
             Trans :=
               fun c w =>
-                match c as u return (Cn _o u) → Hom x (L _o u) with
+                match c as u return (Cn _o u)%object → Hom x (L _o u) with
                   tt => fun w => Trans (LRKE_morph_ex L (LPCCB Cn w)) tt
                 end w
           |}
@@ -117,7 +117,7 @@ Section Rep_Preserve_Limits.
     Next Obligation.
     Proof.
       apply NatTrans_eq_simplify; extensionality c; extensionality w.
-      set (W := f_equal (fun m : NatTrans (FCOMP (Functor_To_1_Cat J) (LPCCB Cn w)) D => Trans m c) (cone_morph_com (LRKE_morph_ex L (LPCCB Cn w)))).
+      set (W := f_equal (fun m : NatTrans ((LPCCB Cn w) ∘ (Functor_To_1_Cat J)) D => Trans m c) (cone_morph_com (LRKE_morph_ex L (LPCCB Cn w)))).
       cbn in *.
       auto.
     Qed.      
@@ -127,9 +127,12 @@ Section Rep_Preserve_Limits.
   Local Notation LPCMTL := Rep_Preserve_Limits_Cone_Morph_to_LPCC_Limit.
   
   Section Rep_Preserve_Limits_Cone_Morph_to_LPCC_Limit_TO_Cone_Morph_to_Limit.
-    Context {Cn : Cone (REPxComp D)} (h : Cone_Morph (REPxComp D) Cn (LPCC L)) (w : (Cn _o) tt).
+    Context {Cn : Cone (REPxComp D)}
+            (h : Cone_Morph (REPxComp D) Cn (LPCC L))
+            (w : (Cn _o tt)%object)
+    .
 
-    Program Instance Rep_Preserve_Limits_Cone_Morph_to_LPCC_Limit_TO_Cone_Morph_to_Limit : Cone_Morph D (LPCCB Cn w) L :=
+    Program Definition Rep_Preserve_Limits_Cone_Morph_to_LPCC_Limit_TO_Cone_Morph_to_Limit : Cone_Morph D (LPCCB Cn w) L :=
       {|
         cone_morph :=
           {|
@@ -156,7 +159,7 @@ Section Rep_Preserve_Limits.
     Next Obligation.
     Proof.
       apply NatTrans_eq_simplify; extensionality c.
-      set (W := f_equal (fun m : NatTrans (FCOMP (Functor_To_1_Cat J) Cn) (REPxComp D) => Trans m c w) (cone_morph_com h)).
+      set (W := f_equal (fun m : NatTrans (Cn ∘ (Functor_To_1_Cat J)) (REPxComp D) => Trans m c w) (cone_morph_com h)).
       cbn in *.
       auto.
     Qed.      
@@ -165,7 +168,7 @@ Section Rep_Preserve_Limits.
 
   Local Notation LPCMTLTL := Rep_Preserve_Limits_Cone_Morph_to_LPCC_Limit_TO_Cone_Morph_to_Limit.
   
-  Program Instance Rep_Preserve_Limits : Limit (REPxComp D) :=
+  Program Definition Rep_Preserve_Limits : Limit (REPxComp D) :=
     {|
       LRKE := LPCC L;
       LRKE_morph_ex := fun Cn => LPCMTL Cn

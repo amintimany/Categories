@@ -1,18 +1,23 @@
 Require Import Category.Main.
 
-Class Functor (C C' : Category) : Type := 
+(**
+Fro categories C and C', a functor F : C -> C' consists of an arrow map from objects of C to objects of C' and an arrow map from arrows of C to arrows of C' such that an arrow h : a -> b is mapped to (F h) : F a -> F b.
+
+Furthermore, we require functors to map identitiies to identities. Additionally, the immage of the coposition of two arrows must be the same as composition of their images.
+*)
+Record Functor (C C' : Category) : Type := 
 {
-  (* Object map *)
+  (** Object map *)
   FO : C → C';
 
-  (* Arrow map *)
+  (** Arrow map *)
   FA : ∀ {a b}, Hom C a b → Hom C' (FO a) (FO b);
 
-  (* Mapping of identities *)
+  (** Mapping of identities *)
   F_id : ∀ c, FA (id c) = id (FO c);
   
-  (* Functor commuting with composition *)
-  F_compose : ∀ {a b c} (f : Hom a b) (g : Hom b c), FA (g ∘ f) = (FA g) ∘ (FA f)
+  (** Functor commuting with composition *)
+  F_compose : ∀ {a b c} (f : Hom a b) (g : Hom b c), (FA (g ∘ f) = (FA g) ∘ (FA f))%morphism
 
   (* F_id and F_compose together state the fact that functors are morphisms of categories (preserving the structure of categories!)*)
 }.
@@ -22,29 +27,36 @@ Arguments FA {_ _} _ {_ _} _, {_ _} _ _ _ _.
 Arguments F_id {_ _} _ _.
 Arguments F_compose {_ _} _ {_ _ _} _ _.
 
+Bind Scope functor_scope with Functor.
+
 Notation "F '_o'" := (FO F) : object_scope.
 
-Notation "F '_a'" := (@FA _ _ F) : morphism_scope.
+Notation "F '@_a'" := (@FA _ _ F) : morphism_scope.
+
+Notation "F '_a'" := (FA F) : morphism_scope.
 
 Hint Extern 2 => (apply F_id).
 
+Local Open Scope morphism_scope.
+Local Open Scope object_scope.
+
 Ltac Functor_Simplify :=
-  match goal with
-    | [|- ?F _a _ _ ?A = id (?F _o ?x)] =>
-      rewrite <- F_id; (simpl||idtac)
-    | [|- (id (?F _o ?x)) = ?F _a _ _ ?A] =>
-      rewrite <- F_id; (simpl||idtac)
-    | [|- ?F _a _ _ ?A ∘ ?F _a _ _ ?B = ?F _a _ _ ?C ∘ ?F _a _ _ ?D] =>
-      repeat rewrite <- F_compose; (simpl||idtac)
-    | [|- ?F _a _ _ ?A ∘ ?F _a _ _ ?B = ?F _a _ _ ?C] =>
-      rewrite <- F_compose; (simpl||idtac)
-    | [|- ?F _a _ _ ?C = ?F _a _ _ ?A ∘ ?F _a _ _ ?B] =>
-      rewrite <- F_compose; (simpl||idtac)
-    | [|- context [?F _a _ _ id] ] =>
-      rewrite F_id; (simpl||idtac)
-    | [|- context [?F _a _ _ ?A ∘ ?F _a _ _ ?B]] =>
-      rewrite <- F_compose; (simpl||idtac)
-  end
+  progress (repeat match goal with
+    | [|- ?F _a ?A = id (?F _o ?x)] =>
+      rewrite <- F_id; (cbn||idtac)
+    | [|- (id (?F _o ?x)) = ?F _a ?A] =>
+      rewrite <- F_id; (cbn||idtac)
+    | [|- ?F _a ?A ∘ ?F _a ?B = ?F _a ?C ∘ ?F _a ?D] =>
+      repeat rewrite <- F_compose; (cbn||idtac)
+    | [|- ?F _a ?A ∘ ?F _a ?B = ?F _a ?C] =>
+      rewrite <- F_compose; (cbn||idtac)
+    | [|- ?F _a ?C = ?F _a ?A ∘ ?F _a ?B] =>
+      rewrite <- F_compose; (cbn||idtac)
+    | [|- context [?F _a id] ] =>
+      rewrite F_id; (cbn||idtac)
+    | [|- context [?F _a ?A ∘ ?F _a ?B]] =>
+      rewrite <- F_compose; (cbn||idtac)
+  end)
 .
 
 Hint Extern 2 => Functor_Simplify.
@@ -53,25 +65,25 @@ Section Functor_eq_simplification.
 
   Context {C C' : Category} (F G : Functor C C').
 
+  (** Two functors are equal if their object maps and arrow maps are. *)
   Lemma Functor_eq_simplify (Oeq : F _o = G _o) :
-    ((fun x y => match Oeq in _ = V return Hom x y → Hom C' (V x) (V y) with eq_refl => F  _a x y end) = G _a) -> F = G.
+    ((fun x y => match Oeq in _ = V return Hom x y → Hom C' (V x) (V y) with eq_refl => F  @_a x y end) = G @_a) -> F = G.
   Proof.
-    intros H.
-    destruct F as [fO fA fid fco]; destruct G as [gO gA gid gco]; cbn in *.
-    destruct Oeq.
-    destruct H.
-    destruct (proof_irrelevance _ fid gid).
-    destruct (proof_irrelevance _ fco gco).
-    reflexivity.
+    destruct F; destruct G.
+    basic_simpl.
+    ElimEq.
+    PIR.
+    trivial.
   Qed.
 
-  Theorem FA_extensionality (Oeq : F _o = G _o) : (∀ (a b : Obj) (h : Hom a b), (fun x y => match Oeq in _ = V return Hom x y → Hom C' (V x) (V y) with eq_refl => F  _a x y end) _ _ h = G _a _ _ h) → (fun x y => match Oeq in _ = V return Hom x y → Hom C' (V x) (V y) with eq_refl => F  _a x y end) = G _a.
+  (** Extensionality for arrow maps of functors. *)
+  Theorem FA_extensionality (Oeq : F _o = G _o) : (∀ (a b : Obj) (h : Hom a b), (fun x y => match Oeq in _ = V return Hom x y → Hom C' (V x) (V y) with eq_refl => F  @_a x y end) _ _ h = G @_a _ _ h) → (fun x y => match Oeq in _ = V return Hom x y → Hom C' (V x) (V y) with eq_refl => F  @_a x y end) = G @_a.
   Proof.
-    intros H.
-    extensionality x; extensionality y; extensionality h; apply H.
+    auto.
   Qed.
-
-  Lemma Functor_extensionality (Oeq : F _o = G _o) : (∀ (a b : Obj) (h : Hom a b), (fun x y => match Oeq in _ = V return Hom x y → Hom C' (V x) (V y) with eq_refl => F  _a x y end) _ _ h = G _a _ _ h) → F = G.
+  
+  (** Fucntor extensionality: two functors are equal of their object maps are equal and their arrow maps are extensionally equal. *)
+  Lemma Functor_extensionality (Oeq : F _o = G _o) : (∀ (a b : Obj) (h : Hom a b), (fun x y => match Oeq in _ = V return Hom x y → Hom C' (V x) (V y) with eq_refl => F  @_a x y end) _ _ h = G @_a _ _ h) → F = G.
   Proof.
     intros H.
     apply (Functor_eq_simplify Oeq); trivial.
@@ -81,3 +93,17 @@ Section Functor_eq_simplification.
 End Functor_eq_simplification.
 
 Hint Extern 2 => Functor_Simplify.
+
+Ltac Func_eq_simpl :=
+  match goal with
+    [|- ?A = ?B :> Functor _ _] =>
+    (apply (Functor_eq_simplify A B (eq_refl : A _o = B _o)%object)) +
+    (cut (A _o = B _o)%object; [
+       let u := fresh "H" in
+       intros H;
+         apply (Functor_eq_simplify A B H)
+         |
+    ])
+  end.
+
+Hint Extern 3 => Func_eq_simpl.

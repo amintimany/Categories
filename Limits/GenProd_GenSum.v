@@ -1,362 +1,288 @@
 Require Import Category.Main.
 Require Import Functor.Main.
-Require Import Archetypal.Discr.
+Require Import Archetypal.Discr.Discr Archetypal.Discr.NatFacts.
 Require Import Coq_Cats.Type_Cat.Type_Cat.
+Require Import Cat.Cat_Iso.
+Require Import NatTrans.NatTrans NatTrans.Func_Cat.
+Require Import KanExt.LocalFacts.NatIso.
 
 Require Import Limits.Limit.
+Require Import Limits.Isomorphic_Cat.
 
 Section GenProd_Sum.
   Context {A : Type} {C : Category} (map : A → C).
 
-  SubClass GenProd := Limit (Discr_Func map).
+  Definition GenProd := Limit (Discr_Func map).
 
-  Existing Class GenProd.
+  Identity Coercion GenProd_Limit : GenProd >-> Limit.
   
-  SubClass GenSum := CoLimit (Discr_Func map).
+  Definition GenSum := CoLimit (Discr_Func_op map).
 
-  Existing Class GenSum.
+  Identity Coercion GenSum_CoLimit : GenSum >-> CoLimit.
 
 End GenProd_Sum.
-  
-Section Conversion.
-  Context {A : Type} {C : Category} {map : A → C}.
-  
-  Section CoCone_to_CoCone_1.
-    Context (Cn : @LoKan_Cone _ _ (Functor_To_1_Cat (Discr_Cat A)) _ (@Discr_Func C^op _ map)).
 
-    Local Hint Extern 1 => cbn.
 
-    Program Instance CoCone_to_CoCone_1 : @LoKan_Cone _ _ (Functor_To_1_Cat (Discr_Cat A)^op) _ (Opposite_Functor (Discr_Func map)) :=
-      {
-        cone_apex := (cone_apex Cn);
-        cone_edge := {|Trans := fun c => Trans ((cone_edge Cn)) c |}
-      }.
 
-  End CoCone_to_CoCone_1.
-
-  Section CoCone_to_CoCone_2.
-    Context (Cn : @LoKan_Cone _ _ (Functor_To_1_Cat (Discr_Cat A)^op) _ (Opposite_Functor (Discr_Func map))).
-
-    Local Hint Extern 1 => cbn.
-    
-    Program Instance CoCone_to_CoCone_2 : @LoKan_Cone _ _ (Functor_To_1_Cat (Discr_Cat A)) _ (@Discr_Func C^op _ map) :=
-      {
-        cone_apex := (cone_apex Cn);
-        cone_edge := {|Trans := fun c => Trans ((cone_edge Cn)) c |}
-      }.
-
-  End CoCone_to_CoCone_2.
-
-  Section CoCone_to_CoCone_1_2.
-    Context (Cn : @LoKan_Cone _ _ (Functor_To_1_Cat (Discr_Cat A)) _ (@Discr_Func C^op _ map)).
-
-    Theorem CoCone_to_CoCone_1_2 : CoCone_to_CoCone_2 (CoCone_to_CoCone_1 Cn) = Cn.
-    Proof.    
-      unfold CoCone_to_CoCone_1, CoCone_to_CoCone_2.
-      destruct Cn as [ap ed]; cbn in *.
-      match goal with
-        [|- {| cone_edge := ?A |} = {| cone_edge := ?B |} ] => cutrewrite (A = B); trivial
-      end.
-      apply NatTrans_eq_simplify; trivial.
-    Qed.
-    
-  End CoCone_to_CoCone_1_2.
-
-  Section CoCone_to_CoCone_2_1.
-    Context (Cn : @LoKan_Cone _ _ (Functor_To_1_Cat (Discr_Cat A)^op) _ (Opposite_Functor (Discr_Func map))).
-
-    Theorem CoCone_to_CoCone_2_1 : CoCone_to_CoCone_1 (CoCone_to_CoCone_2 Cn) = Cn.
-    Proof.    
-      unfold CoCone_to_CoCone_1, CoCone_to_CoCone_2.
-      destruct Cn as [ap ed]; cbn in *.
-      match goal with
-        [|- {| cone_edge := ?A |} = {| cone_edge := ?B |} ] => cutrewrite (A = B); trivial
-      end.
-      apply NatTrans_eq_simplify; trivial.
-    Qed.
-    
-  End CoCone_to_CoCone_2_1.
-  
-  Section CoCone_Morph_to_CoCone_Morph_1.
-    Context {Cn Cn' : @LoKan_Cone _ _ (Functor_To_1_Cat (Discr_Cat A)) _ (@Discr_Func C^op _ map)}
-            (h : LoKan_Cone_Morph Cn Cn').
-
-    Program Instance CoCone_Morph_to_CoCone_Morph_1 : LoKan_Cone_Morph (CoCone_to_CoCone_1 Cn) (CoCone_to_CoCone_1 Cn') :=
-      {
-        cone_morph := cone_morph h
-      }.
-
-    Next Obligation.
-    Proof.
-      apply NatTrans_eq_simplify; apply (f_equal Trans (cone_morph_com h)).
-    Qed.
-
-  End CoCone_Morph_to_CoCone_Morph_1.
-
-  Section CoCone_Morph_to_CoCone_Morph_2.
-    Context {Cn Cn' : @LoKan_Cone _ _ (Functor_To_1_Cat (Discr_Cat A)^op) _ (Opposite_Functor (Discr_Func map))}
-            (h : LoKan_Cone_Morph Cn Cn').
-
-    Program Instance CoCone_Morph_to_CoCone_Morph_2 : LoKan_Cone_Morph (CoCone_to_CoCone_2 Cn) (CoCone_to_CoCone_2 Cn') :=
-      {
-        cone_morph := cone_morph h
-      }.
-
-    Next Obligation.
-    Proof.
-      apply NatTrans_eq_simplify; apply (f_equal Trans (cone_morph_com h)).
-    Qed.
-
-  End CoCone_Morph_to_CoCone_Morph_2.
-
-End Conversion.
+(** The fact That if a category has generalized products of some type, its dual also has
+generalized sums of that type. *)
 
 Section GenProd_to_GenSum.
-  Context {A : Type} {C : Category} {map : A → C} (L : GenProd map).
-  
-  Program Instance GenProd_to_GenSum : @GenSum A C^op map :=
-    {|
-      LRKE := @CoCone_to_CoCone_1 _ C^op _ (LRKE L)
-    |}.
-  
-  Next Obligation.
-  Proof.
-    set (W := @CoCone_Morph_to_CoCone_Morph_1 _ C^op map _ _ (LRKE_morph_ex L (@CoCone_to_CoCone_2 _ C^op map Cn))).
-    rewrite CoCone_to_CoCone_2_1 in W.
-    exact W.
-  Defined.
-
-  Next Obligation.
-  Proof.
-    set (Wh := CoCone_Morph_to_CoCone_Morph_2 h).
-    set (Wh' := CoCone_Morph_to_CoCone_Morph_2 h').
-    set (M := LRKE_morph_unique L).
-    rewrite <- (@CoCone_to_CoCone_1_2 _ C^op _ (LRKE L)) in M.
-    set (M' := M _ Wh Wh').
-    change (cone_morph h) with (cone_morph Wh).
-    change (cone_morph h') with (cone_morph Wh').
-    destruct M; trivial.
-  Qed.
+  Context {A : Type} {C : Category} {map : A → C} (L : GenProd map).  
+  Definition GenProd_to_GenSum : @GenSum A C^op map :=
+    Local_Right_KanExt_Iso (Inverse_Isomorphism (@Discr_Func_Iso C^op A map)) L.
 
 End GenProd_to_GenSum.
 
+(** The fact That if a category has generalized sums of some type, its dual has
+generalized products of that type. *)
 Section GenSum_to_GenProd.
   Context {A : Type} {C : Category} {map : A → C} (L : GenSum map).
   
-  Program Instance GenSum_to_GenProd : @GenProd A C^op map :=
-    {|
-      LRKE := @CoCone_to_CoCone_2 _ C _ (LRKE L)
-    |}.
-  
-  Next Obligation.
-  Proof.
-    set (W := @CoCone_Morph_to_CoCone_Morph_2 _ C map _ _ (LRKE_morph_ex L (@CoCone_to_CoCone_1 _ C map Cn))).
-    rewrite CoCone_to_CoCone_1_2 in W.
-    exact W.
-  Defined.
-
-  Next Obligation.
-  Proof.
-    set (Wh := CoCone_Morph_to_CoCone_Morph_1 h).
-    set (Wh' := CoCone_Morph_to_CoCone_Morph_1 h').
-    set (M := LRKE_morph_unique L).
-    rewrite <- (@CoCone_to_CoCone_2_1 _ C _ (LRKE L)) in M.
-    set (M' := M _ Wh Wh').
-    change (cone_morph h) with (cone_morph Wh).
-    change (cone_morph h') with (cone_morph Wh').
-    destruct M; trivial.
-  Qed.
+  Definition GenSum_to_GenProd : @GenProd A C^op map :=
+    Local_Right_KanExt_Iso (Discr_Func_Iso map) L.
 
 End GenSum_to_GenProd.
 
-Section GenProd_IsoType_Cone_Conversion_1.
-  Context {A B : Type} {Iso : A ≡≡ B ::> Type_Cat} {C : Category} {f : B → C} (Cn : Cone (Discr_Func (f ∘ (iso_morphism Iso)))).
-
-  Local Obligation Tactic := idtac.
-  
-  Program Instance GenProd_IsoType_Cone_Conversion_1 : Cone (Discr_Func f) :=
-    {|
-      cone_apex := Cn;
-      cone_edge :=
-        {|
-          Trans :=
-            fun c =>
-              match equal_f (right_inverse Iso) c in _ = u return
-                    Hom ((Cn _o) tt) (f u) with
-                eq_refl => Trans Cn ((inverse_morphism Iso) c)
-              end
-        |}
-    |}.
-
-  Next Obligation.
-  Proof.
-    intros c c' h.
-    destruct h.
-    cbn.
-    simpl_ids; auto.
-  Qed.
-
-  Next Obligation.
-  Proof.  
-    symmetry.
-    apply GenProd_IsoType_Cone_Conversion_1_obligation_1.
-  Qed.    
-
-End GenProd_IsoType_Cone_Conversion_1.
-  
-Section GenProd_IsoType_Cone_Conversion_2.
-  Context {A B : Type} {Iso : A ≡≡ B ::> Type_Cat} {C : Category} {f : B → C} (Cn : Cone (Discr_Func f)).
-
-  Local Obligation Tactic := idtac.
-  
-  Program Instance GenProd_IsoType_Cone_Conversion_2 : Cone (Discr_Func (f ∘ (iso_morphism Iso))) :=
-    {|
-      cone_apex := Cn;
-      cone_edge :=
-        {|
-          Trans :=
-            fun c =>Trans Cn ((iso_morphism Iso) c)
-        |}
-    |}.
-
-  Next Obligation.
-  Proof.
-    intros c c' h.
-    destruct h.
-    cbn.
-    simpl_ids; auto.
-  Qed.
-
-  Next Obligation.
-  Proof.  
-    symmetry.
-    apply GenProd_IsoType_Cone_Conversion_2_obligation_1.
-  Qed.    
-
-End GenProd_IsoType_Cone_Conversion_2.
-
-Section GenProd_IsoType_Cone_Conversion_1_2.
-  Context {A B : Type} {Iso : A ≡≡ B ::> Type_Cat} {C : Category} {f : B → C} (Cn : Cone (Discr_Func (f ∘ (iso_morphism Iso)))).
-
-  Theorem GenProd_IsoType_Cone_Conversion_1_2 : GenProd_IsoType_Cone_Conversion_2 (GenProd_IsoType_Cone_Conversion_1 Cn) = Cn.
-  Proof.
-    unfold GenProd_IsoType_Cone_Conversion_1, GenProd_IsoType_Cone_Conversion_2.
-    destruct Cn.
-    cbn.
-    match goal with
-      [|- {| cone_edge := ?A |} = {| cone_edge := ?B |} ] => cutrewrite (A = B); trivial
-    end.
-    apply NatTrans_eq_simplify; extensionality c; cbn.
-    apply JMeq_eq.
-    destruct equal_f.
-    set (H := equal_f (left_inverse Iso) c).
-    cbn in H.
-    rewrite H.
-    trivial.
-  Qed.
-
-End GenProd_IsoType_Cone_Conversion_1_2.
-
-Section GenProd_IsoType_Cone_Conversion_2_1.
-  Context {A B : Type} {Iso : A ≡≡ B ::> Type_Cat} {C : Category} {f : B → C} (Cn : Cone (Discr_Func f)).
-
-  Theorem GenProd_IsoType_Cone_Conversion_2_1 : GenProd_IsoType_Cone_Conversion_1 (GenProd_IsoType_Cone_Conversion_2 Cn) = Cn.
-  Proof.
-    unfold GenProd_IsoType_Cone_Conversion_1, GenProd_IsoType_Cone_Conversion_2.
-    destruct Cn.
-    cbn.
-    match goal with
-      [|- {| cone_edge := ?A |} = {| cone_edge := ?B |} ] => cutrewrite (A = B); trivial
-    end.
-    apply NatTrans_eq_simplify; extensionality c; cbn.
-    destruct equal_f; trivial.
-  Qed.
-
-End GenProd_IsoType_Cone_Conversion_2_1.
-
-Section GenProd_IsoType_Cone_Morph_Conversion_1.
-  Context {A B : Type} {Iso : A ≡≡ B ::> Type_Cat} {C : Category} {f : B → C} {Cn Cn' : Cone (Discr_Func (f ∘ (iso_morphism Iso)))} (h : Cone_Morph _ Cn Cn').
-
-  Local Obligation Tactic := idtac.
-  
-  Program Instance GenProd_IsoType_Cone_Morph_Conversion_1 : Cone_Morph (Discr_Func f) (GenProd_IsoType_Cone_Conversion_1 Cn) (GenProd_IsoType_Cone_Conversion_1 Cn') :=
-    {|
-      cone_morph := h
-    |}.
-
-  Next Obligation.
-  Proof.
-    apply NatTrans_eq_simplify; extensionality x; cbn.
-    destruct equal_f.
-    apply (f_equal (fun w : NatTrans (Functor_compose (Functor_To_1_Cat (Discr_Cat A)) Cn) (Discr_Func (f ∘ (iso_morphism Iso))) => Trans w (inverse_morphism Iso x)) (cone_morph_com h)).
-  Qed.
-
-End GenProd_IsoType_Cone_Morph_Conversion_1.
-  
-Section GenProd_IsoType_Cone_Morph_Conversion_2.
-  Context {A B : Type} {Iso : A ≡≡ B ::> Type_Cat} {C : Category} {f : B → C} {Cn Cn' : Cone (Discr_Func f)} (h : Cone_Morph _ Cn Cn').
-
-  Local Obligation Tactic := idtac.
-  
-  Program Instance GenProd_IsoType_Cone_Morph_Conversion_2 : Cone_Morph (Discr_Func (f ∘ (iso_morphism Iso))) (GenProd_IsoType_Cone_Conversion_2 Cn) (GenProd_IsoType_Cone_Conversion_2 Cn') :=
-    {|
-      cone_morph := h
-    |}.
-
-  Next Obligation.
-  Proof.
-    apply NatTrans_eq_simplify; extensionality x; cbn.
-    apply (f_equal (fun w : NatTrans (Functor_compose (Functor_To_1_Cat (Discr_Cat B)) Cn) (Discr_Func f) => Trans w (iso_morphism Iso x)) (cone_morph_com h)).
-  Qed.
-
-End GenProd_IsoType_Cone_Morph_Conversion_2.
-
-Section GenProd_IsoType.
-  Context {A B : Type} {Iso : A ≡≡ B ::> Type_Cat} {C : Category} (H : forall f : A → C, GenProd f).
-  
-  Local Obligation Tactic := idtac.
-  
-  Program Instance GenProd_IsoType (map : B → C) : GenProd map :=
-    {|
-      LRKE := GenProd_IsoType_Cone_Conversion_1 (H (map ∘ (iso_morphism Iso)))
-    |}.
-
-  Next Obligation.
-  Proof.  
-    intros map Cn.
-    set (W := GenProd_IsoType_Cone_Morph_Conversion_1 (LRKE_morph_ex (H (map ∘ (iso_morphism Iso))) (GenProd_IsoType_Cone_Conversion_2 Cn))).
-    rewrite GenProd_IsoType_Cone_Conversion_2_1 in W.
-    exact W.
-  Defined.    
-
-  Next Obligation.
-  Proof.
-    intros map Cn h h'.
-    set (Wh := GenProd_IsoType_Cone_Morph_Conversion_2 h).
-    set (Wh' := GenProd_IsoType_Cone_Morph_Conversion_2 h').
-    set (M := LRKE_morph_unique (H (map ∘ Iso))).
-    rewrite <- (@GenProd_IsoType_Cone_Conversion_1_2 _ _ _ _ _ (LRKE (H (map ∘ Iso)))) in M.
-    set (M' := M _ Wh Wh').
-    change (cone_morph h) with (cone_morph Wh).
-    change (cone_morph h') with (cone_morph Wh').
-    destruct M; trivial.
-  Qed.
-
-End GenProd_IsoType.
-
+(** If we have GenSum for all functions from a type A, where A is isomorphic to B
+we have all GenSum for all functions from B – we can't use this proof as it involves
+isomorphism of categories (Discr_Cat A ≡ Discr_Cat B). This, given current semantics of
+Coq's universe polymorphism implies (Discr_Cat A), (Discr_Cat B) and C must be at the same
+universe levels which is inconsistent when used to prove cocompleteness of
+Type_Cat. *)
+(**
 Section GenSum_IsoType.
-  Context {A B : Type} {Iso : A ≡≡ B ::> Type_Cat} {C : Category} (H : forall f : A → C, GenSum f).
-  
-  Local Obligation Tactic := idtac.
-  
-  Instance GenSum_IsoType (map : B → C) : GenSum map.
+  Context {A B : Type} (Iso : (A ≡≡ B ::> Type_Cat)%morphism) {C : Category}
+          (SM : forall f : A → C, GenSum f).
+
+  Program Definition GenSum_IsoType_map_Iso (map : B → C):
+    (
+      ((Discr_Func_op map)^op)%functor
+        ≡≡ ((Discr_Func_op (fun x : A => map ((iso_morphism Iso) x)) ∘ (iso_morphism (Opposite_Cat_Iso (Inverse_Isomorphism (Discr_Cat_Iso Iso)))))^op)%functor
+        ::> Func_Cat _ _
+    )%morphism
+    :=
+      {|
+        iso_morphism :=
+          {|
+            Trans :=
+              Trans
+                (iso_morphism
+                   (IsoCat_NatIso (Opposite_Cat_Iso (Discr_Cat_Iso Iso)) (Discr_Func_op map))
+                )
+          |};
+        inverse_morphism :=
+          {|
+            Trans :=
+              Trans
+                (inverse_morphism
+                   (IsoCat_NatIso (Opposite_Cat_Iso (Discr_Cat_Iso Iso)) (Discr_Func_op map))
+                )
+          |}
+      |}
+  .
+
+  Next Obligation.
   Proof.
-    apply (@GenProd_to_GenSum B C^op).
-    apply GenProd_IsoType.
-    clear map.
-    intros f.
-    apply GenSum_to_GenProd.
-    apply H.
-  Defined.    
+    apply NatTrans_eq_simplify.
+    apply (
+        f_equal
+          Trans
+          (
+            right_inverse
+              (IsoCat_NatIso (Opposite_Cat_Iso (Discr_Cat_Iso Iso)) (Discr_Func_op map))
+          )
+      ).
+  Qed.
+  
+  Next Obligation.
+  Proof.
+    apply NatTrans_eq_simplify.
+    apply (
+        f_equal
+          Trans
+          (
+            left_inverse
+              (IsoCat_NatIso (Opposite_Cat_Iso (Discr_Cat_Iso Iso)) (Discr_Func_op map))
+          )
+      ).
+  Qed.
+  
+  Definition  GenSum_IsoType (map : B → C) : GenSum map :=
+    Local_Right_KanExt_Iso
+      (GenSum_IsoType_map_Iso map)
+      (
+        CoLimit_From_Isomorphic_Cat
+          (Opposite_Cat_Iso (Inverse_Isomorphism (Discr_Cat_Iso Iso)))
+          (SM (fun x : A => map ((iso_morphism Iso) x)))
+      ).
 
 End GenSum_IsoType.
+
+*)
+
+(** This alternative proof is a direct one and thus does not impose undesirable
+universe restrictions. *)
+Section GenSum_GenProd_IsoType.
+  Context {A B : Type}
+          (Iso : (A ≡≡ B ::> Type_Cat)%morphism)
+  .
+
+  Section Conversions.
+    Context {C : Category} {f : B → C}.
+
+    Section GenProd_IsoType_Cone_Conversion_1.
+      Context (Cn : Cone (Discr_Func (f ∘ (iso_morphism Iso)))%morphism).
+      
+      Program Definition GenProd_IsoType_Cone_Conversion_1 : Cone (Discr_Func f) :=
+        {|
+          cone_apex := Cn;
+          cone_edge :=
+            {|
+              Trans :=
+                fun c =>
+                  match equal_f (right_inverse Iso) c in _ = u return
+                        Hom ((Cn _o) tt) (f u) with
+                    eq_refl => Trans Cn ((inverse_morphism Iso) c)
+                  end
+            |}
+        |}.
+
+    End GenProd_IsoType_Cone_Conversion_1.
+  
+    Section GenProd_IsoType_Cone_Conversion_2.
+      Context (Cn : Cone (Discr_Func f)).
+
+      Program Definition GenProd_IsoType_Cone_Conversion_2 : Cone (Discr_Func (f ∘ (iso_morphism Iso))%morphism) :=
+        {|
+          cone_apex := Cn;
+          cone_edge :=
+            {|
+              Trans :=
+                fun c =>Trans Cn ((iso_morphism Iso) c)
+            |}
+        |}.
+
+    End GenProd_IsoType_Cone_Conversion_2.
+
+    Section GenProd_IsoType_Cone_Conversion_1_2.
+      Context (Cn : Cone (Discr_Func (f ∘ (iso_morphism Iso)))%morphism).
+
+      Theorem GenProd_IsoType_Cone_Conversion_1_2 : GenProd_IsoType_Cone_Conversion_2 (GenProd_IsoType_Cone_Conversion_1 Cn) = Cn.
+      Proof.
+        unfold GenProd_IsoType_Cone_Conversion_1, GenProd_IsoType_Cone_Conversion_2.
+        destruct Cn.
+        cbn.
+        match goal with
+          [|- {| cone_edge := ?A |} = {| cone_edge := ?B |} ] => cutrewrite (A = B); trivial
+        end.
+        apply NatTrans_eq_simplify; extensionality c; cbn.
+        apply JMeq_eq.
+        destruct equal_f.
+        cbn_rewrite (equal_f (left_inverse Iso) c); trivial.
+      Qed.
+
+    End GenProd_IsoType_Cone_Conversion_1_2.
+
+    Section GenProd_IsoType_Cone_Conversion_2_1.
+      Context (Cn : Cone (Discr_Func f)).
+
+      Theorem GenProd_IsoType_Cone_Conversion_2_1 : GenProd_IsoType_Cone_Conversion_1 (GenProd_IsoType_Cone_Conversion_2 Cn) = Cn.
+      Proof.
+        unfold GenProd_IsoType_Cone_Conversion_1, GenProd_IsoType_Cone_Conversion_2.
+        destruct Cn.
+        cbn.
+        match goal with
+          [|- {| cone_edge := ?A |} = {| cone_edge := ?B |} ] => cutrewrite (A = B); trivial
+        end.
+        apply NatTrans_eq_simplify; extensionality c; cbn.
+        destruct equal_f; trivial.
+      Qed.
+
+    End GenProd_IsoType_Cone_Conversion_2_1.
+
+    Section GenProd_IsoType_Cone_Morph_Conversion_1.
+      Context {Cn Cn' : Cone (Discr_Func (f ∘ (iso_morphism Iso)))%morphism} (h : Cone_Morph _ Cn Cn').
+
+      Program Definition GenProd_IsoType_Cone_Morph_Conversion_1 : Cone_Morph (Discr_Func f) (GenProd_IsoType_Cone_Conversion_1 Cn) (GenProd_IsoType_Cone_Conversion_1 Cn') :=
+        {|
+          cone_morph := h
+        |}.
+
+      Next Obligation.
+      Proof.
+        apply NatTrans_eq_simplify; extensionality x; cbn.
+        destruct equal_f.
+        apply (f_equal (fun w : NatTrans (Functor_compose (Functor_To_1_Cat (Discr_Cat A)) Cn) (Discr_Func (f ∘ (iso_morphism Iso))%morphism) => Trans w (inverse_morphism Iso x)) (cone_morph_com h)).
+      Qed.
+
+    End GenProd_IsoType_Cone_Morph_Conversion_1.
+  
+    Section GenProd_IsoType_Cone_Morph_Conversion_2. 
+      Context {Cn Cn' : Cone (Discr_Func f)} (h : Cone_Morph _ Cn Cn').
+
+      Program Definition GenProd_IsoType_Cone_Morph_Conversion_2 : Cone_Morph (Discr_Func (f ∘ (iso_morphism Iso))%morphism) (GenProd_IsoType_Cone_Conversion_2 Cn) (GenProd_IsoType_Cone_Conversion_2 Cn') :=
+        {|
+          cone_morph := h
+        |}.
+
+      Next Obligation.
+      Proof.
+        apply NatTrans_eq_simplify; extensionality x; cbn.
+        apply (f_equal (fun w : NatTrans (Functor_compose (Functor_To_1_Cat (Discr_Cat B)) Cn) (Discr_Func f) => Trans w (iso_morphism Iso x)) (cone_morph_com h)).
+      Qed.
+
+    End GenProd_IsoType_Cone_Morph_Conversion_2.
+
+  End Conversions.
+    
+  Section GenProd_IsoType.
+    Context {C : Category} (H : forall f : A → C, GenProd f).
+  
+    Program Definition GenProd_IsoType (map : B → C) : GenProd map :=
+      {|
+        LRKE := GenProd_IsoType_Cone_Conversion_1 (H (map ∘ (iso_morphism Iso))%morphism);
+        LRKE_morph_ex :=
+          fun Cn =>
+            match GenProd_IsoType_Cone_Conversion_2_1 Cn in _ = y return
+                  LoKan_Cone_Morph y _
+            with
+              eq_refl =>
+              GenProd_IsoType_Cone_Morph_Conversion_1
+                (
+                  LRKE_morph_ex
+                    (H (map ∘ (iso_morphism Iso))%morphism)
+                    (GenProd_IsoType_Cone_Conversion_2 Cn)
+                )
+            end;
+        LRKE_morph_unique := fun Cn h h' => _
+      |}.
+
+    Next Obligation.
+    Proof.
+      set (Wh := GenProd_IsoType_Cone_Morph_Conversion_2 h).
+      set (Wh' := GenProd_IsoType_Cone_Morph_Conversion_2 h').
+      set (M := LRKE_morph_unique (H (map ∘ Iso)%morphism)).
+      rewrite <- (GenProd_IsoType_Cone_Conversion_1_2 (LRKE (H (map ∘ Iso)%morphism))) in M.
+      set (M' := M _ Wh Wh').
+      change (cone_morph h) with (cone_morph Wh).
+      change (cone_morph h') with (cone_morph Wh').
+      destruct M; trivial.
+    Qed.
+
+  End GenProd_IsoType.
+
+  Section GenSum_IsoType.
+  Context {C : Category} (H : forall f : A → C, GenSum f).
+  
+  Definition  GenSum_IsoType (map : B → C) : GenSum map :=
+    GenProd_to_GenSum
+      (GenProd_IsoType
+         (fun f : A → (C ^op)%category => GenSum_to_GenProd (H f))
+         map
+      )
+  .
+
+  End GenSum_IsoType.
+
+End GenSum_GenProd_IsoType.

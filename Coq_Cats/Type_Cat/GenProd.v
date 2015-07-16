@@ -2,21 +2,22 @@ Require Import Category.Main.
 Require Import Functor.Main.
 Require Import Coq_Cats.Type_Cat.Type_Cat.
 Require Import Limits.Limit Limits.GenProd_GenSum.
-Require Import Archetypal.Discr.
+Require Import Archetypal.Discr.Discr.
 Require Import Basic_Cons.Terminal.
 
+(** In category of types, generalized products are simply dependent prdoducts. *)
 Section Type_Cat_GenProd.
   Context (A : Type) (map : A → Type).
 
   Local Notation Fm := (Discr_Func Type_Cat map) (only parsing).
 
-  Program Instance Type_Cat_GenProd_Cone : Cone Fm :=
+  Program Definition Type_Cat_GenProd_Cone : Cone Fm :=
     {|
-      cone_apex := {|FO := fun _ => ∀ x : A, Fm _o x; FA := fun _ _ _ h => h|};
+      cone_apex := {|FO := fun _ => ∀ x : A, (Fm _o x)%object; FA := fun _ _ _ h => h|};
       cone_edge := {|Trans := fun x y => y x |}
     |}.
 
-  Program Instance Type_Cat_GenProd : @GenProd _ Type_Cat map :=
+  Program Definition Type_Cat_GenProd : @GenProd _ Type_Cat map :=
     {|
       LRKE := Type_Cat_GenProd_Cone;
       LRKE_morph_ex :=
@@ -25,8 +26,8 @@ Section Type_Cat_GenProd.
             cone_morph :=
               {|Trans :=
                   fun c X x  =>
-                    match c as u return ((Cn _o) u → map x) with
-                    | tt => fun X : (Cn _o) tt => Trans Cn x X
+                    match c as u return ((Cn _o)%object u → map x) with
+                    | tt => fun X : (Cn _o)%object tt => Trans Cn x X
                     end X
               |}
           |}
@@ -53,7 +54,7 @@ Section Type_Cat_GenProd.
     set (hc := (cone_morph_com h')).
     rewrite (cone_morph_com h) in hc.
     set (hc' := (f_equal (fun w : NatTrans
-                  (Functor_compose (Functor_To_1_Cat (Discr_Cat A)) Cn)
+                  (Cn ∘ (Functor_To_1_Cat (Discr_Cat A)))
                   Fm =>
            Trans w z y) hc)); clearbody hc'; clear hc.
     trivial.
