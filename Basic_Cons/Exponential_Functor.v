@@ -11,7 +11,7 @@ The exponential functor maps each pair of objects (a, b) (an object of product c
 Program Definition Exp_Func {C : Category}
         {hp : Has_Products C}
         (exps : ∀ a b, Exponential a b)
-: Functor (Prod_Cat (C^op) C) C :=
+: ((Prod_Cat (C^op) C) –≻ C)%functor :=
 {|
   FO := fun x => exps (fst x) (snd x);
   FA := fun a b f => 

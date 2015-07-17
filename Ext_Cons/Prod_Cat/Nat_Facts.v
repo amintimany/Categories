@@ -9,10 +9,14 @@ Require Import NatTrans.NatTrans NatTrans.Operations NatTrans.Func_Cat.
 Local Obligation Tactic := idtac.
 
 Section Prod_Functor_NatTrans.
-  Context {C D : Category} {F G : Functor C D} (N : NatTrans F G)
-          {C' D' : Category} {F' G' : Functor C' D'} (N' : NatTrans F' G').
+  Context {C D : Category}
+          {F G : (C –≻ D)%functor}
+          (N : (F –≻ G)%nattrans)
+          {C' D' : Category}
+          {F' G' : (C' –≻ D')%functor}
+          (N' : (F' –≻ G')%nattrans).
 
-  Program Definition Prod_Functor_NatTrans : NatTrans (Prod_Functor F F') (Prod_Functor G G') :=
+  Program Definition Prod_Functor_NatTrans : ((Prod_Functor F F') –≻ (Prod_Functor G G'))%nattrans :=
     {|
       Trans := fun c => (Trans N (fst c), Trans N' (snd c))
     |}.
@@ -30,10 +34,11 @@ Section Prod_Functor_NatTrans.
 End Prod_Functor_NatTrans.
 
 Section Prod_Functor_NatTrans_id.
-  Context {C D : Category} (F : Functor C D)
-          {C' D' : Category} {F' : Functor C' D'}.
+  Context {C D : Category} (F : (C –≻ D)%functor)
+          {C' D' : Category} {F' : (C' –≻ D')%functor}.
 
-  Theorem Prod_Functor_NatTrans_id : Prod_Functor_NatTrans (NatTrans_id F) (NatTrans_id F') = NatTrans_id (Prod_Functor F F').
+  Theorem Prod_Functor_NatTrans_id :
+    Prod_Functor_NatTrans (NatTrans_id F) (NatTrans_id F') = NatTrans_id (Prod_Functor F F').
   Proof.
     apply NatTrans_eq_simplify; trivial.
   Qed.    
@@ -41,8 +46,14 @@ Section Prod_Functor_NatTrans_id.
 End Prod_Functor_NatTrans_id.
 
 Section Prod_Functor_NatTrans_compose.
-  Context {C D : Category} {F G H : Functor C D} (N1 : NatTrans F G) (N2 : NatTrans G H)
-          {C' D' : Category} {F' G' H' : Functor C' D'} (N1' : NatTrans F' G') (N2' : NatTrans G' H').
+  Context {C D : Category}
+          {F G H : (C –≻ D)%functor}
+          (N1 : (F –≻ G)%nattrans)
+          (N2 : (G –≻ H)%nattrans)
+          {C' D' : Category}
+          {F' G' H' : (C' –≻ D')%functor}
+          (N1' : (F' –≻ G')%nattrans)
+          (N2' : (G' –≻ H')%nattrans).
 
   Theorem Prod_Functor_NatTrans_compose : ((Prod_Functor_NatTrans N2 N2') ∘ (Prod_Functor_NatTrans N1 N1') = Prod_Functor_NatTrans (N2 ∘ N1) (N2' ∘ N1'))%nattrans.
   Proof.
@@ -52,8 +63,13 @@ Section Prod_Functor_NatTrans_compose.
 End Prod_Functor_NatTrans_compose.
 
 Section Prod_Functor_NatIso.
-  Context {C D : Category} {F G : Functor C D} (N : (F ≡≡ G ::> Func_Cat _ _)%morphism)
-          {C' D' : Category} {F' G' : Functor C' D'} (N' : (F' ≡≡ G' ::> Func_Cat _ _)%morphism).
+  Context {C D : Category}
+          {F G : (C –≻ D)%functor}
+          (N : (F ≡≡ G ::> Func_Cat _ _)%morphism)
+          {C' D' : Category}
+          {F' G' : (C' –≻ D')%functor}
+          (N' : (F' ≡≡ G' ::> Func_Cat _ _)%morphism)
+  .
 
   Program Definition Prod_Functor_NatIso : ((Prod_Functor F F') ≡≡ (Prod_Functor G G') ::> Func_Cat _ _)%morphism :=
     {|
@@ -82,10 +98,15 @@ Section Prod_Functor_NatIso.
 End Prod_Functor_NatIso.
 
 Section Fix_Bi_Func_1_NatTrans.
-  Context {B C D E : Category} {F F' : Functor (Prod_Cat (Func_Cat C D) B) E}
-          (N : NatTrans F F') (G : Functor C D).
+  Context {B C D E : Category}
+          {F F' : ((Prod_Cat (Func_Cat C D) B) –≻ E)%functor}
+          (N : (F –≻ F')%nattrans)
+          (G : (C –≻ D)%functor)
+  .
 
-  Program Definition Fix_Bi_Func_1_NatTrans : NatTrans (@Fix_Bi_Func_1 (Func_Cat _ _) _ _ G F) (@Fix_Bi_Func_1 (Func_Cat _ _) _ _ G F') :=
+  Program Definition Fix_Bi_Func_1_NatTrans :
+    ((@Fix_Bi_Func_1 (Func_Cat _ _) _ _ G F) –≻ (@Fix_Bi_Func_1 (Func_Cat _ _) _ _ G F'))%nattrans
+    :=
     {|
       Trans := fun c => Trans N (G, c)
     |}.
@@ -105,10 +126,16 @@ Section Fix_Bi_Func_1_NatTrans.
 End Fix_Bi_Func_1_NatTrans.
 
 Section Fix_Bi_Func_1_NatIso.
-  Context {B C D E : Category} {F F' : Functor (Prod_Cat (Func_Cat C D) B) E}
-          (N : (F ≡≡ F' ::> Func_Cat _ _)%morphism) (G : Functor C D).
+  Context {B C D E : Category}
+          {F F' : ((Prod_Cat (Func_Cat C D) B) –≻ E)%functor}
+          (N : (F ≡≡ F' ::> Func_Cat _ _)%morphism)
+          (G : (C –≻ D)%functor)
+  .
 
-  Program Definition Fix_Bi_Func_1_NatIso : ((@Fix_Bi_Func_1 (Func_Cat _ _) _ _ G F) ≡≡ (@Fix_Bi_Func_1 (Func_Cat _ _) _ _ G F') ::> Func_Cat _ _)%morphism :=
+  Program Definition Fix_Bi_Func_1_NatIso :
+    ((@Fix_Bi_Func_1 (Func_Cat _ _) _ _ G F)
+       ≡≡ (@Fix_Bi_Func_1 (Func_Cat _ _) _ _ G F') ::> Func_Cat _ _)%morphism
+    :=
     {|
       iso_morphism := Fix_Bi_Func_1_NatTrans (iso_morphism N) G;
       inverse_morphism := Fix_Bi_Func_1_NatTrans (inverse_morphism N) G
@@ -132,10 +159,15 @@ Section Fix_Bi_Func_1_NatIso.
 End Fix_Bi_Func_1_NatIso.
 
 Section Fix_Bi_Func_2_NatTrans.
-  Context {B C D E : Category} {F F' : Functor (Prod_Cat B (Func_Cat C D)) E}
-          (N : NatTrans F F') (G : Functor C D).
+  Context {B C D E : Category}
+          {F F' : ((Prod_Cat B (Func_Cat C D)) –≻ E)%functor}
+          (N : (F –≻ F')%nattrans)
+          (G : (C –≻ D)%functor)
+  .
 
-  Program Definition Fix_Bi_Func_2_NatTrans : NatTrans (@Fix_Bi_Func_2 _ (Func_Cat _ _) _ G F) (@Fix_Bi_Func_2 _ (Func_Cat _ _) _ G F') :=
+  Program Definition Fix_Bi_Func_2_NatTrans :
+    ((@Fix_Bi_Func_2 _ (Func_Cat _ _) _ G F) –≻ (@Fix_Bi_Func_2 _ (Func_Cat _ _) _ G F'))%nattrans
+    :=
     {|
       Trans := fun c => Trans N (c, G)
     |}.
@@ -153,8 +185,11 @@ Section Fix_Bi_Func_2_NatTrans.
 End Fix_Bi_Func_2_NatTrans.
 
 Section Fix_Bi_Func_2_NatIso.
-  Context {B C D E : Category} {F F' : Functor (Prod_Cat B (Func_Cat C D)) E}
-          (N : (F ≡≡ F' ::> Func_Cat _ _)%morphism) (G : Functor C D).
+  Context {B C D E : Category}
+          {F F' : ((Prod_Cat B (Func_Cat C D)) –≻ E)%functor}
+          (N : (F ≡≡ F' ::> Func_Cat _ _)%morphism)
+          (G : (C –≻ D)%functor)
+  .
 
   Program Definition Fix_Bi_Func_2_NatIso : ((@Fix_Bi_Func_2 _ (Func_Cat _ _) _ G F) ≡≡ (@Fix_Bi_Func_2 _ (Func_Cat _ _) _ G F') ::> Func_Cat _ _)%morphism :=
     {|
@@ -181,8 +216,11 @@ Section Fix_Bi_Func_2_NatIso.
 End Fix_Bi_Func_2_NatIso.
 
 Section Fix_Bi_Func_1_Functor_id_swap_NatIso.
-  Context {B B' C D E E' : Category} (F : Functor B B') (F' : Functor (Prod_Cat (Func_Cat C D) B') E)
-          (G : Functor C D).
+  Context {B B' C D E E' : Category}
+          (F : (B –≻ B')%functor)
+          (F' : ((Prod_Cat (Func_Cat C D) B') –≻ E)%functor)
+          (G : (C –≻ D)%functor)
+  .
 
   Local Obligation Tactic := cbn; auto.
 
@@ -203,8 +241,11 @@ Section Fix_Bi_Func_1_Functor_id_swap_NatIso.
 End Fix_Bi_Func_1_Functor_id_swap_NatIso.
 
 Section Fix_Bi_Func_2_Functor_id_swap_NatIso.
-  Context {B B' C D E E' : Category} (F : Functor B B') (F' : Functor (Prod_Cat B' (Func_Cat C D)) E)
-          (G : Functor C D).
+  Context {B B' C D E E' : Category}
+          (F : (B –≻ B')%functor)
+          (F' : ((Prod_Cat B' (Func_Cat C D)) –≻ E)%functor)
+          (G : (C –≻ D)%functor)
+  .
 
   Local Obligation Tactic := cbn; auto.
 
@@ -225,7 +266,12 @@ Section Fix_Bi_Func_2_Functor_id_swap_NatIso.
 End Fix_Bi_Func_2_Functor_id_swap_NatIso.
 
 Section Fix_Bi_1_Func_Prod_Func_NatIso.
-  Context {A B C D E : Category} (F : Functor A C) (F' : Functor B D) (G : Functor (Prod_Cat C D) E) (x : A).
+  Context {A B C D E : Category}
+          (F : (A –≻ C)%functor)
+          (F' : (B –≻ D)%functor)
+          (G : ((Prod_Cat C D) –≻ E)%functor)
+          (x : A)
+  .
 
   Local Obligation Tactic := cbn; auto.
 
@@ -240,7 +286,12 @@ Section Fix_Bi_1_Func_Prod_Func_NatIso.
 End Fix_Bi_1_Func_Prod_Func_NatIso.
 
 Section Fix_Bi_2_Func_Prod_Func_NatIso.
-  Context {A B C D E : Category} (F : Functor A C) (F' : Functor B D) (G : Functor (Prod_Cat C D) E) (x : B).
+  Context {A B C D E : Category}
+          (F : (A –≻ C)%functor)
+          (F' : (B –≻ D)%functor)
+          (G : ((Prod_Cat C D) –≻ E)%functor)
+          (x : B)
+  .
 
   Local Obligation Tactic := cbn; auto.
 
@@ -255,7 +306,7 @@ Section Fix_Bi_2_Func_Prod_Func_NatIso.
 End Fix_Bi_2_Func_Prod_Func_NatIso.
 
 Section Func_Prod_of_ids_NatIso.
-  Context {C D E : Category} (F : Functor (Prod_Cat C D) E).
+  Context {C D E : Category} (F : ((Prod_Cat C D) –≻ E)%functor).
 
   Local Obligation Tactic := cbn; auto.
 
@@ -270,10 +321,15 @@ Section Func_Prod_of_ids_NatIso.
 End Func_Prod_of_ids_NatIso.
 
 Section Fix_Bi_Func_1_object_NatTrans.
-  Context {B C D E : Category} (F : Functor (Prod_Cat (Func_Cat C D) B) E)
-          {G G' : Functor C D} (N : NatTrans G G').
+  Context {B C D E : Category}
+          (F : ((Prod_Cat (Func_Cat C D) B) –≻ E)%functor)
+          {G G' : (C –≻ D)%functor}
+          (N : (G –≻ G')%nattrans)
+  .
 
-  Program Definition Fix_Bi_Func_1_object_NatTrans : NatTrans (@Fix_Bi_Func_1 (Func_Cat _ _) _ _ G F) (@Fix_Bi_Func_1 (Func_Cat _ _) _ _ G' F) :=
+  Program Definition Fix_Bi_Func_1_object_NatTrans :
+    ((@Fix_Bi_Func_1 (Func_Cat _ _) _ _ G F) –≻ (@Fix_Bi_Func_1 (Func_Cat _ _) _ _ G' F))%nattrans
+     :=
     {|
       Trans := fun c => (F @_a (G, c) (G', c) (N, id))%morphism
     |}.
@@ -297,8 +353,11 @@ Section Fix_Bi_Func_1_object_NatTrans.
 End Fix_Bi_Func_1_object_NatTrans.
 
 Section Fix_Bi_Func_1_object_NatIso.
-  Context {B C D E : Category} (F : Functor (Prod_Cat (Func_Cat C D) B) E)
-          {G G' : Functor C D} (N : (G ≡≡ G' ::> Func_Cat _ _)%morphism).
+  Context {B C D E : Category}
+          (F : ((Prod_Cat (Func_Cat C D) B) –≻ E)%functor)
+          {G G' : (C –≻ D)%functor}
+          (N : (G ≡≡ G' ::> Func_Cat _ _)%morphism)
+  .
 
   Program Definition Fix_Bi_Func_1_object_NatIso : ((@Fix_Bi_Func_1 (Func_Cat _ _) _ _ G F) ≡≡ (@Fix_Bi_Func_1 (Func_Cat _ _) _ _ G' F) ::> Func_Cat _ _)%morphism :=
     {|
@@ -329,10 +388,14 @@ Section Fix_Bi_Func_1_object_NatIso.
 End Fix_Bi_Func_1_object_NatIso.
 
 Section Fix_Bi_Func_2_object_NatTrans.
-  Context {B C D E : Category} (F : Functor (Prod_Cat B (Func_Cat C D)) E)
-          {G G' : Functor C D} (N : NatTrans G G').
+  Context {B C D E : Category} (F : ((Prod_Cat B (Func_Cat C D)) –≻ E)%functor)
+          {G G' : (C –≻ D)%functor}
+          (N : (G –≻ G')%nattrans)
+  .
 
-  Program Definition Fix_Bi_Func_2_object_NatTrans : NatTrans (@Fix_Bi_Func_2 _ (Func_Cat _ _) _ G F) (@Fix_Bi_Func_2 _ (Func_Cat _ _) _ G' F) :=
+  Program Definition Fix_Bi_Func_2_object_NatTrans :
+    ((@Fix_Bi_Func_2 _ (Func_Cat _ _) _ G F) –≻ (@Fix_Bi_Func_2 _ (Func_Cat _ _) _ G' F))%nattrans
+    :=
     {|
       Trans := fun c => (F @_a (c, G) (c, G') (id, N))%morphism
     |}.
@@ -354,8 +417,10 @@ Section Fix_Bi_Func_2_object_NatTrans.
 End Fix_Bi_Func_2_object_NatTrans.
 
 Section Fix_Bi_Func_2_object_NatIso.
-  Context {B C D E : Category} (F : Functor (Prod_Cat B (Func_Cat C D)) E)
-          {G G' : Functor C D} (N : (G ≡≡ G' ::> Func_Cat _ _)%morphism).
+  Context {B C D E : Category}
+          (F : ((Prod_Cat B (Func_Cat C D)) –≻ E)%functor)
+          {G G' : (C –≻ D)%functor}
+          (N : (G ≡≡ G' ::> Func_Cat _ _)%morphism).
 
   Program Definition Fix_Bi_Func_2_object_NatIso : ((@Fix_Bi_Func_2 _ (Func_Cat _ _) _ G F) ≡≡ (@Fix_Bi_Func_2 _ (Func_Cat _ _) _ G' F) ::> Func_Cat _ _)%morphism :=
     {|

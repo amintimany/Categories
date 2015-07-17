@@ -13,18 +13,16 @@ Section Term_Prod.
 
   (** Natural transformations to be used with Yoneda. *)
   Program Definition Term_Prod_lr (a : C) :
-    NatTrans
-      ((Yoneda C) _o (CHP a term))%object
-      ((Yoneda C) _o a)%object
+      ((((Yoneda C) _o (CHP a term))%object)
+         –≻ ((Yoneda C) _o a)%object)%nattrans
     :=
       {|
         Trans := fun b f => @compose C _ _ _ f (@Pi_1 _ _ _ (CHP a term))
       |}.
 
   Program Definition Term_Prod_rl (a : Obj) :
-    NatTrans
-      ((Yoneda C) _o a)%object
-      ((Yoneda C) _o (CHP a term))%object
+    ((((Yoneda C) _o a)%object)
+       –≻ ((Yoneda C) _o (CHP a term))%object)%nattrans
     :=
       {|
         Trans := fun b f =>  @Prod_morph_ex C _ _ _ _ f (@t_morph C _ b)

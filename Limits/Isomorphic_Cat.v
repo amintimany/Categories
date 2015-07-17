@@ -10,7 +10,7 @@ Section Limit_From_Isomorphic_Cat.
 Context {C D : Category}
         (I : (C ≡≡ D ::> Cat)%morphism)
         {E : Category}
-        {F : Functor D E}
+        {F : (D –≻ E)%functor}
         (L : Limit F)
 .
 
@@ -31,7 +31,7 @@ Section CoLimit_From_Isomorphic_Cat.
 Context {C D : Category}
         (I : (C ≡≡ D ::> Cat)%morphism)
         {E : Category}
-        {F : Functor D E}
+        {F : (D –≻ E)%functor}
         (L : CoLimit F)
 .
 

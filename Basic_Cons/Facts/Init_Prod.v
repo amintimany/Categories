@@ -13,9 +13,8 @@ Section Init_Prod.
   (** Natural transformations to be used with Yoneda. *)
   
   Program Definition Init_Prod_lr a :
-    NatTrans
-      (((CoYoneda C) _o) ((Prod_Func C) _o (@terminal _ init, a)))%object
-      (((CoYoneda C) _o) init)%object
+    (((((CoYoneda C) _o) ((Prod_Func C) _o (@terminal _ init, a)))%object)
+      –≻ (((CoYoneda C) _o) init)%object)%nattrans
     :=
       {|
         Trans := fun b f => @t_morph _ init b
@@ -34,9 +33,8 @@ Section Init_Prod.
   Qed.
 
   Program Definition Init_Prod_rl a :
-    NatTrans
-      (((CoYoneda C) _o) init)%object
-      (((CoYoneda C) _o) ((Prod_Func C) _o (@terminal _ init, a)))%object
+    (((((CoYoneda C) _o) init)%object)
+       –≻ (((CoYoneda C) _o) ((Prod_Func C) _o (@terminal _ init, a)))%object)%nattrans
     :=
       {|
         Trans := fun c g => compose C (Pi_1 (CCC_HP C init a)) (t_morph init c)

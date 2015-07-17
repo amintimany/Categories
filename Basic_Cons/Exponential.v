@@ -3,6 +3,8 @@ Require Import Ext_Cons.Prod_Cat.Prod_Cat.
 Require Import Functor.Main.
 Require Import Basic_Cons.Product.
 
+Local Open Scope morphism_scope.
+
 (**
 Given two objects a and b the exponential (bᵃ, denoted 'Exponential a b' below) is intuitively the internal representation of homomorphisms from a to b – it is sometimes referred to as the internal hom. The notion of exponential is a generalization of the notion function space from set theory.
 
@@ -33,13 +35,13 @@ Record Exponential {C : Category} {HP : Has_Products C} (c d : Obj) : Type :=
 {
   exponential : C;
 
-  eval : Hom ((Prod_Func C) _o (exponential, c)) d;
+  eval : ((Prod_Func C) _o (exponential, c))%object –≻ d;
 
-  Exp_morph_ex : ∀ (z : C), Hom ((Prod_Func C) _o (z, c)) d → Hom z exponential;
+  Exp_morph_ex : ∀ (z : C), ((Prod_Func C) _o (z, c))%object –≻ d → z –≻ exponential;
 
-  Exp_morph_com : ∀ (z : C) (f : Hom ((Prod_Func C) _o (z, c)) d), f = (eval ∘ ((Prod_Func C) @_a (_, _) (_, _) (Exp_morph_ex z f, id c)))%morphism;
+  Exp_morph_com : ∀ (z : C) (f : ((Prod_Func C) _o (z, c))%object –≻ d), f = (eval ∘ ((Prod_Func C) @_a (_, _) (_, _) (Exp_morph_ex z f, id c)))%morphism;
 
-  Exp_morph_unique : ∀ (z : C) (f : Hom ((Prod_Func C) _o (z, c)) d) (u u' : Hom z exponential), f = (eval ∘ ((Prod_Func C) @_a (_, _) (_, _) (u, id c)))%morphism → f = (eval ∘ ((Prod_Func C) @_a (_, _) (_, _) (u', id c)))%morphism → u = u'
+  Exp_morph_unique : ∀ (z : C) (f : ((Prod_Func C) _o (z, c))%object –≻ d) (u u' : z –≻ exponential), f = (eval ∘ ((Prod_Func C) @_a (_, _) (_, _) (u, id c)))%morphism → f = (eval ∘ ((Prod_Func C) @_a (_, _) (_, _) (u', id c)))%morphism → u = u'
 }.
 
 Coercion exponential : Exponential >-> Obj.
@@ -75,20 +77,20 @@ Section Curry_UnCurry.
   Context (C : Category) {HP : Has_Products C} {HE : Has_Exponentials C}.
 
   (** Given a arrow f: a×b -> c in a category with exponentials, the curry of f is f̂ in the definition of Exponential above. *)
-  Definition curry : forall {a b c : C}, Hom C ((Prod_Func C) _o (a, b)) c → Hom C a (HE b c) :=
-    fun {a b c : C} (f : Hom C ((Prod_Func C) _o (a, b)) c) =>
+  Definition curry : forall {a b c : C}, ((Prod_Func C) _o (a, b))%object –≻ c → a –≻ (HE b c) :=
+    fun {a b c : C} (f : ((Prod_Func C) _o (a, b))%object –≻ c) =>
       Exp_morph_ex (HE b c) _ f.
 
   (** Given an arrow f: a -> cᵇ, uncurry of f is the arrow (eval_cᵇ ∘ <id_b, f>): a×b -> c. See definition of Exponential above for details. *)
-  Definition uncurry : forall {a b c : C}, Hom C a (HE b c) → Hom C ((Prod_Func C) _o (a, b)) c :=
-    fun {a b c : C} (f : Hom a (HE b c)) =>
+  Definition uncurry : forall {a b c : C}, a –≻ (HE b c) → ((Prod_Func C) _o (a, b))%object –≻ c :=
+    fun {a b c : C} (f : a –≻ (HE b c)) =>
       ((eval (HE b c)) ∘ ((Prod_Func C) @_a (_, _) (_, _) (f, id C b)))%morphism.
 
   Section inversion.
     Context {a b c : C}.
 
     (** See definition of curry and uncurry above for details. Frollows immediately from the definition of Exponential above. *)
-    Theorem curry_uncurry (f : Hom a (HE b c)) : curry (uncurry f) = f.
+    Theorem curry_uncurry (f : a –≻ (HE b c)) : curry (uncurry f) = f.
     Proof.
       unfold curry, uncurry.
       eapply Exp_morph_unique; trivial.
@@ -96,7 +98,7 @@ Section Curry_UnCurry.
     Qed.
     
     (** See definition of curry and uncurry above for details. Frollows immediately from the definition of Exponential above. *)
-    Theorem uncurry_curry (f : Hom ((Prod_Func C) _o (a, b)) c) : uncurry (curry f) = f.
+    Theorem uncurry_curry (f : ((Prod_Func C) _o (a, b))%object –≻ c) : uncurry (curry f) = f.
     Proof.
       unfold curry, uncurry.
       rewrite <- Exp_morph_com; trivial.
@@ -108,7 +110,7 @@ Section Curry_UnCurry.
     Context {a b c : C}.
 
     (** See definition of curry above for details. Frollows immediately from uncurry_curry above. *)
-    Theorem curry_injective (f g : Hom ((Prod_Func C) _o (a, b)) c) : curry f = curry g → f = g.
+    Theorem curry_injective (f g : ((Prod_Func C) _o (a, b))%object –≻ c) : curry f = curry g → f = g.
     Proof.
       intros H.
       rewrite <- (uncurry_curry f); rewrite <- (uncurry_curry g).
@@ -116,7 +118,7 @@ Section Curry_UnCurry.
     Qed.
 
     (** See definition of uncurry above for details. Frollows immediately from curry_uncurry above. *)
-    Theorem uncurry_injective (f g : Hom a (HE b c)) : uncurry f = uncurry g → f = g.
+    Theorem uncurry_injective (f g : a –≻ (HE b c)) : uncurry f = uncurry g → f = g.
     Proof.
       intros H.
       rewrite <- (curry_uncurry f); rewrite <- (curry_uncurry g).
@@ -129,7 +131,7 @@ Section Curry_UnCurry.
     Context {a b c : C}.
 
     (** composing with curry is equivalent to compose and then curry: *)
-    Lemma curry_compose (f : Hom ((Prod_Func C) _o (a, b)) c) {z : C} (g : Hom z a) : ((curry f) ∘ g = curry (f ∘ (Prod_morph_ex _ _ (g ∘ Pi_1) Pi_2)))%morphism.
+    Lemma curry_compose (f : ((Prod_Func C) _o (a, b))%object –≻ c) {z : C} (g : z –≻ a) : (curry f) ∘ g = curry (f ∘ (Prod_morph_ex _ _ (g ∘ Pi_1) Pi_2)).
     Proof.
       unfold curry.
       eapply Exp_morph_unique; eauto.

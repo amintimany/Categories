@@ -54,7 +54,9 @@ image of the arrow map of the functor.
 *)
 Section Functor_Image.
   Context {C D : Category}
-          (F : Functor C D).
+          (F : (C –≻ D)%functor).
+
+  Local Open Scope morphism_scope.
 
   Program Definition Functor_Image :=
     SubCategory D
@@ -66,11 +68,11 @@ Section Functor_Image.
                       ∧
                       Forall_Links ch (
                                      fun x y g =>
-                                     ∃ (c d : Obj) (h : Hom c d)
+                                     ∃ (c d : Obj) (h : c –≻ d)
                                        (Fca : (F _o c)%object = x) (Fdb : (F _o d)%object = y),
-                                       match Fca in (_ = Z) return Hom Z _ with
+                                       match Fca in (_ = Z) return Z –≻ _ with
                                          eq_refl =>
-                                         match Fdb in (_ = Y) return Hom _ Y with
+                                         match Fdb in (_ = Y) return _ –≻ Y with
                                            eq_refl => (F _a h)%morphism
                                          end
                                        end = g)

@@ -10,6 +10,8 @@ Require Import Archetypal.Discr.Discr Archetypal.Discr.NatFacts.
 Require Import Limits.GenProd_GenSum.
 Require Import Limits.Limit.
 
+Local Open Scope functor_scope.
+
 Section GenProd_Eq_Complete.
   Context {C : Category}.
 
@@ -24,7 +26,7 @@ Section GenProd_Eq_Complete.
     .
 
     Section Limits_Exist.
-      Context (D : Functor J C).
+      Context (D : J –≻ C).
 
       Local Notation DTarg := (fun f => (D _o (Targ f))%object) (only parsing).
       Local Notation DF := Discr_Func (only parsing).
@@ -37,7 +39,7 @@ Section GenProd_Eq_Complete.
           cone_edge := {|Trans := fun f => Trans (cone_edge OPR) (Targ f)|}
         |}.
       
-      Definition Projs : Hom C OPR HPR := Trans (LRKE_morph_ex HPR Projs_Cone) tt.
+      Definition Projs : (OPR –≻ HPR)%morphism := Trans (LRKE_morph_ex HPR Projs_Cone) tt.
 
       Program Definition D_imgs_Cone : Cone (DF DTarg) :=
         {|
@@ -50,7 +52,7 @@ Section GenProd_Eq_Complete.
             |}
         |}.
 
-      Definition D_imgs : Hom C OPR HPR := Trans (LRKE_morph_ex HPR D_imgs_Cone) tt.
+      Definition D_imgs : (OPR –≻ HPR)%morphism := Trans (LRKE_morph_ex HPR D_imgs_Cone) tt.
 
       Program Definition Lim_Cone : Cone D :=
         {|
@@ -68,11 +70,9 @@ Section GenProd_Eq_Complete.
         set (W :=
                f_equal
                  (fun t :
-                        NatTrans
-                          ((Const_Func 1 (((OProd (D _o)) _o) tt)%object)
-                             ∘ (Functor_To_1_Cat (Discr_Cat (Arrow J)))
-                          )
-                          (DF DTarg)
+                        (((Const_Func 1 (((OProd (D _o)) _o) tt)%object)
+                             ∘ (Functor_To_1_Cat (Discr_Cat (Arrow J))))
+                          –≻ (DF DTarg))%nattrans
                   =>
                     ((Trans t {|Arr := h|}) ∘ (equalizer_morph (Eqs _ _ Projs D_imgs)))%morphism
                  )
@@ -81,10 +81,9 @@ Section GenProd_Eq_Complete.
         set (W' :=
                f_equal
                  (fun t :
-                        NatTrans
-                          ((Const_Func 1 (((OProd (D _o)) _o) tt)%object)
+                        (((Const_Func 1 (((OProd (D _o)) _o) tt)%object)
                              ∘ (Functor_To_1_Cat (Discr_Cat (Arrow J))))
-                          (DF DTarg)
+                          –≻ (DF DTarg))%nattrans
                   =>
                     (Trans t {|Arr := h|} ∘ (equalizer_morph (Eqs _ _ Projs D_imgs)))%morphism
                  )
@@ -142,7 +141,7 @@ Section GenProd_Eq_Complete.
                                 {|Trans := fun _ => id |} (Discretize (cone_edge Cn))
           |}.
         
-        Definition From_Cone_to_OPR : Hom C Cn OPR := Trans (LRKE_morph_ex OPR Cone_to_DF_DCone) tt.
+        Definition From_Cone_to_OPR : (Cn –≻ OPR)%morphism := Trans (LRKE_morph_ex OPR Cone_to_DF_DCone) tt.
         
         Program Definition Cone_to_DF_DTrag_Cone : Cone (DF DTarg) :=
           {|
@@ -156,7 +155,7 @@ Section GenProd_Eq_Complete.
             cone_morph :=
               {|Trans :=
                   fun f =>
-                    match f as u return (Hom ((Cn _o) u) (_ u))
+                    match f as u return (((Cn _o) u)%object –≻ (_ u))%morphism
                     with
                     | tt => (Projs ∘ From_Cone_to_OPR)%morphism
                     end
@@ -184,9 +183,8 @@ Section GenProd_Eq_Complete.
           set (H :=
                  f_equal
                    (fun w :
-                          NatTrans
-                            (Projs_Cone ∘ (Functor_To_1_Cat (Discr_Cat (Arrow J))))
-                            (DF DTarg)
+                          ((Projs_Cone ∘ (Functor_To_1_Cat (Discr_Cat (Arrow J))))
+                             –≻ (DF DTarg))%nattrans
                     =>
                       (
                         (Trans w x) ∘
@@ -214,9 +212,8 @@ Section GenProd_Eq_Complete.
                  f_equal
                    (
                      fun w :
-                           NatTrans
-                             (Cone_to_DF_DCone ∘ (Functor_To_1_Cat (Discr_Cat J)))
-                             (DF (D _o)%object)
+                           ((Cone_to_DF_DCone ∘ (Functor_To_1_Cat (Discr_Cat J)))
+                              –≻ (DF (D _o)%object))%nattrans
                      =>
                        Trans w (Targ x)
                    )
@@ -233,7 +230,7 @@ Section GenProd_Eq_Complete.
             cone_morph :=
               {|Trans :=
                   fun f =>
-                    match f as u return (Hom ((Cn _o) u) (_ u))
+                    match f as u return (((Cn _o)%object u) –≻ (_ u))%morphism
                     with
                     | tt => (D_imgs ∘ From_Cone_to_OPR)%morphism
                     end
@@ -262,9 +259,8 @@ Section GenProd_Eq_Complete.
                  f_equal
                    (
                      fun w :
-                           NatTrans
-                             (Functor_compose (Functor_To_1_Cat (Discr_Cat (Arrow J))) D_imgs_Cone)
-                             (DF DTarg)
+                           ((D_imgs_Cone ∘ (Functor_To_1_Cat (Discr_Cat (Arrow J))))
+                             –≻ (DF DTarg))%nattrans
                      =>
                        (
                          (Trans w x) ∘
@@ -288,9 +284,8 @@ Section GenProd_Eq_Complete.
                  f_equal
                    (
                      fun w :
-                           NatTrans
-                             (Cone_to_DF_DCone ∘ (Functor_To_1_Cat (Discr_Cat J)))
-                             (DF (D _o)%object)
+                           ((Cone_to_DF_DCone ∘ (Functor_To_1_Cat (Discr_Cat J)))
+                              –≻ (DF (D _o)%object))%nattrans
                      =>
                        (((D _a) (Arr x)) ∘ (Trans w (Orig x)))%morphism
                    )
@@ -320,7 +315,7 @@ Section GenProd_Eq_Complete.
           apply (LRKE_morph_unique HPR).
         Qed.
 
-        Definition From_Cone_to_Lim_Cone : Hom C Cn Lim_Cone :=
+        Definition From_Cone_to_Lim_Cone : (Cn –≻ Lim_Cone)%morphism :=
           equalizer_morph_ex _  From_Cone_to_Obj_Prod_Equalizes.
 
         Program Definition Cone_Morph_to_Lim_Cone : Cone_Morph D Cn Lim_Cone :=
@@ -329,7 +324,7 @@ Section GenProd_Eq_Complete.
               {|
                 Trans :=
                   fun c =>
-                    match c as u return Hom (Cn _o u) _ with
+                    match c as u return ((Cn _o u)%object –≻ _)%morphism with
                       tt => From_Cone_to_Lim_Cone
                     end
               |}
@@ -370,9 +365,8 @@ Section GenProd_Eq_Complete.
                  f_equal
                    (
                      fun w :
-                           NatTrans
-                             (Cone_to_DF_DCone ∘ (Functor_To_1_Cat (Discr_Cat J)))
-                             (DF (D _o)%object)
+                           ((Cone_to_DF_DCone ∘ (Functor_To_1_Cat (Discr_Cat J)))
+                              –≻ (DF (D _o)%object))%nattrans
                      =>
                        Trans w x
                    )
@@ -395,7 +389,7 @@ Section GenProd_Eq_Complete.
               {|
                 Trans :=
                   fun c =>
-                    match c as u return (Hom ((Cn _o) u) (((OProd (D _o)) _o) u))%object with
+                    match c as u return (((Cn _o) u) –≻ (((OProd (D _o)) _o) u))%object%morphism with
                     | tt => (equalizer_morph (Eqs _ _ Projs D_imgs) ∘ Trans h tt)%morphism
                     end
               |}
@@ -420,7 +414,7 @@ Section GenProd_Eq_Complete.
           cbn.
           set (H :=
                  f_equal
-                   (fun w : NatTrans (Cn ∘ (Functor_To_1_Cat J)) D => Trans w x)
+                   (fun w : ((Cn ∘ (Functor_To_1_Cat J)) –≻ D)%nattrans => Trans w x)
                    (cone_morph_com h)
               ).
           cbn in H.
@@ -445,7 +439,7 @@ Section GenProd_Eq_Complete.
         set (H := LRKE_morph_unique (OProd (D _o)%object) _ (CMCOPR h) (CMCOPR h')).
         apply (
             f_equal
-              (fun w : NatTrans (Cone_to_DF_DCone Cn) (OProd (D _o)%object) => Trans w tt)
+              (fun w : ((Cone_to_DF_DCone Cn) –≻ (OProd (D _o)%object))%nattrans => Trans w tt)
           ) in H.
         cbn in H.
         apply NatTrans_eq_simplify.
@@ -501,7 +495,7 @@ Section GenSum_CoEq_Complete.
     .
 
     Section Limits_Exist.
-      Context (D : Functor J C).
+      Context (D : J –≻ C).
 
       Program Definition CoLim_CoCone_is_CoLimit : CoLimit D :=
         @Lim_Cone_is_Limit

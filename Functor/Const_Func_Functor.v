@@ -6,7 +6,7 @@ Require Import NatTrans.NatTrans NatTrans.Func_Cat.
 Section Const_Func_Functor.
   Context (C D : Category).
 
-  Program Definition Const_Func_Functor : Functor C (Func_Cat D C) :=
+  Program Definition Const_Func_Functor : (C –≻ (Func_Cat D C))%functor :=
     {|
       FO := fun c => Const_Func D c;
       FA := fun _ _ h => {|Trans := fun c => h|}

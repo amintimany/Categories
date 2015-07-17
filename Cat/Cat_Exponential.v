@@ -9,8 +9,10 @@ Require Import Cat.Cat_Product.
 
 (** The exponential in cat is jsut the functor category. *)
 
+Local Open Scope functor_scope. 
+
 (** Evaluation functor. *)
-Program Definition Exp_Cat_Eval (C C' : Category) : Functor (Prod_Cat (Func_Cat C C') C) C' :=
+Program Definition Exp_Cat_Eval (C C' : Category) : (Prod_Cat (Func_Cat C C') C) –≻ C' :=
 {|
   FO := fun x => ((fst x) _o (snd x))%object;
   FA := fun A B f => (((fst B) _a (snd f)) ∘ (@Trans _ _ _ _ (fst f) _))%morphism
@@ -33,7 +35,11 @@ Qed.
 (* Exp_Cat_Eval defined *)
 
 (** The arrow map of curry functor. *)
-Program Definition Exp_Cat_morph_ex_A {C C' C'' : Category} (F : Functor (Prod_Cat C'' C)  C') (a b : C'') (h : Hom a b) : NatTrans (Fix_Bi_Func_1 a F) (Fix_Bi_Func_1 b F) :=
+Program Definition Exp_Cat_morph_ex_A
+        {C C' C'' : Category} (F : (Prod_Cat C'' C) –≻  C')
+        (a b : C'') (h : (a –≻ b)%morphism)
+  :
+    ((Fix_Bi_Func_1 a F) –≻ (Fix_Bi_Func_1 b F))%nattrans :=
 {|
   Trans := fun c => (F _a (h, id _ c))%morphism
 |}.
@@ -43,14 +49,27 @@ Program Definition Exp_Cat_morph_ex_A {C C' C'' : Category} (F : Functor (Prod_C
 Local Hint Extern 1 => apply NatTrans_eq_simplify; cbn.
 
 (** The curry functor. *)
-Program Definition Exp_Cat_morph_ex {C C' C'' : Category} (F : Functor (Prod_Cat C'' C)  C') : Functor C'' (Func_Cat C C') :=
+Program Definition Exp_Cat_morph_ex
+        {C C' C'' : Category}
+        (F : (Prod_Cat C'' C) –≻ C')
+  :
+    C'' –≻ (Func_Cat C C') :=
 {|
   FO := fun a => Fix_Bi_Func_1 a F;
   FA := Exp_Cat_morph_ex_A F
 |}.
 
 (** Proof that currying after uncurrying gives back the same functor. *)
-Lemma Exp_cat_morph_ex_eval_id {C C' C'' : Category} (u : Functor C'' (Func_Cat C C')) : (u = Exp_Cat_morph_ex (Exp_Cat_Eval C C' ∘ ((Prod_Func _ Cat_Has_Products) @_a (_, _) (_, _) (u, id Cat C))))%morphism.
+Lemma Exp_cat_morph_ex_eval_id
+      {C C' C'' : Category}
+      (u : C'' –≻ (Func_Cat C C'))
+  :
+    (u =
+     Exp_Cat_morph_ex
+       (
+         (Exp_Cat_Eval C C') ∘ ((Prod_Func _ Cat_Has_Products) @_a (_, _) (_, _) (u, id Cat C))
+       )
+    )%morphism.
 Proof.
   Func_eq_simpl.
   {

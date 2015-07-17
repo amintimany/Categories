@@ -7,10 +7,10 @@ Definition Opposite (C : Category) : Category :=
 
   Obj := Obj C;
            
-  Hom := fun a b => Hom C b a;
+  Hom := fun a b => (b –≻ a)%morphism;
 
   compose :=
-    fun a b c (f : Hom b a) (g : Hom c b) => compose C c b a g f;
+    fun a b c (f : (b –≻ a)%morphism) (g : (c –≻ b)%morphism) => compose C c b a g f;
 
   id := fun c => id C c;
   
@@ -24,4 +24,4 @@ Definition Opposite (C : Category) : Category :=
                    
 |}.
 
-Notation "C '^op'" := (Opposite C) (at level 9, no associativity) : category_scope.
+Notation "C '^op'" := (Opposite C) : category_scope.

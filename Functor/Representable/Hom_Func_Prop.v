@@ -6,6 +6,8 @@ Require Import Functor.Representable.Hom_Func.
 Require Import Cat.Cat Cat.Cat_Iso.
 Require Import NatTrans.NatTrans NatTrans.Func_Cat NatTrans.NatIso.
 
+Local Open Scope functor_scope.
+
 Section Hom_Func_Twist.
   Context (C : Category).
 
@@ -13,29 +15,31 @@ Section Hom_Func_Twist.
 
   Note that: (Home_Func C) : Cᵒᵖ×C -> Type_Cat and (Twist_Func C Cᵒᵖ) : C×Cᵒᴾ → Cᵒᵖ×C.
 *)
-  Theorem Hom_Func_Twist : (Hom_Func C^op) = Functor_compose (Twist_Func C C^op) (Hom_Func C).
+  Theorem Hom_Func_Twist : (Hom_Func C^op) = (Hom_Func C) ∘ (Twist_Func C C^op).
   Proof.
     Func_eq_simpl; cbn; auto.
   Qed.
 
 End Hom_Func_Twist.
 
+
+
 Section Prod_Func_Hom_Func_NT.
   Context {A B C D : Category}
-          {F : Functor A C^op}
-          {F' : Functor A D^op}
-          {G : Functor B C}
-          {G' : Functor B D}
-          (N : NatTrans
-                 ((Hom_Func C) ∘ (Prod_Functor F G))
-                 ((Hom_Func D) ∘ (Prod_Functor F' G'))
+          {F : A –≻ C^op}
+          {F' : A –≻ D^op}
+          {G : B –≻ C}
+          {G' : B –≻ D}
+          (N : (((Hom_Func C) ∘ (Prod_Functor F G))
+                –≻ ((Hom_Func D) ∘ (Prod_Functor F' G')))%nattrans
           )
   .
 
   Local Obligation Tactic := idtac.
   
   (** Given a natural transformation from ((Hom_Func C) ∘ (Prod_Functor F G)) to ((Hom_Func D) ∘ (Prod_Functor F' G')), we construct a natural transformation from ((Hom_Func C^op) ∘ (Prod_Functor G F)) to ((Hom_Func D^op) ∘ (Prod_Functor G' F')). *)
-  Program Definition Prod_Func_Hom_Func_NT : NatTrans ((Hom_Func C^op) ∘ (Prod_Functor G F)) ((Hom_Func D^op) ∘ (Prod_Functor G' F')) :=
+  Program Definition Prod_Func_Hom_Func_NT :
+    (((Hom_Func C^op) ∘ (Prod_Functor G F)) –≻ ((Hom_Func D^op) ∘ (Prod_Functor G' F')))%nattrans :=
     {|
       Trans := fun c h => Trans N (snd c, fst c) h
     |}.
@@ -58,11 +62,16 @@ End Prod_Func_Hom_Func_NT.
   
 Section Prod_Func_Hom_Func.
   Context {A B C D : Category}
-          {F : Functor A C^op}
-          {F' : Functor A D^op}
-          {G : Functor B C}
-          {G' : Functor B D}
-          (N : ((Hom_Func C) ∘ (Prod_Functor F G) ≡≡ (Hom_Func D) ∘ (Prod_Functor F' G') ::> Func_Cat _ _)%functor%morphism).
+          {F : A –≻ C^op}
+          {F' : A –≻ D^op}
+          {G : B –≻ C}
+          {G' : B –≻ D}
+          (N : (
+                 ((Hom_Func C) ∘ (Prod_Functor F G))
+                   ≡≡ ((Hom_Func D) ∘ (Prod_Functor F' G')) ::> Func_Cat _ _
+               )%functor%morphism
+          )
+  .
   
   Local Ltac TRC :=
   match goal with
@@ -87,11 +96,17 @@ End Prod_Func_Hom_Func.
 
 Section Prod_Func_Hom_Func_invl.
   Context {A B C D : Category}
-          {F : Functor A C^op}
-          {F' : Functor A D^op}
-          {G : Functor B C}
-          {G' : Functor B D}
-          (N : ((Hom_Func C) ∘ (Prod_Functor F G) ≡≡ (Hom_Func D) ∘ (Prod_Functor F' G') ::> Func_Cat _ _)%functor%morphism).
+          {F : A –≻ C^op}
+          {F' : A –≻ D^op}
+          {G : B –≻ C}
+          {G' : B –≻ D}
+          (N :
+             (
+               ((Hom_Func C) ∘ (Prod_Functor F G))
+                 ≡≡ ((Hom_Func D) ∘ (Prod_Functor F' G')) ::> Func_Cat _ _
+             )%functor%morphism
+          )
+  .
 
   (** Prod_Func_Hom_Func defined above is involutive. *)
   Theorem Prod_Func_Hom_Func_invl : N = Prod_Func_Hom_Func (Prod_Func_Hom_Func N).
@@ -107,7 +122,7 @@ Section Hom_Func_to_Iso_Hom_Func.
 
   Local Obligation Tactic := idtac.
   
-  Program Definition Hom_Func_to_Iso_Hom_Func : NatTrans (Hom_Func C) ((Hom_Func D) ∘ (Prod_Functor (iso_morphism I)^op (iso_morphism I))) :=
+  Program Definition Hom_Func_to_Iso_Hom_Func : ((Hom_Func C) –≻ ((Hom_Func D) ∘ (Prod_Functor (iso_morphism I)^op (iso_morphism I))))%nattrans :=
     {|
       Trans := fun c h => ((iso_morphism I) _a h)%morphism
     |}.
@@ -123,7 +138,9 @@ Section Hom_Func_to_Iso_Hom_Func.
     apply Hom_Func_to_Iso_Hom_Func_obligation_1.
   Qed.
 
-  Program Definition Iso_Hom_Func_to_Hom_Func : NatTrans ((Hom_Func D) ∘ (Prod_Functor  (iso_morphism I)^op (iso_morphism I))) (Hom_Func C) :=
+  Program Definition Iso_Hom_Func_to_Hom_Func :
+    (((Hom_Func D) ∘ (Prod_Functor  (iso_morphism I)^op (iso_morphism I))) –≻ (Hom_Func C))%nattrans
+    :=
     {|
       Trans := fun c h => Cat_Iso_conv_inv I ((inverse_morphism I) _a h)
     |}.

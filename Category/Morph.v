@@ -1,13 +1,15 @@
 Require Import Category.Category.
 Require Import Category.Opposite.
 
+Local Open Scope morphism_scope.
+
 (** The basic Definition of an isomorphism in a category.
 An isomorphism is a pair of arrows f : a -> b and g : b -> a such that g ∘ f = id a and f ∘ g = id b. *)
 Record Isomorphism {C : Category} (a b : C) : Type := 
 {
-  iso_morphism : Hom a b;
+  iso_morphism : a –≻ b;
   
-  inverse_morphism : Hom b a;
+  inverse_morphism : b –≻ a;
   
   left_inverse : (inverse_morphism ∘ iso_morphism)%morphism = id;
   
@@ -16,8 +18,6 @@ Record Isomorphism {C : Category} (a b : C) : Type :=
 
 
 Bind Scope morphism_scope with Isomorphism.
-
-Local Open Scope morphism_scope.
 
 Hint Resolve left_inverse.
 
@@ -116,8 +116,8 @@ Program Definition Isomorphism_Compose {C : Category} {a b c : C} (I : a ≡ b) 
 (** A monic arrow (AKA, mono, monomorphic arrow and monomorphism) m is an arrow such that for any two arrows g and h (of the appropriate domain and codomain) we have if m ∘ g = m ∘ h then g = h. *)
 Record Monic {C : Category} (a b : Obj) :=
 {
-  mono_morphism : Hom a b;
-  mono_morphism_monomorphic : ∀ (c : Obj) (g h : Hom c a), mono_morphism ∘ g = mono_morphism ∘ h → g = h
+  mono_morphism : a –≻ b;
+  mono_morphism_monomorphic : ∀ (c : Obj) (g h : c –≻ a), mono_morphism ∘ g = mono_morphism ∘ h → g = h
 }.
 
 Next Obligation.

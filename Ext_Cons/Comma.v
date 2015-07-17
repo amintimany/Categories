@@ -3,6 +3,8 @@ Require Import Ext_Cons.Arrow.
 Require Import Functor.Functor Functor.Functor_Ops Const_Func.
 Require Import Archetypal.Discr.Discr.
 
+Local Open Scope morphism_scope.
+
 (**
 A comma category for Functors F : B → C and G : D → C is a category whose objects are arrows in C
 
@@ -31,19 +33,19 @@ for h : x → x' an arrow in B and h' : y → y' an arrow in G.
  
 *)
 Section Comma.
-  Context {B C D : Category} (F : Functor B C) (G : Functor D C).
+  Context {B C D : Category} (F : (B –≻ C)%functor) (G : (D –≻ C)%functor).
 
   Record Comma_Obj : Type :=
     {
       CMO_src : B;
       CMO_trg : D;
-      CMO_hom : Hom (F _o CMO_src) (G _o CMO_trg)
+      CMO_hom : ((F _o CMO_src) –≻ (G _o CMO_trg))%object
     }.
 
   Record Comma_Hom (a b : Comma_Obj) : Type :=
     {
-      CMH_left : Hom (CMO_src a) (CMO_src b);
-      CMH_right : Hom (CMO_trg a) (CMO_trg b);
+      CMH_left : (CMO_src a) –≻ (CMO_src b);
+      CMH_right : (CMO_trg a) –≻ (CMO_trg b);
       CMH_com :  ((G _a CMH_right) ∘ (@CMO_hom a) = (@CMO_hom b) ∘ (F _a CMH_left))%morphism
     }.
 

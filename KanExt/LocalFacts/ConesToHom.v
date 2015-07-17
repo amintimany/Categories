@@ -10,22 +10,21 @@ Require Import Adjunction.Adjunction.
 Require Import KanExt.Local  KanExt.LocalFacts.Uniqueness.
 Require Import Basic_Cons.Terminal.
 
-Local Notation NID := NatTrans_id (only parsing).
-Local Notation FCAT := Func_Cat (only parsing).
+Local Open Scope functor_scope.
 
 (** This module contains conversion from local kan extension defiend as cones
 to local kan extensions defined through hom functor. *)
 
 Section Local_Right_KanExt_to_Hom_Local_Right_KanExt.
-  Context {C C' : Category} {p : Functor C C'}
-          {D : Category} {F : Functor C D}
+  Context {C C' : Category} {p : C –≻ C'}
+          {D : Category} {F : C –≻ D}
           (lrke : Local_Right_KanExt p F).
 
   (** The left to right side of Hom_Local_Right_KanExt isomorphism. *)
   Program Definition Local_Right_KanExt_to_Hom_Local_Right_KanExt_Iso_LR :
-    NatTrans ((@Fix_Bi_Func_2 _ (Func_Cat C D) _ F (Hom_Func (Func_Cat C D))) ∘
-              (Left_Functor_Extender p D)^op)
-             (@Fix_Bi_Func_2 _ (Func_Cat C' D) _ lrke (Hom_Func (Func_Cat C' D))) :=
+    (((@Fix_Bi_Func_2 _ (Func_Cat C D) _ F (Hom_Func (Func_Cat C D)))
+        ∘ (Left_Functor_Extender p D)^op)
+       –≻ (@Fix_Bi_Func_2 _ (Func_Cat C' D) _ lrke (Hom_Func (Func_Cat C' D))))%nattrans :=
     {|
       Trans :=  fun c h => LRKE_morph_ex lrke {|cone_apex := c; cone_edge := h|}
     |}.
@@ -59,13 +58,13 @@ Section Local_Right_KanExt_to_Hom_Local_Right_KanExt.
 
   (** The right to left side of Hom_Local_Right_KanExt isomorphism. *)
   Program Definition Local_Right_KanExt_to_Hom_Local_Right_KanExt_Iso_RL :
-    NatTrans (@Fix_Bi_Func_2 _ (Func_Cat C' D) _ lrke (Hom_Func (Func_Cat C' D)))
-             ((@Fix_Bi_Func_2 _ (Func_Cat C D) _ F (Hom_Func (Func_Cat C D)))
-                ∘ (Left_Functor_Extender p D)^op
-             )
+    ((@Fix_Bi_Func_2 _ (Func_Cat C' D) _ lrke (Hom_Func (Func_Cat C' D)))
+       –≻ ((@Fix_Bi_Func_2 _ (Func_Cat C D) _ F (Hom_Func (Func_Cat C D)))
+             ∘ (Left_Functor_Extender p D)^op
+             ))%nattrans
     :=
     {|
-      Trans :=  fun c h => (lrke ∘ (h ∘_h (NID p)))%nattrans
+      Trans :=  fun c h => (lrke ∘ (h ∘_h (NatTrans_id p)))%nattrans
     |}.
  
   Next Obligation.

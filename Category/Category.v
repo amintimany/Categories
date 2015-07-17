@@ -2,7 +2,6 @@ Require Export Essentials.Notations.
 Require Export Essentials.Types.
 Require Export Essentials.Facts_Tactics.
 
-
 (** The basic definition of a category *)
 Class Category : Type :=
 {
@@ -10,27 +9,27 @@ Class Category : Type :=
   Obj : Type;
 
   (** Type of morphism beween two objects *)
-  Hom : Obj → Obj → Type;
+  Hom : Obj → Obj → Type where "a –≻ b" := (Hom a b);
 
   (** composition of morphisms: *)
-  compose : ∀ {a b c : Obj}, Hom a b → Hom b c → Hom a c where "f ∘ g" := (compose g f);
+  compose : ∀ {a b c : Obj}, (a –≻ b) → (b –≻ c) → (a –≻ c) where "f ∘ g" := (compose g f);
 
   (** associativity of composition: *)
-  assoc : ∀ {a b c d : Obj} (f : Hom  a b) (g : Hom b c) (h : Hom c d),
+  assoc : ∀ {a b c d : Obj} (f : a –≻ b) (g : b –≻ c) (h : c –≻ d),
             ((h ∘ g) ∘ f) = (h ∘ (g ∘ f));
 
   (** symmetric form of associativity: *)
-  assoc_sym : ∀ {a b c d : Obj} (f : Hom a b) (g : Hom b c) (h : Hom c d),
+  assoc_sym : ∀ {a b c d : Obj} (f : a –≻ b) (g : b –≻ c) (h : c –≻ d),
                 ((h ∘ (g ∘ f) = (h ∘ g) ∘ f));
 
   (** identity morphisms: *)
-  id : ∀ {a : Obj}, Hom a a;
+  id : ∀ {a : Obj}, a –≻ a;
 
   (** id left unit: *)
-  id_unit_left : ∀ (a b : Obj) (h : Hom a b), id ∘ h = h;
+  id_unit_left : ∀ (a b : Obj) (h : a –≻ b), id ∘ h = h;
 
   (** id right unit: *)
-  id_unit_right : ∀ (a b : Obj) (h : Hom a b), h ∘ id = h
+  id_unit_right : ∀ (a b : Obj) (h : a –≻ b), h ∘ id = h
 }.
 
 Arguments Obj {_}, _.
@@ -40,7 +39,8 @@ Arguments compose {_} {_ _ _} _ _, _ {_ _ _} _ _, _ _ _ _ _ _.
 Arguments assoc {_ _ _ _ _} _ _ _.
 Arguments assoc_sym {_ _ _ _ _} _ _ _.
 
-Notation "f ∘ g" := (compose g f) : morphism_scope. 
+Notation "f ∘ g" := (compose g f) : morphism_scope.
+Notation "a –≻ b" := (Hom a b) : morphism_scope.
 
 Bind Scope category_scope with Category.
 

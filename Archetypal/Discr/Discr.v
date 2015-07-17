@@ -161,23 +161,23 @@ Section Discr_Func.
 
   (** The discrete functor – a functor from a discrete category of type A
  to a category C based on a function from A to objects of C. *)
-  Program Definition Discr_Func : Functor (Discr_Cat A) C :=
+  Program Definition Discr_Func : ((Discr_Cat A) –≻ C)%functor :=
     {|
       FO := Omap;
       
       FA := fun (a b : A) (h : a = b) =>
-              match h in _ = y return (Hom (Omap a) (Omap y)) with
+              match h in _ = y return ((Omap a) –≻ (Omap y))%morphism with
               | eq_refl => id
               end
     |}.
 
   (** The discrete-opposite functor – a functor from the opposite of a
 discrete category of type A to a category C based on a function from A to objects of C. *)
-  Program Definition Discr_Func_op : Functor (Discr_Cat A)^op C :=
+  Program Definition Discr_Func_op : ((Discr_Cat A)^op –≻ C)%functor :=
     {|
       FO := Omap;
       FA := fun (a b : A) (h : b = a) =>
-              match h in _ = y return (Hom (Omap y) (Omap b)) with
+              match h in _ = y return ((Omap y) –≻ (Omap b))%morphism with
               | eq_refl => id
               end
     |}.

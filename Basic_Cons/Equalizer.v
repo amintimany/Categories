@@ -1,7 +1,9 @@
 Require Import Category.Main.
 
+Local Open Scope morphism_scope.
+
 Section Equalizer.
-  Context {C : Category} {a b : Obj} (f g : Hom a b).
+  Context {C : Category} {a b : Obj} (f g : a –≻ b).
 
   (** given two parallel arrows f,g : a -> b, their equalizer is an object e together with an arrow eq : e -> a such that f ∘ eq = g ∘ eq such that for any other object z and eqz : z -> a that we have f ∘ eqz = g ∘ eqz, there is a unique arrow h : z -> e that makes the following fiagram commute:
 
@@ -24,16 +26,16 @@ z ———–> e ——————> a          b
     {
       equalizer : C;
 
-      equalizer_morph : Hom equalizer a;
+      equalizer_morph : equalizer –≻ a;
 
       equalizer_morph_com : f ∘ equalizer_morph = g ∘ equalizer_morph;
 
-      equalizer_morph_ex (e' : Obj) (eqm : Hom e' a) : f ∘ eqm = g ∘ eqm → Hom e' equalizer;
+      equalizer_morph_ex (e' : Obj) (eqm : e' –≻ a) : f ∘ eqm = g ∘ eqm → e' –≻ equalizer;
 
-      equalizer_morph_ex_com (e' : Obj) (eqm : Hom e' a) (eqmc : f ∘ eqm = g ∘ eqm) :
+      equalizer_morph_ex_com (e' : Obj) (eqm : e' –≻ a) (eqmc : f ∘ eqm = g ∘ eqm) :
         equalizer_morph ∘ (equalizer_morph_ex e' eqm eqmc) = eqm;
 
-      equalizer_morph_unique (e' : Obj) (eqm : Hom e' a) (com : f ∘ eqm = g ∘ eqm) (u u' : Hom e' equalizer) : equalizer_morph ∘ u = eqm → equalizer_morph ∘ u' = eqm → u = u'
+      equalizer_morph_unique (e' : Obj) (eqm : e' –≻ a) (com : f ∘ eqm = g ∘ eqm) (u u' : e' –≻ equalizer) : equalizer_morph ∘ u = eqm → equalizer_morph ∘ u' = eqm → u = u'
     }.
 
   Coercion equalizer : Equalizer >-> Obj.
@@ -56,7 +58,7 @@ Arguments equalizer_morph_unique {_ _ _ _ _} _ {_ _ _} _ _ _ _.
 
 Arguments Equalizer _ {_ _} _ _, {_ _ _} _ _.
 
-Definition Has_Equalizers (C : Category) : Type := ∀ (a b : C) (f g : Hom a b), Equalizer f g.
+Definition Has_Equalizers (C : Category) : Type := ∀ (a b : C) (f g : a –≻ b), Equalizer f g.
 
 Existing Class Has_Equalizers.
 

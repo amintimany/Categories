@@ -145,7 +145,7 @@ Section GenSum_GenProd_IsoType.
               Trans :=
                 fun c =>
                   match equal_f (right_inverse Iso) c in _ = u return
-                        Hom ((Cn _o) tt) (f u) with
+                        (((Cn _o) tt)%object –≻ (f u))%morphism with
                     eq_refl => Trans Cn ((inverse_morphism Iso) c)
                   end
             |}
@@ -216,7 +216,17 @@ Section GenSum_GenProd_IsoType.
       Proof.
         apply NatTrans_eq_simplify; extensionality x; cbn.
         destruct equal_f.
-        apply (f_equal (fun w : NatTrans (Functor_compose (Functor_To_1_Cat (Discr_Cat A)) Cn) (Discr_Func (f ∘ (iso_morphism Iso))%morphism) => Trans w (inverse_morphism Iso x)) (cone_morph_com h)).
+        apply (
+            f_equal
+              (fun w :
+                     ((Cn ∘ (Functor_To_1_Cat (Discr_Cat A)))
+                        –≻ (Discr_Func (f ∘ (iso_morphism Iso))%morphism))%nattrans
+               =>
+                 Trans w (inverse_morphism Iso x)
+              )
+              (cone_morph_com h)
+          )
+        .
       Qed.
 
     End GenProd_IsoType_Cone_Morph_Conversion_1.
@@ -232,7 +242,17 @@ Section GenSum_GenProd_IsoType.
       Next Obligation.
       Proof.
         apply NatTrans_eq_simplify; extensionality x; cbn.
-        apply (f_equal (fun w : NatTrans (Functor_compose (Functor_To_1_Cat (Discr_Cat B)) Cn) (Discr_Func f) => Trans w (iso_morphism Iso x)) (cone_morph_com h)).
+        apply (
+            f_equal
+              (fun w :
+                     ((Cn ∘ (Functor_To_1_Cat (Discr_Cat B)))
+                       –≻ (Discr_Func f))%nattrans
+               =>
+                 Trans w (iso_morphism Iso x)
+              )
+              (cone_morph_com h)
+          )
+        .
       Qed.
 
     End GenProd_IsoType_Cone_Morph_Conversion_2.

@@ -6,6 +6,7 @@ Require Import NatTrans.NatTrans NatTrans.Operations NatTrans.Func_Cat.
 Require Import Adjunction.Adjunction Adjunction.Duality Adjunction.Adj_Facts.
 Require Import KanExt.Global KanExt.Local KanExt.LocalFacts.Uniqueness KanExt.GlobalDuality.
 
+Local Open Scope functor_scope.
 
 (** This module contains conversion from local to global kan extensions. 
 That is, we show that if we have all local kan extensions, we also have
@@ -23,16 +24,16 @@ for conversion. This is waht we do below.
 *)
 Section Local_to_Global_Right.
   Context {C C' : Category}
-          (p : Functor C C')
+          (p : C –≻ C')
           (D : Category)
-          (rke : ∀ F : Functor C D,  Local_Right_KanExt p F)
+          (rke : ∀ F : C –≻ D,  Local_Right_KanExt p F)
   .
 
   (** Conversion from a cone of a functor to the cone of another functor.
 The appex remains the same (the objects in D are not changed) but the
 cone_edge does – see below. *)
   Section Cone_conv.
-    Context {F G : Functor C D} (N : NatTrans F G) (Cn : LoKan_Cone p F).
+    Context {F G : C –≻ D} (N : (F –≻ G)%nattrans) (Cn : LoKan_Cone p F).
 
     Definition Cone_conv : LoKan_Cone p G :=
       {|
@@ -43,9 +44,9 @@ cone_edge does – see below. *)
   End Cone_conv.
 
   Section Cone_conv_Morph_for_compose.
-    Context {F G H : Functor C D}
-            (N : NatTrans F G)
-            (N' : NatTrans G H)
+    Context {F G H : C –≻ D}
+            (N : (F –≻ G)%nattrans)
+            (N' : (G –≻ H)%nattrans)
             (Cn : LoKan_Cone p F)
     .
 
@@ -71,8 +72,8 @@ composition with identity morphism at the level of the terms produced. *)
   End Cone_conv_Morph_for_compose.
 
   Section Cone_Morph_conv.
-    Context {F G : Functor C D}
-            (N : NatTrans F G)
+    Context {F G : C –≻ D}
+            (N : (F –≻ G)%nattrans)
             {Cn Cn' : LoKan_Cone p F}
             (h : LoKan_Cone_Morph Cn Cn')
     .
@@ -96,7 +97,7 @@ composition with identity morphism at the level of the terms produced. *)
   (** For any functor (that can be the functor of a cone), there is a functor
 for which it is cone trivially. *)
   Section Trivial_Cone.
-    Context (F : Functor C' D).
+    Context (F : C' –≻ D).
 
     Definition Trivial_Cone : LoKan_Cone p (Functor_compose p F) :=
       {|
@@ -107,7 +108,7 @@ for which it is cone trivially. *)
   End Trivial_Cone.
 
   Section Trivial_Cone_Morph.
-    Context {F G : Functor C' D} (N : NatTrans F G).
+    Context {F G : C' –≻ D} (N : (F –≻ G)%nattrans).
 
     (** If N : F -> G is a natural transformation, then there is a trivial cone morphism
  from trivial cone of F to trivial cone of G – after conversion. *)
@@ -130,10 +131,10 @@ for which it is cone trivially. *)
   End Trivial_Cone_Morph.
 
   Section Cone_Morph_to_other_Cone.
-    Context {L : Functor C' D}
-            {F : Functor C D}
+    Context {L : C' –≻ D}
+            {F : C –≻ D}
             (Cn : LoKan_Cone p F)
-            (N : NatTrans L Cn)
+            (N : (L –≻ Cn)%nattrans)
     .
 
     (** Given a natrual transformation from some functor L : C' -> D to a cone (the
@@ -158,7 +159,7 @@ underlying functor) we construct a cone morphism from trivial cone of L (after
   Local Obligation Tactic := idtac.
 
   (** The functor (mapping functors to their kan extensions) for global kan extension. *)
-  Program Definition Local_to_Global_Right_Functor : Functor (Func_Cat C D) (Func_Cat C' D) :=
+  Program Definition Local_to_Global_Right_Functor : (Func_Cat C D) –≻ (Func_Cat C' D) :=
     {|
       FO := fun F => LRKE (rke F);
       FA := fun F G N => LRKE_morph_ex (rke G) (Cone_conv N (LRKE (rke F)))
@@ -196,9 +197,8 @@ underlying functor) we construct a cone morphism from trivial cone of L (after
 
   (** The unit of adjunction for global kan extension. *)
   Program Definition Local_to_Global_Right_adj_unit :
-    NatTrans
-      (Functor_id (Func_Cat C' D))
-      (Functor_compose (Left_Functor_Extender p D) Local_to_Global_Right_Functor)
+      ((Functor_id (Func_Cat C' D))
+        –≻ (Functor_compose (Left_Functor_Extender p D) Local_to_Global_Right_Functor))%nattrans
     :=
     {|
       Trans := fun F => LRKE_morph_ex (rke (F ∘ p)) (Trivial_Cone F)
@@ -238,10 +238,10 @@ underlying functor) we construct a cone morphism from trivial cone of L (after
 
   (** Existence of conversion for adjunction – see definition of Adjunct. *)
   Definition Local_to_Global_Right_adj_morph_ex
-             (L : Functor C' D)
-             (F : Functor C D)
-             (N : NatTrans L (LRKE (rke F)))
-    : NatTrans (L ∘ p) F :=
+             (L : C' –≻ D)
+             (F : C –≻ D)
+             (N : (L –≻ (LRKE (rke F)))%nattrans)
+    : ((L ∘ p) –≻ F)%nattrans :=
     ((cone_edge (LRKE (rke F))) ∘ (N ∘_h (NatTrans_id p)))%nattrans.
 
   (** Conversion from local kan extensions (if we have all of them) to the 
@@ -316,12 +316,12 @@ End Local_to_Global_Right.
 (** The conversion from local left kan extensions to global left kan extensions is
 just the daul of that for right. *)
 Section Local_to_Global_Left.
-  Context {C C' : Category} (p : Functor C C') (D : Category).
+  Context {C C' : Category} (p : C –≻ C') (D : Category).
 
-  Context (lke : ∀ F : Functor C D,  Local_Left_KanExt p F).
+  Context (lke : ∀ F : C –≻ D,  Local_Left_KanExt p F).
 
   Definition Local_to_Global_Left : Left_KanExt p D :=
-    KanExt_Right_to_Left _ _ (Local_to_Global_Right _ _ (fun (F : Functor C^op D^op) => (lke F^op))).
+    KanExt_Right_to_Left _ _ (Local_to_Global_Right _ _ (fun (F : C^op –≻ D^op) => (lke F^op))).
 
 End Local_to_Global_Left.
 

@@ -2,8 +2,10 @@ Require Import Category.Main.
 Require Import Functor.Functor.
 Require Import Functor.Functor_Ops.
 
+Local Open Scope functor_scope.
+
 Section Functor_Properties.
-  Context {C C' : Category} (F : Functor C C').
+  Context {C C' : Category} (F : C –≻ C').
 
   Local Open Scope object_scope.
   Local Open Scope morphism_scope.
@@ -24,11 +26,12 @@ to an aobject isomorphic to it. *)
   Definition Essentially_Surjective_Func := ∀ (c : Obj), {c' : Obj & F _o c' ≡ c}.
 
   (** A functor is said to be faithful if its arrow map is injective. *)
-  Definition Faithful_Func := ∀ (c c' : Obj) (h h' : Hom c c'), F _a h = F _a h' → h = h'.
+  Definition Faithful_Func := ∀ (c c' : Obj) (h h' : (c –≻ c')%morphism),
+      F _a h = F _a h' → h = h'.
 
   (** A functor is said to be full if its arrow map is surjective. *)
-  Definition Full_Func := ∀ (c1 c2 : Obj) (h' : Hom (F _o c1) (F _o c2)),
-      {h : Hom c1 c2 | F _a h = h'}
+  Definition Full_Func := ∀ (c1 c2 : Obj) (h' : ((F _o c1) –≻ (F _o c2))%morphism),
+      {h : (c1 –≻ c2)%morphism | F _a h = h'}
   .
 
   Local Ltac Inv_FTH :=
@@ -68,7 +71,7 @@ to an aobject isomorphic to it. *)
                   _
                   _
                   match eq in _ = y return
-                        Hom _ y
+                        (_ –≻ y)%morphism
                   with
                     eq_refl => id (F _o c)
                   end
@@ -79,7 +82,7 @@ to an aobject isomorphic to it. *)
                   _
                   _
                   match eq in _ = y return
-                        Hom y _
+                        (y –≻ _)%morphism
                   with
                     eq_refl => id (F _o c)
                   end
@@ -103,7 +106,7 @@ End Functor_Properties.
 
 (** Functors Preserve Isomorphisms. *)
 Section Functors_Preserve_Isos.
-  Context {C C' : Category} (F : Functor C C') {a b : C} (I : (a ≡≡ b ::> C)%morphism).
+  Context {C C' : Category} (F : C –≻ C') {a b : C} (I : (a ≡≡ b ::> C)%morphism).
 
   Program Definition Functors_Preserve_Isos : (F _o a ≡ F _o b)%morphism :=
     {|
@@ -122,7 +125,7 @@ Section Embedding.
 
   Record Embedding : Type :=
     {
-      Emb_Func : Functor C C';
+      Emb_Func : C –≻ C';
 
       Emb_Faithful : Faithful_Func Emb_Func;
       

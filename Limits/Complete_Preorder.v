@@ -60,7 +60,7 @@ Section Complete_Preorder.
   .
   
   Local Definition Hom_x_LimOf_Arr_y_ISO_Arrow_C_to_Hom_x_y :
-    ((Hom x ((LimOf_Arr_y _o) tt)) ≡≡ (Arrow C → Hom x y) ::> Type_Cat)%morphism :=
+    ((x –≻ ((LimOf_Arr_y _o) tt))%object%morphism ≡≡ (Arrow C → x –≻ y)%morphism ::> Type_Cat)%morphism :=
     LoKan_Cone_Iso_object_Iso
       _
       _

@@ -5,7 +5,11 @@ Require Import Ext_Cons.Prod_Cat.Prod_Cat.
 
 Local Obligation Tactic := idtac.
 
-Program Definition Prod_Functor {C1 C2 C1' C2' : Category} (F : Functor C1 C2) (F' : Functor C1' C2') : Functor (Prod_Cat C1 C1') (Prod_Cat C2 C2') :=
+Local Open Scope functor_scope.
+
+Program Definition Prod_Functor
+        {C1 C2 C1' C2' : Category} (F : C1 –≻ C2) (F' : C1' –≻ C2')
+  : (Prod_Cat C1 C1') –≻ (Prod_Cat C2 C2') :=
 {|
   FO := fun a => (F _o (fst a), F' _o (snd a))%object;
   FA := fun _ _ f => (F _a (fst f), F' _a (snd f))%morphism
@@ -19,29 +23,32 @@ Next Obligation.
   intros; cbn; repeat rewrite F_compose; trivial.
 Qed.
 
-Definition Bi_Func_1 {Cx C1 C1' Cy : Category} (F : Functor Cx C1) (F' : Functor (Prod_Cat C1 C1') Cy) : Functor (Prod_Cat Cx C1') Cy :=
-  Functor_compose (Prod_Functor F (@Functor_id C1')) F'.
+Definition Bi_Func_1 {Cx C1 C1' Cy : Category} (F : Cx –≻ C1) (F' : (Prod_Cat C1 C1') –≻ Cy)
+  : (Prod_Cat Cx C1') –≻ Cy :=
+  F' ∘ (Prod_Functor F (@Functor_id C1')).
 
-Definition Bi_Func_2 {Cx C1 C1' Cy : Category} (F : Functor Cx C1') (F' : Functor (Prod_Cat C1 C1') Cy) : Functor (Prod_Cat C1 Cx) Cy :=
+Definition Bi_Func_2 {Cx C1 C1' Cy : Category} (F : Cx –≻ C1') (F' : (Prod_Cat C1 C1') –≻ Cy) : (Prod_Cat C1 Cx) –≻ Cy :=
   Functor_compose (Prod_Functor (@Functor_id C1) F) F'.
 
 Local Hint Extern 2 => cbn.
 
 Local Obligation Tactic := basic_simpl; do 2 auto.
 
-Program Definition Fix_Bi_Func_1 {C1 C1' Cy : Category} (x : C1) (F : Functor (Prod_Cat C1 C1') Cy) : Functor C1' Cy :=
+Program Definition Fix_Bi_Func_1 {C1 C1' Cy : Category} (x : C1) (F : (Prod_Cat C1 C1') –≻ Cy)
+  : C1' –≻ Cy :=
 {|
   FO := fun a => (F _o (x, a))%object;
   FA := fun _ _ f => (F @_a (_, _) (_, _) (@id _ x, f))%morphism
 |}.
 
-Program Definition Fix_Bi_Func_2 {C1 C1' Cy : Category} (x : C1') (F : Functor (Prod_Cat C1 C1') Cy) : Functor C1 Cy :=
+Program Definition Fix_Bi_Func_2 {C1 C1' Cy : Category} (x : C1') (F : (Prod_Cat C1 C1') –≻ Cy)
+  : C1 –≻ Cy :=
 {|
   FO := fun a => (F _o (a, x))%object;
   FA := fun _ _ f => (F @_a (_, _) (_, _) (f, @id _ x))%morphism
 |}.
 
-Program Definition Diag_Func (C : Category) : Functor C (Prod_Cat C C) :=
+Program Definition Diag_Func (C : Category) : C –≻ (Prod_Cat C C) :=
 {|
   FO := fun a => (a, a);
   FA := fun _ _ f => (f, f);
@@ -49,12 +56,12 @@ Program Definition Diag_Func (C : Category) : Functor C (Prod_Cat C C) :=
   F_compose := fun _ _ _ _ _ => eq_refl
 |}.
 
-Theorem Prod_Functor_Cat_Proj {C D D' : Category} (F : Functor C (Prod_Cat D D')) : ((Prod_Functor ((Cat_Proj1 _ _) ∘ F) ((Cat_Proj2 _ _) ∘ F)) ∘ (Diag_Func C))%functor = F.
+Theorem Prod_Functor_Cat_Proj {C D D' : Category} (F : C –≻ (Prod_Cat D D')) : ((Prod_Functor ((Cat_Proj1 _ _) ∘ F) ((Cat_Proj2 _ _) ∘ F)) ∘ (Diag_Func C))%functor = F.
 Proof.
   Func_eq_simpl; trivial.
 Qed.  
 
-Program Definition Twist_Func (C C' : Category) : Functor (Prod_Cat C C') (Prod_Cat C' C) :=
+Program Definition Twist_Func (C C' : Category) : (Prod_Cat C C') –≻ (Prod_Cat C' C) :=
 {|
   FO := fun a => (snd a, fst a);
   FA := fun _ _ f => (snd f, fst f);
@@ -63,7 +70,7 @@ Program Definition Twist_Func (C C' : Category) : Functor (Prod_Cat C C') (Prod_
 |}.
 
 Section Twist_Prod_Func_Twist.
-  Context {C C' : Category} (F : Functor C C') {D D' : Category} (G : Functor D D').
+  Context {C C' : Category} (F : C –≻ C') {D D' : Category} (G : D –≻ D').
 
   Theorem Twist_Prod_Func_Twist : (((Twist_Func _ _) ∘ (Prod_Functor F G)) ∘ (Twist_Func _ _))%functor = Prod_Functor G F.
   Proof.  
@@ -72,7 +79,7 @@ Section Twist_Prod_Func_Twist.
 
 End Twist_Prod_Func_Twist.
   
-Program Definition ProdOp_Prod_of_Op (C D : Category) : Functor (Prod_Cat C D)^op (Prod_Cat C^op D^op) :=
+Program Definition ProdOp_Prod_of_Op (C D : Category) : (Prod_Cat C D)^op –≻ (Prod_Cat C^op D^op) :=
 {|
   FO := fun x => x;
   FA := fun _ _ x => x;
@@ -80,7 +87,7 @@ Program Definition ProdOp_Prod_of_Op (C D : Category) : Functor (Prod_Cat C D)^o
   F_compose := fun _ _ _ _ _ => eq_refl
 |}.
 
-Program Definition Prod_of_Op_ProdOp (C D : Category) : Functor (Prod_Cat C^op D^op) (Prod_Cat C D)^op :=
+Program Definition Prod_of_Op_ProdOp (C D : Category) : (Prod_Cat C^op D^op) –≻ (Prod_Cat C D)^op :=
 {|
   FO := fun x => x;
   FA := fun _ _ x => x;
@@ -93,8 +100,8 @@ Program Definition Opposite_Prod (C D : Category) : ((Prod_Cat C D)^op%category 
 
 
 Section Prod_Functor_compose.
-  Context {C D E: Category} (F : Functor C D) (G : Functor D E)
-          {C' D' E': Category} (F' : Functor C' D') (G' : Functor D' E').
+  Context {C D E: Category} (F : C –≻ D) (G : D –≻ E)
+          {C' D' E': Category} (F' : C' –≻ D') (G' : D' –≻ E').
 
   Theorem Prod_Functor_compose : ((Prod_Functor G G') ∘ (Prod_Functor F F') = Prod_Functor (G ∘ F) (G' ∘ F'))%functor.
   Proof.

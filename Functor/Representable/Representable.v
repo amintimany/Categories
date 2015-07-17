@@ -7,7 +7,7 @@ Require Import NatTrans.Func_Cat.
 (** A functor F : C → Type_Cat is representable if F is naturaly isomorphic to
 Hom_C(x, -) for some x : C. In this case, we say F is represented by x. *)
 Section Representable.
-  Context {C : Category} (F : Functor C Type_Cat).
+  Context {C : Category} (F : (C –≻ Type_Cat)%functor).
 
   Record Representable : Type :=
     {
@@ -20,4 +20,4 @@ End Representable.
 Arguments representer {_ _} _.
 Arguments representation_Iso {_ _} _.
 
-SubClass CoRepresentable {C : Category} (F : Functor C^op Type_Cat) := @Representable C^op F.
+SubClass CoRepresentable {C : Category} (F : (C^op –≻ Type_Cat)%functor) := @Representable C^op F.

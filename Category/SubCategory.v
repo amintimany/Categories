@@ -10,12 +10,12 @@ We furthermore, require that the Hom_Cri provides that identity arrows of all ob
 Section SubCategory.
   Context (C : Category)
           (Obj_Cri : Obj → Prop)
-          (Hom_Cri : ∀ a b, Hom a b → Prop).
+          (Hom_Cri : ∀ a b, (a –≻ b)%morphism → Prop).
 
   Arguments Hom_Cri {_ _} _.
   
   Context (Hom_Cri_id : ∀ a, Obj_Cri a → Hom_Cri (id a))
-          (Hom_Cri_compose : ∀ a b c (f : Hom a b) (g : Hom b c),
+          (Hom_Cri_compose : ∀ a b c (f : (a –≻ b)%morphism) (g : (b –≻ c)%morphism),
               Hom_Cri f → Hom_Cri g → Hom_Cri (g ∘ f)).
 
   Arguments Hom_Cri_id {_} _.

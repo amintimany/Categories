@@ -17,6 +17,10 @@ Notation "¬ x" := (~x) (at level 75, right associativity) : type_scope.
 
 Notation "x ≠ y" := (x <> y) (at level 70) : type_scope.
 
+Reserved Notation "C '^op'" (at level 9, no associativity).
+
+Reserved Notation "a –≻ b" (at level 10, no associativity).
+
 Reserved Notation "f ∘ g" (at level 11, right associativity).
 
 Reserved Notation "f '∘_h' g" (at level 11, right associativity).
@@ -46,3 +50,9 @@ Delimit Scope object_scope with object.
 Delimit Scope functor_scope with functor.
 
 Delimit Scope nattrans_scope with nattrans.
+
+Delimit Scope nattrans_scope with nattrans.
+
+Delimit Scope natiso_scope with natiso.
+
+Delimit Scope iso_scope with isomorphism.

@@ -9,20 +9,22 @@ Require Import Adjunction.Adjunction.
 Require Import KanExt.Local.
 Require Import Basic_Cons.Terminal.
 
+Local Open Scope functor_scope.
+
 (** In this module we show uniqueness of local kan extensions by
 forming category of cones and showing that the local right kan
 extensions are terminal objects of those categories.
  *)
 Section Facts.
-  Context {C C' : Category} (p : Functor C C')
-          {D : Category} (F : Functor C D).
+  Context {C C' : Category} (p : C –≻ C')
+          {D : Category} (F : C –≻ D).
 
   Section LoKan_Cone_Morph_eq_simplify.
     Context {Cn Cn' : LoKan_Cone p F} (M M' : LoKan_Cone_Morph Cn Cn').
 
     (** Two local kan extension cone morphisms are equal if their underlying
 natural transformations are. *)
-    Theorem LoKan_Cone_Morph_eq_simplify : M = M' :> NatTrans _ _ → M = M'.
+    Theorem LoKan_Cone_Morph_eq_simplify : M = M' :> (_ –≻ _)%nattrans → M = M'.
     Proof.
       intros H.
       destruct M; destruct M'; cbn in *.

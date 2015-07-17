@@ -10,7 +10,7 @@ Require Import KanExt.Global.
 That is, the left kan extension along p is just the right kan extension along pᵒᵖ and vice versa.
  *)
 Section GlobalDuality.
-  Context {C C' : Category} (p : Functor C C') (D : Category).
+  Context {C C' : Category} (p : (C –≻ C')%functor) (D : Category).
 
   (** We establish this duality though hom functor definition of adjunction. *)
   
@@ -19,7 +19,7 @@ Section GlobalDuality.
      ((Left_Functor_Extender p D)^op ∘ (Func_Cat_Op_to_Op_Func_Cat C' D))
     )%functor (only parsing).
 
-  Program Definition GExtend_Duality_lr : NatTrans (Left_Functor_Extender p^op D ^op) GEXOP :=
+  Program Definition GExtend_Duality_lr : ((Left_Functor_Extender p^op D ^op) –≻ GEXOP)%nattrans :=
     {|
       Trans :=  fun h => {|Trans := fun d => id |}
     |}.
@@ -42,7 +42,7 @@ Section GlobalDuality.
     apply GExtend_Duality_lr_obligation_3.
   Qed.
 
-  Program Definition GExtend_Duality_rl : NatTrans GEXOP (Left_Functor_Extender p^op D ^op) :=
+  Program Definition GExtend_Duality_rl : (GEXOP –≻ (Left_Functor_Extender p^op D ^op))%nattrans :=
     {|
       Trans :=  fun h => {|Trans := fun d => id |}
     |}.

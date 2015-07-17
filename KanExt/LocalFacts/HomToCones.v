@@ -10,11 +10,13 @@ Require Import Adjunction.Adjunction.
 Require Import KanExt.Local.
 Require Import Basic_Cons.Terminal.
 
+Local Open Scope functor_scope.
+
 (** This module contains conversion from local kan extensions defined through hom functor to
 local kan extensions defined through cones. *)
 Section Hom_Local_Right_KanExt_to_Local_Right_KanExt.
-  Context {C C' : Category} {p : Functor C C'}
-          {D : Category} {F : Functor C D}
+  Context {C C' : Category} {p : C –≻ C'}
+          {D : Category} {F : C –≻ D}
           (hlrke : Hom_Local_Right_KanExt p F).
 
   (** The cone that is the kan extension. *)
@@ -44,14 +46,11 @@ local kan extension. *)
       set (W :=
              f_equal (
                  fun w :
-                       NatTrans
-                         (
-                           (@Fix_Bi_Func_2 _ (Func_Cat _ _) _ F (Hom_Func _))
-                             ∘ (Left_Functor_Extender p D)^op
-                         )%functor
-                         ((@Fix_Bi_Func_2 _ (Func_Cat _ _) _ F (Hom_Func _))
+                       (((@Fix_Bi_Func_2 _ (Func_Cat _ _) _ F (Hom_Func _))
+                             ∘ (Left_Functor_Extender p D)^op)
+                         –≻ ((@Fix_Bi_Func_2 _ (Func_Cat _ _) _ F (Hom_Func _))
                             ∘ (Left_Functor_Extender p D)^op
-                         )%functor =>
+                         ))%nattrans =>
                    Trans w Cn
                ) (left_inverse (HLRKE_Iso hlrke))).
       cbn in W.
@@ -79,9 +78,8 @@ local kan extension. *)
       cbn_rewrite (
           f_equal
             (fun w :
-                   NatTrans
-                     (@Fix_Bi_Func_2 _ (Func_Cat _ _) _ hlrke (Hom_Func _))
-                     (@Fix_Bi_Func_2 _ (Func_Cat _ _) _ hlrke (Hom_Func _))
+                   ((@Fix_Bi_Func_2 _ (Func_Cat _ _) _ hlrke (Hom_Func _))
+                     –≻ (@Fix_Bi_Func_2 _ (Func_Cat _ _) _ hlrke (Hom_Func _)))%nattrans
              => Trans w hlrke (NatTrans_id _)
             )
             (right_inverse (HLRKE_Iso hlrke))
@@ -96,7 +94,7 @@ local kan extension. *)
     Context {Cn : LoKan_Cone p F} (h h' : LoKan_Cone_Morph Cn TCONE).
 
     Theorem Hom_Local_Right_KanExt_to_Local_Right_KanExt_Morph_to_Terminal_Cone_unique :
-      h = h' :> NatTrans _ _.
+      h = h' :> (_ –≻ _)%nattrans.
     Proof.
       set (Mh :=
              equal_f
@@ -109,7 +107,11 @@ local kan extension. *)
                (Trans (inverse_morphism (HLRKE_Iso hlrke)) hlrke (NatTrans_id hlrke))
           ).
       cbn in Mh, Mh'.
-      cbn_rewrite ((f_equal (fun w : NatTrans (@Fix_Bi_Func_2 _ (Func_Cat _ _) _ hlrke (Hom_Func _)) (@Fix_Bi_Func_2 _ (Func_Cat _ _) _ hlrke (Hom_Func _)) => Trans w hlrke (NatTrans_id _)) (right_inverse (HLRKE_Iso hlrke)))) in Mh Mh'.
+      cbn_rewrite ((f_equal
+                      (fun w :
+                             ((@Fix_Bi_Func_2 _ (Func_Cat _ _) _ hlrke (Hom_Func _))
+                                –≻ (@Fix_Bi_Func_2 _ (Func_Cat _ _) _ hlrke (Hom_Func _)))%nattrans
+                       => Trans w hlrke (NatTrans_id _)) (right_inverse (HLRKE_Iso hlrke)))) in Mh Mh'.
       repeat rewrite NatTrans_id_unit_left in Mh, Mh'.
       destruct Mh; destruct Mh'.
       apply f_equal.

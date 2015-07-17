@@ -9,7 +9,7 @@ Section Arrow.
     {
       Orig : Obj;
       Targ : Obj;
-      Arr : Hom Orig Targ
+      Arr : Orig –≻ Targ
     }.
 
   Arguments Orig {_} _ : clear implicits.
@@ -34,8 +34,8 @@ h1 |              | h2
  *)
   Record Arrow_Hom {C : Category} (a b : Arrow C) :=
     {
-      Arr_H : Hom (Orig a) (Orig b);
-      Arr_H' : Hom (Targ a) (Targ b);
+      Arr_H : (Orig a) –≻ (Orig b);
+      Arr_H' : (Targ a) –≻ (Targ b);
       Arr_Hom_com : Arr_H' ∘ (Arr a) = (Arr b) ∘ Arr_H
     }.
   Arguments Arr_H {_ _ _} _ : clear implicits.

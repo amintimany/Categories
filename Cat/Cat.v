@@ -1,6 +1,8 @@
 Require Import Category.Main.
 Require Import Functor.Functor Functor.Functor_Ops.
 
+Local Open Scope functor_scope.
+
 (** Cat, the category of (small) categories, is a category whose objects are (small) categories
 and morphisms are functors.
 
@@ -15,10 +17,10 @@ Definition Cat : Category :=
 
   compose := fun C D E => Functor_compose;
   
-  assoc := fun C D E F (G : Functor C D) (H : Functor D E) (I : Functor E F) =>
+  assoc := fun C D E F (G : C –≻ D) (H : D –≻ E) (I : E –≻ F) =>
             @Functor_assoc _ _ _ _ G H I;
 
-  assoc_sym := fun C D E F (G : Functor C D) (H : Functor D E) (I : Functor E F) =>
+  assoc_sym := fun C D E F (G : C –≻ D) (H : D –≻ E) (I : E –≻ F) =>
             eq_sym (@Functor_assoc _ _ _ _ G H I);
 
   id := fun C => Functor_id C;

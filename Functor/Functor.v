@@ -11,13 +11,14 @@ Record Functor (C C' : Category) : Type :=
   FO : C → C';
 
   (** Arrow map *)
-  FA : ∀ {a b}, Hom C a b → Hom C' (FO a) (FO b);
+  FA : ∀ {a b}, (a –≻ b)%morphism → ((FO a) –≻ (FO b))%morphism;
 
   (** Mapping of identities *)
   F_id : ∀ c, FA (id c) = id (FO c);
   
   (** Functor commuting with composition *)
-  F_compose : ∀ {a b c} (f : Hom a b) (g : Hom b c), (FA (g ∘ f) = (FA g) ∘ (FA f))%morphism
+  F_compose : ∀ {a b c} (f : (a –≻ b)%morphism) (g : (b –≻ c)%morphism),
+      (FA (g ∘ f) = (FA g) ∘ (FA f))%morphism
 
   (* F_id and F_compose together state the fact that functors are morphisms of categories (preserving the structure of categories!)*)
 }.
@@ -26,6 +27,8 @@ Arguments FO {_ _} _ _.
 Arguments FA {_ _} _ {_ _} _, {_ _} _ _ _ _.
 Arguments F_id {_ _} _ _.
 Arguments F_compose {_ _} _ {_ _ _} _ _.
+
+Notation "C –≻ D" := (Functor C D) : functor_scope.
 
 Bind Scope functor_scope with Functor.
 
@@ -68,11 +71,11 @@ Hint Extern 2 => Functor_Simplify.
 
 Section Functor_eq_simplification.
 
-  Context {C C' : Category} (F G : Functor C C').
+  Context {C C' : Category} (F G : (C –≻ C')%functor).
 
   (** Two functors are equal if their object maps and arrow maps are. *)
   Lemma Functor_eq_simplify (Oeq : F _o = G _o) :
-    ((fun x y => match Oeq in _ = V return Hom x y → Hom C' (V x) (V y) with eq_refl => F  @_a x y end) = G @_a) -> F = G.
+    ((fun x y => match Oeq in _ = V return (x –≻ y → (V x) –≻ (V y))%morphism with eq_refl => F  @_a x y end) = G @_a) -> F = G.
   Proof.
     destruct F; destruct G.
     basic_simpl.
@@ -82,13 +85,45 @@ Section Functor_eq_simplification.
   Qed.
 
   (** Extensionality for arrow maps of functors. *)
-  Theorem FA_extensionality (Oeq : F _o = G _o) : (∀ (a b : Obj) (h : Hom a b), (fun x y => match Oeq in _ = V return Hom x y → Hom C' (V x) (V y) with eq_refl => F  @_a x y end) _ _ h = G @_a _ _ h) → (fun x y => match Oeq in _ = V return Hom x y → Hom C' (V x) (V y) with eq_refl => F  @_a x y end) = G @_a.
+  Theorem FA_extensionality (Oeq : F _o = G _o) :
+    (
+      ∀ (a b : Obj)
+        (h : (a –≻ b)%morphism),
+        (
+          fun x y =>
+            match Oeq in _ = V return
+                  (x –≻ y → (V x) –≻ (V y))%morphism
+            with
+              eq_refl => F  @_a x y
+            end
+        ) _ _ h = G _a h
+    )
+    →
+    (
+      fun x y =>
+        match Oeq in _ = V return
+              (x –≻ y → (V x) –≻ (V y))%morphism
+        with
+          eq_refl => F  @_a x y
+        end
+    ) = G @_a.
   Proof.
     auto.
   Qed.
   
   (** Fucntor extensionality: two functors are equal of their object maps are equal and their arrow maps are extensionally equal. *)
-  Lemma Functor_extensionality (Oeq : F _o = G _o) : (∀ (a b : Obj) (h : Hom a b), (fun x y => match Oeq in _ = V return Hom x y → Hom C' (V x) (V y) with eq_refl => F  @_a x y end) _ _ h = G @_a _ _ h) → F = G.
+  Lemma Functor_extensionality (Oeq : F _o = G _o) :
+    (
+      ∀ (a b : Obj) (h : (a –≻ b)%morphism),
+        (
+          fun x y =>
+            match Oeq in _ = V return
+                  (x –≻ y → (V x) –≻ (V y))%morphism
+            with
+              eq_refl => F  @_a x y
+            end
+        ) _ _ h = G _a h
+    ) → F = G.
   Proof.
     intros H.
     apply (Functor_eq_simplify Oeq); trivial.

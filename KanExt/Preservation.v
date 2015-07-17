@@ -9,18 +9,20 @@ Require Import KanExt.Local KanExt.LocalFacts.Main.
 Local Notation NID := NatTrans_id (only parsing).
 Local Notation FCAT := Func_Cat (only parsing).
 
+Local Open Scope functor_scope.
+
 (** Local right kan extensions are preserved by right adjoints and local left kan extensions are
 preserved by left adjoints. *)
 Section Right_Adjoint_Preserves_Hom_Local_Right_KanExt.
   Context
     {C C' : Category}
-    (p : Functor C C')
+    (p : C –≻ C')
     {D : Category}
-    (F : Functor C D)
+    (F : C –≻ D)
     (hlrke : Hom_Local_Right_KanExt p F)
     {E : Category}
-    {L : Functor E D}
-    {R : Functor D E}
+    {L : E –≻ D}
+    {R : D –≻ E}
     (adj : UCU_Adjunct L R)
   .
   
@@ -151,13 +153,13 @@ End Right_Adjoint_Preserves_Hom_Local_Right_KanExt.
 
 Section Right_Adjoint_Preserves_Local_Right_KanExt.
   Context {C C' : Category}
-          (p : Functor C C')
+          (p : C –≻ C')
           {D : Category}
-          (F : Functor C D)
+          (F : C –≻ D)
           (lrke : Local_Right_KanExt p F)
           {E : Category}
-          {L : Functor E D}
-          {R : Functor D E}
+          {L : E –≻ D}
+          {R : D –≻ E}
           (adj : UCU_Adjunct L R)
   .
   
@@ -177,13 +179,13 @@ End Right_Adjoint_Preserves_Local_Right_KanExt.
 
 Section Left_Adjoint_Preserves_Hom_Local_Left_KanExt.
   Context {C C' : Category}
-          (p : Functor C C')
+          (p : C –≻ C')
           {D : Category}
-          (F : Functor C D)
+          (F : C –≻ D)
           (hllke : Hom_Local_Left_KanExt p F)
           {E : Category}
-          {L : Functor D E}
-          {R : Functor E D}
+          {L : D –≻ E}
+          {R : E –≻ D}
           (adj : UCU_Adjunct L R)
   .
   
@@ -200,13 +202,13 @@ End Left_Adjoint_Preserves_Hom_Local_Left_KanExt.
 
 Section Left_Adjoint_Preserves_Local_Left_KanExt.
   Context {C C' : Category}
-          (p : Functor C C')
+          (p : C –≻ C')
           {D : Category}
-          (F : Functor C D)
+          (F : C –≻ D)
           (hllke : Local_Left_KanExt p F)
           {E : Category}
-          {L : Functor D E}
-          {R : Functor E D}
+          {L : D –≻ E}
+          {R : E –≻ D}
           (adj : UCU_Adjunct L R)
   .
   

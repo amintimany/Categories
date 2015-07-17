@@ -17,8 +17,8 @@ End Adjunct_Id.
   
 Section Adjunct_Compose.
   Context {C D E : Category}
-          {F : Functor C D} {G : Functor D C} (adj : F ⊣ G)
-          {F' : Functor D E} {G' : Functor E D} (adj' : F' ⊣ G').
+          {F : C –≻ D} {G : D –≻ C} (adj : F ⊣ G)
+          {F' : D –≻ E} {G' : E –≻ D} (adj' : F' ⊣ G').
   
   Program Definition Adjunct_Compose : ((F' ∘ F) ⊣ (G ∘ G')) :=
     {|
@@ -71,9 +71,9 @@ End Adjunct_Compose.
 
 Section Adjunct_Compose_assoc.
   Context {B C D E : Category}
-          {F : Functor B C} {G : Functor C B} (adj : F ⊣ G)
-          {F' : Functor C D} {G' : Functor D C} (adj' : F' ⊣ G')
-          {F'' : Functor D E} {G'' : Functor E D} (adj'' : F'' ⊣ G'').
+          {F : B –≻ C} {G : C –≻ B} (adj : F ⊣ G)
+          {F' : C –≻ D} {G' : D –≻ C} (adj' : F' ⊣ G')
+          {F'' : D –≻ E} {G'' : E –≻ D} (adj'' : F'' ⊣ G'').
   
   Theorem Adjunct_Compose_assoc :
     match (Functor_assoc F F' F'') in _ = Y return Adjunct Y _ with
@@ -111,7 +111,7 @@ End Adjunct_Compose_assoc.
 
 Section Adjunct_Id_unit_left.
   Context {B C: Category}
-          {F : Functor B C} {G : Functor C B} (adj : F ⊣ G).
+          {F : B –≻ C} {G : C –≻ B} (adj : F ⊣ G).
   
   Theorem Adjunct_Id_unit_left :
     match (Functor_id_unit_left _ _ F) in _ = Y return Adjunct Y _ with
@@ -147,7 +147,7 @@ End Adjunct_Id_unit_left.
 
 Section Adjunct_Id_unit_right.
   Context {B C: Category}
-          {F : Functor B C} {G : Functor C B} (adj : F ⊣ G).
+          {F : B –≻ C} {G : C –≻ B} (adj : F ⊣ G).
   
   Theorem Adjunct_Id_unit_right :
     match (Functor_id_unit_right _ _ F) in _ = Y return Adjunct Y _ with
@@ -182,7 +182,7 @@ Section Adjunct_Id_unit_right.
 End Adjunct_Id_unit_right.
 
 Definition Adjunct_Between (C D : Category) : Type :=
-  {F : (Functor C D) * (Functor D C) & (fst F) ⊣ (snd F)}
+  {F : (C –≻ D) * (D –≻ C) & (fst F) ⊣ (snd F)}
 .
 
 Definition Adjunct_Between_Id (C : Category) : Adjunct_Between C C := existT _ (Functor_id C, Functor_id C) (Adjunct_Id C).

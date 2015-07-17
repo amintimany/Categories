@@ -3,7 +3,7 @@ Require Import Category.Main.
 Require Import Basic_Cons.Equalizer.
 
 Section Equalizer_Monic.
-  Context {C : Category} {a b} (f g : Hom a b) {e : Equalizer f g}.
+  Context {C : Category} {a b} (f g : (a –≻ b)%morphism) {e : Equalizer f g}.
 
   Program Definition Equalizer_Monic : (e ≫–> a)%morphism :=
     {|
@@ -13,7 +13,7 @@ Section Equalizer_Monic.
   Next Obligation. (* mono_morphism_monomorphism *)
   Proof.
     match goal with
-        [H : ?A = ?B :> Hom c a |- _] =>
+        [H : ?A = ?B :> (c –≻ a)%morphism |- _] =>
         let H1 := fresh "H" in
         let H2 := fresh "H" in
         cut (f ∘ A = g ∘ A)%morphism;

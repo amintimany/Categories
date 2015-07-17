@@ -87,12 +87,14 @@ Program Definition Discr_Hom_Iso (A : Type) :
   ).
 
 Section Discretize.
-  Context {C D : Category} {F G : Functor C D} (N : NatTrans F G).
+  Context {C D : Category} {F G : (C –≻ D)%functor} (N : (F –≻ G)%nattrans).
 
   (** Discretizes a natural transformation. That is, it forgets about the arrow maps
 of the functors and assumes the functors are just discrete functors, retaining the
 object maps of the functors. *)
-  Program Definition Discretize : NatTrans (Discr_Func (F _o)%object) (Discr_Func (G _o)%object) :=
+  Program Definition Discretize :
+    ((Discr_Func (F _o)%object) –≻ (Discr_Func (G _o)%object))%nattrans
+    :=
     {|
       Trans := Trans N
     |}.

@@ -32,14 +32,14 @@ Section SubObject_Classifier.
     {
       SOC : C;
       SOC_morph : Monic term SOC;
-      SOC_char {a b : C} (m : (a ≫–> b)%morphism) : Hom b SOC;
+      SOC_char {a b : C} (m : (a ≫–> b)%morphism) : (b –≻ SOC)%morphism;
       SO_pulback {a b : C} (m : (a ≫–> b)%morphism) :
         is_PullBack
           (mono_morphism m)
           (t_morph term a)
           (SOC_char m)
           (mono_morphism SOC_morph);
-      SOC_char_unique {a b : C} (m : (a ≫–> b)%morphism) (h h' : Hom b SOC) :
+      SOC_char_unique {a b : C} (m : (a ≫–> b)%morphism) (h h' : (b –≻ SOC)%morphism) :
         is_PullBack
           (mono_morphism m)
           (t_morph term a)

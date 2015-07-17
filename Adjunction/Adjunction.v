@@ -4,6 +4,8 @@ Require Import Functor.Main.
 Require Import Functor.Representable.Hom_Func Functor.Representable.Hom_Func_Prop.
 Require Import NatTrans.Main.
 
+Local Open Scope functor_scope.
+
 (** Local notations for simplification. *)
 Local Notation NID := NatTrans_id (only parsing).
 Local Notation FCAT := Func_Cat (only parsing).
@@ -19,7 +21,7 @@ Notation Hom_Adj_Right C D F G := ((Hom_Func C) ∘ (Prod_Functor (@Functor_id C
 Local Obligation Tactic := idtac.
 
 Section Adjunction.
-  Context {C D : Category} (F : Functor C D) (G : Functor D C).
+  Context {C D : Category} (F : C –≻ D) (G : D –≻ C).
 
   (** This is the definition of adjunctions taken as them main definition in this development. 
 Functor F : C -> D is the left adjoint to functor G : D -> C if there is a natural transformation
@@ -43,14 +45,15 @@ Functor F : C -> D is the left adjoint to functor G : D -> C if there is a natur
 *)
   Record Adjunct : Type :=
   {
-    adj_unit : NatTrans (Functor_id C) (G ∘ F);
+    adj_unit : ((Functor_id C) –≻ (G ∘ F))%nattrans;
     
-    adj_morph_ex {c : C} {d : D} (f : Hom c (G _o d)) : Hom (F _o c) d;
+    adj_morph_ex {c : C} {d : D} (f : (c –≻ (G _o d)%object)%morphism) : ((F _o c)%object –≻ d)%morphism;
     
-    adj_morph_com {c : C} {d : D} (f : Hom c (G _o d)) :
+    adj_morph_com {c : C} {d : D} (f : (c –≻ (G _o d))%morphism%object) :
       f = ((G _a (adj_morph_ex f)) ∘ (Trans adj_unit c))%morphism;
     
-    adj_morph_unique {c : C} {d : D} (f : Hom c (G _o d)) (g h : Hom (F _o c) d) :
+    adj_morph_unique {c : C} {d : D} (f : (c –≻ (G _o d))%object%morphism)
+                     (g h : ((F _o c) –≻ d)%morphism%object) :
       f = ((G _a g) ∘ (Trans adj_unit c))%morphism →
       f = ((G _a h) ∘ (Trans adj_unit c))%morphism →
       g = h
@@ -88,9 +91,9 @@ the types. Therefore, we have:
 *)
   Record UCU_Adjunct :=
     {
-      ucu_adj_unit : NatTrans (Functor_id C) (G ∘ F);
+      ucu_adj_unit : ((Functor_id C) –≻ (G ∘ F))%nattrans;
       
-      ucu_adj_counit : NatTrans (F ∘ G) (Functor_id D);
+      ucu_adj_counit : ((F ∘ G) –≻ (Functor_id D))%nattrans;
 
       ucu_adj_left_id : ((NatTrans_from_compose_id _) ∘ ((((ucu_adj_counit ∘_h (NID F)) ∘ (NatTrans_Functor_assoc_sym _ _ _)) ∘ ((NID F) ∘_h ucu_adj_unit)) ∘ (NatTrans_to_id_compose _)))%nattrans = (NID F);
       
@@ -122,7 +125,7 @@ the types. Therefore, we have:
       rewrite F_compose; rewrite assoc.
       cbn_rewrite <- (Trans_com (ucu_adj_unit Adj) f).
       rewrite assoc_sym.
-      set (W := f_equal (fun w : NatTrans G G => Trans w d) (ucu_adj_right_id Adj));
+      set (W := f_equal (fun w => Trans w d) (ucu_adj_right_id Adj));
         cbn in W; repeat rewrite F_id in W; simpl_ids in W; rewrite W.
       auto.
     Qed.      
@@ -138,7 +141,7 @@ the types. Therefore, we have:
      cbn_rewrite (@Trans_com _ _ _ _ (ucu_adj_counit Adj) _ _ g) in H2.
       cbn_rewrite (@Trans_com _ _ _ _ (ucu_adj_counit Adj) _ _ h) in H2.
       repeat rewrite assoc in H2.
-      set (W := f_equal (fun w : NatTrans F F => Trans w c) (ucu_adj_left_id Adj));
+      set (W := f_equal (fun w => Trans w c) (ucu_adj_left_id Adj));
         cbn in W; repeat rewrite F_id in W; simpl_ids in W; rewrite W in H2; clear W.
       auto.
     Qed.
@@ -206,7 +209,7 @@ the types. Therefore, we have:
     Context (Adj : (F ⊣ G)%functor).
 
     (** Conversion from adjunction to hom functor adjunction – the left to right natural transformation. *)
-    Program Definition Adj_to_Hom_Adj_LR : NatTrans (Hom_Adj_Left _ _ F G) (Hom_Adj_Right _ _ F G) :=
+    Program Definition Adj_to_Hom_Adj_LR : ((Hom_Adj_Left _ _ F G) –≻ (Hom_Adj_Right _ _ F G))%nattrans :=
     {|
       Trans := fun c h => ((G _a h) ∘ (Trans (adj_unit Adj) _))%morphism
     |}.
@@ -229,7 +232,7 @@ the types. Therefore, we have:
     Qed.
 
     (** Conversion from adjunction to hom functor adjunction – the right to left natural transformation. *)
-    Program Definition Adj_to_Hom_Adj_RL : NatTrans (Hom_Adj_Right _ _ F G) (Hom_Adj_Left _ _ F G) :=
+    Program Definition Adj_to_Hom_Adj_RL : ((Hom_Adj_Right _ _ F G) –≻ (Hom_Adj_Left _ _ F G))%nattrans :=
     {|
       Trans := fun c h => adj_morph_ex Adj h
     |}.

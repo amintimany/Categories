@@ -59,7 +59,7 @@ Section Type_Cat_GenSum.
     set (hc' := (
                  f_equal
                    (fun w :
-                          NatTrans (Cn ∘ (Functor_To_1_Cat (Discr_Cat A)^op) ^op) Fm^op
+                          ((Cn ∘ (Functor_To_1_Cat (Discr_Cat A)^op) ^op) –≻ Fm^op)%nattrans
                     =>
                       Trans w y1 y2) hc
                )

@@ -5,7 +5,7 @@ Require Import Basic_Cons.Terminal.
 Require Import Archetypal.Discr.Discr.
 
 (** The unique functor from the initial category to any other. *)
-Program Definition Functor_From_Empty_Cat (C' : Category) : Functor 0%category C' :=
+Program Definition Functor_From_Empty_Cat (C' : Category) : (0 –≻ C')%functor :=
 {|
   FO := fun x => Empty_rect _ x;
   FA := fun a b f => match a as _ return _ with end
@@ -16,6 +16,6 @@ Local Hint Extern 1 => cbn in *.
 (** Empty Cat is the initial category. *)
 Program Instance Cat_Init : Initial Cat :=
 {|
-  terminal := (0%category);
+  terminal := 0%category;
   t_morph := fun x => Functor_From_Empty_Cat x
 |}.

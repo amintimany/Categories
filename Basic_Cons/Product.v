@@ -2,6 +2,7 @@ Require Import Category.Main.
 Require Import Ext_Cons.Prod_Cat.Prod_Cat Ext_Cons.Prod_Cat.Operations.
 Require Import Functor.Main.
 
+Local Open Scope morphism_scope.
 
 (**
 Given two objects a and b, their product a×b is an object such that there are two projections from it to a and b:
@@ -34,17 +35,24 @@ Record Product {C : Category} (c d : C) : Type :=
 {
   product : C;
 
-  Pi_1 : Hom product c;
+  Pi_1 : product –≻ c;
 
-  Pi_2 : Hom product d;
+  Pi_2 : product –≻ d;
 
-  Prod_morph_ex : ∀ (p' : Obj) (r1 : Hom p' c) (r2 : Hom p' d), Hom p' product;
+  Prod_morph_ex : ∀ (p' : Obj) (r1 : p' –≻ c) (r2 : p' –≻ d), p' –≻ product;
 
-  Prod_morph_com_1 : ∀ (p' : Obj) (r1 : Hom p' c) (r2 : Hom p' d), (Pi_1 ∘ (Prod_morph_ex p' r1 r2))%morphism = r1;
+  Prod_morph_com_1 : ∀ (p' : Obj) (r1 : p' –≻ c) (r2 : p' –≻ d),
+      (Pi_1 ∘ (Prod_morph_ex p' r1 r2))%morphism = r1;
   
-  Prod_morph_com_2 : ∀ (p' : Obj) (r1 : Hom p' c) (r2 : Hom p' d), (Pi_2 ∘ (Prod_morph_ex p' r1 r2))%morphism = r2;
+  Prod_morph_com_2 : ∀ (p' : Obj) (r1 : p' –≻ c) (r2 : p' –≻ d),
+      (Pi_2 ∘ (Prod_morph_ex p' r1 r2))%morphism = r2;
   
-  Prod_morph_unique : ∀ (p' : Obj) (r1 : Hom p' c) (r2 : Hom p' d) (f g : Hom p' product), (Pi_1 ∘ f = r1)%morphism → (Pi_2 ∘ f = r2)%morphism → (Pi_1 ∘ g = r1)%morphism → (Pi_2 ∘ g = r2)%morphism → f = g
+  Prod_morph_unique : ∀ (p' : Obj) (r1 : p' –≻ c) (r2 : p' –≻ d) (f g : p' –≻ product),
+      Pi_1 ∘ f = r1
+      → Pi_2 ∘ f = r2
+      → Pi_1 ∘ g = r1
+      → Pi_2 ∘ g = r2
+      → f = g
 }.
 
 Arguments Product _ _ _, {_} _ _.
@@ -74,7 +82,7 @@ Existing Class Has_Products.
 (**
 The product functor maps each pair of objects (an object of the product category C×C) to their product in C.
 *)
-Program Definition Prod_Func (C : Category) {HP : Has_Products C} : Functor (Prod_Cat C C) C :=
+Program Definition Prod_Func (C : Category) {HP : Has_Products C} : ((Prod_Cat C C) –≻ C)%functor :=
 {|
   FO := fun x => HP (fst x) (snd x); 
   FA := fun a b f => Prod_morph_ex _ _ ((fst f) ∘ Pi_1) ((snd f) ∘ Pi_2)
@@ -106,6 +114,7 @@ Existing Class Has_Sums.
 (**
 The sum functor maps each pair of objects (an object of the product category C×C) to their sum in C.
 *)
-Definition Sum_Func {C : Category} {HS : Has_Sums C} : Functor (Prod_Cat C C) C := Opposite_Functor (Functor_compose (iso_morphism (Opposite_Prod C C)) (Prod_Func C^op HS)).
+Definition Sum_Func {C : Category} {HS : Has_Sums C} : ((Prod_Cat C C) –≻ C)%functor :=
+  (((Prod_Func C^op HS) ∘ (iso_morphism (Opposite_Prod C C)))^op)%functor.
 
 Arguments Sum_Func _ _, _ {_}.

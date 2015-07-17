@@ -53,9 +53,8 @@ Section Type_Cat_GenProd.
     destruct x.
     set (hc := (cone_morph_com h')).
     rewrite (cone_morph_com h) in hc.
-    set (hc' := (f_equal (fun w : NatTrans
-                  (Cn ∘ (Functor_To_1_Cat (Discr_Cat A)))
-                  Fm =>
+    set (hc' := (f_equal (fun w :
+                  ((Cn ∘ (Functor_To_1_Cat (Discr_Cat A))) –≻ Fm)%nattrans =>
            Trans w z y) hc)); clearbody hc'; clear hc.
     trivial.
   Qed.    
