@@ -8,7 +8,6 @@ Require Import KanExt.Global.
 
 (** In this module we establish the dualit of kan extensions.
 That is, the left kan extension along p is just the right kan extension along pᵒᵖ and vice versa.
-
  *)
 Section GlobalDuality.
   Context {C C' : Category} (p : Functor C C') (D : Category).
