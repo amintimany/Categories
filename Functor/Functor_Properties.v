@@ -11,57 +11,108 @@ Section Functor_Properties.
   (** A functor is said to be injective if its object map is. *)
   Definition Injective_Func := ∀ (c c' : Obj), F _o c = F _o c' → c = c'.
 
-  (** A functor is said to be essentially injective if its object map maps equal objects to isomorphic objects in the codomain category. *)
+  (** A functor is said to be essentially injective if its object map maps
+equal objects to isomorphic objects in the codomain category. *)
   Definition Essentially_Injective_Func := ∀ (c c' : Obj), F _o c = F _o c' → c ≡ c'.
   
   (** A functor is said to be surjective if its object map is. *)
   Definition Surjective_Func := ∀ (c : Obj), {c' : Obj | F _o c' = c}.
 
-  (** A functor is said to be essentially surjective if for each object in the codomain category there is an aobject in the domain category that is mapped to an aobject isomorphic to it. *)
+  (** A functor is said to be essentially surjective if for each object in the
+codomain category there is an aobject in the domain category that is mapped
+to an aobject isomorphic to it. *)
   Definition Essentially_Surjective_Func := ∀ (c : Obj), {c' : Obj & F _o c' ≡ c}.
 
   (** A functor is said to be faithful if its arrow map is injective. *)
   Definition Faithful_Func := ∀ (c c' : Obj) (h h' : Hom c c'), F _a h = F _a h' → h = h'.
 
   (** A functor is said to be full if its arrow map is surjective. *)
-  Definition Full_Func := ∀ (c1 c2 : Obj) (h' : Hom (F _o c1) (F _o c2)), {h : Hom c1 c2 | F _a h = h'}.
+  Definition Full_Func := ∀ (c1 c2 : Obj) (h' : Hom (F _o c1) (F _o c2)),
+      {h : Hom c1 c2 | F _a h = h'}
+  .
 
+  Local Ltac Inv_FTH :=
+    match goal with
+      [fl : Full_Func |- _] =>
+      progress (
+          repeat
+            match goal with
+              [|- context [(F _a (proj1_sig (fl _ _ ?x)))]] =>
+              rewrite (proj2_sig (fl _ _ x))
+            end
+        )
+    end
+  .
+
+  Local Hint Extern 1 => Inv_FTH.
+
+  Local Hint Extern 1 => rewrite F_compose.
+
+  Local Hint Extern 1 =>
+  match goal with
+    [fth : Faithful_Func |- _ = _ ] => apply fth
+  end
+  .
+
+  Local Obligation Tactic := basic_simpl; auto 6.
+  
   (** Any fully-faithful functor is essentially surjective. *)
-  Theorem Fully_Faithful_Essentially_Injective : Faithful_Func → Full_Func → Essentially_Injective_Func.
-  Proof.
-    intros F_Faithful F_Full c c' H.
-    destruct (F_Full _ _ (
-                       match H in (_ = Y) return Hom (F _o c) Y with
-                         | eq_refl => F _a (id c)
-                       end)
-             ) as [U' HU].
-    destruct (F_Full _ _ (
-                       match H in (_ = Y) return Hom Y (F _o c) with
-                         | eq_refl => F _a (id c)
-                       end)
-             ) as [V' HV].
-    apply (Build_Isomorphism _ _ _ U' V');
-      apply F_Faithful; rewrite F_compose;
-      rewrite HU, HV;
-      repeat rewrite F_id; clear; destruct H; auto.
-  Qed.
+  Program Definition Fully_Faithful_Essentially_Injective (fth : Faithful_Func) (fl : Full_Func)
+    : Essentially_Injective_Func
+    :=
+      fun c c' eq =>
+        {|
+          iso_morphism :=
+            proj1_sig (
+                fl
+                  _
+                  _
+                  match eq in _ = y return
+                        Hom _ y
+                  with
+                    eq_refl => id (F _o c)
+                  end
+              );
+          inverse_morphism :=
+            proj1_sig (
+                fl
+                  _
+                  _
+                  match eq in _ = y return
+                        Hom y _
+                  with
+                    eq_refl => id (F _o c)
+                  end
+              )
+        |}
+  .
 
   (** Any fully-faithful functor is conservative.
 
 A conservative functor is one for which we have to objects of the domain category are isomorphic if their images are ismorphic. *)
-  Theorem Fully_Faithful_Conservative : Faithful_Func → Full_Func → ∀ (c c' : Obj), F _o c ≡ F _o c' → c ≡ c'.
-  Proof.
-    intros F_Faithful F_Full c c' [f g H1 H2].
-    destruct (F_Full _ _ f) as [Ff Hf].
-    destruct (F_Full _ _ g) as [Fg Hg].
-    apply (Build_Isomorphism _ _ _ Ff Fg);
-      apply F_Faithful;
-      rewrite F_compose;
-      rewrite Hf, Hg, F_id; trivial.
-  Qed.
+  Program Definition Fully_Faithful_Conservative (fth : Faithful_Func) (fl : Full_Func)
+    : ∀ (c c' : Obj), F _o c ≡ F _o c' → c ≡ c' :=
+    fun c c' I =>
+      {|
+        iso_morphism := proj1_sig (fl _ _ I);
+        inverse_morphism := proj1_sig (fl _ _ I⁻¹)
+      |}
+  .
 
 End Functor_Properties.
 
+(** Functors Preserve Isomorphisms. *)
+Section Functors_Preserve_Isos.
+  Context {C C' : Category} (F : Functor C C') {a b : C} (I : (a ≡≡ b ::> C)%morphism).
+
+  Program Definition Functors_Preserve_Isos : (F _o a ≡ F _o b)%morphism :=
+    {|
+      iso_morphism := (F _a I)%morphism;
+      inverse_morphism := (F _a I⁻¹)%morphism
+    |}.
+
+End Functors_Preserve_Isos.
+  
 Section Embedding.
   Context (C C' : Category).
 

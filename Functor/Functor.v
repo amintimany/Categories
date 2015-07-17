@@ -41,22 +41,27 @@ Local Open Scope morphism_scope.
 Local Open Scope object_scope.
 
 Ltac Functor_Simplify :=
-  progress (repeat match goal with
-    | [|- ?F _a ?A = id (?F _o ?x)] =>
-      rewrite <- F_id; (cbn||idtac)
-    | [|- (id (?F _o ?x)) = ?F _a ?A] =>
-      rewrite <- F_id; (cbn||idtac)
-    | [|- ?F _a ?A ∘ ?F _a ?B = ?F _a ?C ∘ ?F _a ?D] =>
-      repeat rewrite <- F_compose; (cbn||idtac)
-    | [|- ?F _a ?A ∘ ?F _a ?B = ?F _a ?C] =>
-      rewrite <- F_compose; (cbn||idtac)
-    | [|- ?F _a ?C = ?F _a ?A ∘ ?F _a ?B] =>
-      rewrite <- F_compose; (cbn||idtac)
-    | [|- context [?F _a id] ] =>
-      rewrite F_id; (cbn||idtac)
-    | [|- context [?F _a ?A ∘ ?F _a ?B]] =>
-      rewrite <- F_compose; (cbn||idtac)
-  end)
+  progress
+    (
+      repeat rewrite F_id;
+      (
+        repeat
+          match goal with
+          | [|- ?F _a ?A = id (?F _o ?x)] =>
+            (rewrite <- F_id; (cbn+idtac))
+          | [|- (id (?F _o ?x)) = ?F _a ?A] =>
+            (rewrite <- F_id; (cbn+idtac))
+          | [|- ?F _a ?A ∘ ?F _a ?B = ?F _a ?C ∘ ?F _a ?D] =>
+            (repeat rewrite <- F_compose; (cbn+idtac))
+          | [|- ?F _a ?A ∘ ?F _a ?B = ?F _a ?C] =>
+            (rewrite <- F_compose; (cbn+idtac))
+          | [|- ?F _a ?C = ?F _a ?A ∘ ?F _a ?B] =>
+            (rewrite <- F_compose; (cbn+idtac))
+          | [|- context [?F _a ?A ∘ ?F _a ?B]] =>
+            (rewrite <- F_compose; (cbn+idtac))
+          end
+      )
+    )
 .
 
 Hint Extern 2 => Functor_Simplify.
