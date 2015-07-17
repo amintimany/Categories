@@ -1,6 +1,7 @@
 Require Import Category.Main.
 Require Import Functor.Functor Functor.Functor_Ops
         Functor.Representable.Hom_Func.
+Require Import Functor.Functor_Extender.
 Require Import NatTrans.NatTrans NatTrans.Operations
         NatTrans.Func_Cat NatTrans.NatIso.
 Require Import Ext_Cons.Prod_Cat.Prod_Cat Ext_Cons.Prod_Cat.Operations
@@ -8,9 +9,6 @@ Require Import Ext_Cons.Prod_Cat.Prod_Cat Ext_Cons.Prod_Cat.Operations
 Require Import Adjunction.Adjunction.
 Require Import KanExt.Local.
 Require Import Basic_Cons.Terminal.
-
-Local Notation NID := NatTrans_id (only parsing).
-Local Notation FCAT := Func_Cat (only parsing).
 
 (** This module contains conversion from local kan extensions defined through hom functor to
 local kan extensions defined through cones. *)

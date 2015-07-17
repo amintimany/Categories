@@ -2,12 +2,7 @@ Require Import Category.Main.
 Require Import Functor.Functor Functor.Functor_Ops Functor.Representable.Hom_Func.
 Require Import Ext_Cons.Prod_Cat.Prod_Cat Ext_Cons.Prod_Cat.Operations.
 Require Import NatTrans.NatTrans NatTrans.Operations NatTrans.Func_Cat.
-Require Export Functor.Functor_Extender.
-
-(** Local notations for conciceness. *)
-Local Notation NID := NatTrans_id (only parsing).
-Local Notation FCAT := Func_Cat (only parsing).
-
+Require Import Functor.Functor_Extender.
 
 (**
 Given a functor p : C -> C' and a functor F : C -> D, the local right kan extension of F along p is functor G : C' -> D together with natural transformation η : G ∘ p -> F:
@@ -80,7 +75,7 @@ Section KanExtension.
       Record LoKan_Cone_Morph : Type :=
         {
           cone_morph : NatTrans Cn Cn';
-          cone_morph_com : Cn = (Cn' ∘ (cone_morph ∘_h (NID p)))%nattrans :> NatTrans _ _
+          cone_morph_com : Cn = (Cn' ∘ (cone_morph ∘_h (NatTrans_id p)))%nattrans :> NatTrans _ _
         }.
 
       Coercion cone_morph : LoKan_Cone_Morph >-> NatTrans.

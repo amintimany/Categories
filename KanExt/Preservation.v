@@ -1,5 +1,6 @@
 Require Import Category.Main.
 Require Import Functor.Functor Functor.Functor_Ops Functor.Representable.Hom_Func.
+Require Import Functor.Functor_Extender.
 Require Import NatTrans.Main.
 Require Import Ext_Cons.Prod_Cat.Main.
 Require Import Adjunction.Adjunction Adjunction.Duality Adjunction.Adj_Facts.

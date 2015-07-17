@@ -1,6 +1,7 @@
 Require Import Category.Main.
 Require Import Functor.Functor Functor.Functor_Ops
         Functor.Representable.Hom_Func.
+Require Import Functor.Functor_Extender.
 Require Import NatTrans.NatTrans NatTrans.Operations
         NatTrans.Func_Cat NatTrans.NatIso.
 Require Import Ext_Cons.Prod_Cat.Prod_Cat Ext_Cons.Prod_Cat.Operations
