@@ -23,11 +23,7 @@ Section NatTrans_id_Iso.
   Context {C D : Category} (F : (C –≻ D)%functor).
 
   (** The identity natural transformation is a natural isomorphism. *)
-  Program Definition NatTrans_id_Iso : (F ≡≡ F ::> Func_Cat _ _)%morphism :=
-    {|
-      iso_morphism := NatTrans_id _;
-      inverse_morphism := NatTrans_id _
-    |}.
+  Definition NatTrans_id_Iso : (F ≡≡ F ::> Func_Cat _ _)%morphism := @Isomorphism_id (Func_Cat _ _) F.
 
 End NatTrans_id_Iso.
 
