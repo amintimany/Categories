@@ -138,7 +138,8 @@ Proof.
 Qed.
 
 (** The Yoneda Lemma*)
-Program Definition Yoneda_Lemma (C : Category) : ((Y_left C) ≡≡ (Y_right C) ::> (Func_Cat _ _))%morphism :=
+Program Definition Yoneda_Lemma (C : Category) :
+  ((Y_left C) ≃ (Y_right C))%natiso :=
   NatIso _ _ (Y_left_to_right C) (Y_right_to_left C) _ _.
 
 Next Obligation.
@@ -201,7 +202,7 @@ Definition Yoneda_Emb (C : Category) : Embedding C (Func_Cat C ^op Type_Cat) :=
 |}.
 
 (** Yoneda is conservative of isomorphisms. *)
-Theorem Yoneda_Iso (C : Category) : forall (c c' : Obj), ((Yoneda C) _o c ≡ (Yoneda C) _o c')%morphism → (c ≡ c')%morphism.
+Theorem Yoneda_Iso (C : Category) : forall (c c' : Obj), ((Yoneda C) _o c ≃ (Yoneda C) _o c')%isomorphism → (c ≃ c')%isomorphism.
 Proof.
   intros.
   apply (Emb_Conservative _ _ (Yoneda_Emb C) _); trivial.
@@ -210,7 +211,7 @@ Qed.
 Ltac Yoneda := apply Yoneda_Iso.
 
 (** The dual of Yoneda is conservative of isomorphisms. *)
-Theorem CoYoneda_Iso (C : Category) : forall (c c' : Obj), ((CoYoneda C) _o c ≡ (CoYoneda C) _o c')%morphism → (c ≡ c')%morphism.
+Theorem CoYoneda_Iso (C : Category) : forall (c c' : Obj), ((CoYoneda C) _o c ≃ (CoYoneda C) _o c')%isomorphism → (c ≃ c')%isomorphism.
 Proof.
   intros; Yoneda; trivial.
 Qed.

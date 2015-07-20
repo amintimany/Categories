@@ -39,9 +39,14 @@ Record Exponential {C : Category} {HP : Has_Products C} (c d : Obj) : Type :=
 
   Exp_morph_ex : ∀ (z : C), ((Prod_Func C) _o (z, c))%object –≻ d → z –≻ exponential;
 
-  Exp_morph_com : ∀ (z : C) (f : ((Prod_Func C) _o (z, c))%object –≻ d), f = (eval ∘ ((Prod_Func C) @_a (_, _) (_, _) (Exp_morph_ex z f, id c)))%morphism;
+  Exp_morph_com : ∀ (z : C) (f : ((Prod_Func C) _o (z, c))%object –≻ d),
+      f = (eval ∘ ((Prod_Func C) @_a (_, _) (_, _) (Exp_morph_ex z f, id c)))%morphism;
 
-  Exp_morph_unique : ∀ (z : C) (f : ((Prod_Func C) _o (z, c))%object –≻ d) (u u' : z –≻ exponential), f = (eval ∘ ((Prod_Func C) @_a (_, _) (_, _) (u, id c)))%morphism → f = (eval ∘ ((Prod_Func C) @_a (_, _) (_, _) (u', id c)))%morphism → u = u'
+  Exp_morph_unique : ∀ (z : C) (f : ((Prod_Func C) _o (z, c))%object –≻ d)
+                       (u u' : z –≻ exponential),
+      f = (eval ∘ ((Prod_Func C) @_a (_, _) (_, _) (u, id c)))%morphism →
+      f = (eval ∘ ((Prod_Func C) @_a (_, _) (_, _) (u', id c)))%morphism →
+      u = u'
 }.
 
 Coercion exponential : Exponential >-> Obj.
@@ -55,14 +60,26 @@ Arguments Exp_morph_com {_ _ _ _} _ _ _, {_ _} _ _ {_} _ _.
 Arguments Exp_morph_unique {_ _ _ _} _ _ _ _ _ _ _, {_ _} _ _ {_} _ _ _ _ _ _.
 
 (** Exponentials are unique up to isomorphism. *)
-Theorem Exponential_iso {C : Category} {HP : Has_Products C} (c d : C) (E E' : Exponential c d) : (E ≡ E')%morphism.
+Theorem Exponential_iso {C : Category} {HP : Has_Products C} (c d : C)
+        (E E' : Exponential c d) : (E ≃ E')%isomorphism.
 Proof.
-  eapply (Build_Isomorphism _ _ _ (Exp_morph_ex E' _ (eval E)) (Exp_morph_ex E _ (eval E'))); eapply Exp_morph_unique; eauto;
+  eapply
+    (
+      Build_Isomorphism
+        _
+        _
+        _
+        (Exp_morph_ex E' _ (eval E))
+        (Exp_morph_ex E _ (eval E'))
+    );
+  eapply Exp_morph_unique; eauto;
   simpl_ids;
   match goal with
       [|- (_ ∘ ?M)%morphism = _] =>
       match M with
-          (?U _a (?A ∘ ?B, ?C))%morphism => cutrewrite (M = (U @_a (_, _) (_, _) (A, C)) ∘ (U @_a (_, _) (_, _) (B, C)))%morphism; [|simpl_ids; rewrite <- F_compose; simpl; simpl_ids; trivial]
+        (?U _a (?A ∘ ?B, ?C))%morphism =>
+        cutrewrite (M = (U @_a (_, _) (_, _) (A, C)) ∘ (U @_a (_, _) (_, _) (B, C)))%morphism;
+          [|simpl_ids; rewrite <- F_compose; simpl; simpl_ids; trivial]
       end
   end;
   rewrite <- assoc;
@@ -76,12 +93,14 @@ Existing Class Has_Exponentials.
 Section Curry_UnCurry.
   Context (C : Category) {HP : Has_Products C} {HE : Has_Exponentials C}.
 
-  (** Given a arrow f: a×b -> c in a category with exponentials, the curry of f is f̂ in the definition of Exponential above. *)
+  (** Given a arrow f: a×b -> c in a category with exponentials, the curry of f is f̂ 
+in the definition of Exponential above. *)
   Definition curry : forall {a b c : C}, ((Prod_Func C) _o (a, b))%object –≻ c → a –≻ (HE b c) :=
     fun {a b c : C} (f : ((Prod_Func C) _o (a, b))%object –≻ c) =>
       Exp_morph_ex (HE b c) _ f.
 
-  (** Given an arrow f: a -> cᵇ, uncurry of f is the arrow (eval_cᵇ ∘ <id_b, f>): a×b -> c. See definition of Exponential above for details. *)
+  (** Given an arrow f: a -> cᵇ, uncurry of f is the arrow (eval_cᵇ ∘ <id_b, f>): a×b -> c.
+See definition of Exponential above for details. *)
   Definition uncurry : forall {a b c : C}, a –≻ (HE b c) → ((Prod_Func C) _o (a, b))%object –≻ c :=
     fun {a b c : C} (f : a –≻ (HE b c)) =>
       ((eval (HE b c)) ∘ ((Prod_Func C) @_a (_, _) (_, _) (f, id C b)))%morphism.
@@ -89,7 +108,8 @@ Section Curry_UnCurry.
   Section inversion.
     Context {a b c : C}.
 
-    (** See definition of curry and uncurry above for details. Frollows immediately from the definition of Exponential above. *)
+    (** See definition of curry and uncurry above for details. Frollows immediately from
+the definition of Exponential above. *)
     Theorem curry_uncurry (f : a –≻ (HE b c)) : curry (uncurry f) = f.
     Proof.
       unfold curry, uncurry.
@@ -97,7 +117,8 @@ Section Curry_UnCurry.
       rewrite <- Exp_morph_com; trivial.
     Qed.
     
-    (** See definition of curry and uncurry above for details. Frollows immediately from the definition of Exponential above. *)
+    (** See definition of curry and uncurry above for details. Frollows immediately from
+the definition of Exponential above. *)
     Theorem uncurry_curry (f : ((Prod_Func C) _o (a, b))%object –≻ c) : uncurry (curry f) = f.
     Proof.
       unfold curry, uncurry.
@@ -131,7 +152,8 @@ Section Curry_UnCurry.
     Context {a b c : C}.
 
     (** composing with curry is equivalent to compose and then curry: *)
-    Lemma curry_compose (f : ((Prod_Func C) _o (a, b))%object –≻ c) {z : C} (g : z –≻ a) : (curry f) ∘ g = curry (f ∘ (Prod_morph_ex _ _ (g ∘ Pi_1) Pi_2)).
+    Lemma curry_compose (f : ((Prod_Func C) _o (a, b))%object –≻ c) {z : C} (g : z –≻ a)
+      : (curry f) ∘ g = curry (f ∘ (Prod_morph_ex _ _ (g ∘ Pi_1) Pi_2)).
     Proof.
       unfold curry.
       eapply Exp_morph_unique; eauto.
@@ -140,7 +162,8 @@ Section Curry_UnCurry.
           [|- ((_ ∘ (_ _a) ?M) ∘ _)%morphism = _] =>
           match M with
               ((?N ∘ ?x)%morphism, id ?y) =>
-              replace M with (compose (Prod_Cat _ _) (_, _) (_, _) (_, _) (x, id y) (N,id y)) by (cbn; auto)
+              replace M with
+              (compose (Prod_Cat _ _) (_, _) (_, _) (_, _) (x, id y) (N,id y)) by (cbn; auto)
           end
       end.
       rewrite F_compose.

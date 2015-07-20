@@ -80,7 +80,7 @@ Section Discr_Cat_Dual_Iso.
   Local Hint Extern 1 => progress cbn.
   
   Program Definition Discr_Cat_Dual_Iso :
-    (Discr_Cat obj ≡≡ (Discr_Cat obj)^op ::> Cat)%morphism%category
+    (Discr_Cat obj ≃≃ (Discr_Cat obj)^op ::> Cat)%isomorphism%category
     :=
       {|
         iso_morphism := {|FO := fun x => x; FA := fun _ _ h => eq_sym h|};
@@ -91,10 +91,10 @@ End Discr_Cat_Dual_Iso.
 
 (** Any two isomorphic types form isomorphic discrete categories. *)
 Section Discr_Cat_Iso.
-  Context {obj obj' : Type} (I : (obj ≡≡ obj' ::> Type_Cat)%morphism).
+  Context {obj obj' : Type} (I : (obj ≃≃ obj' ::> Type_Cat)%isomorphism).
 
   Program Definition Discr_Cat_Iso :
-    ((Discr_Cat obj) ≡≡ (Discr_Cat obj') ::> Cat)%morphism
+    ((Discr_Cat obj) ≃≃ (Discr_Cat obj') ::> Cat)%isomorphism
     :=
       {|
         iso_morphism :=

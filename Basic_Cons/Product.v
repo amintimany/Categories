@@ -67,7 +67,7 @@ Arguments Prod_morph_unique {_ _ _} _ _ _ _ _ _ _ _ _ _.
 Coercion product : Product >-> Obj.
 
 (** for any pair of objects, their product is unique up to isomorphism. *)
-Theorem Product_iso {C : Category} (c d : Obj) (P : Product c d) (P' : Product c d) : (P ≡ P')%morphism.
+Theorem Product_iso {C : Category} (c d : Obj) (P : Product c d) (P' : Product c d) : (P ≃ P')%isomorphism.
 Proof.
   eapply (Build_Isomorphism _ _ _ (Prod_morph_ex P' P Pi_1 Pi_2) (Prod_morph_ex P P' Pi_1 Pi_2));
   eapply Prod_morph_unique; eauto;

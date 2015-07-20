@@ -6,7 +6,8 @@ Section PullBack.
   Context {C : Category} {a b x : C} (f : a –≻ x) (g : b –≻ x).
 
   (**
-Given two arrows f : a -> x and g : b -> x, their pullback is an object p together with two arrows π₁ : p -> a and π₂ : p -> b such that the follwoing diagram commutes:
+Given two arrows f : a -> x and g : b -> x, their pullback is an object p together
+with two arrows π₁ : p -> a and π₂ : p -> b such that the follwoing diagram commutes:
 
 #
 <pre>
@@ -21,7 +22,8 @@ Given two arrows f : a -> x and g : b -> x, their pullback is an object p togeth
 </pre>
 #
 
-Provided that for any object q and arrows p1 : q -> a and p2 : q -> b that the following diagram commutes:
+Provided that for any object q and arrows p1 : q -> a and p2 : q -> b that the following
+diagram commutes:
 
 #
 <pre>
@@ -105,14 +107,38 @@ We usually use a half square in the corner of p to denote p is the pullback of f
   Coercion pullback : PullBack >-> Obj.
 
   (** Pullbacks are unique up to isomorphism. *)
-  Theorem PullBack_iso (p1 p2 : PullBack) : p1 ≡ p2.
+  Theorem PullBack_iso (p1 p2 : PullBack) : (p1 ≃ p2)%isomorphism.
   Proof.
-    apply (Build_Isomorphism _ _ _ (pullback_morph_ex p2 _ (pullback_morph_1 p1) (pullback_morph_2 p1) (pullback_morph_com p1)) (pullback_morph_ex p1 _ (pullback_morph_1 p2) (pullback_morph_2 p2) (pullback_morph_com p2))); eapply pullback_morph_ex_unique;
+    apply
+      (
+        Build_Isomorphism
+          _
+          _
+          _
+          (
+            pullback_morph_ex
+              p2
+              _
+              (pullback_morph_1 p1)
+              (pullback_morph_2 p1)
+              (pullback_morph_com p1)
+          )
+          (
+            pullback_morph_ex
+              p1
+              _
+              (pullback_morph_1 p2)
+              (pullback_morph_2 p2)
+              (pullback_morph_com p2)
+          )
+      ); eapply pullback_morph_ex_unique;
     match goal with
       | [|- _ ∘ id = _] => simpl_ids; trivial
       | _ => idtac
     end; try apply pullback_morph_com;
-    rewrite <- assoc; repeat (rewrite pullback_morph_ex_com_1 || rewrite pullback_morph_ex_com_2); trivial.
+    rewrite <- assoc;
+    repeat (rewrite pullback_morph_ex_com_1 || rewrite pullback_morph_ex_com_2);
+    trivial.
   Qed.
 
 End PullBack.
@@ -151,7 +177,8 @@ Section is_PullBack.
 
 End is_PullBack.
 
-Definition Has_PullBacks (C : Category) : Type := ∀ (a b c : C) (f : a –≻ c) (g : b –≻ c), PullBack f g.
+Definition Has_PullBacks (C : Category) : Type := ∀ (a b c : C) (f : a –≻ c) (g : b –≻ c),
+    PullBack f g.
 
 Existing Class Has_PullBacks.
 

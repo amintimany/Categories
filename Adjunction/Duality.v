@@ -12,7 +12,7 @@ Section Hom_Adj_Duality.
 
   (** Duality for hom adjunctions. *)
   Definition Hom_Adjunct_Duality : G^op ⊣_hom F^op :=
-    (Prod_Func_Hom_Func (Inverse_Isomorphism adj))
+    (Prod_Func_Hom_Func adj⁻¹)
   .
 
 End Hom_Adj_Duality.

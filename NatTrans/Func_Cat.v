@@ -49,7 +49,7 @@ Section Opposite_Func_Cat.
     |}.
   
   (** The opposite of the category of functors from C to D is naturally isomorphic to the category of functors from C^op to D^op. *)
-  Program Definition Func_Cat_Op_Iso : (((Func_Cat C D)^op)%category ≡≡ (Func_Cat C^op D^op) ::> Cat) %morphism :=
+  Program Definition Func_Cat_Op_Iso : (((Func_Cat C D)^op)%category ≃≃ (Func_Cat C^op D^op) ::> Cat) %isomorphism :=
     {|
       iso_morphism := Op_Func_Cat_to_Func_Cat_Op;
       inverse_morphism := Func_Cat_Op_to_Op_Func_Cat

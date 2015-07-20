@@ -13,14 +13,14 @@ Local Open Scope functor_scope.
 Section Hom_Adjunct_left_iso.
   Context {C D : Category}
           {F F' : C –≻ D}
-          (N : (F' ≡≡ F ::> Func_Cat _ _)%morphism)
+          (N : (F' ≃ F)%natiso)
           {G : D –≻ C}
           (adj : F ⊣_hom G)
   .
 
 
   (** If F ≡ F' and (F ⊣_hom G) then (F' ⊣_hom G) *)
-  Definition Hom_Adjunct_left_iso : F' ⊣_hom G := Isomorphism_Compose (NatIso_hor_comp (Prod_Functor_NatIso (Opposite_NatIso N) (NatTrans_id_Iso (Functor_id D))) (NatTrans_id_Iso (Hom_Func D))) adj.
+  Definition Hom_Adjunct_left_iso : F' ⊣_hom G := (adj ∘ ((NatTrans_id_Iso (Hom_Func D)) ∘_h (Prod_Functor_NatIso N^op (NatTrans_id_Iso (Functor_id D)))))%isomorphism%natiso.
 
 End Hom_Adjunct_left_iso.
 
@@ -28,19 +28,19 @@ Section Hom_Adjunct_right_iso.
   Context {C D : Category}
           {F : C –≻ D}
           {G G' : D –≻ C}
-          (N : (G ≡≡ G' ::> Func_Cat _ _)%morphism)
+          (N : (G ≃ G')%natiso)
           (adj : F ⊣_hom G)
   .
 
   (** If G ≡ G' and (F ⊣_hom G) then (F ⊣_hom G') *)
-  Definition Hom_Adjunct_right_iso : F ⊣_hom G' := Hom_Adjunct_Duality (Hom_Adjunct_left_iso (Inverse_Isomorphism (Opposite_NatIso N)) (Hom_Adjunct_Duality adj)).
+  Definition Hom_Adjunct_right_iso : F ⊣_hom G' := Hom_Adjunct_Duality (Hom_Adjunct_left_iso ((N^op)⁻¹)%isomorphism%natiso (Hom_Adjunct_Duality adj)).
 
 End Hom_Adjunct_right_iso.
 
 Section Adjunct_left_iso.
   Context {C D : Category}
           (F F' : C –≻ D)
-          (N : (F' ≡≡ F ::> Func_Cat _ _)%morphism)
+          (N : (F' ≃ F)%natiso)
           (G : D –≻ C)
           (adj : F ⊣ G)
   .
@@ -54,7 +54,7 @@ Section Adjunct_right_iso.
   Context {C D : Category}
           (F : C –≻ D)
           (G G' : D –≻ C)
-          (N : (G ≡≡ G' ::> Func_Cat _ _)%morphism)
+          (N : (G ≃ G')%natiso)
           (adj : F ⊣ G)
   .
 
@@ -73,7 +73,7 @@ Section Hom_Adjunct_left_unique.
 
 
   (** If F ⊣_hom G and F' ⊣_hom G then F ≡ F' *)
-  Definition Hom_Adjunct_left_unique : (F ≡≡ F' ::> Func_Cat _ _)%morphism.
+  Definition Hom_Adjunct_left_unique : (F ≃ F')%natiso.
   Proof.
     apply (@Opposite_NatIso _ _ F^op F'^op).
     eapply (Embedding_mono (Yoneda_Emb D^op)).
@@ -99,11 +99,11 @@ Section Hom_Adjunct_right_unique.
   .
 
   (** If F ⊣_hom G and F ⊣_hom G' then G ≡ G' *)
-  Theorem Hom_Adjunct_right_unique : (G ≡≡ G' ::> Func_Cat _ _)%morphism.
+  Theorem Hom_Adjunct_right_unique : (G ≃ G')%natiso.
   Proof.
     apply Hom_Adjunct_Duality in adj.
     apply Hom_Adjunct_Duality in adj'.
-    apply (@Opposite_NatIso _ _ (Opposite_Functor G) (Opposite_Functor G')).
+    apply (@Opposite_NatIso _ _ G^op G'^op).
     apply (Hom_Adjunct_left_unique adj adj').
   Defined.
 
@@ -118,7 +118,7 @@ Section Adjunct_left_unique.
   .
 
   (** If F ⊣ G and F' ⊣ G then F ≡ F' *)
-  Theorem Adjunct_left_unique : (F ≡≡ F' ::> Func_Cat _ _)%morphism.
+  Theorem Adjunct_left_unique : (F ≃ F' )%natiso.
   Proof.
     apply Adj_to_Hom_Adj in adj.
     apply Adj_to_Hom_Adj in adj'.
@@ -136,7 +136,7 @@ Section Adjunct_right_unique.
   .
 
   (** If F ⊣ G and F ⊣ G' then G ≡ G' *)
-  Theorem Adjunct_right_unique : (G ≡≡ G' ::> Func_Cat _ _)%morphism.
+  Theorem Adjunct_right_unique : (G ≃ G')%natiso.
   Proof.
     apply Adj_to_Hom_Adj in adj.
     apply Adj_to_Hom_Adj in adj'.
@@ -227,7 +227,7 @@ Section Hom_Adjunct_Lifted.
     apply Hom_Adjunct_Lifted_RL_obligation_1.
   Qed.
 
-  Program Definition Hom_Adjunct_Lifted : (LEFT ≡≡ RIGHT ::> Func_Cat _ _)%morphism :=
+  Program Definition Hom_Adjunct_Lifted : (LEFT ≃ RIGHT)%natiso :=
     {|
       iso_morphism := Hom_Adjunct_Lifted_LR;
       inverse_morphism := Hom_Adjunct_Lifted_RL

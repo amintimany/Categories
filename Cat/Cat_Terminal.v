@@ -3,7 +3,7 @@ Require Import Functor.Main.
 Require Import Cat.Cat.
 Require Import Basic_Cons.Terminal.
 Require Import Archetypal.Discr.Discr.
-Require Import NatTrans.NatTrans NatTrans.Func_Cat.
+Require Import NatTrans.NatTrans NatTrans.NatIso.
 
 (** The unique functor to the terminal category. *)
 Program Definition Functor_To_1_Cat (C' : Category) : (C' –≻ 1)%functor :=
@@ -51,7 +51,7 @@ End From_Term_Cat.
 Program Definition Functor_To_1_Cat_Iso
         {C : Category}
         (F F' : (C –≻ 1)%functor)
-  : (F ≡≡ F' ::> Func_Cat _ _)%morphism :=
+  : (F ≃ F')%natiso :=
 {|
   iso_morphism :=
     {|

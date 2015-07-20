@@ -41,7 +41,7 @@ z ———–> e ——————> a          b
   Coercion equalizer : Equalizer >-> Obj.
   
   (** Equalizers are unique up to isomorphism. *)
-  Theorem Equalizer_iso (e1 e2 : Equalizer) : e1 ≡ e2.
+  Theorem Equalizer_iso (e1 e2 : Equalizer) : (e1 ≃ e2)%isomorphism.
   Proof.
     apply (Build_Isomorphism _ _ _ (equalizer_morph_ex e2 _ (equalizer_morph e1) (equalizer_morph_com e1)) ((equalizer_morph_ex e1 _ (equalizer_morph e2) (equalizer_morph_com e2))));
     eapply equalizer_morph_unique; [| | simpl_ids; trivial| | |simpl_ids; trivial]; try apply equalizer_morph_com;

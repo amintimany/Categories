@@ -152,7 +152,7 @@ terminal objects in the category of cones. *)
     Context (rke rke' : Local_Right_KanExt p F).
 
     Theorem Local_Right_KanExt_unique :
-      ((LRKE rke) ≡≡ (LRKE rke') ::> LoKan_Cone_Cat)%morphism.
+      ((LRKE rke) ≃≃ (LRKE rke') ::> LoKan_Cone_Cat)%isomorphism.
     Proof (
         Terminal_iso
           (Local_Right_KanExt_terminal rke)
@@ -164,10 +164,10 @@ terminal objects in the category of cones. *)
   (** If cones are isomorphic, then also are objects of their their images. *)
   Section LoKan_Cone_Iso_object_Iso.
     Context {Cn Cn' : LoKan_Cone p F}
-            (N : (Cn ≡≡ Cn' ::> LoKan_Cone_Cat)%morphism).
+            (N : (Cn ≃≃ Cn' ::> LoKan_Cone_Cat)%isomorphism).
 
     Program Definition LoKan_Cone_Iso_object_Iso (c : C') :
-      (Cn _o c ≡ Cn' _o c)%morphism :=
+      (Cn _o c ≃ Cn' _o c)%isomorphism :=
       {|
         iso_morphism := Trans (iso_morphism N) c;
         inverse_morphism := Trans (inverse_morphism N) c

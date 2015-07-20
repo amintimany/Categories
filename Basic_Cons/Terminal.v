@@ -16,7 +16,7 @@ Arguments t_morph_unique {_} _ _ _ _.
 Coercion terminal : Terminal >-> Obj.
 
 (** (The) terminal object is unique up to isomorphism. *)
-Theorem Terminal_iso {C : Category} (T T' : Terminal C) : (T ≡ T')%morphism.
+Theorem Terminal_iso {C : Category} (T T' : Terminal C) : (T ≃ T')%isomorphism.
 Proof.
   apply (Build_Isomorphism _ _ _ (t_morph _ _) (t_morph _ _)); apply t_morph_unique.
 Qed.

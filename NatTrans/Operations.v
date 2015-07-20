@@ -237,7 +237,7 @@ Given I : C ≡≡ D for categories C and D and F : D -> E, there is a natural t
 from F ∘ (I ∘ I⁻¹) to F and back.
 *)
 Section IsoCat_NatTrans.
-  Context {C D : Category} (I : (C ≡≡ D ::> Cat)%morphism) {E : Category} (F : (D –≻ E)%functor).
+  Context {C D : Category} (I : (C ≃≃ D ::> Cat)%isomorphism) {E : Category} (F : (D –≻ E)%functor).
 
   Local Obligation Tactic := idtac.
   

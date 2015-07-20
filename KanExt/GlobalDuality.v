@@ -25,39 +25,25 @@ Hom_{Func_Cat Cᵒᵖ Dᵒᵖ}(– ∘ p, –) ≡ Hom_{Func_Cat C'ᵒᵖ Dᵒ�
 
  *)
     Local Definition KanExt_Left_to_Right_NIso :=
-      NatIso_hor_comp
-               (NatTrans_id_Iso
-                  (
-                    Prod_Functor
-                     ((inverse_morphism (Func_Cat_Op_Iso C' D))^op)
-                     (inverse_morphism (Func_Cat_Op_Iso C D))
-                  )
-               )
-               (
-                 Isomorphism_Compose
-                   (
-                     NatIso_hor_comp
-                       (
-                         NatTrans_id_Iso
-                           (Prod_Functor (Left_Functor_Extender p D) (Functor_id (Func_Cat C D) ^op))
-                       )
-                       (
-                         Inverse_Isomorphism (Hom_Func_Cat_Iso (Func_Cat_Op_Iso C D))
-                       )
-                   )
-                   (
-                     Isomorphism_Compose
-                       (Hom_Adjunct_Duality (Adj_to_Hom_Adj (left_kan_ext_adj lke)))
-                       (
-                         NatIso_hor_comp
-                          (
-                            NatTrans_id_Iso
-                              (Prod_Functor (Functor_id ((Func_Cat C' D) ^op) ^op) lke^op)
-                          )
-                          (Hom_Func_Cat_Iso (Func_Cat_Op_Iso C' D))
-                       )
-                   )
-               )
+      (
+        (
+          (
+            ((Hom_Func_Cat_Iso (Func_Cat_Op_Iso C' D))
+               ∘_h (NatTrans_id_Iso (Prod_Functor (Functor_id ((Func_Cat C' D) ^op) ^op) lke^op))
+            )
+              ∘ (Hom_Adjunct_Duality (Adj_to_Hom_Adj (left_kan_ext_adj lke)))
+          )
+            ∘ (((Hom_Func_Cat_Iso (Func_Cat_Op_Iso C D))⁻¹)
+                 ∘_h (NatTrans_id_Iso
+                        (Prod_Functor (Left_Functor_Extender p D) (Functor_id (Func_Cat C D) ^op))))
+        )
+          ∘_h (NatTrans_id_Iso
+                 (Prod_Functor
+                    ((inverse_morphism (Func_Cat_Op_Iso C' D))^op)
+                    (inverse_morphism (Func_Cat_Op_Iso C D))
+                 )
+              )
+      )%natiso
     .
 
     (** If we give the trans formations (e.g., function given in the first obligation)
@@ -170,38 +156,32 @@ Hom_{Func_Cat C'ᵒᵖ Dᵒᵖ}(rke, –) ≡ Hom_{Func_Cat Cᵒᵖ Dᵒᵖ}(–
 
  *)
     Local Definition KanExt_Right_to_Left_NIso :=
-      NatIso_hor_comp
+      (
         (
-          NatTrans_id_Iso
+          (
             (
-              Prod_Functor
-               ((inverse_morphism (Func_Cat_Op_Iso C D))^op)
-               (inverse_morphism (Func_Cat_Op_Iso C' D))
+              (Hom_Func_Cat_Iso (Func_Cat_Op_Iso C D))
+                ∘_h (
+                  NatTrans_id_Iso
+                    (Prod_Functor
+                       (Functor_id ((Func_Cat C D) ^op) ^op)
+                       (Left_Functor_Extender p D)^op
+                ))
             )
+              ∘ (Hom_Adjunct_Duality (Adj_to_Hom_Adj (right_kan_ext_adj rke)))
+          )
+            ∘ (
+              ((Hom_Func_Cat_Iso (Func_Cat_Op_Iso C' D))⁻¹)
+                ∘_h (NatTrans_id_Iso (Prod_Functor rke (Functor_id (Func_Cat C' D) ^op))))
         )
-        (
-          Isomorphism_Compose
-            (
-              NatIso_hor_comp
-                (NatTrans_id_Iso (Prod_Functor rke (Functor_id (Func_Cat C' D) ^op)))
-                (Inverse_Isomorphism (Hom_Func_Cat_Iso (Func_Cat_Op_Iso C' D)))
-            )
-            (
-              Isomorphism_Compose
-                (Hom_Adjunct_Duality (Adj_to_Hom_Adj (right_kan_ext_adj rke)))
-                (
-                  NatIso_hor_comp
-                    (
-                      NatTrans_id_Iso
-                        (
-                          Prod_Functor
-                            (Functor_id ((Func_Cat C D) ^op) ^op)
-                            (Left_Functor_Extender p D)^op)
-                    )
-                    (Hom_Func_Cat_Iso (Func_Cat_Op_Iso C D))
-                )
-            )
-        )
+          ∘_h
+          (NatTrans_id_Iso
+             (Prod_Functor
+                ((inverse_morphism (Func_Cat_Op_Iso C D))^op)
+                (inverse_morphism (Func_Cat_Op_Iso C' D))
+             )
+          )
+      )%natiso
     .
 
     Program Definition KanExt_Right_to_Left : Left_KanExt  p^op D^op :=

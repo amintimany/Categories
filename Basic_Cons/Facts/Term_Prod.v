@@ -47,7 +47,7 @@ Section Term_Prod.
     apply Term_Prod_rl_obligation_1.
   Qed.
 
-  Theorem Term_Prod (a : Obj) : (((Prod_Func C) _o (a, @terminal _ term)) ≡ a)%morphism.
+  Theorem Term_Prod (a : Obj) : (((Prod_Func C) _o (a, @terminal _ term)) ≃ a)%isomorphism.
   Proof.
     Yoneda.
     apply (NatIso _ _ (Term_Prod_lr a) (Term_Prod_rl a)).

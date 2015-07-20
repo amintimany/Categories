@@ -8,6 +8,7 @@ Section Functor_Properties.
   Context {C C' : Category} (F : C –≻ C').
 
   Local Open Scope object_scope.
+  Local Open Scope isomorphism_scope.
   Local Open Scope morphism_scope.
     
   (** A functor is said to be injective if its object map is. *)
@@ -15,7 +16,7 @@ Section Functor_Properties.
 
   (** A functor is said to be essentially injective if its object map maps
 equal objects to isomorphic objects in the codomain category. *)
-  Definition Essentially_Injective_Func := ∀ (c c' : Obj), F _o c = F _o c' → c ≡ c'.
+  Definition Essentially_Injective_Func := ∀ (c c' : Obj), F _o c = F _o c' → c ≃ c'.
   
   (** A functor is said to be surjective if its object map is. *)
   Definition Surjective_Func := ∀ (c : Obj), {c' : Obj | F _o c' = c}.
@@ -23,7 +24,7 @@ equal objects to isomorphic objects in the codomain category. *)
   (** A functor is said to be essentially surjective if for each object in the
 codomain category there is an aobject in the domain category that is mapped
 to an aobject isomorphic to it. *)
-  Definition Essentially_Surjective_Func := ∀ (c : Obj), {c' : Obj & F _o c' ≡ c}.
+  Definition Essentially_Surjective_Func := ∀ (c : Obj), {c' : Obj & F _o c' ≃ c}.
 
   (** A functor is said to be faithful if its arrow map is injective. *)
   Definition Faithful_Func := ∀ (c c' : Obj) (h h' : (c –≻ c')%morphism),
@@ -94,7 +95,7 @@ to an aobject isomorphic to it. *)
 
 A conservative functor is one for which we have to objects of the domain category are isomorphic if their images are ismorphic. *)
   Program Definition Fully_Faithful_Conservative (fth : Faithful_Func) (fl : Full_Func)
-    : ∀ (c c' : Obj), F _o c ≡ F _o c' → c ≡ c' :=
+    : ∀ (c c' : Obj), F _o c ≃ F _o c' → c ≃ c' :=
     fun c c' I =>
       {|
         iso_morphism := proj1_sig (fl _ _ I);
@@ -106,9 +107,9 @@ End Functor_Properties.
 
 (** Functors Preserve Isomorphisms. *)
 Section Functors_Preserve_Isos.
-  Context {C C' : Category} (F : C –≻ C') {a b : C} (I : (a ≡≡ b ::> C)%morphism).
+  Context {C C' : Category} (F : C –≻ C') {a b : C} (I : (a ≃≃ b ::> C)%isomorphism).
 
-  Program Definition Functors_Preserve_Isos : (F _o a ≡ F _o b)%morphism :=
+  Program Definition Functors_Preserve_Isos : (F _o a ≃ F _o b)%isomorphism :=
     {|
       iso_morphism := (F _a I)%morphism;
       inverse_morphism := (F _a I⁻¹)%morphism

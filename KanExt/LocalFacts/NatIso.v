@@ -19,19 +19,21 @@ stated with hom functor definition of local kan extensions. *)
 Section Hom_Local_Right_KanExt_Iso.
   Context {C C' : Category} {p : C –≻ C'}
           {D : Category} {F F' : C –≻ D}
-          (N : (F' ≡≡ F ::> Func_Cat _ _)%morphism)
+          (N : (F' ≃ F)%natiso)
           (hlrke : Hom_Local_Right_KanExt p F).
 
   Definition Hom_Local_Right_KanExt_Iso : Hom_Local_Right_KanExt p F' :=
     {|
       HLRKE := hlrke;
       HLRKE_Iso :=
-        Isomorphism_Compose
-          (NatIso_hor_comp
-             (NatTrans_id_Iso (Left_Functor_Extender p D)^op)
-             (Fix_Bi_Func_2_object_NatIso (Hom_Func (Func_Cat C D)) N)
-          )
+        (
           (HLRKE_Iso hlrke)
+            ∘ (
+              (Fix_Bi_Func_2_object_NatIso (Hom_Func (Func_Cat C D)) N)
+               ∘_h (NatTrans_id_Iso (Left_Functor_Extender p D)^op)
+            )
+        )%isomorphism%natiso
+          
     |}.
 
 End Hom_Local_Right_KanExt_Iso.
@@ -43,7 +45,7 @@ Section Local_Right_KanExt_Iso.
           {p : C –≻ C'}
           {D : Category}
           {F F' : C –≻ D}
-          (N : (F' ≡≡ F ::> Func_Cat _ _)%morphism)
+          (N : (F' ≃ F)%natiso)
           (hlrke : Local_Right_KanExt p F).
 
   Definition Local_Right_KanExt_Iso : Local_Right_KanExt p F' :=
@@ -63,16 +65,14 @@ Section Iso_Hom_Local_Right_KanExt.
           {D : Category}
           {F : C –≻ D}
           {hlrke hlrke' : C' –≻ D}
-          (N : (hlrke ≡≡ hlrke' ::> Func_Cat _ _)%morphism)
+          (N : (hlrke ≃ hlrke')%natiso)
           (ihlrke : Hom_Local_Right_KanExt_Isomorphism p F hlrke).
   
   Definition Iso_Hom_Local_Right_KanExt : Hom_Local_Right_KanExt p F :=
     {|
       HLRKE := hlrke';
       HLRKE_Iso :=
-        Isomorphism_Compose
-          ihlrke
-          (Fix_Bi_Func_2_object_NatIso (Hom_Func (Func_Cat C' D)) N)
+        ((Fix_Bi_Func_2_object_NatIso (Hom_Func (Func_Cat C' D)) N) ∘ ihlrke)%isomorphism
     |}.
 
 End Iso_Hom_Local_Right_KanExt.
@@ -85,7 +85,7 @@ Section Iso_Local_Right_KanExt.
           {D : Category}
           {F : C –≻ D}
           {hlrke hlrke' : C' –≻ D}
-          (N : (hlrke ≡≡ hlrke' ::> Func_Cat _ _)%morphism)
+          (N : (hlrke ≃ hlrke')%natiso)
           (ihlrke : is_Local_Right_KanExt p F hlrke).
 
   Definition  Iso_Local_Right_KanExt : is_Local_Right_KanExt p F hlrke' :=
@@ -111,7 +111,7 @@ End Iso_Local_Right_KanExt.
 stated with hom functor definition of local kan extensions. *)
 Section Hom_Local_Right_KanExt_Iso_along.
   Context {C C' : Category} {p p' : C –≻ C'}
-          (N : (p' ≡≡ p ::> Func_Cat _ _)%morphism)
+          (N : (p' ≃ p )%natiso)
           {D : Category} {F : C –≻ D}
           (hlrke : Hom_Local_Right_KanExt p F).
 
@@ -120,12 +120,12 @@ Section Hom_Local_Right_KanExt_Iso_along.
       HLRKE := hlrke;
       HLRKE_Iso :=
         (
-          Isomorphism_Compose
-            (NatIso_hor_comp
-               (Opposite_NatIso (Left_Functor_Extender_Iso N D))
-               (NatTrans_id_Iso (@Fix_Bi_Func_2 _ (Func_Cat C D) _ F (Hom_Func (Func_Cat C D))))
+          (HLRKE_Iso hlrke)
+            ∘ (
+              (NatTrans_id_Iso (@Fix_Bi_Func_2 _ (Func_Cat C D) _ F (Hom_Func (Func_Cat C D))))
+                ∘_h ((Left_Functor_Extender_Iso N D)^op)
             )
-            (HLRKE_Iso hlrke))
+        )%isomorphism%natiso
     |}.
 
 End Hom_Local_Right_KanExt_Iso_along.
@@ -134,7 +134,7 @@ End Hom_Local_Right_KanExt_Iso_along.
 stated with cones definition of local kan extensions. *)
 Section Local_Right_KanExt_Iso_along.
   Context {C C' : Category} {p p' : C –≻ C'}
-          (N : (p' ≡≡ p ::> Func_Cat _ _)%morphism)
+          (N : (p' ≃ p)%natiso)
           {D : Category} {F : C –≻ D}
           (hlrke : Local_Right_KanExt p F).
 

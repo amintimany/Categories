@@ -4,7 +4,7 @@ Require Import Cat.Cat.
 Require Import Ext_Cons.Prod_Cat.Prod_Cat Ext_Cons.Prod_Cat.Operations.
 Require Import Basic_Cons.Product.
 Require Import Basic_Cons.Exponential.
-Require Import NatTrans.NatTrans NatTrans.Func_Cat.
+Require Import NatTrans.NatTrans NatTrans.Func_Cat NatTrans.NatIso.
 Require Import Cat.Cat_Product Cat.Cat_Exponential.
 
 (** Facts about exponentials in Cat. *)
@@ -69,7 +69,7 @@ Section Exp_Cat_morph_ex_compose_Iso.
     |}.
     
   (** This is the isomorphic form of the theorem above. *)
-  Program Definition Exp_Cat_morph_ex_compose_Iso : ((Exp_Cat_morph_ex (F ∘ (Prod_Functor G (Functor_id C))))%functor ≡≡ ((Exp_Cat_morph_ex F) ∘ G)%functor ::> Func_Cat _ _)%morphism :=
+  Program Definition Exp_Cat_morph_ex_compose_Iso : ((Exp_Cat_morph_ex (F ∘ (Prod_Functor G (Functor_id C))))%functor ≃ ((Exp_Cat_morph_ex F) ∘ G)%functor)%natiso :=
     {|
       iso_morphism := Exp_Cat_morph_ex_compose_Iso_RL;
       inverse_morphism := Exp_Cat_morph_ex_compose_Iso_LR
@@ -110,11 +110,11 @@ End Exp_Cat_morph_ex_NT.
 Section Exp_Cat_morph_ex_Iso.
   Context {C C' C'' : Category}
           {F F' : (Prod_Cat C'' C) –≻ C'}
-          (N : (F ≡≡ F' ::> Func_Cat _ _)%morphism)
+          (N : (F ≃ F')%natiso)
   .
 
   (** If F is naturally isomorphic to F' then (curry F) is naturally isomorphic to (curry F'). *)
-  Program Definition Exp_Cat_morph_ex_Iso : (Exp_Cat_morph_ex F ≡≡ Exp_Cat_morph_ex F' ::> Func_Cat _ _)%morphism :=
+  Program Definition Exp_Cat_morph_ex_Iso : (Exp_Cat_morph_ex F ≃ Exp_Cat_morph_ex F')%natiso :=
     {|
       iso_morphism := Exp_Cat_morph_ex_NT (iso_morphism N);
       inverse_morphism := Exp_Cat_morph_ex_NT (inverse_morphism N)
@@ -176,11 +176,11 @@ End Exp_Cat_morph_ex_inverse_NT.
 Section Exp_Cat_morph_ex_inverse_Iso.
   Context {C C' C'' : Category}
           {F F' : (Prod_Cat C'' C) –≻  C'}
-          (N : (Exp_Cat_morph_ex F ≡≡ Exp_Cat_morph_ex F' ::> Func_Cat _ _)%morphism)
+          (N : (Exp_Cat_morph_ex F ≃ Exp_Cat_morph_ex F')%natiso)
   .
 
   (** If (curry F) is naturally isomorphic  to (curry F') then we have that F is naturally isomorphic to F'. *)
-  Program Definition Exp_Cat_morph_ex_inverse_Iso :  (F ≡≡ F' ::> Func_Cat _ _)%morphism :=
+  Program Definition Exp_Cat_morph_ex_inverse_Iso :  (F ≃ F')%natiso :=
     {|
       iso_morphism := Exp_Cat_morph_ex_inverse_NT (iso_morphism N);
       inverse_morphism := Exp_Cat_morph_ex_inverse_NT (inverse_morphism N)

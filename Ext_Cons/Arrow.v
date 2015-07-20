@@ -139,7 +139,7 @@ Program Definition Arrow_to_Arrow_OP (C : Category) (ar : Arrow C) : Arrow (C ^o
   |}.
 
 (** The type of arrows of a category and the type of arrows of its opposite are isomorphic. *)
-Program Definition Arrow_OP_Iso (C : Category) : ((Arrow C) ≡≡ (Arrow (C ^op)) ::> Type_Cat)%morphism :=
+Program Definition Arrow_OP_Iso (C : Category) : ((Arrow C) ≃≃ (Arrow (C ^op)) ::> Type_Cat)%isomorphism :=
   {|
     iso_morphism := Arrow_to_Arrow_OP C;
     inverse_morphism := Arrow_to_Arrow_OP (C ^op)

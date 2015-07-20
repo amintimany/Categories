@@ -30,7 +30,7 @@ generalized sums of that type. *)
 Section GenProd_to_GenSum.
   Context {A : Type} {C : Category} {map : A → C} (L : GenProd map).  
   Definition GenProd_to_GenSum : @GenSum A C^op map :=
-    Local_Right_KanExt_Iso (Inverse_Isomorphism (@Discr_Func_Iso C^op A map)) L.
+    Local_Right_KanExt_Iso ((@Discr_Func_Iso C^op A map)⁻¹) L.
 
 End GenProd_to_GenSum.
 
@@ -128,7 +128,7 @@ End GenSum_IsoType.
 universe restrictions. *)
 Section GenSum_GenProd_IsoType.
   Context {A B : Type}
-          (Iso : (A ≡≡ B ::> Type_Cat)%morphism)
+          (Iso : (A ≃≃ B ::> Type_Cat)%isomorphism)
   .
 
   Section Conversions.

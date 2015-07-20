@@ -56,7 +56,7 @@ Section Init_Prod.
   Qed.
 
   Theorem Init_Prod a :
-    (((Prod_Func C) _o (@terminal _ init, a)) ≡ init)%morphism.
+    (((Prod_Func C) _o (@terminal _ init, a)) ≃ init)%isomorphism.
   Proof.
     apply (@CoIso (C^op)).
     CoYoneda.

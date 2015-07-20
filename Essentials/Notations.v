@@ -21,6 +21,12 @@ Reserved Notation "C '^op'" (at level 9, no associativity).
 
 Reserved Notation "a –≻ b" (at level 10, no associativity).
 
+Reserved Notation "f '⁻¹'" (at level 7, no associativity).
+
+Reserved Notation "a ≃ b" (at level 70, no associativity).
+
+Reserved Notation "a ≃≃ b ::> C" (at level 70, no associativity).
+
 Reserved Notation "f ∘ g" (at level 11, right associativity).
 
 Reserved Notation "f '∘_h' g" (at level 11, right associativity).
@@ -55,4 +61,4 @@ Delimit Scope nattrans_scope with nattrans.
 
 Delimit Scope natiso_scope with natiso.
 
-Delimit Scope iso_scope with isomorphism.
+Delimit Scope isomorphism_scope with isomorphism.

@@ -1,7 +1,7 @@
 Require Import Category.Main.
 Require Import Functor.Functor Functor.Const_Func Functor.Functor_Ops.
 Require Import Ext_Cons.Prod_Cat.Prod_Cat Ext_Cons.Prod_Cat.Operations.
-Require Import NatTrans.Operations NatTrans.Func_Cat.
+Require Import NatTrans.Operations NatTrans.NatIso.
 Require Import Archetypal.Discr.Discr.
 Require Import Limits.Limit Limits.Pointwise.
 Require Import Ext_Cons.Arrow.
@@ -40,8 +40,8 @@ Section Complete_Preorder.
       (Discr_Func
          (((@Fix_Bi_Func_1 C^op _ _ x (Hom_Func.Hom_Func C)) ∘ (Discr_Func Arr_y)) _o)%object
       )
-      ≡≡ ((@Fix_Bi_Func_1 C^op _ _ x (Hom_Func.Hom_Func C)) ∘ (Discr_Func Arr_y))%functor
-      ::> Func_Cat _ _)%morphism
+      ≃ ((@Fix_Bi_Func_1 C^op _ _ x (Hom_Func.Hom_Func C)) ∘ (Discr_Func Arr_y))%functor
+    )%natiso
     :=
     {|
       iso_morphism := {|Trans := fun c h => h|};
@@ -53,14 +53,14 @@ Section Complete_Preorder.
     (Local_Right_KanExt_Iso
       Func_Iso
       (Rep_Preserve_Limits _ x LimOf_Arr_y)
-      ≡≡
+      ≃≃
       GenProd_of_const_Hom_x_y
-      ::> LoKan_Cone_Cat _ _)%morphism
+      ::> LoKan_Cone_Cat _ _)%isomorphism
     := Local_Right_KanExt_unique _ _ _ _
   .
   
   Local Definition Hom_x_LimOf_Arr_y_ISO_Arrow_C_to_Hom_x_y :
-    ((x –≻ ((LimOf_Arr_y _o) tt))%object%morphism ≡≡ (Arrow C → x –≻ y)%morphism ::> Type_Cat)%morphism :=
+    ((x –≻ ((LimOf_Arr_y _o) tt))%object%morphism ≃≃ (Arrow C → x –≻ y)%morphism ::> Type_Cat)%isomorphism :=
     LoKan_Cone_Iso_object_Iso
       _
       _

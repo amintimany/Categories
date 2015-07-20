@@ -33,7 +33,7 @@ End Limit.
 
 (** Limits are unique up to isomorphism. *)
 Program Definition Limit_Iso {J C : Category} {D : J –≻ C} (l l' : Limit D) :
-  (l ≡≡ l' ::> C)%morphism :=
+  (l ≃≃ l' ::> C)%isomorphism :=
   {|
     iso_morphism :=
       Trans

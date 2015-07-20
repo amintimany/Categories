@@ -3,16 +3,17 @@ Require Import Functor.Functor Functor.Functor_Ops.
 Require Import Coq_Cats.Type_Cat.Type_Cat.
 Require Import Ext_Cons.Prod_Cat.Prod_Cat.
 Require Import Cat.Cat.
-Require Import NatTrans.NatTrans NatTrans.Operations NatTrans.Func_Cat.
+Require Import NatTrans.NatTrans NatTrans.Operations NatTrans.Func_Cat NatTrans.NatIso.
 
+Local Open Scope isomorphism_scope.
 Local Open Scope morphism_scope.
 Local Open Scope object_scope.
 
 (** If two categories are isomorphic, then so are their duals. *)
 Section Opposite_Cat_Iso.
-  Context {C D : Category} (I : C ≡≡ D ::> Cat).
+  Context {C D : Category} (I : C ≃≃ D ::> Cat).
 
-  Program Definition Opposite_Cat_Iso : (C^op)%category ≡≡ (D^op)%category ::> Cat
+  Program Definition Opposite_Cat_Iso : (C^op)%category ≃≃ (D^op)%category ::> Cat
     :=
       {|
         iso_morphism := ((iso_morphism I)^op)%functor;
@@ -37,7 +38,7 @@ End Opposite_Cat_Iso.
   
 (** Conversion from a category to another isomorphic category. *)
 Section Cat_IConv.
-  Context {C D : Category} (I : C ≡≡ D ::> Cat).
+  Context {C D : Category} (I : C ≃≃ D ::> Cat).
 
   (** Object conversion through an isomorphism and its inverse isomorphism gives back the same object. *)
   Definition Cat_Iso_Obj_conv (c : C) : c = (((inverse_morphism I) _o) (((iso_morphism I) _o) c))%object.
@@ -148,7 +149,7 @@ Section Cat_IConv.
 End Cat_IConv.
 
 Section Cat_Iso_inv.
-  Context {C D : Category} (I : C ≡≡ D ::> Cat).
+  Context {C D : Category} (I : C ≃≃ D ::> Cat).
 
   (** The main theorem of this module. Given two isomorphism I between categories C and D, for each morphism h: Hom (I _o c) (I _o c') in D, there is a morphism g in C such that the conversion of h through I (I _a g) gives back the smae arrow, i.e., h = (I _a h). *)
   Theorem Cat_Iso_inv {c c' : C} (h : ((iso_morphism I) _o c) –≻ ((iso_morphism I) _o c'))
@@ -158,8 +159,8 @@ Section Cat_Iso_inv.
     match goal with
       [|- ?A = ?B] =>
         etransitivity;
-        [apply (eq_sym (@Cat_Iso_conv_inv_I_inv_I D C (Inverse_Isomorphism I) _ _ A))|
-         etransitivity; [|apply (@Cat_Iso_conv_inv_I_inv_I D C (Inverse_Isomorphism I) _ _ B)]]
+        [apply (eq_sym (@Cat_Iso_conv_inv_I_inv_I D C (I⁻¹) _ _ A))|
+         etransitivity; [|apply (@Cat_Iso_conv_inv_I_inv_I D C (I⁻¹) _ _ B)]]
     end.
     do 2 apply f_equal.
     match goal with
@@ -179,10 +180,10 @@ Given I : C ≡≡ D for categories C and D and F : D -> E, F ∘ (I ∘ I⁻¹)
 naturally isomorphic.
 *)
 Section IsoCat_NatIso.
-  Context {C D : Category} (I : (C ≡≡ D ::> Cat)%morphism) {E : Category} (F : (D –≻ E)%functor).
+  Context {C D : Category} (I : (C ≃≃ D ::> Cat)%morphism) {E : Category} (F : (D –≻ E)%functor).
 
   Program Definition IsoCat_NatIso :
-    ((F ∘ ((iso_morphism I) ∘ (I⁻¹)%morphism)) ≡≡ F ::> Func_Cat _ _)%morphism :=
+    ((F ∘ ((iso_morphism I) ∘ (I⁻¹)%morphism))%functor ≃ F)%natiso :=
     {|
       iso_morphism := IsoCat_NatTrans I F;
       inverse_morphism := IsoCat_NatTrans_back I F

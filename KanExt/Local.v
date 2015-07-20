@@ -1,7 +1,7 @@
 Require Import Category.Main.
 Require Import Functor.Functor Functor.Functor_Ops Functor.Representable.Hom_Func.
 Require Import Ext_Cons.Prod_Cat.Prod_Cat Ext_Cons.Prod_Cat.Operations.
-Require Import NatTrans.NatTrans NatTrans.Operations NatTrans.Func_Cat.
+Require Import NatTrans.NatTrans NatTrans.Operations NatTrans.Func_Cat NatTrans.NatIso.
 Require Import Functor.Functor_Extender.
 
 (**
@@ -158,12 +158,11 @@ Section Hom_Local_Right_KanExt.
         (@Fix_Bi_Func_2 _ (Func_Cat _ _) _ F (Hom_Func (Func_Cat C D)))
           ∘ (Left_Functor_Extender p D)^op
       )%functor
-       ≡≡
+       ≃
        (
          @Fix_Bi_Func_2 _ (Func_Cat _ _) _ HLRKE (Hom_Func (Func_Cat C' D))
        )
-       ::> Func_Cat _ _
-    )%morphism
+    )%natiso
   .
   
   Record Hom_Local_Right_KanExt := 

@@ -67,9 +67,9 @@ Section Prod_Func_Hom_Func.
           {G : B –≻ C}
           {G' : B –≻ D}
           (N : (
-                 ((Hom_Func C) ∘ (Prod_Functor F G))
-                   ≡≡ ((Hom_Func D) ∘ (Prod_Functor F' G')) ::> Func_Cat _ _
-               )%functor%morphism
+                 ((Hom_Func C) ∘ (Prod_Functor F G))%functor
+                   ≃ ((Hom_Func D) ∘ (Prod_Functor F' G'))%functor
+               )%natiso
           )
   .
   
@@ -86,12 +86,16 @@ Section Prod_Func_Hom_Func.
     apply NatTrans_eq_simplify; FunExt; basic_simpl; TRC; solve [(cbn_rewrite (right_inverse N); trivial) |  (cbn_rewrite (left_inverse N); trivial)].
 
   (** Given a natural isomorphism ((Hom_Func C) ∘ (Prod_Functor F G)) ≡ ((Hom_Func D) ∘ (Prod_Functor F' G')), we construct a natural ismorphism ((Hom_Func C^op) ∘ (Prod_Functor G F)) ≡ ((Hom_Func D^op) ∘ (Prod_Functor G' F')). *)
-  Program Definition Prod_Func_Hom_Func : ((Hom_Func C^op) ∘ (Prod_Functor G F) ≡≡ (Hom_Func D^op) ∘ (Prod_Functor G' F') ::> Func_Cat _ _)%functor%morphism :=
-    {|
-      iso_morphism := Prod_Func_Hom_Func_NT (iso_morphism N);
-      inverse_morphism := Prod_Func_Hom_Func_NT (inverse_morphism N)
-    |}.
-
+  Program Definition Prod_Func_Hom_Func :
+    ((((Hom_Func C^op) ∘ (Prod_Functor G F))%functor)
+       ≃ ((Hom_Func D^op) ∘ (Prod_Functor G' F'))%functor)%natiso
+    :=
+      {|
+        iso_morphism := Prod_Func_Hom_Func_NT (iso_morphism N);
+        inverse_morphism := Prod_Func_Hom_Func_NT (inverse_morphism N)
+      |}
+  .
+  
 End Prod_Func_Hom_Func.
 
 Section Prod_Func_Hom_Func_invl.
@@ -102,9 +106,9 @@ Section Prod_Func_Hom_Func_invl.
           {G' : B –≻ D}
           (N :
              (
-               ((Hom_Func C) ∘ (Prod_Functor F G))
-                 ≡≡ ((Hom_Func D) ∘ (Prod_Functor F' G')) ::> Func_Cat _ _
-             )%functor%morphism
+               ((Hom_Func C) ∘ (Prod_Functor F G))%functor
+                 ≃ ((Hom_Func D) ∘ (Prod_Functor F' G'))%functor
+             )%natiso
           )
   .
 
@@ -118,7 +122,7 @@ End Prod_Func_Hom_Func_invl.
 
 (** If I : C ≡ D is an isomorphism of categories, then hom functor of C is naturally isomorphic to hom functor of D taken after conversion from C to D through I. In this section we prove this by providing both sides of natural isomorphism and showing that they are inverses. *)
 Section Hom_Func_to_Iso_Hom_Func.
-  Context {C D : Category} (I : (C ≡≡ D ::> Cat)%morphism).
+  Context {C D : Category} (I : (C ≃≃ D ::> Cat)%isomorphism).
 
   Local Obligation Tactic := idtac.
   
@@ -160,7 +164,11 @@ Section Hom_Func_to_Iso_Hom_Func.
   Qed.
 
     
-  Program Definition Hom_Func_Cat_Iso : ((Hom_Func C) ≡≡ (Hom_Func D) ∘ (Prod_Functor (iso_morphism I)^op (iso_morphism I)) ::> Func_Cat _ _)%functor%morphism :=
+  Program Definition Hom_Func_Cat_Iso :
+    (
+      (Hom_Func C)
+        ≃ ((Hom_Func D) ∘ (Prod_Functor (iso_morphism I)^op (iso_morphism I)))%functor
+    )%natiso :=
     {|
       iso_morphism := Hom_Func_to_Iso_Hom_Func;
       inverse_morphism := Iso_Hom_Func_to_Hom_Func

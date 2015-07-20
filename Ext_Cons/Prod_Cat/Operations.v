@@ -95,7 +95,7 @@ Program Definition Prod_of_Op_ProdOp (C D : Category) : (Prod_Cat C^op D^op) –
   F_compose := fun _ _ _ _ _ => eq_refl
 |}.
 
-Program Definition Opposite_Prod (C D : Category) : ((Prod_Cat C D)^op%category ≡≡ Prod_Cat C^op D^op ::> Cat)%morphism :=
+Program Definition Opposite_Prod (C D : Category) : ((Prod_Cat C D)^op%category ≃≃ Prod_Cat C^op D^op ::> Cat)%isomorphism :=
   Build_Isomorphism _ _ _ (ProdOp_Prod_of_Op _ _) (Prod_of_Op_ProdOp _ _) eq_refl eq_refl.
 
 

@@ -8,7 +8,7 @@ Require Import Cat.Cat_Iso.
 (** Given I : C ≡ D for C and D categories we have limit of (F ∘ I) if we have limit of F. *)
 Section Limit_From_Isomorphic_Cat.
 Context {C D : Category}
-        (I : (C ≡≡ D ::> Cat)%morphism)
+        (I : (C ≃≃ D ::> Cat)%isomorphism)
         {E : Category}
         {F : (D –≻ E)%functor}
         (L : Limit F)
@@ -29,7 +29,7 @@ End Limit_From_Isomorphic_Cat.
 (** Given I : C ≡ D for C and D categories we have colimit of (F ∘ I) if we have colimit of F. *)
 Section CoLimit_From_Isomorphic_Cat.
 Context {C D : Category}
-        (I : (C ≡≡ D ::> Cat)%morphism)
+        (I : (C ≃≃ D ::> Cat)%isomorphism)
         {E : Category}
         {F : (D –≻ E)%functor}
         (L : CoLimit F)
