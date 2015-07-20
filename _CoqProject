@@ -108,6 +108,7 @@ Limits/Isomorphic_Cat.v
 #Archetypal:
 Archetypal/Discr/Discr.v
 Archetypal/Discr/NatFacts.v
+Archetypal/Discr/Main.v
 Archetypal/Monoid_Cat.v
 Archetypal/PreOrder_Cat.v
 Archetypal/Examples/List_Monoid_Cat.v
@@ -140,6 +141,7 @@ KanExt/Facts.v
 #Topos:
 Topos/SubObject_Classifier.v
 Topos/Topos.v
+Topos/Main.v
 
 #Demo:
 Demo/Demo.v

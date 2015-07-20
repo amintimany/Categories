@@ -1,5 +1,5 @@
 Require Import Category.Main.
-Require Import Functor.Main.
+Require Import Functor.Functor Functor.Functor_Ops Functor.Functor_Properties.
 Require Import Cat.Cat.
 Require Import NatTrans.NatTrans NatTrans.Func_Cat NatTrans.Operations.
 
