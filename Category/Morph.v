@@ -112,13 +112,6 @@ Program Definition Isomorphism_Compose {C : Category} {a b c : C} (I : a ≡ b) 
   iso_morphism := I' ∘ I;
   inverse_morphism := I⁻¹ ∘ I'⁻¹
 |}.
-  
-(** A monic arrow (AKA, mono, monomorphic arrow and monomorphism) m is an arrow such that for any two arrows g and h (of the appropriate domain and codomain) we have if m ∘ g = m ∘ h then g = h. *)
-Record Monic {C : Category} (a b : Obj) :=
-{
-  mono_morphism : a –≻ b;
-  mono_morphism_monomorphic : ∀ (c : Obj) (g h : c –≻ a), mono_morphism ∘ g = mono_morphism ∘ h → g = h
-}.
 
 Next Obligation.
 Proof.
@@ -133,7 +126,14 @@ Proof.
   rewrite (assoc_sym I'⁻¹).
   auto.
 Qed.
-  
+
+(** A monic arrow (AKA, mono, monomorphic arrow and monomorphism) m is an arrow such that for any two arrows g and h (of the appropriate domain and codomain) we have if m ∘ g = m ∘ h then g = h. *)
+Record Monic {C : Category} (a b : Obj) :=
+{
+  mono_morphism : a –≻ b;
+  mono_morphism_monomorphic : ∀ (c : Obj) (g h : c –≻ a), mono_morphism ∘ g = mono_morphism ∘ h → g = h
+}.
+
 Coercion mono_morphism : Monic >-> Hom.
 
 Arguments mono_morphism {_ _ _} _.
