@@ -1,5 +1,6 @@
 Require Import Category.Main.
 Require Import Basic_Cons.CCC.
+Require Import Coq_Cats.Coq_Cat.
 
 (*
 **********************************************************
@@ -12,16 +13,7 @@ Require Import Basic_Cons.CCC.
 
 (* The category of Types in Coq's "Prop" universe (Coq's Proposits) *)
 
-Program Instance Prop_Cat : Category :=
-{
-  Obj := Prop; 
-
-  Hom := (λ A B, A → B);
-
-  compose := fun A B C (g : A -> B) (h : B -> C) => fun (x : A) => h (g x);
-
-  id := fun A => fun x => x
-}.
+Program Definition Prop_Cat : Category := Coq_Cat Prop.
 
 Local Hint Extern 1 => contradiction.
 
@@ -33,52 +25,83 @@ Program Instance True_term : Terminal Prop_Cat := {terminal := True}.
 
 Local Hint Extern 1 => match goal with |- ?A = ?B :> _ ∧ _ => destruct A; destruct B end.
 
-Program Instance Conj_Product (P Q : Prop) : Product P Q := {product := (P ∧ Q)}.
+Local Hint Extern 1 => tauto.
 
-Next Obligation. (* Prod_morph_unique *)
-Proof.
-  extensionality x.
-  apply (fun p => equal_f p x) in H1; apply (fun p => equal_f p x) in H2.
-  simpl in H1, H2.
+Section Prod.
+  Context (P Q : Prop).
+
+  Program Definition Conj_Product : @Product Prop_Cat P Q := {|product := (P ∧ Q)|}.
+  
+  Local Obligation Tactic := idtac.
+  
+  Next Obligation. (* Prod_morph_unique *)
+  Proof.
+    intros p' r1 r2 f g H1 H2 H3 H4.
+    rewrite <- H3 in H1.
+    rewrite <- H4 in H2.
+    clear H3 H4.
+    extensionality x.
+    apply (fun p => equal_f p x) in H1; apply (fun p => equal_f p x) in H2.
+    cbn in H1, H2.
   destruct (f x); destruct (g x); cbn in *; subst; trivial.
-Qed.
+  Qed.
 
-Program Instance Prop_Cat_Has_Products : Has_Products Prop_Cat := fun _ _ => _.
+End Prod.
+  
+Program Instance Prop_Cat_Has_Products : Has_Products Prop_Cat := Conj_Product.
 
 Local Hint Extern 1 => match goal with H : _ ∧ _ |- _ => destruct H end.
 
-Program Instance implication_exp (P Q : Prop) : Exponential P Q := {exponential := (P -> Q)}.
+Section Exp.
+  Context (P Q : Prop).
+  
+  Program Definition implication_exp :
+    @Exponential Prop_Cat _ P Q
+    :=
+      {|
+        exponential := (P -> Q)
+      |}.
 
-Next Obligation. (* Exp_morph_unique *)
-Proof.
-  extensionality a; extensionality x.
-  apply (fun p => equal_f p (conj a x)) in H0.
-  trivial.
-Qed.
+  Local Obligation Tactic := idtac.
+  
+  Next Obligation. (* Exp_morph_unique *)
+  Proof.
+    intros z f u u' H1 H2.
+    rewrite H1 in H2; clear H1.
+    extensionality a; extensionality x.
+    apply (fun p => equal_f p (conj a x)) in H2.
+    assumption.
+  Qed.
 
-(* Category of Prop Universe is cartesian closed *)
+End Exp.
 
-Program Instance Prop_Cat_Has_Exponentials : Has_Exponentials Prop_Cat := fun _ _ => _.
+Program Instance Prop_Cat_Has_Exponentials : Has_Exponentials Prop_Cat := implication_exp.
 
 Program Instance Prop_Cat_CCC : CCC Prop_Cat.
 
-Local Hint Extern 1 => tauto.
-
 Local Hint Extern 1 => match goal with H : _ ∨ _ |- _ => destruct H end.
 
-Program Instance Disj_Sum (P Q : Prop) : Sum P Q := {|product := (P ∨ Q)|}.
+Section Sum.
+  Context (P Q : Prop).
+  Program Definition Disj_Sum  : @Sum Prop_Cat P Q := {|product := (P ∨ Q)|}.
 
-Next Obligation. (* Sum_morph_unique *)
-Proof.
-  extensionality x.
-  destruct x as [x1|x2].
-  + apply (fun p => equal_f p x1) in H1; auto.
-  + apply (fun p => equal_f p x2) in H2; auto.
-Qed.
+  Local Obligation Tactic := idtac.
 
-(* Prop_Sum is proven -- the rest of the obligations (e.g., injections, etc.) are proven by Program system :-) *)
+  Next Obligation. (* Sum_morph_unique *)
+  Proof.
+    intros p' r1 r2 f g H1 H2 H3 H4.
+    rewrite <- H3 in H1.
+    rewrite <- H4 in H2.
+    clear H3 H4.
+    extensionality x.
+    destruct x as [x1|x2].
+    + apply (fun p => equal_f p x1) in H1; auto.
+    + apply (fun p => equal_f p x2) in H2; auto.
+  Qed.
+  
+End Sum.
 
-Program Instance Prop_Cat_Has_Sums : Has_Sums Prop_Cat := fun _ _ => _.
+Program Instance Prop_Cat_Has_Sums : Has_Sums Prop_Cat := Disj_Sum.
 
 
 

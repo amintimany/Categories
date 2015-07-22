@@ -1,40 +1,75 @@
 Require Import Category.Category.
 Require Import Ext_Cons.Arrow.
 Require Import Functor.Functor Functor.Functor_Ops Const_Func.
-Require Import Archetypal.Discr.
+Require Import Archetypal.Discr.Discr.
 
+Local Open Scope morphism_scope.
+
+(**
+A comma category for Functors F : B → C and G : D → C is a category whose objects are arrows in C
+
+#
+<pre>   
+   F _o x ———————–> G _o y
+</pre>
+#
+
+for x an object of B and y an object of D. Arrows of comma are commutative diagrams in C:
+
+#
+<pre>
+         F _o x ———————–> G _o y
+           |                |
+           |                |
+   F _a h  |                |  F _a h'
+           |                |
+           |                |
+           ↓                ↓
+         F _o x' ———————–> G _o y'
+</pre>
+#
+
+for h : x → x' an arrow in B and h' : y → y' an arrow in G.
+ 
+*)
 Section Comma.
-  Context {B C D : Category} (F : Functor B C) (G : Functor D C).
+  Context {B C D : Category} (F : (B –≻ C)%functor) (G : (D –≻ C)%functor).
 
-  Class Comma_Obj : Type :=
+  Record Comma_Obj : Type :=
     {
       CMO_src : B;
       CMO_trg : D;
-      CMO_hom : Hom (F _o CMO_src) (G _o CMO_trg)
+      CMO_hom : ((F _o CMO_src) –≻ (G _o CMO_trg))%object
     }.
 
-  Class Comma_Hom (a b : Comma_Obj) : Type :=
+  Record Comma_Hom (a b : Comma_Obj) : Type :=
     {
-      CMH_left : Hom (@CMO_src a) (@CMO_src b);
-      CMH_right : Hom (@CMO_trg a) (@CMO_trg b);
-      CMH_com :  (G _a _ _ CMH_right) ∘ (@CMO_hom a) = (@CMO_hom b) ∘ (F _a _ _ CMH_left)
+      CMH_left : (CMO_src a) –≻ (CMO_src b);
+      CMH_right : (CMO_trg a) –≻ (CMO_trg b);
+      CMH_com :  ((G _a CMH_right) ∘ (@CMO_hom a) = (@CMO_hom b) ∘ (F _a CMH_left))%morphism
     }.
+
+  Arguments CMH_left {_ _} _.
+  Arguments CMH_right {_ _} _.
+  Arguments CMH_com {_ _} _.
 
   Theorem Comma_Hom_eq_simplify {a b : Comma_Obj} (h h' : Comma_Hom a b) : (@CMH_left _ _ h) = (@CMH_left _ _ h') → (@CMH_right _ _ h) = (@CMH_right _ _ h') → h = h'.
   Proof.
     intros H1 H2.
-    destruct h as [hl hr hc]; destruct h' as [hl' hr' hc'].
+    destruct h; destruct h'.
     cbn in *.
-    destruct H1; destruct H2.
-    destruct (proof_irrelevance _ hc hc').
+    ElimEq.
+    PIR.
     trivial.
   Qed.
 
-  Program Instance Comma_Hom_compose {a b c : Comma_Obj} (h : Comma_Hom a b) (h' : Comma_Hom b c) : Comma_Hom a c :=
-    {
-      CMH_left := (@CMH_left _ _ h') ∘ (@CMH_left _ _ h);
-      CMH_right := (@CMH_right _ _ h') ∘ (@CMH_right _ _ h)
-    }.
+  Program Definition Comma_Hom_compose
+          {a b c : Comma_Obj} (h : Comma_Hom a b) (h' : Comma_Hom b c) :
+    Comma_Hom a c :=
+    {|
+      CMH_left := (CMH_left h') ∘ (CMH_left h);
+      CMH_right := (CMH_right h') ∘ (CMH_right h)
+    |}.
 
   Next Obligation.
   Proof.
@@ -51,11 +86,11 @@ Section Comma.
     apply Comma_Hom_eq_simplify; cbn; auto.
   Qed.    
 
-  Program Instance Comma_Hom_id (a : Comma_Obj) : Comma_Hom a a :=
-    {
+  Program Definition Comma_Hom_id (a : Comma_Obj) : Comma_Hom a a :=
+    {|
       CMH_left := id;
       CMH_right := id
-    }.
+    |}.
 
   Theorem Comma_Hom_id_unit_left {a b : Comma_Obj} (h : Comma_Hom a b) : Comma_Hom_compose h (Comma_Hom_id b) = h.
   Proof.
@@ -68,8 +103,8 @@ Section Comma.
   Qed.
 
   
-  Program Instance Comma : Category :=
-    {
+  Definition Comma : Category :=
+    {|
       Obj := Comma_Obj;
 
       Hom := Comma_Hom;
@@ -85,7 +120,7 @@ Section Comma.
       id_unit_right := @Comma_Hom_id_unit_right;
 
       id_unit_left := @Comma_Hom_id_unit_left
-    }.
+    |}.
 
 End Comma.
 
@@ -96,13 +131,20 @@ Arguments CMH_left {_ _ _ _ _ _ _} _.
 Arguments CMH_right {_ _ _ _ _ _ _} _.
 Arguments CMH_com {_ _ _ _ _ _ _} _.
 
+(**
+Slice, coslice and arrow categories are special cases of comma categories defined below:
+*)
+
 Section Slice_CoSlice.
   Context (C : Category) (c : Obj).
   
-  (*
+  (**
    The Slice of Category C with respect to c:
      Objects : Arrows of C ending in c
      Arrows: for g : a → c and h : b → c, an arrow from g to h is a pair of arrows f : a → b s.t. the ollowing commutes:
+
+#
+<pre>
 
            g
          a –––→ c
@@ -112,16 +154,19 @@ Section Slice_CoSlice.
          |  /
          ↓ /
          b 
-
+</pre>
+#
    *)
 
-  Instance Slice : Category := Comma (Functor_id _) (Const_Func 1 c).
+  Definition Slice : Category := Comma (Functor_id _) (Const_Func 1 c).
 
-  (*
+  (**
    The Slice of Category C with respect to c:
      Objects : Arrows of C ending in c
      Arrows: for g : a → c and h : b → c, an arrow from g to h is a pair of arrows f : a → b s.t. the ollowing commutes:
 
+#
+<pre>
             g
          c ←––– a
          ↑     /
@@ -130,20 +175,24 @@ Section Slice_CoSlice.
          |  /
          | ↙
          b 
-
+</pre>
+#
    *)
 
-  Instance CoSlice : Category := Comma (Const_Func 1 c) (Functor_id _).
+  Definition CoSlice : Category := Comma (Const_Func 1 c) (Functor_id _).
 
 End Slice_CoSlice.
 
 Section Arrow_Cat.
   Context (C : Category).
 
-  (*
+  (**
    The Arrow Category of C:
      Objects : Arrows of C
      Arrows: for g : a → b and h : c → d, an arrow from g to h is a pair of arrows (f,f') s.t. the ollowing commutes:
+
+#
+<pre>
 
              g
          a ––––→ b
@@ -152,9 +201,11 @@ Section Arrow_Cat.
          ↓       ↓
          c –——–→ d
              h
+</pre>
+#
    *)
 
-  Instance Arrow_Cat : Category := Comma (Functor_id C) (Functor_id C).
+  Definition Arrow_Cat : Category := Comma (Functor_id C) (Functor_id C).
 
 End Arrow_Cat.
 

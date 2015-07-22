@@ -1,137 +1,147 @@
 Require Import Category.Main.
 Require Import Functor.Functor Functor.Functor_Ops Functor.Representable.Hom_Func_Prop.
+Require Import Functor.Functor_Extender.
 Require Import Ext_Cons.Prod_Cat.Prod_Cat Ext_Cons.Prod_Cat.Operations.
-Require Import NatTrans.NatTrans NatTrans.Func_Cat NatTrans.NatIso.
+Require Import NatTrans.NatTrans NatTrans.Operations NatTrans.Func_Cat NatTrans.NatIso.
 Require Import Adjunction.Adjunction Adjunction.Duality Adjunction.Adj_Facts.
 Require Import KanExt.Global.
 
-
+(** In this module we establish the dualit of kan extensions.
+That is, the left kan extension along p is just the right kan extension along pᵒᵖ and vice versa.
+ *)
 Section GlobalDuality.
-  Context {C C' : Category} (p : Functor C C') (D : Category).
+  Context {C C' : Category} (p : (C –≻ C')%functor) (D : Category).
 
-  Local Notation GEXOP := (Functor_compose
-                 (Functor_compose (Func_Cat_Op_to_Op_Func_Cat C' D)
-                    (Opposite_Functor (Left_Functor_Extender p D)))
-                 (Op_Func_Cat_to_Func_Cat_Op C D)) (only parsing).
-
-  Program Instance GExtend_Duality_lr : NatTrans (Left_Functor_Extender (Opposite_Functor p) D ^op) GEXOP :=
-    {
-      Trans :=  fun h => {|Trans := fun d => id |}
-    }.
-
+  (** We establish this duality though hom functor definition of adjunction. *)
+  
   Local Obligation Tactic := idtac.
-
-  Next Obligation.
-  Proof.
-    intros c c' h.
-    apply NatTrans_eq_simplify; extensionality x; cbn.
-    simpl_ids.
-    rewrite (F_id c).
-    rewrite (F_id c').
-    etransitivity; [apply (@id_unit_right D)| symmetry; apply (@id_unit_left D)].
-  Qed.
-
-  Next Obligation.
-  Proof.
-    symmetry.
-    apply GExtend_Duality_lr_obligation_3.
-  Qed.
-
-  Program Instance GExtend_Duality_rl : NatTrans GEXOP (Left_Functor_Extender (Opposite_Functor p) D ^op) :=
-    {
-      Trans :=  fun h => {|Trans := fun d => id |}
-    }.
-
-  Local Obligation Tactic := idtac.
-
-  Next Obligation.
-  Proof.
-    intros F c c' h; cbn.
-    simpl_ids; trivial.
-  Qed.
-
-  Next Obligation.
-  Proof.
-    intros F c c' h; cbn.
-    simpl_ids; trivial.
-  Qed.
-    
-  Next Obligation.
-  Proof.
-    intros c c' h.
-    apply NatTrans_eq_simplify; extensionality x; cbn.
-    simpl_ids.
-    rewrite (F_id c).
-    rewrite (F_id c').
-    etransitivity; [apply (@id_unit_left D)| symmetry; apply (@id_unit_right D)].
-  Qed.
-
-  Next Obligation.
-  Proof.
-    symmetry.
-    apply GExtend_Duality_rl_obligation_3.
-  Qed.
-
-  Program Instance GExtend_Duality : (Left_Functor_Extender (Opposite_Functor p) D ^op) ≡≡ GEXOP ::> Func_Cat _ _ :=
-    {
-      iso_morphism := GExtend_Duality_lr;
-      inverse_morphism := GExtend_Duality_rl
-    }.
-
-  Next Obligation.
-  Proof.
-    apply NatTrans_eq_simplify; extensionality x.
-    apply NatTrans_eq_simplify; extensionality y.
-    cbn.
-    repeat rewrite F_id; repeat rewrite (F_id x); trivial.
-  Qed.
-
-  Next Obligation.
-  Proof.
-    apply NatTrans_eq_simplify; extensionality x.
-    apply NatTrans_eq_simplify; extensionality y.
-    cbn.
-    repeat rewrite F_id; repeat rewrite (F_id x); trivial.
-  Qed.
-
+  
   Section Left_to_Right.
     Context (lke : Left_KanExt p D).
 
-    Program Instance KanExt_Left_to_Right : Right_KanExt (Opposite_Functor p) D^op :=
-      {
-        right_kan_ext := Functor_compose
-                           (Functor_compose (Func_Cat_Op_to_Op_Func_Cat C D)
-                                            (Opposite_Functor lke)) (Op_Func_Cat_to_Func_Cat_Op C' D)
-      }.
+    (** The natural Isomorphism underlying the right kan extension which is to be shown.
+
+Hom_{Func_Cat Cᵒᵖ Dᵒᵖ}(– ∘ p, –) ≡ Hom_{Func_Cat C'ᵒᵖ Dᵒᵖ}(–, lkeᵒᵖ)
+
+ *)
+    Local Definition KanExt_Left_to_Right_NIso :=
+      (
+        (
+          (
+            ((Hom_Func_Cat_Iso (Func_Cat_Op_Iso C' D))
+               ∘_h (NatTrans_id_Iso (Prod_Functor (Functor_id ((Func_Cat C' D) ^op) ^op) lke^op))
+            )
+              ∘ (Hom_Adjunct_Duality (Adj_to_Hom_Adj (left_kan_ext_adj lke)))
+          )
+            ∘ (((Hom_Func_Cat_Iso (Func_Cat_Op_Iso C D))⁻¹)
+                 ∘_h (NatTrans_id_Iso
+                        (Prod_Functor (Left_Functor_Extender p D) (Functor_id (Func_Cat C D) ^op))))
+        )
+          ∘_h (NatTrans_id_Iso
+                 (Prod_Functor
+                    ((inverse_morphism (Func_Cat_Op_Iso C' D))^op)
+                    (inverse_morphism (Func_Cat_Op_Iso C D))
+                 )
+              )
+      )%natiso
+    .
+
+    (** If we give the trans formations (e.g., function given in the first obligation)
+explicitly "Program" generates obligations for equalitiies that are definitional! *)
+    
+    Program Definition KanExt_Left_to_Right : Right_KanExt  p^op D^op :=
+      {|
+        right_kan_ext :=
+          ((Op_Func_Cat_to_Func_Cat_Op C' D) ∘
+          (lke^op ∘ (Func_Cat_Op_to_Op_Func_Cat C D)))%functor;
+        right_kan_ext_adj :=
+          Hom_Adj_to_Adj
+            {|
+              iso_morphism :=
+                {|
+                  Trans := _
+                |};
+              inverse_morphism :=
+                {|
+                  Trans := _
+                |}
+            |}
+      |}.
+    
+    Next Obligation.
+    Proof.
+      exact (fun c => Trans (iso_morphism KanExt_Left_to_Right_NIso) c).
+    Defined.
 
     Next Obligation.
     Proof.
-      set (V := NatIso_hor_comp (NatTrans_id_Iso (Prod_Functor (Opposite_Functor (inverse_morphism (Func_Cat_Op_Iso C' D))) (inverse_morphism (Func_Cat_Op_Iso C D)))) (Isomorphism_Compose (NatIso_hor_comp (NatTrans_id_Iso (Prod_Functor (Opposite_Functor (Opposite_Functor (Left_Functor_Extender p D))) (Functor_id (Func_Cat C D) ^op))) (Inverse_Isomorphism (Hom_Func_Cat_Iso (Func_Cat_Op_Iso C D)))) (Isomorphism_Compose (Hom_Adjunct_Duality (Adj_to_Hom_Adj (left_kan_ext_adj lke))) (NatIso_hor_comp (NatTrans_id_Iso (Prod_Functor (Functor_id ((Func_Cat C' D) ^op) ^op) (Opposite_Functor lke))) (Hom_Func_Cat_Iso (Func_Cat_Op_Iso C' D)))))).
-      cbn in V.
-      repeat rewrite Functor_assoc in V.
-      repeat rewrite Prod_Functor_compose in V.
-      do 2 rewrite Functor_id_unit_left in V.
-      change (Functor_compose
-              (Functor_compose
-                 (Opposite_Functor (Func_Cat_Op_to_Op_Func_Cat C' D))
-                 (Opposite_Functor (Opposite_Functor (Left_Functor_Extender p D))))
-              (Opposite_Functor (Op_Func_Cat_to_Func_Cat_Op C D)))
-             with (Opposite_Functor (Functor_compose
-              (Functor_compose
-                 (Func_Cat_Op_to_Op_Func_Cat C' D)
-                 (Opposite_Functor (Left_Functor_Extender p D)))
-              (Op_Func_Cat_to_Func_Cat_Op C D))) in V.
-      change (Functor_compose
-                 (Opposite_Functor (Func_Cat_Op_to_Op_Func_Cat C' D))
-                 (Opposite_Functor (Op_Func_Cat_to_Func_Cat_Op C' D)))
-             with (Opposite_Functor (Functor_compose
-                     (Func_Cat_Op_to_Op_Func_Cat C' D)
-                     (Op_Func_Cat_to_Func_Cat_Op C' D))) in V.
-      set (J := right_inverse (Func_Cat_Op_Iso C D)); cbn in J; rewrite J in V; clear J.
-      set (K := right_inverse (Func_Cat_Op_Iso C' D)); cbn in K; rewrite K in V; clear K.
-      apply (Adjunct_left_iso _ _ GExtend_Duality).
-      apply Hom_Adj_to_Adj.
-      exact V.
+      intros c c' h.
+      set (w := Trans_com (iso_morphism KanExt_Left_to_Right_NIso) h).
+      etransitivity; [etransitivity;[| apply w]|];
+      clear w; trivial; cbn.
+      rewrite NatTrans_hor_comp_Op.
+      repeat rewrite <- NatTrans_id_Op.
+      trivial.
+    Qed.
+
+    Next Obligation.
+    Proof.
+      symmetry.
+      apply KanExt_Left_to_Right_obligation_2.
+    Qed.
+
+    Next Obligation.
+    Proof.
+      exact (fun c => Trans (inverse_morphism KanExt_Left_to_Right_NIso) c).
+    Defined.
+
+    Next Obligation.
+    Proof.    
+      intros c c' h.
+      set (w := Trans_com (inverse_morphism KanExt_Left_to_Right_NIso) h).
+      etransitivity; [etransitivity;[| apply w]|];
+      clear w; trivial; cbn.
+      rewrite NatTrans_hor_comp_Op.
+      repeat rewrite <- NatTrans_id_Op.
+      trivial.
+    Qed.
+
+    Next Obligation.
+    Proof.
+      symmetry.
+      apply KanExt_Left_to_Right_obligation_5.
+    Qed.
+
+    Next Obligation.
+    Proof.
+      apply NatTrans_eq_simplify.
+      match goal with
+        [|- _ = ?A] =>
+        let w := constr:(
+                   (KanExt_Left_to_Right_NIso ⁻¹ ∘ KanExt_Left_to_Right_NIso)%morphism
+                 )%nattrans
+        in
+        change (
+            Trans w = A
+          )
+      end.
+      rewrite (left_inverse KanExt_Left_to_Right_NIso); trivial.
+    Qed.
+      
+    Next Obligation.
+    Proof.
+      apply NatTrans_eq_simplify.
+      match goal with
+        [|- _ = ?A] =>
+        let w := constr:(
+                   (KanExt_Left_to_Right_NIso ∘ KanExt_Left_to_Right_NIso⁻¹)%morphism
+                 )%nattrans
+        in
+        change (
+            Trans w = A
+          )
+      end.
+      rewrite (right_inverse KanExt_Left_to_Right_NIso); trivial.
     Qed.
 
   End Left_to_Right.
@@ -140,43 +150,137 @@ Section GlobalDuality.
   Section Right_to_Left.
     Context (rke : Right_KanExt p D).
 
-    Program Instance KanExt_Right_to_Left : Left_KanExt (Opposite_Functor p) D^op :=
-      {
-        left_kan_ext := Functor_compose
-                           (Functor_compose (Func_Cat_Op_to_Op_Func_Cat C D)
-                                            (Opposite_Functor rke)) (Op_Func_Cat_to_Func_Cat_Op C' D)
-      }.
-    
+    (** The natural Isomorphism underlying the right kan extension which is to be shown.
+
+Hom_{Func_Cat C'ᵒᵖ Dᵒᵖ}(rke, –) ≡ Hom_{Func_Cat Cᵒᵖ Dᵒᵖ}(–, – ∘ p)
+
+ *)
+    Local Definition KanExt_Right_to_Left_NIso :=
+      (
+        (
+          (
+            (
+              (Hom_Func_Cat_Iso (Func_Cat_Op_Iso C D))
+                ∘_h (
+                  NatTrans_id_Iso
+                    (Prod_Functor
+                       (Functor_id ((Func_Cat C D) ^op) ^op)
+                       (Left_Functor_Extender p D)^op
+                ))
+            )
+              ∘ (Hom_Adjunct_Duality (Adj_to_Hom_Adj (right_kan_ext_adj rke)))
+          )
+            ∘ (
+              ((Hom_Func_Cat_Iso (Func_Cat_Op_Iso C' D))⁻¹)
+                ∘_h (NatTrans_id_Iso (Prod_Functor rke (Functor_id (Func_Cat C' D) ^op))))
+        )
+          ∘_h
+          (NatTrans_id_Iso
+             (Prod_Functor
+                ((inverse_morphism (Func_Cat_Op_Iso C D))^op)
+                (inverse_morphism (Func_Cat_Op_Iso C' D))
+             )
+          )
+      )%natiso
+    .
+
+    Program Definition KanExt_Right_to_Left : Left_KanExt  p^op D^op :=
+      {|
+        left_kan_ext :=
+          (
+            (Op_Func_Cat_to_Func_Cat_Op C' D)
+              ∘ (rke^op ∘ (Func_Cat_Op_to_Op_Func_Cat C D))
+          )%functor;
+        left_kan_ext_adj :=
+          Hom_Adj_to_Adj
+            {|
+              iso_morphism :=
+                {|
+                  Trans := _
+                |};
+              inverse_morphism :=
+                {|
+                  Trans := _
+                |}
+            |}
+      |}.
+
     Next Obligation.
     Proof.
-      set (V := NatIso_hor_comp (NatTrans_id_Iso (Prod_Functor (Opposite_Functor (inverse_morphism (Func_Cat_Op_Iso C D))) (inverse_morphism (Func_Cat_Op_Iso C' D)))) (Isomorphism_Compose (NatIso_hor_comp (NatTrans_id_Iso (Prod_Functor (Opposite_Functor (Opposite_Functor rke)) (Functor_id (Func_Cat C' D) ^op))) (Inverse_Isomorphism (Hom_Func_Cat_Iso (Func_Cat_Op_Iso C' D)))) (Isomorphism_Compose (Hom_Adjunct_Duality (Adj_to_Hom_Adj (right_kan_ext_adj rke))) (NatIso_hor_comp (NatTrans_id_Iso (Prod_Functor (Functor_id ((Func_Cat C D) ^op) ^op) (Opposite_Functor (Left_Functor_Extender p D)))) (Hom_Func_Cat_Iso (Func_Cat_Op_Iso C D)))))).
-      cbn in V.
-      repeat rewrite Functor_assoc in V.
-      repeat rewrite Prod_Functor_compose in V.
-      do 2 rewrite Functor_id_unit_left in V.
-      change (Functor_compose
-              (Functor_compose
-                 (Opposite_Functor (Func_Cat_Op_to_Op_Func_Cat C D))
-                 (Opposite_Functor (Opposite_Functor rke)))
-              (Opposite_Functor (Op_Func_Cat_to_Func_Cat_Op C' D)))
-             with (Opposite_Functor (Functor_compose
-              (Functor_compose
-                 (Func_Cat_Op_to_Op_Func_Cat C D)
-                 (Opposite_Functor rke))
-              (Op_Func_Cat_to_Func_Cat_Op C' D))) in V.
-      change  (Functor_compose
-                 (Opposite_Functor (Func_Cat_Op_to_Op_Func_Cat C D))
-                 (Opposite_Functor (Op_Func_Cat_to_Func_Cat_Op C D)))
-             with (Opposite_Functor (Functor_compose
-                 (Func_Cat_Op_to_Op_Func_Cat C D)
-                 (Op_Func_Cat_to_Func_Cat_Op C D))) in V.
-      set (J := right_inverse (Func_Cat_Op_Iso C D)); cbn in J; rewrite J in V; clear J.
-      set (K := right_inverse (Func_Cat_Op_Iso C' D)); cbn in K; rewrite K in V; clear K.
-      apply (Adjunct_right_iso _ _ _ (Inverse_Isomorphism GExtend_Duality)).
-      apply Hom_Adj_to_Adj.
-      exact V.
+      exact (fun c => Trans (iso_morphism KanExt_Right_to_Left_NIso) c).
+    Defined.
+
+    Next Obligation.
+    Proof.
+      intros c c' h.
+      set (w := Trans_com (iso_morphism KanExt_Right_to_Left_NIso) h).
+      etransitivity; [etransitivity;[| apply w]|];
+      clear w; trivial; cbn.
+      repeat rewrite NatTrans_hor_comp_Op.
+      repeat rewrite NatTrans_id_Op.
+      trivial.
     Qed.
 
-  End Right_to_Left.
+    Next Obligation.
+    Proof.
+      symmetry.
+      apply KanExt_Right_to_Left_obligation_2.
+    Qed.
 
+    Next Obligation.
+    Proof.
+      exact (fun c => Trans (inverse_morphism KanExt_Right_to_Left_NIso) c).
+    Defined.
+
+    Next Obligation.
+    Proof.
+      intros c c' h.
+      set (w := Trans_com (inverse_morphism KanExt_Right_to_Left_NIso) h).
+      etransitivity; [etransitivity;[| apply w]|];
+      clear w; trivial; cbn.
+      repeat rewrite NatTrans_hor_comp_Op.
+      repeat rewrite NatTrans_id_Op.
+      trivial.
+    Qed.
+
+    Next Obligation.
+    Proof.
+      symmetry.
+      apply KanExt_Right_to_Left_obligation_5.
+    Qed.
+
+    Next Obligation.
+    Proof.
+      apply NatTrans_eq_simplify.
+      match goal with
+        [|- _ = ?A] =>
+        let w := constr:(
+                   (KanExt_Right_to_Left_NIso ⁻¹ ∘ KanExt_Right_to_Left_NIso)%morphism
+                 )%nattrans
+        in
+        change (
+            Trans w = A
+          )
+      end.
+      rewrite (left_inverse KanExt_Right_to_Left_NIso); trivial.
+    Qed.
+      
+    Next Obligation.
+    Proof.
+      apply NatTrans_eq_simplify.
+      match goal with
+        [|- _ = ?A] =>
+        let w := constr:(
+                   (KanExt_Right_to_Left_NIso ∘ KanExt_Right_to_Left_NIso⁻¹)%morphism
+                 )%nattrans
+        in
+        change (
+            Trans w = A
+          )
+      end.
+      rewrite (right_inverse KanExt_Right_to_Left_NIso); trivial.
+    Qed.
+    
+  End Right_to_Left.
+    
 End GlobalDuality.

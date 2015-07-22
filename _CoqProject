@@ -35,6 +35,7 @@ Functor/Representable/Hom_Func_Prop.v
 Functor/Representable/Representable.v
 
 #Coq_Cats:
+Coq_Cats/Coq_Cat.v
 Coq_Cats/Type_Cat/Type_Cat.v
 Coq_Cats/Type_Cat/Initial.v
 Coq_Cats/Type_Cat/CCC.v
@@ -72,7 +73,6 @@ Basic_Cons/PullBack.v
 
 #Algebras:
 Algebras/Algebras.v
-Algebras/CoAlgebras.v
 Algebras/Main.v
 
 #Cat:
@@ -103,10 +103,14 @@ Limits/GenProd_GenSum.v
 Limits/GenProd_Eq_Limits.v
 Limits/Pointwise.v
 Limits/Complete_Preorder.v
+Limits/Isomorphic_Cat.v
 
 #Archetypal:
-Archetypal/Discr.v
+Archetypal/Discr/Discr.v
+Archetypal/Discr/NatFacts.v
+Archetypal/Discr/Main.v
 Archetypal/Monoid_Cat.v
+Archetypal/PreOrder_Cat.v
 Archetypal/Examples/List_Monoid_Cat.v
 
 #Adjunction:
@@ -120,7 +124,12 @@ Adjunction/Adj_Cat.v
 KanExt/Local.v
 KanExt/Global.v
 KanExt/GlobalDuality.v
-KanExt/LocalFacts.v
+KanExt/LocalFacts/Uniqueness.v
+KanExt/LocalFacts/ConesToHom.v
+KanExt/LocalFacts/HomToCones.v
+KanExt/LocalFacts/NatIso.v
+KanExt/LocalFacts/From_Iso_Cat.v
+KanExt/LocalFacts/Main.v
 KanExt/GlobalFacts.v
 KanExt/LocaltoGlobal.v
 KanExt/GlobaltoLocal.v
@@ -132,6 +141,7 @@ KanExt/Facts.v
 #Topos:
 Topos/SubObject_Classifier.v
 Topos/Topos.v
+Topos/Main.v
 
 #Demo:
 Demo/Demo.v

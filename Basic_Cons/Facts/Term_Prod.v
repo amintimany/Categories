@@ -7,20 +7,27 @@ Require Import Basic_Cons.Product.
 Require Import NatTrans.NatTrans NatTrans.NatIso.
 Require Import Yoneda.Yoneda.
 
+(** 1 × a ≡ a. where 1 is the terminal object. *)
 Section Term_Prod.
-
   Context {C : Category} {term : Terminal C} {CHP : Has_Products C}.
 
-  Program Instance Term_Prod_lr (a : C) : NatTrans ((Yoneda C) _o (CHP a term)) ((Yoneda C) _o a) :=
-  {
-    Trans := fun b f => @compose C _ _ _ f (@Pi_1 _ _ _ (CHP a term))
-  }.
+  (** Natural transformations to be used with Yoneda. *)
+  Program Definition Term_Prod_lr (a : C) :
+      ((((Yoneda C) _o (CHP a term))%object)
+         –≻ ((Yoneda C) _o a)%object)%nattrans
+    :=
+      {|
+        Trans := fun b f => @compose C _ _ _ f (@Pi_1 _ _ _ (CHP a term))
+      |}.
 
-  Program Instance Term_Prod_rl (a : Obj) : NatTrans ((Yoneda C) _o a) ((Yoneda C) _o (CHP a term)) :=
-  {
-    Trans := fun b f =>  @Prod_morph_ex C _ _ _ _ f (@t_morph C _ b)
-  }.
-
+  Program Definition Term_Prod_rl (a : Obj) :
+    ((((Yoneda C) _o a)%object)
+       –≻ ((Yoneda C) _o (CHP a term))%object)%nattrans
+    :=
+      {|
+        Trans := fun b f =>  @Prod_morph_ex C _ _ _ _ f (@t_morph C _ b)
+      |}.
+  
   Next Obligation. (* Trans_com *)
   Proof.
     extensionality g.
@@ -40,7 +47,7 @@ Section Term_Prod.
     apply Term_Prod_rl_obligation_1.
   Qed.
 
-  Theorem Term_Prod (a : Obj) : ((Prod_Func C) _o (a, @terminal _ term)) ≡ a.
+  Theorem Term_Prod (a : Obj) : (((Prod_Func C) _o (a, @terminal _ term)) ≃ a)%isomorphism.
   Proof.
     Yoneda.
     apply (NatIso _ _ (Term_Prod_lr a) (Term_Prod_rl a)).

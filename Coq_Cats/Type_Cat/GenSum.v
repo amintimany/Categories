@@ -2,21 +2,23 @@ Require Import Category.Main.
 Require Import Functor.Main.
 Require Import Coq_Cats.Type_Cat.Type_Cat.
 Require Import Limits.Limit Limits.GenProd_GenSum.
-Require Import Archetypal.Discr.
+Require Import Archetypal.Discr.Discr.
 Require Import Basic_Cons.Terminal.
 
+(** In category of types, generalized sums are simply dependent sum types. *)
 Section Type_Cat_GenSum.
   Context (A : Type) (map : A → Type).
 
-  Local Notation Fm := (Discr_Func Type_Cat map) (only parsing).
+  Local Notation Fm := (Discr_Func_op Type_Cat map) (only parsing).
 
-  Program Instance Type_Cat_GenSum_CoCone : CoCone Fm :=
+  (** The cocone for the colimit of generalized sum. *)
+  Program Definition Type_Cat_GenSum_CoCone : CoCone Fm :=
     {|
-      cone_apex := {|FO := fun _ => {x : A & Fm _o x}; FA := fun _ _ _ h => h|};
+      cone_apex := {|FO := fun _ => {x : A & (Fm _o x)%object}; FA := fun _ _ _ h => h|};
       cone_edge := {|Trans := fun x => existT _ x |}
     |}.
-
-   Program Instance Type_Cat_GenSum : @GenSum _ Type_Cat map :=
+    
+   Program Definition Type_Cat_GenSum : @GenSum _ Type_Cat map :=
     {|
       LRKE := Type_Cat_GenSum_CoCone;
       LRKE_morph_ex :=
@@ -25,7 +27,7 @@ Section Type_Cat_GenSum.
             cone_morph :=
               {|Trans :=
                   fun c h =>
-                    match c as u return ((Cn _o) u) with
+                    match c as u return ((Cn _o) u)%object with
                     | tt => Trans Cn (projT1 h) (projT2 h)
                     end
               |}
@@ -54,11 +56,14 @@ Section Type_Cat_GenSum.
     cbn in *.
     set (hc := (cone_morph_com h')).
     rewrite (cone_morph_com h) in hc.
-    set (hc' := (f_equal (fun w : NatTrans
-                 (Functor_compose
-                    (Opposite_Functor (Functor_To_1_Cat (Discr_Cat A))) Cn)
-                 (Opposite_Functor Fm) =>
-           Trans w y1 y2) hc)); clearbody hc'; clear hc.
+    set (hc' := (
+                 f_equal
+                   (fun w :
+                          ((Cn ∘ (Functor_To_1_Cat (Discr_Cat A)^op) ^op) –≻ Fm^op)%nattrans
+                    =>
+                      Trans w y1 y2) hc
+               )
+        ); clearbody hc'; clear hc.
     cbn in *.
     apply hc'.
   Qed.

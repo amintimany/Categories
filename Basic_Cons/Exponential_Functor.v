@@ -5,16 +5,18 @@ Require Import Basic_Cons.Product.
 Require Import Basic_Cons.Exponential.
 
 Local Obligation Tactic := idtac.
-
-Program Instance Exp_Func {C : Category}
+(**
+The exponential functor maps each pair of objects (a, b) (an object of product category Cᵒᵖ × C -> C) to the exponential bᵃ.
+*)
+Program Definition Exp_Func {C : Category}
         {hp : Has_Products C}
         (exps : ∀ a b, Exponential a b)
-: Functor (Prod_Cat (C^op) C) C :=
-{
+: ((Prod_Cat (C^op) C) –≻ C)%functor :=
+{|
   FO := fun x => exps (fst x) (snd x);
   FA := fun a b f => 
-           Exp_morph_ex _ _ ((snd f) ∘ (eval _) ∘ ((Prod_Func C) _a (_, fst b) (_, fst a) (id (exps (fst a) (snd a)), fst f)))
-}.
+           Exp_morph_ex _ _ ((snd f) ∘ (eval _) ∘ ((Prod_Func C) @_a (_, fst b) (_, fst a) (id (exps (fst a) (snd a)), fst f)))%morphism
+|}.
 
 Next Obligation. (* F_id *)
 Proof.
@@ -39,9 +41,11 @@ Proof.
   rewrite <- Prod_cross_compose.
   rewrite F_compose.
   match goal with
-      [|- _ = _ ∘ ?A ∘ ?B ∘ _] =>
-      reveal_comp A B
-  end.
+      [|- _ = (?X ∘ ?A ∘ ?B ∘ _)%morphism] =>
+      rewrite (assoc_sym _ _ X);
+        rewrite (assoc_sym _ _ (X ∘ A));
+        rewrite (assoc _ _ X)
+  end. 
   rewrite <- Exp_morph_com.
   repeat rewrite assoc.
   rewrite <- F_compose.

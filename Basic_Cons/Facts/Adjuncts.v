@@ -6,16 +6,26 @@ Require Import Adjunction.Adjunction.
 Require Import Ext_Cons.Prod_Cat.Operations.
 Require Import NatTrans.NatTrans.
 
+(** Δ ⊣ × *)
 Section Prod_Adj.
   Context (C : Category) (HP : Has_Products C).
 
-  Hint Extern 1 => eapply Prod_morph_unique; eauto; repeat rewrite assoc_sym; repeat rewrite Prod_morph_com_1; repeat rewrite Prod_morph_com_2; repeat rewrite assoc; repeat rewrite Prod_morph_com_1; repeat rewrite Prod_morph_com_2.
+  Hint Extern 1 =>
+  eapply Prod_morph_unique;
+    eauto;
+    repeat rewrite assoc_sym;
+    repeat rewrite Prod_morph_com_1;
+    repeat rewrite Prod_morph_com_2;
+    repeat rewrite assoc;
+    repeat rewrite Prod_morph_com_1;
+    repeat rewrite Prod_morph_com_2
+  .
   
-  Program Instance Prod_Adj : Adjunct (Diag_Func C) (Prod_Func C HP) :=
-    {
+  Program Definition Prod_Adj : ((Diag_Func C) ⊣ (Prod_Func C HP))%functor :=
+    {|
       adj_unit := {|Trans := fun c => @Prod_morph_ex _ _ _ (HP c c) c id id |};
-      adj_morph_ex := fun c c' h => (Pi_1 ∘ h, Pi_2 ∘ h)
-    }.
+      adj_morph_ex := fun c c' h => (Pi_1 ∘ h, Pi_2 ∘ h)%morphism
+    |}.
 
   Local Obligation Tactic := idtac.
   
@@ -23,24 +33,32 @@ Section Prod_Adj.
   Proof.
     intros c d f [g1 g2] [h1 h2] H1 H2.
     cbn in *.
-    replace g1 with (Pi_1 ∘ f); [|rewrite H1; rewrite assoc_sym; rewrite Prod_morph_com_1; rewrite assoc; rewrite Prod_morph_com_1; auto].
-    replace g2 with (Pi_2 ∘ f); [|rewrite H1; rewrite assoc_sym; rewrite Prod_morph_com_2; rewrite assoc; rewrite Prod_morph_com_2; auto].
-    replace h1 with (Pi_1 ∘ f); [|rewrite H2; rewrite assoc_sym; rewrite Prod_morph_com_1; rewrite assoc; rewrite Prod_morph_com_1; auto].
-    replace h2 with (Pi_2 ∘ f); [|rewrite H2; rewrite assoc_sym; rewrite Prod_morph_com_2; rewrite assoc; rewrite Prod_morph_com_2; auto]; trivial.
+    replace g1 with (Pi_1 ∘ f)%morphism; [|rewrite H1; rewrite assoc_sym; rewrite Prod_morph_com_1; rewrite assoc; rewrite Prod_morph_com_1; auto].
+    replace g2 with (Pi_2 ∘ f)%morphism; [|rewrite H1; rewrite assoc_sym; rewrite Prod_morph_com_2; rewrite assoc; rewrite Prod_morph_com_2; auto].
+    replace h1 with (Pi_1 ∘ f)%morphism; [|rewrite H2; rewrite assoc_sym; rewrite Prod_morph_com_1; rewrite assoc; rewrite Prod_morph_com_1; auto].
+    replace h2 with (Pi_2 ∘ f)%morphism; [|rewrite H2; rewrite assoc_sym; rewrite Prod_morph_com_2; rewrite assoc; rewrite Prod_morph_com_2; auto]; trivial.
   Qed.
 
 End Prod_Adj.
 
+(** + ⊣ Δ *)
 Section Sum_Adj.
   Context (C : Category) (HS : Has_Sums C).
 
   Hint Extern 1 => eapply Prod_morph_unique; eauto; repeat rewrite assoc_sym; repeat rewrite Prod_morph_com_1; repeat rewrite Prod_morph_com_2; repeat rewrite assoc; repeat rewrite Prod_morph_com_1; repeat rewrite Prod_morph_com_2.
   
-  Program Instance Sum_Adj : Adjunct (Sum_Func C HS) (Diag_Func C) :=
-    {
-      adj_unit := {|Trans := fun c => (@Pi_1 _ _ _ (HS (fst c) (snd c)), @Pi_2 _ _ _ (HS (fst c) (snd c))) |};
-      adj_morph_ex := fun c c' h => @Prod_morph_ex _ _ _ (HS (fst c) (snd c)) c' (fst h) (snd h)
-    }.
+  Program Definition Sum_Adj : ((Sum_Func C HS) ⊣ (Diag_Func C))%functor :=
+    {|
+      adj_unit :=
+        {|
+          Trans :=
+            fun c =>
+              (@Pi_1 _ _ _ (HS (fst c) (snd c)), @Pi_2 _ _ _ (HS (fst c) (snd c)))
+        |};
+      adj_morph_ex :=
+        fun c c' h =>
+          @Prod_morph_ex _ _ _ (HS (fst c) (snd c)) c' (fst h) (snd h)
+    |}.
 
   Next Obligation.
   Proof.
@@ -62,7 +80,6 @@ Section Sum_Adj.
 
   Next Obligation.
   Proof.
-    destruct f.
     match goal with
       [|- (?A, ?B) = (?C, ?D)] => cutrewrite(C = A); [cutrewrite (D = B)|]; trivial
     end.
@@ -85,37 +102,49 @@ Section Sum_Adj.
 
 End Sum_Adj.
 
+(** a × – ⊣ a⁻ *)
 Section Prod_Exp_Adj.
   Context (C : Category) (HP : Has_Products C) (HE : Has_Exponentials C) (x : C).
 
-  Program Instance Prod_Exp_Adj : Adjunct (Fix_Bi_Func_2 x (Prod_Func C HP)) (@Fix_Bi_Func_1 C^op _ _ x (@Exp_Func C HP HE)) :=
-    {
+  Program Definition Prod_Exp_Adj :
+    (
+      (Fix_Bi_Func_2 x (Prod_Func C HP)) ⊣ (@Fix_Bi_Func_1 C^op _ _ x (@Exp_Func C HP HE))
+    )%functor
+    :=
+    {|
       adj_unit := {|Trans := fun c => Exp_morph_ex (HE x (HP c x)) c id|};
       adj_morph_ex := fun c c' h => uncurry _ h
-    }.
+    |}.
 
   Next Obligation.
   Proof.
     eapply Exp_morph_unique; eauto; cbn.
-    set (W := @Exp_morph_com C HP _ _ (HE x (HP c' x))); cbn in *.
     set (M := curry_compose); unfold curry in M; cbn in M; rewrite M.
-    rewrite <- W.
+    cbn_rewrite <- (@Exp_morph_com C HP _ _ (HE x (HP c' x))).
     rewrite M.
-    rewrite <- W.
-    replace (Prod_morph_ex (HP (HE x (HP c x)) x) (HP (HE x (HP c x)) x) (id ∘ Pi_1) (id ∘ Pi_2)) with (id (HP (HE x (HP c x)) x)).
+    cbn_rewrite <- (@Exp_morph_com C HP _ _ (HE x (HP c' x))).
+    replace
+      (Prod_morph_ex
+         (HP (HE x (HP c x)) x)
+         (HP (HE x (HP c x)) x)
+         (id ∘ Pi_1)
+         (id ∘ Pi_2)
+      )
+    with (id (HP (HE x (HP c x)) x)).
     {
       repeat rewrite id_unit_right.
       rewrite assoc.
-      clear W.
-      set (W := @Exp_morph_com C HP _ _ (HE x (HP c x))); cbn in *.
       rewrite <- (id_unit_left _ _ Pi_2).
-      rewrite <- W.
+      cbn_rewrite <- (@Exp_morph_com C HP _ _ (HE x (HP c x))).
       auto.
     }
     {
-      eapply Prod_morph_unique; eauto; try rewrite Prod_morph_com_1; try rewrite Prod_morph_com_2; auto.
+      eapply Prod_morph_unique; eauto;
+      try rewrite Prod_morph_com_1;
+      try rewrite Prod_morph_com_2;
+      auto.
     }
-  Qed.    
+  Qed.
 
   Next Obligation.
   Proof.  
@@ -127,21 +156,29 @@ Section Prod_Exp_Adj.
   Proof.
     set (M := curry_compose); unfold curry in M; cbn in M; rewrite M.
     eapply Exp_morph_unique; eauto; cbn.
-    set (W := @Exp_morph_com C HP _ _ (HE x d)); cbn in *.
-    rewrite <- W.
-    replace (Prod_morph_ex (HP (HE x (HP c x)) x) (HP (HE x (HP c x)) x) (id ∘ Pi_1) (id ∘ Pi_2)) with (id (HP (HE x (HP c x)) x)).
+    cbn_rewrite <- (@Exp_morph_com C HP _ _ (HE x d)).
+    replace (
+        Prod_morph_ex
+          (HP (HE x (HP c x)) x)
+          (HP (HE x (HP c x)) x)
+          (id ∘ Pi_1)
+          (id ∘ Pi_2)
+      )
+    with (id (HP (HE x (HP c x)) x)).
     {
       repeat rewrite id_unit_right.
       repeat rewrite assoc.
       rewrite <- (id_unit_left _ _ Pi_2).
-      clear W.
-      set (W := @Exp_morph_com C HP _ _ (HE x (HP c x))); cbn in *.
-      rewrite <- W.
+      cbn_rewrite <- (@Exp_morph_com C HP _ _ (HE x (HP c x))).
       unfold uncurry; cbn.
       auto.
     }
     {
-      eapply Prod_morph_unique; eauto; try rewrite Prod_morph_com_1; try rewrite Prod_morph_com_2; auto.
+      eapply Prod_morph_unique;
+      eauto;
+      try rewrite Prod_morph_com_1;
+      try rewrite Prod_morph_com_2;
+      auto.
     }
   Qed.    
 
@@ -158,18 +195,21 @@ Section Prod_Exp_Adj.
       set (M := curry_compose); unfold curry in M; cbn in M; rewrite M in H2.
       rewrite assoc in H2.
       rewrite <- (id_unit_left _ _ Pi_2) in H2.
-      set (W := @Exp_morph_com C HP); cbn in *.
-      rewrite <- W in H2.
+      cbn_rewrite <- (@Exp_morph_com C HP) in H2.
       rewrite M in H2.
       rewrite assoc in H2.
       rewrite <- (id_unit_left _ _ Pi_2) in H2.
-      rewrite <- W in H2.
+      cbn_rewrite <- (@Exp_morph_com C HP) in H2.
       simpl_ids in H2.
       eapply curry_injective.
       trivial.
     }    
     {
-      eapply Prod_morph_unique; eauto; try rewrite Prod_morph_com_1; try rewrite Prod_morph_com_2; auto.
+      eapply Prod_morph_unique;
+      eauto;
+      try rewrite Prod_morph_com_1;
+      try rewrite Prod_morph_com_2;
+      auto.
     }
   Qed.
 

@@ -1,1 +1,3 @@
-Require Export Ext_Cons.Prod_Cat.Prod_Cat Ext_Cons.Prod_Cat.Operations Ext_Cons.Prod_Cat.Nat_Facts.
+Require Export Ext_Cons.Prod_Cat.Prod_Cat.
+Require Export Ext_Cons.Prod_Cat.Operations.
+Require Export Ext_Cons.Prod_Cat.Nat_Facts.

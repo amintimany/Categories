@@ -1,6 +1,7 @@
 Require Import Category.Main.
 
-Class Monoid : Type :=
+(** Monoids are categories. *)
+Record Monoid : Type :=
 {
   Mon_car : Type;
   
@@ -20,12 +21,12 @@ Section Monoid_Cat.
 
   Hint Resolve Mon_unit_left Mon_unit_right Mon_assoc.
 
-  Program Instance Monoid_Cat : Category :=
-    {
+  Program Definition Monoid_Cat : Category :=
+    {|
       Obj := unit;
-      Hom := (λ _ _, @Mon_car M);
-      compose := λ _ _ _, @Mon_op M;
-      id := λ a, Mon_unit
-    }.
+      Hom := fun _ _ => Mon_car M;
+      compose := fun _ _ _ => Mon_op M;
+      id := fun a => Mon_unit M
+    |}.
 
 End Monoid_Cat.

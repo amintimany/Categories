@@ -2,32 +2,34 @@ Require Import Category.Main.
 Require Import Functor.Functor Functor.Functor_Ops.
 Require Import NatTrans.NatTrans NatTrans.Operations NatTrans.Func_Cat.
 Require Import Adjunction.Adjunction.
-Require Export Functor.Functor_Extender.
+Require Import Functor.Functor_Extender.
 
+Local Open Scope functor_scope.
+
+(**
+Given functor p : C -> C', we define the global kan extension along p operation.
+
+To define it, notice Left_Functor_Extender p D. It functor which maps (as objects) a functor F : C' -> D to F ∘ p : C -> D. The global left/right kan extension operation along p is simply the left/right adjoint to this functor. 
+
+*)
 Section KanExtension.
-  Context {C C' : Category} (p : Functor C C').
+  Context {C C' : Category} (p : (C –≻ C')%functor).
 
-  Local Notation FCOMP := Functor_compose (only parsing).
-  Local Notation NCOMP := NatTrans_compose (only parsing).
-  Local Notation HCOMP := NatTrans_hor_comp (only parsing).
-  Local Notation NID := NatTrans_id (only parsing).
-  Local Notation FCAT := Func_Cat (only parsing).
-  
   Section Global.
     Context (D : Category).
 
-    Class Left_KanExt : Type :=
+    Record Left_KanExt : Type :=
       {
-        left_kan_ext : Functor (FCAT C D) (FCAT C' D);
-        left_kan_ext_adj : Adjunct left_kan_ext (Left_Functor_Extender p D)
+        left_kan_ext : (Func_Cat C D) –≻ (Func_Cat C' D);
+        left_kan_ext_adj : left_kan_ext ⊣ (Left_Functor_Extender p D)
       }.
 
     Coercion left_kan_ext : Left_KanExt >-> Functor.
 
-    Class Right_KanExt : Type :=
+    Record Right_KanExt : Type :=
       {
-        right_kan_ext : Functor (FCAT C D) (FCAT C' D);
-        right_kan_ext_adj : Adjunct (Left_Functor_Extender p D) right_kan_ext
+        right_kan_ext : (Func_Cat C D) –≻ (Func_Cat C' D);
+        right_kan_ext_adj : (Left_Functor_Extender p D) ⊣ right_kan_ext
       }.
 
     Coercion right_kan_ext : Right_KanExt >-> Functor.

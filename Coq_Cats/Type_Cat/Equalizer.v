@@ -4,14 +4,17 @@ Require Import Coq_Cats.Type_Cat.Type_Cat.
 
 Local Obligation Tactic := idtac.
 
+(** Just like in category of sets, in category of types, the equalizer is the type
+that reperesents the subset of the cartesian profuct of the domain of the two functions
+that is mapped to equal values by both functions. *)
 Section Equalizer.
   Context {A B : Type} (f g : A → B).
 
-  Program Instance Type_Cat_Eq : Equalizer f g :=
-    {
+  Program Definition Type_Cat_Eq : Equalizer Type_Cat f g :=
+    {|
       equalizer := {x : A | f x = g x};
       equalizer_morph := @proj1_sig _ _
-    }.
+    |}.
 
   Next Obligation.
   Proof.
@@ -37,12 +40,21 @@ Section Equalizer.
     apply (fun w => equal_f w x) in H3; cbn in H3.
     destruct (u x) as [ux e]; destruct (u' x) as [ux' e']; cbn in *.
     destruct H2; destruct H3.
-    destruct (proof_irrelevance _ e e').
+    PIR.
     trivial.
   Qed.
 
 End Equalizer.
-  
+
+(** Similar to the category set, in category of types, the coequalizer of two functions
+f,g : A -> B is quotient of B with respect to the equivalence relation ~. Here, ~
+is the equivalence closure of the relation for which we have
+
+x ~ y if and only if ∃z. (f(z) = x) ∧ (g(z) = y)
+
+*)
+
+
 Program Instance Type_Cat_Has_Equalizers : Has_Equalizers Type_Cat := fun _ _ => Type_Cat_Eq.
 
 Require Import Coq.Relations.Relations Coq.Relations.Relation_Definitions.
@@ -93,7 +105,7 @@ Section CoEqualizer.
     }
   Qed.    
     
-  Program Instance Type_Cat_CoEq  : CoEqualizer f g :=
+  Program Definition Type_Cat_CoEq  : CoEqualizer Type_Cat f g :=
     {|
       equalizer := CoEq_Type
     |}.
@@ -136,9 +148,6 @@ Section CoEqualizer.
     induction Hz as [? ? [w [[] []]]| | |]; auto.
     {
       eapply equal_f in H; eauto.
-    }
-    {
-      etransitivity; eauto.
     }
   Qed.
 
