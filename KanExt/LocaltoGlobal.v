@@ -1,3 +1,6 @@
+Require Import Essentials.Notations.
+Require Import Essentials.Types.
+Require Import Essentials.Facts_Tactics.
 Require Import Category.Main.
 Require Import Functor.Functor Functor.Functor_Ops Functor.Representable.Hom_Func_Prop.
 Require Import Functor.Functor_Extender.

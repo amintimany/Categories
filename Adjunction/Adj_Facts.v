@@ -1,3 +1,6 @@
+Require Import Essentials.Notations.
+Require Import Essentials.Types.
+Require Import Essentials.Facts_Tactics.
 Require Import Category.Main.
 Require Import Ext_Cons.Prod_Cat.Prod_Cat Ext_Cons.Prod_Cat.Nat_Facts Ext_Cons.Prod_Cat.Operations.
 Require Import Functor.Main.

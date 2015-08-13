@@ -1,3 +1,6 @@
+Require Import Essentials.Notations.
+Require Import Essentials.Types.
+Require Import Essentials.Facts_Tactics.
 Require Import Category.Category.
 Require Import Ext_Cons.Arrow.
 Require Import Functor.Functor Functor.Functor_Ops Const_Func.

@@ -1,6 +1,6 @@
-Require Export Essentials.Notations.
-Require Export Essentials.Types.
-Require Export Essentials.Facts_Tactics.
+Require Import Essentials.Notations.
+Require Import Essentials.Types.
+Require Import Essentials.Facts_Tactics.
 
 (** The basic definition of a category *)
 Class Category : Type :=

@@ -1,3 +1,6 @@
+Require Import Essentials.Notations.
+Require Import Essentials.Types.
+Require Import Essentials.Facts_Tactics.
 Require Import Category.Main.
 Require Import Topos.SubObject_Classifier.
 Require Import Basic_Cons.Terminal Basic_Cons.PullBack.
