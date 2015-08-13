@@ -128,10 +128,10 @@ End KanExtension.
 Section Left.
   Context {C C' : Category} (p : (C –≻ C')%functor) {D : Category} (F : (C –≻ D)%functor).
 
-  Definition Local_Left_KanExt := Local_Right_KanExt p^op F^op.
+  Definition Local_Left_KanExt := Local_Right_KanExt (p^op) (F^op).
 
   Definition is_Local_Left_KanExt (Cn_apex : (C' –≻ D)%functor) :=
-    is_Local_Right_KanExt p^op F^op Cn_apex^op
+    is_Local_Right_KanExt (p^op) (F^op) (Cn_apex^op)
   .
   
 End Left.
@@ -181,7 +181,8 @@ End Hom_Local_Right_KanExt.
 Section Hom_Local_Left_KanExt.
   Context {C C' : Category} (p : (C –≻ C')%functor) {D : Category} (F : (C –≻ D)%functor).
 
-  Definition Hom_Local_Left_KanExt := Hom_Local_Right_KanExt p^op F^op.
+  Definition Hom_Local_Left_KanExt :=
+    Hom_Local_Right_KanExt (p^op) (F^op).
   
 End Hom_Local_Left_KanExt.
 

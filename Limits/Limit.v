@@ -97,10 +97,10 @@ End Complete_to_Restricted_Limits.
 (** CoLimits *)
 
 Definition CoCone {J C : Category} (D : J –≻ C) :=
-  LoKan_Cone (Functor_To_1_Cat J^op) D^op.
+  LoKan_Cone (Functor_To_1_Cat J^op) (D^op).
 
 Definition CoCone_Morph {J C : Category} (D : J –≻ C) Cn Cn' :=
-  @LoKan_Cone_Morph _ _ (Functor_To_1_Cat J^op) _ D^op Cn Cn'.
+  @LoKan_Cone_Morph _ _ (Functor_To_1_Cat J^op) _ (D^op) Cn Cn'.
 
 Definition CoLimit {J C : Category} (D : J –≻ C) := Local_Left_KanExt (Functor_To_1_Cat J) D.
 
@@ -157,7 +157,7 @@ Definition Has_Restr_Limits_to_Has_Restr_CoLimits_Op
      HRL
        (D ^op)%category
        (F ^op)%functor H1
-       (Card_Rest_Respect P (Arrow D) (Arrow D ^op) (Arrow_OP_Iso D) H2)
+       (Card_Rest_Respect P (Arrow D) (Arrow (D^op)) (Arrow_OP_Iso D) H2)
   ).
 
 (** If a category has restricted colimits, its dual has restricted lomits *)
@@ -174,5 +174,5 @@ Definition Has_Restr_CoLimits_to_Has_Restr_Limits_Op
        (D ^op)%category
        (F ^op)%functor
        H1
-       (Card_Rest_Respect P (Arrow D) (Arrow D ^op) (Arrow_OP_Iso D) H2)
+       (Card_Rest_Respect P (Arrow D) (Arrow (D^op)) (Arrow_OP_Iso D) H2)
   ).

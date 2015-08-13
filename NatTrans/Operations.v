@@ -22,13 +22,13 @@ Section Opposite_NatTrans.
   
 End Opposite_NatTrans.
 
-Notation "N '^op'" := (Opposite_NatTrans N) (at level 9, no associativity) : nattrans_scope.
+Notation "N '^op'" := (Opposite_NatTrans N) : nattrans_scope.
 
 (** Composition of opposite natural transformations is just the same as the opposite natural transformation of the composition. *)
 Section Compose_NOP.
   Context {C D : Category} {F F' F'' : (C –≻ D)%functor} (N : F –≻ F') (N' : F' –≻ F'').
 
-  Theorem NatTrans_compose_Op : ((N' ∘ N)^op = N^op ∘ N'^op)%nattrans.
+  Theorem NatTrans_compose_Op : ((N' ∘ N)^op = N^op ∘ (N'^op))%nattrans.
   Proof.
     apply NatTrans_eq_simplify.
     trivial.

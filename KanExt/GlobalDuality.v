@@ -32,7 +32,7 @@ Hom_{Func_Cat Cᵒᵖ Dᵒᵖ}(– ∘ p, –) ≡ Hom_{Func_Cat C'ᵒᵖ Dᵒ�
         (
           (
             ((Hom_Func_Cat_Iso (Func_Cat_Op_Iso C' D))
-               ∘_h (NatTrans_id_Iso (Prod_Functor (Functor_id ((Func_Cat C' D) ^op) ^op) lke^op))
+               ∘_h (NatTrans_id_Iso (Prod_Functor (Functor_id ((Func_Cat C' D) ^op) ^op) (lke^op)))
             )
               ∘ (Hom_Adjunct_Duality (Adj_to_Hom_Adj (left_kan_ext_adj lke)))
           )
@@ -52,7 +52,8 @@ Hom_{Func_Cat Cᵒᵖ Dᵒᵖ}(– ∘ p, –) ≡ Hom_{Func_Cat C'ᵒᵖ Dᵒ�
     (** If we give the trans formations (e.g., function given in the first obligation)
 explicitly "Program" generates obligations for equalitiies that are definitional! *)
     
-    Program Definition KanExt_Left_to_Right : Right_KanExt  p^op D^op :=
+    Program Definition KanExt_Left_to_Right :
+      Right_KanExt  (p^op) (D^op) :=
       {|
         right_kan_ext :=
           ((Op_Func_Cat_to_Func_Cat_Op C' D) ∘
@@ -168,7 +169,7 @@ Hom_{Func_Cat C'ᵒᵖ Dᵒᵖ}(rke, –) ≡ Hom_{Func_Cat Cᵒᵖ Dᵒᵖ}(–
                   NatTrans_id_Iso
                     (Prod_Functor
                        (Functor_id ((Func_Cat C D) ^op) ^op)
-                       (Left_Functor_Extender p D)^op
+                       ((Left_Functor_Extender p D)^op)
                 ))
             )
               ∘ (Hom_Adjunct_Duality (Adj_to_Hom_Adj (right_kan_ext_adj rke)))
@@ -187,7 +188,8 @@ Hom_{Func_Cat C'ᵒᵖ Dᵒᵖ}(rke, –) ≡ Hom_{Func_Cat Cᵒᵖ Dᵒᵖ}(–
       )%natiso
     .
 
-    Program Definition KanExt_Right_to_Left : Left_KanExt  p^op D^op :=
+    Program Definition KanExt_Right_to_Left :
+      Left_KanExt  (p^op) (D^op) :=
       {|
         left_kan_ext :=
           (

@@ -130,6 +130,6 @@ Section Global_to_Local_Left.
           (F : C –≻ D).
 
   Definition Global_to_Local_Left : Local_Left_KanExt p F :=
-    Global_to_Local_Right _ _ (KanExt_Left_to_Right _ _ lke) F^op.
+    Global_to_Local_Right _ _ (KanExt_Left_to_Right _ _ lke) (F^op).
 
 End Global_to_Local_Left.

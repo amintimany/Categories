@@ -18,7 +18,7 @@ Section Hom_Func_Twist.
 
   Note that: (Home_Func C) : Cᵒᵖ×C -> Type_Cat and (Twist_Func C Cᵒᵖ) : C×Cᵒᴾ → Cᵒᵖ×C.
 *)
-  Theorem Hom_Func_Twist : (Hom_Func C^op) = (Hom_Func C) ∘ (Twist_Func C C^op).
+  Theorem Hom_Func_Twist : (Hom_Func (C^op)) = (Hom_Func C) ∘ (Twist_Func C (C^op)).
   Proof.
     Func_eq_simpl; cbn; auto.
   Qed.
@@ -42,7 +42,7 @@ Section Prod_Func_Hom_Func_NT.
   
   (** Given a natural transformation from ((Hom_Func C) ∘ (Prod_Functor F G)) to ((Hom_Func D) ∘ (Prod_Functor F' G')), we construct a natural transformation from ((Hom_Func C^op) ∘ (Prod_Functor G F)) to ((Hom_Func D^op) ∘ (Prod_Functor G' F')). *)
   Program Definition Prod_Func_Hom_Func_NT :
-    (((Hom_Func C^op) ∘ (Prod_Functor G F)) –≻ ((Hom_Func D^op) ∘ (Prod_Functor G' F')))%nattrans :=
+    (((Hom_Func (C^op)) ∘ (Prod_Functor G F)) –≻ ((Hom_Func (D^op)) ∘ (Prod_Functor G' F')))%nattrans :=
     {|
       Trans := fun c h => Trans N (snd c, fst c) h
     |}.
@@ -90,8 +90,8 @@ Section Prod_Func_Hom_Func.
 
   (** Given a natural isomorphism ((Hom_Func C) ∘ (Prod_Functor F G)) ≡ ((Hom_Func D) ∘ (Prod_Functor F' G')), we construct a natural ismorphism ((Hom_Func C^op) ∘ (Prod_Functor G F)) ≡ ((Hom_Func D^op) ∘ (Prod_Functor G' F')). *)
   Program Definition Prod_Func_Hom_Func :
-    ((((Hom_Func C^op) ∘ (Prod_Functor G F))%functor)
-       ≃ ((Hom_Func D^op) ∘ (Prod_Functor G' F'))%functor)%natiso
+    ((((Hom_Func (C^op)) ∘ (Prod_Functor G F))%functor)
+       ≃ ((Hom_Func (D^op)) ∘ (Prod_Functor G' F'))%functor)%natiso
     :=
       {|
         iso_morphism := Prod_Func_Hom_Func_NT (iso_morphism N);
@@ -129,7 +129,7 @@ Section Hom_Func_to_Iso_Hom_Func.
 
   Local Obligation Tactic := idtac.
   
-  Program Definition Hom_Func_to_Iso_Hom_Func : ((Hom_Func C) –≻ ((Hom_Func D) ∘ (Prod_Functor (iso_morphism I)^op (iso_morphism I))))%nattrans :=
+  Program Definition Hom_Func_to_Iso_Hom_Func : ((Hom_Func C) –≻ ((Hom_Func D) ∘ (Prod_Functor ((iso_morphism I)^op) (iso_morphism I))))%nattrans :=
     {|
       Trans := fun c h => ((iso_morphism I) _a h)%morphism
     |}.
@@ -146,7 +146,7 @@ Section Hom_Func_to_Iso_Hom_Func.
   Qed.
 
   Program Definition Iso_Hom_Func_to_Hom_Func :
-    (((Hom_Func D) ∘ (Prod_Functor  (iso_morphism I)^op (iso_morphism I))) –≻ (Hom_Func C))%nattrans
+    (((Hom_Func D) ∘ (Prod_Functor ((iso_morphism I)^op) (iso_morphism I))) –≻ (Hom_Func C))%nattrans
     :=
     {|
       Trans := fun c h => Cat_Iso_conv_inv I ((inverse_morphism I) _a h)
@@ -170,7 +170,7 @@ Section Hom_Func_to_Iso_Hom_Func.
   Program Definition Hom_Func_Cat_Iso :
     (
       (Hom_Func C)
-        ≃ ((Hom_Func D) ∘ (Prod_Functor (iso_morphism I)^op (iso_morphism I)))%functor
+        ≃ ((Hom_Func D) ∘ (Prod_Functor ((iso_morphism I)^op) (iso_morphism I)))%functor
     )%natiso :=
     {|
       iso_morphism := Hom_Func_to_Iso_Hom_Func;

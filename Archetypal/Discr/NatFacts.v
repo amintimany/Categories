@@ -21,7 +21,7 @@ Section Discr_Func_Iso.
   
   Program Definition Discr_Func_Iso :
     (
-      (@Discr_Func C^op A Omap) ≃ ((@Discr_Func_op C A Omap)^op)%functor
+      (@Discr_Func (C^op) A Omap) ≃ ((@Discr_Func_op C A Omap)^op)%functor
     )%natiso
     :=
       {|
@@ -39,11 +39,11 @@ Section Discr_Func_Iso.
 End Discr_Func_Iso.
 
 Section Discr_Func_Arrow_Iso.
-  Context {C D : Category} (arrmap : (Arrow C^op) → D).
+  Context {C D : Category} (arrmap : (Arrow (C^op)) → D).
 
   (**  *)
   Definition Discr_Cat_ArrowOp_Discr_Cat_Arrow_Op :
-    (((Discr_Cat (Arrow C^op))^op)%category
+    (((Discr_Cat (Arrow (C^op)))^op)%category
                                   ≃≃ ((Discr_Cat (Arrow C))^op)%category ::> Cat)%isomorphism
     :=
       Opposite_Cat_Iso (Discr_Cat_Iso ((Arrow_OP_Iso C)⁻¹))
@@ -57,7 +57,7 @@ Section Discr_Func_Arrow_Iso.
         (Discr_Func_op (fun x : Arrow C => arrmap (Arrow_to_Arrow_OP C x)))
           ∘ (iso_morphism Discr_Cat_ArrowOp_Discr_Cat_Arrow_Op)
       )%functor
-        ≃ ((@Discr_Func_op D (Arrow C^op) arrmap))%functor
+        ≃ ((@Discr_Func_op D (Arrow (C^op)) arrmap))%functor
     )%natiso
     :=
       {|

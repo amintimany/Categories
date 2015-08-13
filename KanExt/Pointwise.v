@@ -58,7 +58,7 @@ Section Pointwise_LLKE.
   
   Definition Pointwise_LLKE :=
     ∀ (G : D^op –≻ Type_Cat) (GR : CoRepresentable G),
-    is_Local_Right_KanExt p (G^op ∘ F) (G ∘ llke)^op
+    is_Local_Right_KanExt p (G^op ∘ F) ((G ∘ llke)^op)
   .
   
 End Pointwise_LLKE.

@@ -78,7 +78,7 @@ Section Functor_eq_simplification.
 
   (** Two functors are equal if their object maps and arrow maps are. *)
   Lemma Functor_eq_simplify (Oeq : F _o = G _o) :
-    ((fun x y => match Oeq in _ = V return (x –≻ y → (V x) –≻ (V y))%morphism with eq_refl => F  @_a x y end) = G @_a) -> F = G.
+    ((fun x y => match Oeq in _ = V return ((x –≻ y) → ((V x) –≻ (V y)))%morphism with eq_refl => F  @_a x y end) = G @_a) -> F = G.
   Proof.
     destruct F; destruct G.
     basic_simpl.
@@ -95,7 +95,7 @@ Section Functor_eq_simplification.
         (
           fun x y =>
             match Oeq in _ = V return
-                  (x –≻ y → (V x) –≻ (V y))%morphism
+                  ((x –≻ y) → ((V x) –≻ (V y)))%morphism
             with
               eq_refl => F  @_a x y
             end
@@ -105,7 +105,7 @@ Section Functor_eq_simplification.
     (
       fun x y =>
         match Oeq in _ = V return
-              (x –≻ y → (V x) –≻ (V y))%morphism
+              ((x –≻ y) → ((V x) –≻ (V y)))%morphism
         with
           eq_refl => F  @_a x y
         end
@@ -121,7 +121,7 @@ Section Functor_eq_simplification.
         (
           fun x y =>
             match Oeq in _ = V return
-                  (x –≻ y → (V x) –≻ (V y))%morphism
+                  ((x –≻ y) → ((V x) –≻ (V y)))%morphism
             with
               eq_refl => F  @_a x y
             end

@@ -54,7 +54,7 @@ Section Cat_IConv.
   Definition Cat_Iso_Hom_conv (c c' : C) :
     ((((inverse_morphism I) _o) (((iso_morphism I) _o) c))
       –≻
-      (((inverse_morphism I) _o) (((iso_morphism I) _o) c')))%morphism = c –≻ c'.
+      (((inverse_morphism I) _o) (((iso_morphism I) _o) c')))%morphism = (c –≻ c').
   Proof.
     do 2 rewrite <- Cat_Iso_Obj_conv; trivial.
   Defined.

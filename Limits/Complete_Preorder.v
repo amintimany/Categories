@@ -34,16 +34,16 @@ Section Complete_Preorder.
   Local Definition GenProd_of_const_Hom_x_y :=
     Type_Cat_GenProd
       _
-      (((@Fix_Bi_Func_1 C^op _ _ x (Hom_Func.Hom_Func C)) ∘ (Discr_Func Arr_y)) _o)%object.
+      (((@Fix_Bi_Func_1 (C^op) _ _ x (Hom_Func.Hom_Func C)) ∘ (Discr_Func Arr_y)) _o)%object.
 
   Local Hint Extern 1 => cbn.
 
   Local Program Definition Func_Iso :
     (
       (Discr_Func
-         (((@Fix_Bi_Func_1 C^op _ _ x (Hom_Func.Hom_Func C)) ∘ (Discr_Func Arr_y)) _o)%object
+         (((@Fix_Bi_Func_1 (C^op) _ _ x (Hom_Func.Hom_Func C)) ∘ (Discr_Func Arr_y)) _o)%object
       )
-      ≃ ((@Fix_Bi_Func_1 C^op _ _ x (Hom_Func.Hom_Func C)) ∘ (Discr_Func Arr_y))%functor
+      ≃ ((@Fix_Bi_Func_1 (C^op) _ _ x (Hom_Func.Hom_Func C)) ∘ (Discr_Func Arr_y))%functor
     )%natiso
     :=
     {|

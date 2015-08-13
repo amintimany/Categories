@@ -44,8 +44,8 @@ Section Right_Adjoint_Preserves_Hom_Local_Right_KanExt.
   Local Definition Conv_1 :=
     (
       NatIso_Functor_assoc
-       (Left_Functor_Extender p E)^op
-       (Right_Functor_Extender L C)^op
+       ((Left_Functor_Extender p E)^op)
+       ((Right_Functor_Extender L C)^op)
        (@Fix_Bi_Func_2 _ (Func_Cat _ _) _ F (Hom_Func (Func_Cat C D)))
     ).
 

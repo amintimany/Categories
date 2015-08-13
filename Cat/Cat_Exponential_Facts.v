@@ -127,7 +127,7 @@ Section Exp_Cat_morph_ex_Iso.
   Proof.
     apply NatTrans_eq_simplify; extensionality x; cbn.
     apply NatTrans_eq_simplify; extensionality y; cbn.
-    change (Trans N ⁻¹ (x, y) ∘ Trans (iso_morphism N) (x, y))%morphism with (Trans (N⁻¹ ∘ N)%morphism (x, y)).
+    change (Trans (N⁻¹) (x, y) ∘ Trans (iso_morphism N) (x, y))%morphism with (Trans (N⁻¹ ∘ N)%morphism (x, y)).
     rewrite left_inverse; trivial.
   Qed.
 
@@ -135,7 +135,7 @@ Section Exp_Cat_morph_ex_Iso.
   Proof.
     apply NatTrans_eq_simplify; extensionality x; cbn.
     apply NatTrans_eq_simplify; extensionality y; cbn.
-    change (Trans (iso_morphism N) (x, y) ∘ Trans N⁻¹ (x, y))%morphism with (Trans (N ∘ N⁻¹)%morphism (x, y)).
+    change (Trans (iso_morphism N) (x, y) ∘ Trans (N⁻¹) (x, y))%morphism with (Trans (N ∘ (N⁻¹))%morphism (x, y)).
     rewrite right_inverse; trivial.
   Qed.
 

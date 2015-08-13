@@ -133,7 +133,7 @@ Qed.
 Next Obligation.
 Proof.
   rewrite assoc.
-  rewrite (assoc_sym I'⁻¹).
+  rewrite (assoc_sym (I'⁻¹)).
   auto.
 Qed.
 
@@ -224,5 +224,5 @@ End Iso_Mono_Epi.
 Theorem CoIso {C : Category} (a b : C) : a ≃≃ b ::> C → a ≃≃ b ::> C^op. 
 Proof.
   intros I.
-  eapply (Build_Isomorphism C^op _ _ I⁻¹ I); unfold compose; simpl; auto.
+  eapply (Build_Isomorphism (C^op)%category _ _ (I⁻¹) I); unfold compose; simpl; auto.
 Qed.

@@ -106,7 +106,7 @@ Qed.
 Arguments Prod_Func _ _, _ {_}.
 
 (** Sum is the dual of product *)
-Definition Sum (C : Category) := @Product C^op.
+Definition Sum (C : Category) := @Product (C^op).
 
 Arguments Sum _ _ _, {_} _ _.
 
@@ -117,6 +117,6 @@ Existing Class Has_Sums.
 (**
 The sum functor maps each pair of objects (an object of the product category C×C) to their sum in C.
 *)
-Definition Sum_Func {C : Category} {HS : Has_Sums C} : ((C × C) –≻ C)%functor := (Prod_Func C^op HS)^op.
+Definition Sum_Func {C : Category} {HS : Has_Sums C} : ((C × C) –≻ C)%functor := (Prod_Func (C^op) HS)^op.
 
 Arguments Sum_Func _ _, _ {_}.

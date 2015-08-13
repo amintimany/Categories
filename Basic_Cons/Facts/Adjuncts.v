@@ -68,8 +68,8 @@ Section Sum_Adj.
     match goal with
       [|- (?A, ?B) = (?C, ?D)] => cutrewrite(C = A); [cutrewrite (D = B)|]; trivial
     end.
-    apply (@Prod_morph_com_2 C^op).
-    apply (@Prod_morph_com_1 C^op).
+    apply (@Prod_morph_com_2 (C^op)).
+    apply (@Prod_morph_com_1 (C^op)).
   Qed.
 
   Next Obligation.
@@ -77,8 +77,8 @@ Section Sum_Adj.
     match goal with
       [|- (?A, ?B) = (?C, ?D)] => cutrewrite(A = C); [cutrewrite (B = D)|]; trivial
     end.
-    apply (@Prod_morph_com_2 C^op).
-    apply (@Prod_morph_com_1 C^op).
+    apply (@Prod_morph_com_2 (C^op)).
+    apply (@Prod_morph_com_1 (C^op)).
   Qed.
 
   Next Obligation.
@@ -86,8 +86,8 @@ Section Sum_Adj.
     match goal with
       [|- (?A, ?B) = (?C, ?D)] => cutrewrite(C = A); [cutrewrite (D = B)|]; trivial
     end.
-    apply (@Prod_morph_com_2 C^op).
-    apply (@Prod_morph_com_1 C^op).
+    apply (@Prod_morph_com_2 (C^op)).
+    apply (@Prod_morph_com_1 (C^op)).
   Qed.    
   
   Local Obligation Tactic := idtac.
@@ -111,7 +111,7 @@ Section Prod_Exp_Adj.
 
   Program Definition Prod_Exp_Adj :
     (
-      (Fix_Bi_Func_2 x (Prod_Func C HP)) ⊣ (@Fix_Bi_Func_1 C^op _ _ x (@Exp_Func C HP HE))
+      (Fix_Bi_Func_2 x (Prod_Func C HP)) ⊣ (@Fix_Bi_Func_1 (C^op) _ _ x (@Exp_Func C HP HE))
     )%functor
     :=
     {|

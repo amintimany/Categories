@@ -32,8 +32,8 @@ generalized sums of that type. *)
 
 Section GenProd_to_GenSum.
   Context {A : Type} {C : Category} {map : A → C} (L : GenProd map).  
-  Definition GenProd_to_GenSum : @GenSum A C^op map :=
-    Local_Right_KanExt_Iso ((@Discr_Func_Iso C^op A map)⁻¹) L.
+  Definition GenProd_to_GenSum : @GenSum A (C^op) map :=
+    Local_Right_KanExt_Iso ((@Discr_Func_Iso (C^op) A map)⁻¹) L.
 
 End GenProd_to_GenSum.
 
@@ -42,7 +42,7 @@ generalized products of that type. *)
 Section GenSum_to_GenProd.
   Context {A : Type} {C : Category} {map : A → C} (L : GenSum map).
   
-  Definition GenSum_to_GenProd : @GenProd A C^op map :=
+  Definition GenSum_to_GenProd : @GenProd A (C^op) map :=
     Local_Right_KanExt_Iso (Discr_Func_Iso map) L.
 
 End GenSum_to_GenProd.

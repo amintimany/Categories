@@ -23,7 +23,7 @@ Section Opposite_Functor.
 
 End Opposite_Functor.
 
-Notation "F '^op'" := (Opposite_Functor F) (at level 9, no associativity) : functor_scope.
+Notation "F '^op'" := (Opposite_Functor F) : functor_scope.
 
 (* We can compose functors. The object and arrow maps are simply function compositions of object and arrow maps. *)
 Section Functor_Compose.

@@ -16,10 +16,10 @@ Local Notation FCAT := Func_Cat (only parsing).
 (** This module contains different definitions of adjunctions and their conversion. *)
 
 (** The left hand side of the isomorphism for adjunctions defined through hom functor. *)
-Notation Hom_Adj_Left C D F G := ((Hom_Func D) ∘ (Prod_Functor F^op (@Functor_id D)))%functor (only parsing).
+Notation Hom_Adj_Left C D F G := ((Hom_Func D) ∘ (Prod_Functor (F^op) (@Functor_id D)))%functor (only parsing).
 
 (* The right hand side of the isomorphism for adjunctions defined through hom functor. *)
-Notation Hom_Adj_Right C D F G := ((Hom_Func C) ∘ (Prod_Functor (@Functor_id C^op) G))%functor (only parsing).
+Notation Hom_Adj_Right C D F G := ((Hom_Func C) ∘ (Prod_Functor (@Functor_id (C^op)) G))%functor (only parsing).
 
 Local Obligation Tactic := idtac.
 

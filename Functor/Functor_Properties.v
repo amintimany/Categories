@@ -102,7 +102,7 @@ A conservative functor is one for which we have to objects of the domain categor
     fun c c' I =>
       {|
         iso_morphism := proj1_sig (fl _ _ I);
-        inverse_morphism := proj1_sig (fl _ _ I⁻¹)
+        inverse_morphism := proj1_sig (fl _ _ (I⁻¹))
       |}
   .
 
@@ -115,7 +115,7 @@ Section Functors_Preserve_Isos.
   Program Definition Functors_Preserve_Isos : (F _o a ≃ F _o b)%isomorphism :=
     {|
       iso_morphism := (F _a I)%morphism;
-      inverse_morphism := (F _a I⁻¹)%morphism
+      inverse_morphism := (F _a (I⁻¹))%morphism
     |}.
 
 End Functors_Preserve_Isos.

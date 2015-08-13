@@ -15,7 +15,7 @@ Section Representable.
   Record Representable : Type :=
     {
       representer : C;
-      representation_Iso : (F ≃ @Fix_Bi_Func_1 C^op _ _ representer (Hom_Func C))%natiso
+      representation_Iso : (F ≃ @Fix_Bi_Func_1 (C^op) _ _ representer (Hom_Func C))%natiso
     }.
 
 End Representable.
@@ -23,4 +23,4 @@ End Representable.
 Arguments representer {_ _} _.
 Arguments representation_Iso {_ _} _.
 
-SubClass CoRepresentable {C : Category} (F : (C^op –≻ Type_Cat)%functor) := @Representable C^op F.
+Definition CoRepresentable {C : Category} (F : (C^op –≻ Type_Cat)%functor) := @Representable (C^op) F.

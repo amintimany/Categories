@@ -18,7 +18,7 @@ Section Y_emb.
   Definition CoYoneda : (C^op –≻ (Func_Cat C Type_Cat))%functor := Exp_Cat_morph_ex (Hom_Func C).
 
   (** The Yoneda embedding for category C – the curry of hom functor of Cᵒᵖ. *)
-  Definition Yoneda : (C –≻ (Func_Cat C^op Type_Cat))%functor := Exp_Cat_morph_ex (Hom_Func C^op).
+  Definition Yoneda : (C –≻ (Func_Cat (C^op) Type_Cat))%functor := Exp_Cat_morph_ex (Hom_Func (C^op)).
 
 End Y_emb.
 
@@ -27,13 +27,13 @@ Section Y_Left_Right.
 
   (** The left hand side of the Yoneda lemma's isomorphism *)
   Definition Y_left :
-    ((C^op × (Func_Cat C^op Type_Cat)) –≻ Type_Cat)%functor
+    ((C^op × (Func_Cat (C^op) Type_Cat)) –≻ Type_Cat)%functor
     :=
-      ((Hom_Func _) ∘ (Prod_Functor (Yoneda C)^op (Functor_id (Func_Cat C^op Type_Cat))))%functor.
+      ((Hom_Func _) ∘ (Prod_Functor ((Yoneda C)^op) (Functor_id (Func_Cat (C^op) Type_Cat))))%functor.
   
   (** The right hand side of the Yoneda lemma's isomorphism *)
-  Definition Y_right : ((C^op × (Func_Cat C^op Type_Cat)) –≻ Type_Cat)%functor :=
-    ((Exp_Cat_Eval C^op Type_Cat) ∘ (Twist_Func _ _))%functor.
+  Definition Y_right : ((C^op × (Func_Cat (C^op) Type_Cat)) –≻ Type_Cat)%functor :=
+    ((Exp_Cat_Eval (C^op) Type_Cat) ∘ (Twist_Func _ _))%functor.
 
 End Y_Left_Right.
 
@@ -197,7 +197,7 @@ Proof.
 Qed.
 
 (** Yoneda embedding is indeed an embedding. *)
-Definition Yoneda_Emb (C : Category) : Embedding C (Func_Cat C ^op Type_Cat) :=
+Definition Yoneda_Emb (C : Category) : Embedding C (Func_Cat (C^op) Type_Cat) :=
 {|
   Emb_Func := Yoneda C;
   Emb_Faithful := Yoneda_Faithful C;

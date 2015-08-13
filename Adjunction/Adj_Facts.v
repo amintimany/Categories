@@ -23,7 +23,7 @@ Section Hom_Adjunct_left_iso.
 
 
   (** If F ≡ F' and (F ⊣_hom G) then (F' ⊣_hom G) *)
-  Definition Hom_Adjunct_left_iso : F' ⊣_hom G := (adj ∘ ((NatTrans_id_Iso (Hom_Func D)) ∘_h (Prod_Functor_NatIso N^op (NatTrans_id_Iso (Functor_id D)))))%isomorphism%natiso.
+  Definition Hom_Adjunct_left_iso : F' ⊣_hom G := (adj ∘ ((NatTrans_id_Iso (Hom_Func D)) ∘_h (Prod_Functor_NatIso (N^op) (NatTrans_id_Iso (Functor_id D)))))%isomorphism%natiso.
 
 End Hom_Adjunct_left_iso.
 
@@ -78,8 +78,8 @@ Section Hom_Adjunct_left_unique.
   (** If F ⊣_hom G and F' ⊣_hom G then F ≡ F' *)
   Definition Hom_Adjunct_left_unique : (F ≃ F')%natiso.
   Proof.
-    apply (@Opposite_NatIso _ _ F^op F'^op).
-    eapply (Embedding_mono (Yoneda_Emb D^op)).
+    apply (@Opposite_NatIso _ _ (F^op) (F'^op)).
+    eapply (Embedding_mono (Yoneda_Emb (D^op))).
     eapply Isomorphism_Compose;
       [eapply Inverse_Isomorphism; apply Exp_Cat_morph_ex_compose_Iso |].
     eapply Isomorphism_Compose; [|apply Exp_Cat_morph_ex_compose_Iso].
@@ -106,7 +106,7 @@ Section Hom_Adjunct_right_unique.
   Proof.
     apply Hom_Adjunct_Duality in adj.
     apply Hom_Adjunct_Duality in adj'.
-    apply (@Opposite_NatIso _ _ G^op G'^op).
+    apply (@Opposite_NatIso _ _ (G^op) (G'^op)).
     apply (Hom_Adjunct_left_unique adj adj').
   Defined.
 
@@ -175,7 +175,7 @@ Section Hom_Adjunct_Lifted.
     (
       (Hom_Func (Func_Cat B C))
         ∘ (Prod_Functor
-             (Functor_id (Func_Cat B C)^op%category)
+             (Functor_id ((Func_Cat B C)^op)%category)
              (Right_Functor_Extender G B)
           )
     )

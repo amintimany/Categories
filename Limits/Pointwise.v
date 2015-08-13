@@ -24,7 +24,7 @@ Local Notation FCAT := Func_Cat (only parsing).
 Section Rep_Preserve_Limits.
   Context {J C : Category} (D : J –≻ C) (x : C).
 
-  Local Notation REPx := (@Fix_Bi_Func_1 C^op _ _ x (Hom_Func C)) (only parsing).
+  Local Notation REPx := (@Fix_Bi_Func_1 (C^op) _ _ x (Hom_Func C)) (only parsing).
 
   Local Notation REPxComp U := (REPx ∘ U)%functor (only parsing).
   

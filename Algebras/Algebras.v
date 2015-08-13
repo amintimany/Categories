@@ -144,13 +144,16 @@ Arguments Algebra_Hom_id {_ _} _.
 Section CoAlgebras.
   Context {C : Category}.
 
-  Definition CoAlgebra (T : (C –≻ C)%functor) := @Algebra C^op T^op.
+  Definition CoAlgebra (T : (C –≻ C)%functor) :=
+    @Algebra (C^op) (T^op).
   
   Definition CoAlgebra_Hom {T : (C –≻ C)%functor} := 
-      @Algebra_Hom C^op T^op.
+      @Algebra_Hom (C^op) (T^op).
 
-  Definition CoAlgebra_Hom_id {T : (C –≻ C)%functor} := @Algebra_Hom_id  C^op T^op.
+  Definition CoAlgebra_Hom_id {T : (C –≻ C)%functor} :=
+    @Algebra_Hom_id  (C^op) (T^op).
 
-  Definition CoAlgebra_Cat (T : (C –≻ C)%functor) := @Algebra_Cat C^op T^op.
+  Definition CoAlgebra_Cat (T : (C –≻ C)%functor) :=
+    @Algebra_Cat (C^op) (T^op).
 
 End CoAlgebras.

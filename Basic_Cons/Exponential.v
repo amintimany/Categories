@@ -40,7 +40,7 @@ Record Exponential {C : Category} {HP : Has_Products C} (c d : Obj) : Type :=
 
   eval : ((Prod_Func C) _o (exponential, c))%object –≻ d;
 
-  Exp_morph_ex : ∀ (z : C), ((Prod_Func C) _o (z, c))%object –≻ d → z –≻ exponential;
+  Exp_morph_ex : ∀ (z : C), (((Prod_Func C) _o (z, c))%object –≻ d) → (z –≻ exponential);
 
   Exp_morph_com : ∀ (z : C) (f : ((Prod_Func C) _o (z, c))%object –≻ d),
       f = (eval ∘ ((Prod_Func C) @_a (_, _) (_, _) (Exp_morph_ex z f, id c)))%morphism;
@@ -98,13 +98,16 @@ Section Curry_UnCurry.
 
   (** Given a arrow f: a×b -> c in a category with exponentials, the curry of f is f̂ 
 in the definition of Exponential above. *)
-  Definition curry : forall {a b c : C}, ((Prod_Func C) _o (a, b))%object –≻ c → a –≻ (HE b c) :=
+  Definition curry :
+    forall {a b c : C},
+      (((Prod_Func C) _o (a, b))%object –≻ c) → (a –≻ (HE b c)) :=
     fun {a b c : C} (f : ((Prod_Func C) _o (a, b))%object –≻ c) =>
       Exp_morph_ex (HE b c) _ f.
 
   (** Given an arrow f: a -> cᵇ, uncurry of f is the arrow (eval_cᵇ ∘ <id_b, f>): a×b -> c.
 See definition of Exponential above for details. *)
-  Definition uncurry : forall {a b c : C}, a –≻ (HE b c) → ((Prod_Func C) _o (a, b))%object –≻ c :=
+  Definition uncurry : forall {a b c : C},
+      (a –≻ (HE b c)) → (((Prod_Func C) _o (a, b))%object –≻ c) :=
     fun {a b c : C} (f : a –≻ (HE b c)) =>
       ((eval (HE b c)) ∘ ((Prod_Func C) @_a (_, _) (_, _) (f, id C b)))%morphism.
 

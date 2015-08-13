@@ -17,37 +17,37 @@ Notation "¬ x" := (~x) (at level 75, right associativity) : type_scope.
 
 Notation "x ≠ y" := (x <> y) (at level 70) : type_scope.
 
-Reserved Notation "C '^op'" (at level 9, no associativity).
+Reserved Notation "C '^op'" (at level 50, no associativity).
 
-Reserved Notation "a –≻ b" (at level 10, no associativity).
+Reserved Notation "a –≻ b" (at level 90, b at level 200, right associativity).
 
-Reserved Notation "f '⁻¹'" (at level 7, no associativity).
+Reserved Notation "f '⁻¹'" (at level 50, no associativity).
 
 Reserved Notation "a ≃ b" (at level 70, no associativity).
 
 Reserved Notation "a ≃≃ b ::> C" (at level 70, no associativity).
 
-Reserved Notation "f ∘ g" (at level 11, right associativity).
+Reserved Notation "f ∘ g" (at level 51, right associativity).
 
-Reserved Notation "f '∘_h' g" (at level 11, right associativity).
+Reserved Notation "f '∘_h' g" (at level 51, right associativity).
 
-Reserved Notation "a ≫–> b" (at level 10, no associativity).
+Reserved Notation "a ≫–> b" (at level 100, no associativity).
 
-Reserved Notation "a –≫ b" (at level 10, no associativity).
+Reserved Notation "a –≫ b" (at level 100, no associativity).
 
-Reserved Notation "F '_o'" (at level 10, no associativity).
+Reserved Notation "F '_o'" (at level 50, no associativity).
 
-Reserved Notation "F '_a'" (at level 10, no associativity).
+Reserved Notation "F '_a'" (at level 50, no associativity).
 
-Reserved Notation "F '@_a'" (at level 10, no associativity).
+Reserved Notation "F '@_a'" (at level 50, no associativity).
 
-Reserved Notation "F ⊣ G" (at level 12, no associativity).
+Reserved Notation "F ⊣ G" (at level 100, no associativity).
 
-Reserved Notation "F ⊣_hom G" (at level 12, no associativity).
+Reserved Notation "F ⊣_hom G" (at level 100, no associativity).
 
-Reserved Notation "F ⊣_ucu G" (at level 12, no associativity).
+Reserved Notation "F ⊣_ucu G" (at level 100, no associativity).
 
-Reserved Notation "a × b" (at level 10, no associativity).
+Reserved Notation "a × b" (at level 80, no associativity).
 
 Delimit Scope category_scope with category.
 

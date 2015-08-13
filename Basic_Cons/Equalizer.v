@@ -66,11 +66,11 @@ Definition Has_Equalizers (C : Category) : Type := ∀ (a b : C) (f g : a –≻
 Existing Class Has_Equalizers.
 
 (** CoEqualizer is the dual of equalzier *)
-Definition CoEqualizer {C : Category} := @Equalizer C^op.
+Definition CoEqualizer {C : Category} := @Equalizer (C^op).
 
 Arguments CoEqualizer _ {_ _} _ _, {_ _ _} _ _.
 
-Definition Has_CoEqualizers (C : Category) : Type := Has_Equalizers C^op.
+Definition Has_CoEqualizers (C : Category) : Type := Has_Equalizers (C^op).
 
 Existing Class Has_CoEqualizers.
 

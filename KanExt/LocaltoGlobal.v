@@ -324,7 +324,7 @@ Section Local_to_Global_Left.
   Context (lke : ∀ F : C –≻ D,  Local_Left_KanExt p F).
 
   Definition Local_to_Global_Left : Left_KanExt p D :=
-    KanExt_Right_to_Left _ _ (Local_to_Global_Right _ _ (fun (F : C^op –≻ D^op) => (lke F^op))).
+    KanExt_Right_to_Left _ _ (Local_to_Global_Right _ _ (fun (F : C^op –≻ D^op) => (lke (F^op)))).
 
 End Local_to_Global_Left.
 
