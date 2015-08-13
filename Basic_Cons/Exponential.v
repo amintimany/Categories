@@ -163,7 +163,7 @@ the definition of Exponential above. *)
           match M with
               ((?N ∘ ?x)%morphism, id ?y) =>
               replace M with
-              (compose (Prod_Cat _ _) (_, _) (_, _) (_, _) (x, id y) (N,id y)) by (cbn; auto)
+              (compose (_ × _) (_, _) (_, _) (_, _) (x, id y) (N,id y)) by (cbn; auto)
           end
       end.
       rewrite F_compose.

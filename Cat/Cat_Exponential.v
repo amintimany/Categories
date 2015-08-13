@@ -12,7 +12,7 @@ Require Import Cat.Cat_Product.
 Local Open Scope functor_scope. 
 
 (** Evaluation functor. *)
-Program Definition Exp_Cat_Eval (C C' : Category) : (Prod_Cat (Func_Cat C C') C) –≻ C' :=
+Program Definition Exp_Cat_Eval (C C' : Category) : ((Func_Cat C C') × C) –≻ C' :=
 {|
   FO := fun x => ((fst x) _o (snd x))%object;
   FA := fun A B f => (((fst B) _a (snd f)) ∘ (@Trans _ _ _ _ (fst f) _))%morphism
@@ -36,7 +36,7 @@ Qed.
 
 (** The arrow map of curry functor. *)
 Program Definition Exp_Cat_morph_ex_A
-        {C C' C'' : Category} (F : (Prod_Cat C'' C) –≻  C')
+        {C C' C'' : Category} (F : (C'' × C) –≻  C')
         (a b : C'') (h : (a –≻ b)%morphism)
   :
     ((Fix_Bi_Func_1 a F) –≻ (Fix_Bi_Func_1 b F))%nattrans :=
@@ -51,7 +51,7 @@ Local Hint Extern 1 => apply NatTrans_eq_simplify; cbn.
 (** The curry functor. *)
 Program Definition Exp_Cat_morph_ex
         {C C' C'' : Category}
-        (F : (Prod_Cat C'' C) –≻ C')
+        (F : (C'' × C) –≻ C')
   :
     C'' –≻ (Func_Cat C C') :=
 {|

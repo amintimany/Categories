@@ -47,6 +47,8 @@ Reserved Notation "F ⊣_hom G" (at level 12, no associativity).
 
 Reserved Notation "F ⊣_ucu G" (at level 12, no associativity).
 
+Reserved Notation "a × b" (at level 10, no associativity).
+
 Delimit Scope category_scope with category.
 
 Delimit Scope morphism_scope with morphism.

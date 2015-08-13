@@ -24,12 +24,12 @@ Section Y_Left_Right.
 
   (** The left hand side of the Yoneda lemma's isomorphism *)
   Definition Y_left :
-    ((Prod_Cat C^op (Func_Cat C^op Type_Cat)) –≻ Type_Cat)%functor
+    ((C^op × (Func_Cat C^op Type_Cat)) –≻ Type_Cat)%functor
     :=
       ((Hom_Func _) ∘ (Prod_Functor (Yoneda C)^op (Functor_id (Func_Cat C^op Type_Cat))))%functor.
   
   (** The right hand side of the Yoneda lemma's isomorphism *)
-  Definition Y_right : ((Prod_Cat C^op (Func_Cat C^op Type_Cat)) –≻ Type_Cat)%functor :=
+  Definition Y_right : ((C^op × (Func_Cat C^op Type_Cat)) –≻ Type_Cat)%functor :=
     ((Exp_Cat_Eval C^op Type_Cat) ∘ (Twist_Func _ _))%functor.
 
 End Y_Left_Right.

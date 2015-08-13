@@ -8,7 +8,7 @@ Require Import Ext_Cons.Prod_Cat.Prod_Cat.
 Require Import Cat.Facts.
 
 
-Program Definition term_id : (Type_Cat –≻ (Prod_Cat Type_Cat Type_Cat))%functor :=
+Program Definition term_id : (Type_Cat –≻ (Type_Cat × Type_Cat))%functor :=
 {|
   FO := fun a => (@CCC_term Type_Cat _, a);
   FA := fun a b f => (@id _ (@CCC_term Type_Cat _), f)

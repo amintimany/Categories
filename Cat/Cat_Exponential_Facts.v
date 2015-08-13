@@ -13,7 +13,7 @@ Local Open Scope functor_scope.
 
 Section Exp_Cat_morph_ex_compose.
   Context {C C' C'' : Category}
-          (F : (Prod_Cat C'' C) –≻  C')
+          (F : (C'' × C) –≻  C')
           {B : Category}
           (G : B –≻ C'')
   .
@@ -41,7 +41,7 @@ End Exp_Cat_morph_ex_compose.
 
 Section Exp_Cat_morph_ex_compose_Iso.
   Context {C C' C'' : Category}
-          (F : (Prod_Cat C'' C) –≻  C')
+          (F : (C'' × C) –≻  C')
           {B : Category}
           (G : B –≻ C'').
 
@@ -79,7 +79,7 @@ End Exp_Cat_morph_ex_compose_Iso.
 
 Section Exp_Cat_morph_ex_NT.
   Context {C C' C'' : Category}
-          {F F' : (Prod_Cat C'' C) –≻  C'}
+          {F F' : (C'' × C) –≻  C'}
           (N : (F –≻ F')%nattrans).
   (** If we have a natural transformation from F to F' then we have a natural transformation from (curry F) to (curry F'). *)
   Program Definition Exp_Cat_morph_ex_NT :
@@ -109,7 +109,7 @@ End Exp_Cat_morph_ex_NT.
 
 Section Exp_Cat_morph_ex_Iso.
   Context {C C' C'' : Category}
-          {F F' : (Prod_Cat C'' C) –≻ C'}
+          {F F' : (C'' × C) –≻ C'}
           (N : (F ≃ F')%natiso)
   .
 
@@ -140,7 +140,7 @@ End Exp_Cat_morph_ex_Iso.
 
 Section Exp_Cat_morph_ex_inverse_NT.
   Context {C C' C'' : Category}
-          {F F' : (Prod_Cat C'' C) –≻  C'}
+          {F F' : (C'' × C) –≻  C'}
           (N : ((Exp_Cat_morph_ex F) –≻ (Exp_Cat_morph_ex F'))%nattrans).
 
 
@@ -175,7 +175,7 @@ End Exp_Cat_morph_ex_inverse_NT.
 
 Section Exp_Cat_morph_ex_inverse_Iso.
   Context {C C' C'' : Category}
-          {F F' : (Prod_Cat C'' C) –≻  C'}
+          {F F' : (C'' × C) –≻  C'}
           (N : (Exp_Cat_morph_ex F ≃ Exp_Cat_morph_ex F')%natiso)
   .
 

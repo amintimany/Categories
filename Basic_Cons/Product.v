@@ -82,7 +82,7 @@ Existing Class Has_Products.
 (**
 The product functor maps each pair of objects (an object of the product category C×C) to their product in C.
 *)
-Program Definition Prod_Func (C : Category) {HP : Has_Products C} : ((Prod_Cat C C) –≻ C)%functor :=
+Program Definition Prod_Func (C : Category) {HP : Has_Products C} : ((C × C) –≻ C)%functor :=
 {|
   FO := fun x => HP (fst x) (snd x); 
   FA := fun a b f => Prod_morph_ex _ _ ((fst f) ∘ Pi_1) ((snd f) ∘ Pi_2)
@@ -114,7 +114,6 @@ Existing Class Has_Sums.
 (**
 The sum functor maps each pair of objects (an object of the product category C×C) to their sum in C.
 *)
-Definition Sum_Func {C : Category} {HS : Has_Sums C} : ((Prod_Cat C C) –≻ C)%functor :=
-  (((Prod_Func C^op HS) ∘ (iso_morphism (Opposite_Prod C C)))^op)%functor.
+Definition Sum_Func {C : Category} {HS : Has_Sums C} : ((C × C) –≻ C)%functor := (Prod_Func C^op HS)^op.
 
 Arguments Sum_Func _ _, _ {_}.

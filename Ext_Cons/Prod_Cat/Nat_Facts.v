@@ -99,7 +99,7 @@ End Prod_Functor_NatIso.
 
 Section Fix_Bi_Func_1_NatTrans.
   Context {B C D E : Category}
-          {F F' : ((Prod_Cat (Func_Cat C D) B) –≻ E)%functor}
+          {F F' : (((Func_Cat C D) × B) –≻ E)%functor}
           (N : (F –≻ F')%nattrans)
           (G : (C –≻ D)%functor)
   .
@@ -127,7 +127,7 @@ End Fix_Bi_Func_1_NatTrans.
 
 Section Fix_Bi_Func_1_NatIso.
   Context {B C D E : Category}
-          {F F' : ((Prod_Cat (Func_Cat C D) B) –≻ E)%functor}
+          {F F' : (((Func_Cat C D) × B) –≻ E)%functor}
           (N : (F ≃ F')%natiso)
           (G : (C –≻ D)%functor)
   .
@@ -160,7 +160,7 @@ End Fix_Bi_Func_1_NatIso.
 
 Section Fix_Bi_Func_2_NatTrans.
   Context {B C D E : Category}
-          {F F' : ((Prod_Cat B (Func_Cat C D)) –≻ E)%functor}
+          {F F' : ((B × (Func_Cat C D)) –≻ E)%functor}
           (N : (F –≻ F')%nattrans)
           (G : (C –≻ D)%functor)
   .
@@ -186,7 +186,7 @@ End Fix_Bi_Func_2_NatTrans.
 
 Section Fix_Bi_Func_2_NatIso.
   Context {B C D E : Category}
-          {F F' : ((Prod_Cat B (Func_Cat C D)) –≻ E)%functor}
+          {F F' : ((B × (Func_Cat C D)) –≻ E)%functor}
           (N : (F ≃ F')%natiso)
           (G : (C –≻ D)%functor)
   .
@@ -223,7 +223,7 @@ End Fix_Bi_Func_2_NatIso.
 Section Fix_Bi_Func_1_Functor_id_swap_NatIso.
   Context {B B' C D E E' : Category}
           (F : (B –≻ B')%functor)
-          (F' : ((Prod_Cat (Func_Cat C D) B') –≻ E)%functor)
+          (F' : (((Func_Cat C D) × B') –≻ E)%functor)
           (G : (C –≻ D)%functor)
   .
 
@@ -251,7 +251,7 @@ End Fix_Bi_Func_1_Functor_id_swap_NatIso.
 Section Fix_Bi_Func_2_Functor_id_swap_NatIso.
   Context {B B' C D E E' : Category}
           (F : (B –≻ B')%functor)
-          (F' : ((Prod_Cat B' (Func_Cat C D)) –≻ E)%functor)
+          (F' : ((B' × (Func_Cat C D)) –≻ E)%functor)
           (G : (C –≻ D)%functor)
   .
 
@@ -280,7 +280,7 @@ Section Fix_Bi_1_Func_Prod_Func_NatIso.
   Context {A B C D E : Category}
           (F : (A –≻ C)%functor)
           (F' : (B –≻ D)%functor)
-          (G : ((Prod_Cat C D) –≻ E)%functor)
+          (G : ((C × D) –≻ E)%functor)
           (x : A)
   .
 
@@ -303,7 +303,7 @@ Section Fix_Bi_2_Func_Prod_Func_NatIso.
   Context {A B C D E : Category}
           (F : (A –≻ C)%functor)
           (F' : (B –≻ D)%functor)
-          (G : ((Prod_Cat C D) –≻ E)%functor)
+          (G : ((C × D) –≻ E)%functor)
           (x : B)
   .
 
@@ -323,7 +323,7 @@ Section Fix_Bi_2_Func_Prod_Func_NatIso.
 End Fix_Bi_2_Func_Prod_Func_NatIso.
 
 Section Func_Prod_of_ids_NatIso.
-  Context {C D E : Category} (F : ((Prod_Cat C D) –≻ E)%functor).
+  Context {C D E : Category} (F : ((C × D) –≻ E)%functor).
 
   Local Obligation Tactic := cbn; auto.
 
@@ -340,7 +340,7 @@ End Func_Prod_of_ids_NatIso.
 
 Section Fix_Bi_Func_1_object_NatTrans.
   Context {B C D E : Category}
-          (F : ((Prod_Cat (Func_Cat C D) B) –≻ E)%functor)
+          (F : (((Func_Cat C D) × B) –≻ E)%functor)
           {G G' : (C –≻ D)%functor}
           (N : (G –≻ G')%nattrans)
   .
@@ -372,7 +372,7 @@ End Fix_Bi_Func_1_object_NatTrans.
 
 Section Fix_Bi_Func_1_object_NatIso.
   Context {B C D E : Category}
-          (F : ((Prod_Cat (Func_Cat C D) B) –≻ E)%functor)
+          (F : (((Func_Cat C D) × B) –≻ E)%functor)
           {G G' : (C –≻ D)%functor}
           (N : (G ≃ G')%natiso)
   .
@@ -392,7 +392,7 @@ Section Fix_Bi_Func_1_object_NatIso.
     rewrite <- F_compose; cbn.
     cbn_rewrite (left_inverse N).
     simpl_ids.
-    change (NatTrans_id G, id) with (id (Prod_Cat (Func_Cat _ _) B) (G, c)).
+    change (NatTrans_id G, id) with (id ((Func_Cat _ _) × B) (G, c)).
     auto.
   Qed.
 
@@ -402,14 +402,14 @@ Section Fix_Bi_Func_1_object_NatIso.
     rewrite <- F_compose; cbn.
     cbn_rewrite (right_inverse N).
     simpl_ids.
-    change (NatTrans_id G', id) with (id (Prod_Cat (Func_Cat _ _) B) (G', c)).
+    change (NatTrans_id G', id) with (id ((Func_Cat _ _) × B) (G', c)).
     auto.
   Qed.
 
 End Fix_Bi_Func_1_object_NatIso.
 
 Section Fix_Bi_Func_2_object_NatTrans.
-  Context {B C D E : Category} (F : ((Prod_Cat B (Func_Cat C D)) –≻ E)%functor)
+  Context {B C D E : Category} (F : ((B × (Func_Cat C D)) –≻ E)%functor)
           {G G' : (C –≻ D)%functor}
           (N : (G –≻ G')%nattrans)
   .
@@ -439,7 +439,7 @@ End Fix_Bi_Func_2_object_NatTrans.
 
 Section Fix_Bi_Func_2_object_NatIso.
   Context {B C D E : Category}
-          (F : ((Prod_Cat B (Func_Cat C D)) –≻ E)%functor)
+          (F : ((B × (Func_Cat C D)) –≻ E)%functor)
           {G G' : (C –≻ D)%functor}
           (N : (G ≃ G')%natiso).
 
@@ -457,7 +457,7 @@ Section Fix_Bi_Func_2_object_NatIso.
     rewrite <- F_compose; cbn.
     simpl_ids.
     cbn_rewrite (left_inverse N).
-    change (id, NatTrans_id G) with (id (Prod_Cat B (Func_Cat _ _)) (c, G)).
+    change (id, NatTrans_id G) with (id (B × (Func_Cat _ _)) (c, G)).
     auto.
   Qed.
 
@@ -467,7 +467,7 @@ Section Fix_Bi_Func_2_object_NatIso.
     rewrite <- F_compose; cbn.
     simpl_ids.
     cbn_rewrite (right_inverse N).
-    change (id, NatTrans_id G') with (id (Prod_Cat B (Func_Cat _ _)) (c, G')).
+    change (id, NatTrans_id G') with (id (B × (Func_Cat _ _)) (c, G')).
     auto.
   Qed.
 

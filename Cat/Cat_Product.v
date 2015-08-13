@@ -8,7 +8,7 @@ Require Import Basic_Cons.Product.
 
 Program Definition Cat_Products (C C' : Category) : @Product Cat C C' :=
 {|
-  product := (Prod_Cat C C');
+  product := (C × C')%category;
 
   Pi_1 := Cat_Proj1 C C';
 
