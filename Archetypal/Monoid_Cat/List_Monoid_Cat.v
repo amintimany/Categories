@@ -1,5 +1,5 @@
 Require Import Category.Main.
-Require Import Archetypal.Monoid_Cat.
+Require Import Archetypal.Monoid_Cat.Monoid_Cat.
 Require Import Coq.Lists.List.
 
 (** Lists form a monoid and thus a category. *)

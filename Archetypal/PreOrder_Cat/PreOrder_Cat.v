@@ -8,18 +8,18 @@ Record PreOrder : Type :=
 {
   PreOrder_car :> Type;
   
-  PreOrder_rel : PreOrder_car → PreOrder_car → Prop where "a < b" := (PreOrder_rel a b);
+  PreOrder_rel :> PreOrder_car → PreOrder_car → Prop where "a ≤ b" := (PreOrder_rel a b);
 
-  PreOrder_refl : ∀ a, a < a;
+  PreOrder_refl : ∀ a, a ≤ a;
 
-  PreOrder_trans : ∀ a b c, a < b → b < c → a < c
+  PreOrder_trans : ∀ a b c, a ≤ b → b ≤ c → a ≤ c
 }.
 
 Arguments PreOrder_rel {_} _ _.
 Arguments PreOrder_refl {_} _.
 Arguments PreOrder_trans {_ _ _ _} _ _.
 
-Notation "a < b" := (PreOrder_rel a b) : preorder_scope.
+Notation "a ≤ b" := (PreOrder_rel a b) : preorder_scope.
 
 Section PreOrder_Cat.
   Context (P : PreOrder).
@@ -30,7 +30,7 @@ Section PreOrder_Cat.
 so that they can be processed by proof irrelevance tactic (PIR). *)
   Local Hint Extern 1 =>
   match goal with
-    [|- ?A = ?B :> (_ < _) ] => set A; set B
+    [|- ?A = ?B :> (_ ≤ _) ] => set A; set B
   end.
 
   Local Hint Extern 1 => PIR. (* automatically apply proof irrelevance *)
@@ -42,7 +42,7 @@ so that they can be processed by proof irrelevance tactic (PIR). *)
   Program Definition PreOrder_Cat : Category :=
     {|
       Obj := P;
-      Hom := fun a b => a < b
+      Hom := fun a b => a ≤ b
     |}
   .
 
