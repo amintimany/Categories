@@ -158,6 +158,19 @@ Section Discr_Cat_Iso.
   
 End Discr_Cat_Iso.
 
+(* Functor from SingletonCat to another category. *)
+Section Func_From_SingletonCat.
+  Context {C : Category} (Cobj : C).
+
+  (** The functor from SingletonCat to C induced bo Cobj. *)
+  Program Definition Func_From_SingletonCat : (SingletonCat –≻ C)%functor :=
+    {|
+      FO := fun _ => Cobj;
+      FA := fun _ _ _ => id
+    |}.
+
+End Func_From_SingletonCat.
+
 (* Discrete Functor *)
 Section Discr_Func.
   Context {C : Category} {A : Type} (Omap : A → C).
