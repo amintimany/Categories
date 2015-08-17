@@ -32,6 +32,14 @@ Section Limit.
 
   Coercion cone_to_obj : Cone >-> Obj.
 
+  Definition is_Limit (Cn : Cone) := is_Local_Right_KanExt (Functor_To_1_Cat J) D Cn.
+
+  Definition is_Limit_Limit {Cn : Cone} (il : is_Limit Cn) : Limit :=
+    is_Local_Right_KanExt_Local_Right_KanExt (Functor_To_1_Cat J) D il.
+
+  Definition Limit_is_Limit {L : Limit} : is_Limit L :=
+    Local_Right_KanExt_is_Local_Right_KanExt (Functor_To_1_Cat J) D L.
+  
 End Limit.
 
 (** Limits are unique up to isomorphism. *)
@@ -96,13 +104,26 @@ End Complete_to_Restricted_Limits.
 
 (** CoLimits *)
 
-Definition CoCone {J C : Category} (D : J –≻ C) :=
-  LoKan_Cone (Functor_To_1_Cat J^op) (D^op).
+Section CoLimit.
+  Context {J C : Category} (D : J –≻ C).
 
-Definition CoCone_Morph {J C : Category} (D : J –≻ C) Cn Cn' :=
-  @LoKan_Cone_Morph _ _ (Functor_To_1_Cat J^op) _ (D^op) Cn Cn'.
+  Definition CoCone :=
+    LoKan_Cone (Functor_To_1_Cat J^op) (D^op).
 
-Definition CoLimit {J C : Category} (D : J –≻ C) := Local_Left_KanExt (Functor_To_1_Cat J) D.
+  Definition CoCone_Morph Cn Cn' :=
+    @LoKan_Cone_Morph _ _ (Functor_To_1_Cat J^op) _ (D^op) Cn Cn'.
+
+  Definition CoLimit := Local_Left_KanExt (Functor_To_1_Cat J) D.
+
+  Definition is_CoLimit (Cn : CoCone) := is_Local_Right_KanExt (Functor_To_1_Cat (J^op)) (D^op) Cn.
+
+  Definition is_CoLimit_CoLimit {Cn : CoCone} (il : is_CoLimit Cn) : CoLimit :=
+    is_Local_Right_KanExt_Local_Right_KanExt (Functor_To_1_Cat (J^op)) (D^op) il.
+
+  Definition CoLimit_is_CoLimit {L : CoLimit} : is_CoLimit L :=
+    Local_Right_KanExt_is_Local_Right_KanExt (Functor_To_1_Cat (J^op)) (D^op) L.
+
+End CoLimit.
 
 (** Proposition stating that category C has all colimits of cardinality specified by P *)
 Definition Has_Restr_CoLimits (C : Category) (P : Card_Restriction) :=
