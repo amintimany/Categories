@@ -119,6 +119,32 @@ Section KanExtension.
         isLRKE_morph_ex := @LRKE_morph_ex lrke;
         isLRKE_morph_unique := @LRKE_morph_unique lrke
       |}.
+
+    (** The predicate form of local right kan extensions for cones. *)
+    Record is_Cone_Local_Right_KanExt (Cn : LoKan_Cone) :=
+      {
+        isCLRKE_morph_ex : ∀ (Cn' : LoKan_Cone), LoKan_Cone_Morph Cn' Cn;
+        isCLRKE_morph_unique :
+          ∀ (Cn' : LoKan_Cone) (h h' : LoKan_Cone_Morph Cn' Cn),
+            h = h' :> (_ –≻ _)%nattrans
+      }.
+
+    (** The predicate from implies the compact form. *)
+    Definition is_Cone_Local_Right_KanExt_Local_Right_KanExt {Cn : LoKan_Cone}
+               (ilrke : is_Cone_Local_Right_KanExt Cn) : Local_Right_KanExt :=
+      {|
+        LRKE := Cn;
+        LRKE_morph_ex := @isCLRKE_morph_ex _ ilrke;
+        LRKE_morph_unique := @isCLRKE_morph_unique _ ilrke
+      |}.
+
+    (** The compact form implies the preicate form. *)
+    Definition Local_Right_KanExt_is_Cone_Local_Right_KanExt (lrke : Local_Right_KanExt)
+      : is_Cone_Local_Right_KanExt lrke :=
+      {|
+        isCLRKE_morph_ex := @LRKE_morph_ex lrke;
+        isCLRKE_morph_unique := @LRKE_morph_unique lrke
+      |}.
     
   End Right.
   

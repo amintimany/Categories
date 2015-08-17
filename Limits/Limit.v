@@ -32,13 +32,13 @@ Section Limit.
 
   Coercion cone_to_obj : Cone >-> Obj.
 
-  Definition is_Limit (Cn : Cone) := is_Local_Right_KanExt (Functor_To_1_Cat J) D Cn.
+  Definition is_Limit (Cn : Cone) := is_Cone_Local_Right_KanExt (Functor_To_1_Cat J) D Cn.
 
   Definition is_Limit_Limit {Cn : Cone} (il : is_Limit Cn) : Limit :=
-    is_Local_Right_KanExt_Local_Right_KanExt (Functor_To_1_Cat J) D il.
+    is_Cone_Local_Right_KanExt_Local_Right_KanExt (Functor_To_1_Cat J) D il.
 
   Definition Limit_is_Limit {L : Limit} : is_Limit L :=
-    Local_Right_KanExt_is_Local_Right_KanExt (Functor_To_1_Cat J) D L.
+    Local_Right_KanExt_is_Cone_Local_Right_KanExt (Functor_To_1_Cat J) D L.
   
 End Limit.
 
@@ -115,13 +115,13 @@ Section CoLimit.
 
   Definition CoLimit := Local_Left_KanExt (Functor_To_1_Cat J) D.
 
-  Definition is_CoLimit (Cn : CoCone) := is_Local_Right_KanExt (Functor_To_1_Cat (J^op)) (D^op) Cn.
+  Definition is_CoLimit (Cn : CoCone) := is_Cone_Local_Right_KanExt (Functor_To_1_Cat (J^op)) (D^op) Cn.
 
   Definition is_CoLimit_CoLimit {Cn : CoCone} (il : is_CoLimit Cn) : CoLimit :=
-    is_Local_Right_KanExt_Local_Right_KanExt (Functor_To_1_Cat (J^op)) (D^op) il.
+    is_Cone_Local_Right_KanExt_Local_Right_KanExt (Functor_To_1_Cat (J^op)) (D^op) il.
 
   Definition CoLimit_is_CoLimit {L : CoLimit} : is_CoLimit L :=
-    Local_Right_KanExt_is_Local_Right_KanExt (Functor_To_1_Cat (J^op)) (D^op) L.
+    Local_Right_KanExt_is_Cone_Local_Right_KanExt (Functor_To_1_Cat (J^op)) (D^op) L.
 
 End CoLimit.
 
