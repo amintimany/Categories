@@ -66,6 +66,14 @@ Proof.
   inversion H; auto.
 Defined.
 
+Theorem Not_S_Tle (n : nat) : Tle (S n) n → False.
+Proof.
+  intros H.
+  induction n; inversion H; auto.
+  apply IHn.
+  apply Tle_remS; trivial.
+Qed.
+  
 (** Tle is decidable. This is crutial in conversion from le to Tle. *)
 Definition Tle_dec (n m : nat) : (n ≤ m) + ((n ≤ m) → False).
 Proof.
