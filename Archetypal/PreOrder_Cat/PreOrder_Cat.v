@@ -8,7 +8,9 @@ Record PreOrder : Type :=
 {
   PreOrder_car :> Type;
   
-  PreOrder_rel :> PreOrder_car → PreOrder_car → Prop where "a ≤ b" := (PreOrder_rel a b);
+  PreOrder_rel :> PreOrder_car → PreOrder_car → Type where "a ≤ b" := (PreOrder_rel a b);
+
+  PreOrder_rel_isProp : ∀ x y (h h' : PreOrder_rel x y), h = h'; 
 
   PreOrder_refl : ∀ a, a ≤ a;
 
@@ -24,26 +26,15 @@ Notation "a ≤ b" := (PreOrder_rel a b) : preorder_scope.
 Section PreOrder_Cat.
   Context (P : PreOrder).
 
-  Local Open Scope preorder_scope.
-
-  (* if goal is equality of two preorder relation proofs, we get the to the hypotheses
-so that they can be processed by proof irrelevance tactic (PIR). *)
-  Local Hint Extern 1 =>
-  match goal with
-    [|- ?A = ?B :> (_ ≤ _) ] => set A; set B
-  end.
-
-  Local Hint Extern 1 => PIR. (* automatically apply proof irrelevance *)
-  
-  Local Hint Resolve PreOrder_refl PreOrder_trans.
-
-  Local Obligation Tactic := basic_simpl; eauto.
+  Local Hint Resolve PreOrder_rel_isProp.
 
   Program Definition PreOrder_Cat : Category :=
     {|
       Obj := P;
-      Hom := fun a b => a ≤ b
+      Hom := fun a b => (a ≤ b)%preorder;
+      compose := @PreOrder_trans P;
+      id := @PreOrder_refl P
     |}
   .
-
+  
 End PreOrder_Cat.

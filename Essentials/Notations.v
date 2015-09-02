@@ -69,3 +69,5 @@ Delimit Scope nattrans_scope with nattrans.
 Delimit Scope natiso_scope with natiso.
 
 Delimit Scope isomorphism_scope with isomorphism.
+
+Delimit Scope preorder_scope with preorder.
