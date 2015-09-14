@@ -12,7 +12,7 @@ We furthermore, require that the Hom_Cri provides that identity arrows of all ob
 *)
 Section SubCategory.
   Context (C : Category)
-          (Obj_Cri : Obj → Prop)
+          (Obj_Cri : Obj → Type)
           (Hom_Cri : ∀ a b, (a –≻ b)%morphism → Prop).
 
   Arguments Hom_Cri {_ _} _.
@@ -28,11 +28,11 @@ Section SubCategory.
 
   Program Definition SubCategory : Category :=
   {|
-    Obj := sig Obj_Cri;
+    Obj := sigT Obj_Cri;
 
     Hom :=
       fun a b =>
-        sig (@Hom_Cri (proj1_sig a) (proj1_sig b));
+        sig (@Hom_Cri (projT1 a) (projT1 b));
 
     compose :=
       fun _ _ _ f g =>
@@ -41,7 +41,7 @@ Section SubCategory.
 
     id :=
       fun a =>
-        exist _ _ (Hom_Cri_id (proj2_sig a))
+        exist _ _ (Hom_Cri_id (projT2 a))
   |}.
 
   Next Obligation.
