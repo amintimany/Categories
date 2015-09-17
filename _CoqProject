@@ -144,6 +144,9 @@ Topos/SubObject_Classifier.v
 Topos/Topos.v
 Topos/Main.v
 
+#PreSheaf:
+PreSheaf/PreSheaf.v
+
 #Demo:
 Demo/Demo.v
 
