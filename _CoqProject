@@ -146,6 +146,9 @@ Topos/Main.v
 
 #PreSheaf:
 PreSheaf/PreSheaf.v
+PreSheaf/Terminal.v
+PreSheaf/Product.v
+PreSheaf/Exponential.v
 
 #Demo:
 Demo/Demo.v
