@@ -149,6 +149,8 @@ PreSheaf/PreSheaf.v
 PreSheaf/Terminal.v
 PreSheaf/Product.v
 PreSheaf/Exponential.v
+PreSheaf/Initial.v
+PreSheaf/Equalizer.v
 
 #Demo:
 Demo/Demo.v

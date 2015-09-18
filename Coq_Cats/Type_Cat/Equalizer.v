@@ -16,7 +16,10 @@ Section Equalizer.
   Program Definition Type_Cat_Eq : Equalizer Type_Cat f g :=
     {|
       equalizer := {x : A | f x = g x};
-      equalizer_morph := @proj1_sig _ _
+      equalizer_morph := @proj1_sig _ _;
+      equalizer_morph_ex :=
+        fun T eqm H x =>
+          exist _ (eqm x) _
     |}.
 
   Next Obligation.
@@ -27,8 +30,8 @@ Section Equalizer.
   Next Obligation.
   Proof.  
     intros T eqm H x.
-    exists (eqm x); apply (fun w => equal_f w x) in H; trivial.
-  Defined.
+    apply (fun w => equal_f w x) in H; trivial.
+  Qed.
 
   Next Obligation.
   Proof.
