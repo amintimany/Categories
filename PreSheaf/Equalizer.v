@@ -103,7 +103,7 @@ Section Equalizer.
   
 End Equalizer.
 
-Instance Type_Cat_Has_Equalizers (C : Category) : Has_Equalizers (PShCat C)
+Instance PSh_Has_Equalizers (C : Category) : Has_Equalizers (PShCat C)
   := fun _ _ => PSh_Eq C.
 
 Section CoEqualizer.
@@ -479,5 +479,5 @@ Section CoEqualizer.
   
 End CoEqualizer.
 
-Instance Type_Cat_Has_CoEqualizers (C : Category) : Has_CoEqualizers (PShCat C)
+Instance PSh_Has_CoEqualizers (C : Category) : Has_CoEqualizers (PShCat C)
   := fun _ _ => PSh_CoEq C.
