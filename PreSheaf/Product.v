@@ -11,26 +11,19 @@ Require Import PreSheaf.PreSheaf.
 Section Product.
   Context (C : Category) (F G : PreSheaf C).
 
+  Local Hint Extern 1 => match goal with [F : PreSheaf _ |- _] => rewrite (F_id F) end.
+  Local Hint Extern 1 =>
+  match goal with
+    [F : PreSheaf _ |- context [(F _a (?f ∘ ?g))%morphism]] =>
+    cbn_rewrite (F_compose F f g)
+  end.
+  
   (** The pointwise product presheaf. *)
   Program Definition pointwise_product_psh : Functor (C^op) Type_Cat :=
     {|
       FO := fun x => ((F _o x) * (G _o x))%object%type;
       FA := fun _ _ f u => (F _a f (fst u), G _a f (snd u))%morphism%object
     |}.
-
-  Next Obligation.
-  Proof.
-    FunExt.
-    rewrite (F_id F); rewrite (F_id G); trivial.
-  Qed.
-
-  Next Obligation.
-  Proof.
-    FunExt.
-    cbn_rewrite (F_compose F f g).
-    cbn_rewrite (F_compose G f g).
-    trivial.
-  Qed.
 
   Local Hint Extern 1 =>
   repeat
