@@ -12,10 +12,10 @@ Section Sum.
   Context (C : Category) (F G : PreSheaf C).
 
   Local Hint Extern 1 => match goal with [H : (_ + _)%type |- _] => destruct H end.
-  Local Hint Extern 1 => match goal with [F : PreSheaf _ |- _] => rewrite (F_id F) end.
+  Local Hint Extern 1 => match goal with [|- context [(?F _a id)%morphism]] => rewrite (F_id F) end.
   Local Hint Extern 1 =>
   match goal with
-    [F : PreSheaf _ |- context [(F _a (?f ∘ ?g))%morphism]] =>
+    [|- context [(?F _a (?f ∘ ?g))%morphism]] =>
     cbn_rewrite (F_compose F f g)
   end.
   

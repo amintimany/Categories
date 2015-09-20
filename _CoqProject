@@ -155,6 +155,7 @@ PreSheaf/Sum.v
 PreSheaf/GenProd.v
 PreSheaf/GenSum.v
 PreSheaf/Complete.v
+PreSheaf/PullBack.v
 
 #Demo:
 Demo/Demo.v
