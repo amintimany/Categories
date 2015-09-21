@@ -32,7 +32,7 @@ Definition Tle_addS (n m : nat) : n ≤ m → S n ≤ S m.
 Proof.
   intros H.
   induction H; auto.
-Defined.
+Qed.
 
 Definition Tle_trans (n m t : nat) : n ≤ m → m ≤ t → n ≤ t.
 Proof.
@@ -49,7 +49,7 @@ Proof.
   inversion H as [Hx | m H1 H2]; inversion H1.
   intros n H.
   inversion H; auto.
-Defined.
+Qed.
 
 Theorem Not_S_Tle (n : nat) : Tle (S n) n → False.
 Proof.
@@ -75,14 +75,14 @@ Proof.
         intros H3.
         contradict H2.
         apply Tle_remS; trivial.
-Defined.
+Qed.
 
 (** This is prety straightforward. *)
 Definition Tle_le {n m : nat} : n ≤ m → le n m.
 Proof.
   intros H.
   induction H; auto.
-Defined.
+Qed.
 
 (** The contrapositive of conversion from le to Tle. *)
 Definition NTle_Nle {n m : nat} : (n ≤ m → False) → (le n m → False).
@@ -93,7 +93,7 @@ Proof.
   + apply IHle.
     intros H3.
     apply H1; auto.
-Defined.
+Qed.
 
 (** This is the actual conversion from le to Tle.
 
@@ -112,7 +112,7 @@ Proof.
   destruct (Tle_dec n m) as [H1|H1]; auto.
   contradict H.
   unfold not; apply NTle_Nle; trivial.
-Defined.
+Qed.
 
 (** We show that (homotopy-type-theoretically speaking) Tle is a mere proposition.
 That is, any two proofs of a ≤ b are equal. Note that Tle is in
@@ -178,8 +178,6 @@ Definition OmegaPreOrder :=
     PreOrder_refl := Tle_n;
     PreOrder_trans := Tle_trans
   |}.
-
-Set Printing Universes.
 
 (** The pre-order category ω. *)
 Definition OmegaCat : Category@{i j} := PreOrder_Cat OmegaPreOrder.
