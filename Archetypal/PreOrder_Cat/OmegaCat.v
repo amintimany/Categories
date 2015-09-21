@@ -171,16 +171,18 @@ Qed.
 (** Natural numbers form a preorder with le (less than or equal relation). *)
 Definition OmegaPreOrder :=
   {|
-    PreOrder_car := nat;
-    PreOrder_rel := Tle;
+    PreOrder_car := nat : Type;
+    PreOrder_rel := Tle : _ → _ → Type;
     PreOrder_rel_isProp :=
       fun _ _ h h' => Tle_is_HProp h h';
     PreOrder_refl := Tle_n;
     PreOrder_trans := Tle_trans
   |}.
 
+Set Printing Universes.
+
 (** The pre-order category ω. *)
-Definition OmegaCat := PreOrder_Cat OmegaPreOrder.
+Definition OmegaCat : Category@{i j} := PreOrder_Cat OmegaPreOrder.
 
 Notation "'ω'" := (OmegaCat) : omegacat_scope.
 
