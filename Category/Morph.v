@@ -139,11 +139,13 @@ Qed.
 
 Notation "f ∘ g" := (Isomorphism_Compose g f) : isomorphism_scope.
 
+Local Close Scope isomorphism_scope.
+
 (** A monic arrow (AKA, mono, monomorphic arrow and monomorphism) m is an arrow such that for any two arrows g and h (of the appropriate domain and codomain) we have if m ∘ g = m ∘ h then g = h. *)
 Record Monic {C : Category} (a b : Obj) :=
 {
   mono_morphism : a –≻ b;
-  mono_morphism_monomorphic : ∀ (c : Obj) (g h : c –≻ a), (mono_morphism ∘ g = mono_morphism ∘ h)%morphism → g = h
+  mono_morphism_monomorphic : ∀ (c : Obj) (g h : c –≻ a), (mono_morphism ∘ g = mono_morphism ∘ h) → g = h
 }.
 
 Coercion mono_morphism : Monic >-> Hom.
@@ -162,6 +164,114 @@ Notation "a –≫ b" := (Epic a b) : morphism_scope.
 
 Bind Scope morphism_scope with Epic.
 
+(** The condition for a morphism to be mono-morphic. *)
+Definition is_Monic {C : Category} {a b : Obj} (f : a –≻ b) :=
+  ∀ (c : Obj) (g h : c –≻ a), (f ∘ g = f ∘ h) → g = h.
+
+(** A mono-morphic morphism forms a Monic. *)
+Definition is_Monic_Monic
+           {C : Category}
+           {a b : Obj}
+           {f : a –≻ b}
+           (H : is_Monic f)
+  : Monic a b
+  :=
+    {|
+      mono_morphism := f;
+      mono_morphism_monomorphic := H
+    |}
+.
+
+(** A morphism is ipic if it is monic in the opposit category. *)
+Definition is_Epic {C : Category} {a b : C} (f : a –≻ b) := @is_Monic (C^op) b a f.
+
+(** A morphism f : a –≻ b is split monic if there is another morphism
+g : b –≻ a such that g ∘ f = idₐ *)
+Record is_split_Monic {C : Category} {a b : Obj} (f : a –≻ b) :=
+  {
+    is_split_monic_left_inverse : b –≻ a;
+    is_split_monic_left_inverse_is_left_inverse :
+      (is_split_monic_left_inverse ∘ f) = id
+  }
+.
+
+Arguments is_split_monic_left_inverse {_ _ _ _} _.
+Arguments is_split_monic_left_inverse_is_left_inverse {_ _ _ _} _.
+
+(** A morphism is ipic if it is monic in the opposit category. *)
+Definition is_split_Epic {C : Category} {a b : C} (f : a –≻ b) := @is_split_Monic (C^op) b a f.
+
+(** A split monic morphism is a monomorphism. *)
+Program Definition is_split_Monic_Monic
+           {C : Category}
+           {a b : Obj}
+           {f : a –≻ b}
+           (H : is_split_Monic f)
+  : Monic a b
+  :=
+    {|
+      mono_morphism := f;
+      mono_morphism_monomorphic := fun c g h H1 => _
+    |}
+.
+
+Next Obligation.
+Proof.
+  assert (H2 := f_equal (fun w : c –≻ b => (is_split_monic_left_inverse H) ∘ w) H1).
+  cbn in H2.
+  repeat rewrite assoc_sym in H2.
+  rewrite is_split_monic_left_inverse_is_left_inverse in H2.
+  auto.
+Qed.
+
+(** If a monic morphism is split epic, it forms an isomorphism. *)
+Program Definition Monic_is_split_Epic_Iso
+        {C : Category}
+        (a b : Obj)
+        (f : a ≫–> b)
+        (H : is_split_Epic f)
+  :
+    (a ≃ b)%isomorphism
+  :=
+    {|
+      iso_morphism := f;
+      inverse_morphism := is_split_monic_left_inverse H;
+      right_inverse := is_split_monic_left_inverse_is_left_inverse H
+    |}
+.
+
+Next Obligation.
+Proof.
+  apply (mono_morphism_monomorphic f).
+  rewrite assoc_sym.
+  cbn_rewrite (is_split_monic_left_inverse_is_left_inverse H).
+  auto.
+Qed.
+
+(** If both g and (f ∘ g) are monic, then so is f. *)
+Program Definition Compose_Monic_is_Monic_then_Monic
+           {C : Category}
+           {a b c : C}
+           (M : a –≻ b)
+           (M' : b ≫–> c)
+           (H : is_Monic (M' ∘ M))
+  :
+    Monic a b
+  :=
+    {|
+      mono_morphism := M;
+      mono_morphism_monomorphic := fun d g h H1 => _
+    |}
+.
+
+Next Obligation.
+Proof.
+  assert (H2 := f_equal (fun w : d –≻ b => M' ∘ w) H1).
+  cbn in H2.
+  repeat rewrite assoc_sym in H2.
+  apply H; trivial.
+Qed.
+
 (** Monomorphisms compose. The case for epis follows by duality.*)
 Section Mono_compose.
   Context {C : Category} {a b c : C} (M : a ≫–> b) (M' : b ≫–> c).
@@ -176,6 +286,8 @@ Section Mono_compose.
     |}.
     
 End Mono_compose.
+
+Local Open Scope isomorphism_scope.
 
 (** An isomorphism is both monic and epic. *)
 Section Iso_Mono_Epi.
