@@ -50,6 +50,7 @@ Coq_Cats/Type_Cat/PullBack.v
 Coq_Cats/Type_Cat/LCCC.v
 Coq_Cats/Type_Cat/SubObject_Classifier.v
 Coq_Cats/Type_Cat/Topos.v
+Coq_Cats/Type_Cat/Morphisms.v
 Coq_Cats/Set_Cat.v
 Coq_Cats/Prop_Cat.v
 Coq_Cats/Main.v
