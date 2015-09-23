@@ -14,7 +14,7 @@ Local Axiom ConstructiveIndefiniteDescription_Type : forall T : Type, Constructi
 (** The type Prop is the subobject classifier for Type_Cat. With ⊤ mapping the single element of
 the singleton set to (True : Prop) *)
 Section Type_Cat_characteristic_function_unique.
-  Context {A B : Type} (F : @Monic Type_Cat A B) (h h' : B → Prop) (hpb : is_PullBack (mono_morphism F) (fun _ => TT) h (fun _ => True)).
+  Context {A B : Type} (F : @Monic Type_Cat A B) (h : B → Prop) (hpb : is_PullBack (mono_morphism F) (fun _ => TT) h (fun _ => True)).
 
   Theorem Type_Cat_characteristic_function_unique : h = fun x => (exists y : A, (mono_morphism F) y = x).
   Proof.
