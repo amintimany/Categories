@@ -92,6 +92,7 @@ NatTrans/NatTrans.v
 NatTrans/Operations.v
 NatTrans/NatIso.v
 NatTrans/Func_Cat.v
+NatTrans/Morphisms.v
 NatTrans/Main.v
 
 #Yoneda:
