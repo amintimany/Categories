@@ -49,7 +49,7 @@ Local Hint Resolve UNIT_SINGLETON.
 Program Definition Type_Cat_SubObject_Classifier : SubObject_Classifier Type_Cat :=
   {|
     SOC := Prop;
-    SOC_morph := {|mono_morphism := fun _ : UNIT => True|};
+    SOC_morph := fun _ : UNIT => True;
     SOC_char := fun A B f x => exists y : A, (mono_morphism f) y = x;
     SO_pulback :=
       fun A B f =>

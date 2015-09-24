@@ -158,6 +158,9 @@ PreSheaf/GenProd.v
 PreSheaf/GenSum.v
 PreSheaf/Complete.v
 PreSheaf/PullBack.v
+PreSheaf/Morphisms.v
+PreSheaf/SubObject_Classifier.v
+
 
 #Demo:
 Demo/Demo.v

@@ -29,3 +29,25 @@ Section is_Monic_components_is_Monic.
   Qed.
 
 End is_Monic_components_is_Monic.
+
+(** If all components of a natural transformation are epic then
+so is that natural transformation. *)
+Section is_Epic_components_is_Epic.
+  Context
+    {C D : Category}
+    {F G : (C –≻ D)%functor}
+    (N : F –≻ G)
+    (H : ∀ c, is_Epic (Trans N c))
+  .
+
+  Definition is_Epic_components_is_Epic :
+    @is_Epic (Func_Cat _ _) _ _ N.
+  Proof.
+    intros I g h H2.
+    apply NatTrans_eq_simplify.
+    extensionality x.
+    apply H.
+    apply (fun x => f_equal (fun w => Trans w x) H2).
+  Qed.
+
+End is_Epic_components_is_Epic.

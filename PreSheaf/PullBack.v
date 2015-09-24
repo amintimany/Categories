@@ -31,11 +31,6 @@ Section PSh_PullBack.
     cbn_rewrite (equal_f (Trans_com f h))
   end.
 
-  Local Hint Extern 1 =>
-  match goal with
-    [H : {x : _ | _}|- _] => destruct x
-  end.
-
   Local Hint Extern 1 => progress cbn in *.
 
   Local Obligation Tactic := basic_simpl; auto 10.

@@ -12,7 +12,7 @@ Section Terminal.
   Context (C : Category).
 
   (** The terminal element of the category of presheafs. *)
-  Program Definition PSh_Term_Func : Functor (C^op) Type_Cat :=
+  Program Definition PSh_Term_PreSheaf : Functor (C^op) Type_Cat :=
     {|
       FO := fun _ => UNIT
     |}.
@@ -23,7 +23,7 @@ Section Terminal.
   (** The functor that maps to the unit type in coq is the terminal object of presheafs. *)
   Program Instance PSh_Terminal : Terminal (PShCat C) :=
     {
-      terminal := PSh_Term_Func;
+      terminal := PSh_Term_PreSheaf;
       t_morph := fun _ => {|Trans := fun _ _ => TT|}
     }.
 
