@@ -160,6 +160,8 @@ PreSheaf/Complete.v
 PreSheaf/PullBack.v
 PreSheaf/Morphisms.v
 PreSheaf/SubObject_Classifier.v
+PreSheaf/CCC.v
+PreSheaf/Topos.v
 
 
 #Demo:
