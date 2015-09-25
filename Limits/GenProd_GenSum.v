@@ -49,7 +49,7 @@ End GenSum_to_GenProd.
 
 (** If we have GenSum for all functions from a type A, where A is isomorphic to B
 we have all GenSum for all functions from B – we can't use this proof as it involves
-isomorphism of categories (Discr_Cat A ≡ Discr_Cat B). This, given current semantics of
+isomorphism of categories (Discr_Cat A ≃ Discr_Cat B). This, given current semantics of
 Coq's universe polymorphism implies (Discr_Cat A), (Discr_Cat B) and C must be at the same
 universe levels which is inconsistent when used to prove cocompleteness of
 Type_Cat. *)
@@ -57,13 +57,13 @@ Type_Cat. *)
 #
 <pre>
 Section GenSum_IsoType.
-  Context {A B : Type} (Iso : (A ≡≡ B ::> Type_Cat)%morphism) {C : Category}
+  Context {A B : Type} (Iso : (A ≃≃ B ::> Type_Cat)%morphism) {C : Category}
           (SM : forall f : A → C, GenSum f).
 
   Program Definition GenSum_IsoType_map_Iso (map : B → C):
     (
       ((Discr_Func_op map)^op)%functor
-        ≡≡ ((Discr_Func_op (fun x : A => map ((iso_morphism Iso) x)) ∘ (iso_morphism (Opposite_Cat_Iso (Inverse_Isomorphism (Discr_Cat_Iso Iso)))))^op)%functor
+        ≃≃ ((Discr_Func_op (fun x : A => map ((iso_morphism Iso) x)) ∘ (iso_morphism (Opposite_Cat_Iso (Inverse_Isomorphism (Discr_Cat_Iso Iso)))))^op)%functor
         ::> Func_Cat _ _
     )%morphism
     :=

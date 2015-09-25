@@ -236,7 +236,7 @@ Section NatTrans_comp_hor_comp.
 End NatTrans_comp_hor_comp.
 
 (**
-Given I : C ≡≡ D for categories C and D and F : D -> E, there is a natural transformation
+Given I : C ≃ D for categories C and D and F : D -> E, there is a natural transformation
 from F ∘ (I ∘ I⁻¹) to F and back.
 *)
 Section IsoCat_NatTrans.

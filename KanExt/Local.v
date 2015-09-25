@@ -174,7 +174,7 @@ Arguments LRKE_morph_unique {_ _ _ _ _} _ _ _ _.
 
 (** The local kan extension defined using hom-functors. In short: HLRKE : C' -> D is the local right kan extension of F : C -> D along p : C -> C' if the following isomorphism holds:
 
-          Hom_{D^C}(–, F) ∘ (Left_Functor_Extender p D)ᵒᵖ ≡ Hom_{D^C'}(–, HLRKE)
+          Hom_{D^C}(–, F) ∘ (Left_Functor_Extender p D)ᵒᵖ ≃ Hom_{D^C'}(–, HLRKE)
 
 Note that: (Left_Functor_Extender p D) : (D^C') -> (D^C).
  *)

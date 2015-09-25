@@ -76,7 +76,7 @@ Functor F : C -> D is the left adjoint to functor G : D -> C if there is a natur
   Qed.
 
   (** The hom functor definition of adjunction. F : C -> D is the left adjoint to G : D -> C if
-           Hom_D(Fᵒᵖ, –) ≡ Hom_C(–, G)
+           Hom_D(Fᵒᵖ, –) ≃ Hom_C(–, G)
 *)  
   Definition Hom_Adjunct := (Hom_Adj_Left _ _ F G ≃ Hom_Adj_Right _ _ F G)%natiso.
 

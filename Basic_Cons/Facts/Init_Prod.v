@@ -9,7 +9,7 @@ Require Import Basic_Cons.CCC.
 Require Import NatTrans.NatTrans NatTrans.NatIso.
 Require Import Yoneda.Yoneda.
 
-(** 0 × a ≡ 0. where 0 is the initial object *)
+(** 0 × a ≃ 0. where 0 is the initial object *)
 Section Init_Prod.
   Context {C : Category} {C_CCC : CCC C} {init : Initial C}.
 

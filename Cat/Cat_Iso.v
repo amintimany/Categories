@@ -179,7 +179,7 @@ Section Cat_Iso_inv.
 End Cat_Iso_inv.
 
 (**
-Given I : C ≡≡ D for categories C and D and F : D -> E, F ∘ (I ∘ I⁻¹) and F are
+Given I : C ≃ D for categories C and D and F : D -> E, F ∘ (I ∘ I⁻¹) and F are
 naturally isomorphic.
 *)
 Section IsoCat_NatIso.

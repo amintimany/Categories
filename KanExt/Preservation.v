@@ -29,7 +29,7 @@ Section Right_Adjoint_Preserves_Hom_Local_Right_KanExt.
     (adj : UCU_Adjunct L R)
   .
   
-  (** Hom_Func_{Func_Cat C E}(- ∘ p, R ∘ F) ≡ Hom_Func_{Func_Cat C D}(L ∘ - ∘ p, F) *)
+  (** Hom_Func_{Func_Cat C E}(- ∘ p, R ∘ F) ≃ Hom_Func_{Func_Cat C D}(L ∘ - ∘ p, F) *)
   Local Definition Ext_p_F_Hom_Adjunct_Lifted :=
     ((
         ((Fix_Bi_Func_2_NatIso (Hom_Adjunct_Lifted adj C) F)

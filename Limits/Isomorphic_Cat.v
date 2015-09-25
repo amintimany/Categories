@@ -8,7 +8,7 @@ Require Import Limits.Limit.
 Require Import KanExt.LocalFacts.From_Iso_Cat.
 Require Import Cat.Cat_Iso.
 
-(** Given I : C ≡ D for C and D categories we have limit of (F ∘ I) if we have limit of F. *)
+(** Given I : C ≃ D for C and D categories we have limit of (F ∘ I) if we have limit of F. *)
 Section Limit_From_Isomorphic_Cat.
 Context {C D : Category}
         (I : (C ≃≃ D ::> Cat)%isomorphism)
@@ -29,7 +29,7 @@ Definition Limit_From_Isomorphic_Cat : Limit (F ∘ (iso_morphism I)) :=
 
 End Limit_From_Isomorphic_Cat.
 
-(** Given I : C ≡ D for C and D categories we have colimit of (F ∘ I) if we have colimit of F. *)
+(** Given I : C ≃ D for C and D categories we have colimit of (F ∘ I) if we have colimit of F. *)
 Section CoLimit_From_Isomorphic_Cat.
 Context {C D : Category}
         (I : (C ≃≃ D ::> Cat)%isomorphism)

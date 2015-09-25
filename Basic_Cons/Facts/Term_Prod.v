@@ -10,7 +10,7 @@ Require Import Basic_Cons.Product.
 Require Import NatTrans.NatTrans NatTrans.NatIso.
 Require Import Yoneda.Yoneda.
 
-(** 1 × a ≡ a. where 1 is the terminal object. *)
+(** 1 × a ≃ a. where 1 is the terminal object. *)
 Section Term_Prod.
   Context {C : Category} {term : Terminal C} {CHP : Has_Products C}.
 

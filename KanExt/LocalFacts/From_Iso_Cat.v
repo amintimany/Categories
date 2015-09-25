@@ -13,7 +13,7 @@ Require Import Cat.Cat.
 
 Local Open Scope functor_scope.
 
-(** Given I : C ≡ D for C and D categories we have KanExt (p ∘ I) (F ∘ I) if we have KanExt p F. *)
+(** Given I : C ≃ D for C and D categories we have KanExt (p ∘ I) (F ∘ I) if we have KanExt p F. *)
 Section KanExt_From_Isomorphic_Cat.
   Context {C D : Category}
           (I : (C ≃≃ D ::> Cat)%isomorphism)

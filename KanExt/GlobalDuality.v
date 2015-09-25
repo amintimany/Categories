@@ -24,7 +24,7 @@ Section GlobalDuality.
 
     (** The natural Isomorphism underlying the right kan extension which is to be shown.
 
-Hom_{Func_Cat Cᵒᵖ Dᵒᵖ}(– ∘ p, –) ≡ Hom_{Func_Cat C'ᵒᵖ Dᵒᵖ}(–, lkeᵒᵖ)
+Hom_{Func_Cat Cᵒᵖ Dᵒᵖ}(– ∘ p, –) ≃ Hom_{Func_Cat C'ᵒᵖ Dᵒᵖ}(–, lkeᵒᵖ)
 
  *)
     Local Definition KanExt_Left_to_Right_NIso :=
@@ -156,7 +156,7 @@ explicitly "Program" generates obligations for equalitiies that are definitional
 
     (** The natural Isomorphism underlying the right kan extension which is to be shown.
 
-Hom_{Func_Cat C'ᵒᵖ Dᵒᵖ}(rke, –) ≡ Hom_{Func_Cat Cᵒᵖ Dᵒᵖ}(–, – ∘ p)
+Hom_{Func_Cat C'ᵒᵖ Dᵒᵖ}(rke, –) ≃ Hom_{Func_Cat Cᵒᵖ Dᵒᵖ}(–, – ∘ p)
 
  *)
     Local Definition KanExt_Right_to_Left_NIso :=

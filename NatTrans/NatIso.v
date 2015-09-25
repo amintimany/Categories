@@ -101,7 +101,7 @@ Section Embedding_mono.
 
   Local Obligation Tactic := idtac.
 
-  (** For an embeding F and functors G and G', F ∘ G ≡ F ∘ G' implies there is a natrual transformation from G to G'. We will use this to show that G and G' are naturally isomorphic below. *)
+  (** For an embeding F and functors G and G', F ∘ G ≃ F ∘ G' implies there is a natrual transformation from G to G'. We will use this to show that G and G' are naturally isomorphic below. *)
   Section Embedding_mono_NT.
     Context {G G' : (B –≻ C)%functor} (H : ((F ∘ G)%functor ≃ (F ∘ G')%functor)%natiso).
     
@@ -129,7 +129,7 @@ Section Embedding_mono.
 
   Context {G G' : (B –≻ C)%functor} (H : ((F ∘ G)%functor ≃ (F ∘ G')%functor)%natiso).
   
-  (** For an embeding F and functors G and G', F ∘ G ≡ F ∘ G' implies G ≡ G'. *)
+  (** For an embeding F and functors G and G', F ∘ G ≃ F ∘ G' implies G ≃ G'. *)
   Program Definition Embedding_mono : (G ≃ G')%natiso  :=
     {|
       iso_morphism := Embedding_mono_NT H;

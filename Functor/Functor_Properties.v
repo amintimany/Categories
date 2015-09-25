@@ -124,7 +124,7 @@ Section Embedding.
   Context (C C' : Category).
 
   (**
-    An embedding is a functor that is faully-faithful. Such a functor is necessarily essentially injective and conservative, i.e., if F _O c ≡ F _O c' then c ≡ c'.
+    An embedding is a functor that is faully-faithful. Such a functor is necessarily essentially injective and conservative, i.e., if F _O c ≃ F _O c' then c ≃ c'.
    *)
 
   Record Embedding : Type :=

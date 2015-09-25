@@ -22,7 +22,7 @@ Section Hom_Adjunct_left_iso.
   .
 
 
-  (** If F ≡ F' and (F ⊣_hom G) then (F' ⊣_hom G) *)
+  (** If F ≃ F' and (F ⊣_hom G) then (F' ⊣_hom G) *)
   Definition Hom_Adjunct_left_iso : F' ⊣_hom G := (adj ∘ ((NatTrans_id_Iso (Hom_Func D)) ∘_h (Prod_Functor_NatIso (N^op) (NatTrans_id_Iso (Functor_id D)))))%isomorphism%natiso.
 
 End Hom_Adjunct_left_iso.
@@ -35,7 +35,7 @@ Section Hom_Adjunct_right_iso.
           (adj : F ⊣_hom G)
   .
 
-  (** If G ≡ G' and (F ⊣_hom G) then (F ⊣_hom G') *)
+  (** If G ≃ G' and (F ⊣_hom G) then (F ⊣_hom G') *)
   Definition Hom_Adjunct_right_iso : F ⊣_hom G' := Hom_Adjunct_Duality (Hom_Adjunct_left_iso ((N^op)⁻¹)%isomorphism%natiso (Hom_Adjunct_Duality adj)).
 
 End Hom_Adjunct_right_iso.
@@ -48,7 +48,7 @@ Section Adjunct_left_iso.
           (adj : F ⊣ G)
   .
 
-  (** If F ≡ F' and (F ⊣ G) then (F' ⊣ G) *)
+  (** If F ≃ F' and (F ⊣ G) then (F' ⊣ G) *)
   Definition Adjunct_left_iso : F' ⊣ G := Hom_Adj_to_Adj (Hom_Adjunct_left_iso N (Adj_to_Hom_Adj adj)).
 
 End Adjunct_left_iso.
@@ -61,7 +61,7 @@ Section Adjunct_right_iso.
           (adj : F ⊣ G)
   .
 
-  (** If G ≡ G' and (F ⊣ G) then (F ⊣ G') *)
+  (** If G ≃ G' and (F ⊣ G) then (F ⊣ G') *)
   Definition Adjunct_right_iso : F ⊣ G' := Hom_Adj_to_Adj (Hom_Adjunct_right_iso N (Adj_to_Hom_Adj adj)).
 
 End Adjunct_right_iso.
@@ -75,7 +75,7 @@ Section Hom_Adjunct_left_unique.
   .
 
 
-  (** If F ⊣_hom G and F' ⊣_hom G then F ≡ F' *)
+  (** If F ⊣_hom G and F' ⊣_hom G then F ≃ F' *)
   Definition Hom_Adjunct_left_unique : (F ≃ F')%natiso.
   Proof.
     apply (@Opposite_NatIso _ _ (F^op) (F'^op)).
@@ -101,7 +101,7 @@ Section Hom_Adjunct_right_unique.
           (adj' : F ⊣_hom G')
   .
 
-  (** If F ⊣_hom G and F ⊣_hom G' then G ≡ G' *)
+  (** If F ⊣_hom G and F ⊣_hom G' then G ≃ G' *)
   Theorem Hom_Adjunct_right_unique : (G ≃ G')%natiso.
   Proof.
     apply Hom_Adjunct_Duality in adj.
@@ -120,7 +120,7 @@ Section Adjunct_left_unique.
           (adj' : F' ⊣ G)
   .
 
-  (** If F ⊣ G and F' ⊣ G then F ≡ F' *)
+  (** If F ⊣ G and F' ⊣ G then F ≃ F' *)
   Theorem Adjunct_left_unique : (F ≃ F' )%natiso.
   Proof.
     apply Adj_to_Hom_Adj in adj.
@@ -138,7 +138,7 @@ Section Adjunct_right_unique.
           (adj' : F ⊣ G')
   .
 
-  (** If F ⊣ G and F ⊣ G' then G ≡ G' *)
+  (** If F ⊣ G and F ⊣ G' then G ≃ G' *)
   Theorem Adjunct_right_unique : (G ≃ G')%natiso.
   Proof.
     apply Adj_to_Hom_Adj in adj.
@@ -148,7 +148,7 @@ Section Adjunct_right_unique.
 
 End Adjunct_right_unique.
 
-(** If F ⊣_ucu G then Hom_{Func_Cat B D}(Fᵒᵖ ∘ –, –) ≡ Hom_{Func_Cat B C}(–, G ∘ —)
+(** If F ⊣_ucu G then Hom_{Func_Cat B D}(Fᵒᵖ ∘ –, –) ≃ Hom_{Func_Cat B C}(–, G ∘ —)
  *)
 Section Hom_Adjunct_Lifted.
   Context {C D : Category}
