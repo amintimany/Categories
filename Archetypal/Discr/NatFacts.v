@@ -38,10 +38,38 @@ Section Discr_Func_Iso.
     
 End Discr_Func_Iso.
 
+(** We show that the opposite of the functor from the singleton category that
+maps to object x in C is naturally isomorphic to the functor from the
+singleton category that maps to object x in Cᵒᵖ. *)
+Section Func_From_SingletonCat_Opposite.
+  Context {C : Category} (x : C).
+
+  Local Hint Extern 1 => apply NatTrans_eq_simplify; cbn.
+  
+  Program Definition Func_From_SingletonCat_Opposite :
+    (
+      ((@Func_From_SingletonCat C x)^op ≃ (@Func_From_SingletonCat (C ^op) x))%functor
+    )%natiso
+    :=
+      {|
+        iso_morphism :=
+          {|
+            Trans := fun _ => id
+          |};
+        inverse_morphism :=
+          {|
+            Trans := fun _ => id
+          |}
+      |}
+  .
+    
+End Func_From_SingletonCat_Opposite.
+
 Section Discr_Func_Arrow_Iso.
   Context {C D : Category} (arrmap : (Arrow (C^op)) → D).
 
-  (**  *)
+  (** Let A be the discrete categoty of morphisms of Cᵒᵖ and B be the category
+of morphisms of C. We show that Aᵒᵖ ≃ Bᵒᵖ. *)
   Definition Discr_Cat_ArrowOp_Discr_Cat_Arrow_Op :
     (((Discr_Cat (Arrow (C^op)))^op)%category
                                   ≃≃ ((Discr_Cat (Arrow C))^op)%category ::> Cat)%isomorphism
@@ -51,6 +79,12 @@ Section Discr_Func_Arrow_Iso.
 
   Local Hint Extern 1 => apply NatTrans_eq_simplify; cbn.
 
+  (** Let A be the discrete categoty of morphisms of Cᵒᵖ and B be the category
+of morphisms of C. Let, furthermore, U : B → D be a function we show that
+((Discr_Func_op (fun x : B => U x̂)) ∘ M) ≃ (Discr_Func_op U). Where x̂ is mirrored of x
+(from an arrow of C to an arrow of C)ᵒᵖ and M is Discr_Cat_ArrowOp_Discr_Cat_Arrow_Op
+defined above.
+*)
   Program Definition Discr_Func_Arrow_Iso :
     (
       (
