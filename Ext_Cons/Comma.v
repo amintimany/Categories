@@ -1,10 +1,11 @@
 Require Import Essentials.Notations.
 Require Import Essentials.Types.
 Require Import Essentials.Facts_Tactics.
-Require Import Category.Category.
+Require Import Category.Category Category.Morph Category.Opposite.
 Require Import Ext_Cons.Arrow.
 Require Import Functor.Functor Functor.Functor_Ops Const_Func.
 Require Import Archetypal.Discr.Discr.
+Require Import Cat.Cat.
 
 Local Open Scope morphism_scope.
 
@@ -134,6 +135,68 @@ Arguments CMH_left {_ _ _ _ _ _ _} _.
 Arguments CMH_right {_ _ _ _ _ _ _} _.
 Arguments CMH_com {_ _ _ _ _ _ _} _.
 
+(** In this section we show that the opposite the comma category of (Comma F G) is
+isomorphic to the comma category (Comma Gᵒᵖ Fᵒᵖ).
+ *)
+Section Comma_Opposite_Iso.
+  Context {B C D : Category} (F : (B –≻ C)%functor) (G : (D –≻ C)%functor).
+
+  Local Hint Extern 1 => progress cbn.
+
+  Local Hint Extern 1 => apply Comma_Hom_eq_simplify.
+  
+  Program Definition Comma_Opposite_Iso_LR :
+    Functor ((Comma F G)^op) (Comma (G ^op) (F ^op))
+    :=
+      {|
+        FO :=
+          fun x =>
+            {|
+              CMO_src := CMO_trg x;
+              CMO_trg := CMO_src x;
+              CMO_hom := CMO_hom x
+            |};
+        FA :=
+          fun c c' h =>
+            {|
+              CMH_left := CMH_right h;
+              CMH_right := CMH_left h;
+              CMH_com := eq_sym (CMH_com h)
+            |}
+      |}.
+
+  Program Definition Comma_Opposite_Iso_RL :
+    Functor (Comma (G ^op) (F ^op)) ((Comma F G)^op)
+    :=
+      {|
+        FO :=
+          fun x =>
+            {|
+              CMO_src := CMO_trg x;
+              CMO_trg := CMO_src x;
+              CMO_hom := CMO_hom x
+            |};
+        FA :=
+          fun c c' h =>
+            {|
+              CMH_left := CMH_right h;
+              CMH_right := CMH_left h;
+              CMH_com := eq_sym (CMH_com h)
+            |}
+      |}.
+    
+    
+  Program Definition Comma_Opposite_Iso :
+    (((Comma F G)^op)%category ≃≃ Comma (G ^op) (F ^op) ::> Cat)%isomorphism
+    :=
+      {|
+        iso_morphism := Comma_Opposite_Iso_LR;
+        inverse_morphism := Comma_Opposite_Iso_RL
+      |}
+  .
+
+End Comma_Opposite_Iso.
+  
 (**
 Slice, coslice and arrow categories are special cases of comma categories defined below:
 *)
@@ -211,5 +274,3 @@ Section Arrow_Cat.
   Definition Arrow_Cat : Category := Comma (Functor_id C) (Functor_id C).
 
 End Arrow_Cat.
-
-

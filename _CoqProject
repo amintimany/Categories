@@ -66,6 +66,7 @@ Basic_Cons/Facts/Term_Prod.v
 Basic_Cons/Facts/Main.v
 Basic_Cons/Facts/Equalizer_Monic.v
 Basic_Cons/Facts/Adjuncts.v
+Basic_Cons/Facts/Term_IsoCat.v
 Basic_Cons/Main.v
 Basic_Cons/CCC.v
 Basic_Cons/LCCC.v

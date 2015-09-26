@@ -154,7 +154,7 @@ End Cat_IConv.
 Section Cat_Iso_inv.
   Context {C D : Category} (I : C ≃≃ D ::> Cat).
 
-  (** The main theorem of this module. Given two isomorphism I between categories C and D, for each morphism h: Hom (I _o c) (I _o c') in D, there is a morphism g in C such that the conversion of h through I (I _a g) gives back the smae arrow, i.e., h = (I _a h). *)
+  (** The main theorem of this module. Given an isomorphism I between categories C and D, for each morphism h: Hom (I _o c) (I _o c') in D, there is a morphism g in C such that the conversion of h through I (I _a g) gives back the smae arrow, i.e., h = (I _a h). *)
   Theorem Cat_Iso_inv {c c' : C} (h : ((iso_morphism I) _o c) –≻ ((iso_morphism I) _o c'))
     : {g : c –≻ c' | h = ((iso_morphism I) _a g)}.
   Proof.
