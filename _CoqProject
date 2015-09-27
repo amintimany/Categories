@@ -72,6 +72,7 @@ Basic_Cons/CCC.v
 Basic_Cons/LCCC.v
 Basic_Cons/Equalizer.v
 Basic_Cons/PullBack.v
+Basic_Cons/Limits.v
 
 #Algebras:
 Algebras/Algebras.v
