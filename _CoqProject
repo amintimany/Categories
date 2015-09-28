@@ -125,6 +125,7 @@ Adjunction/Main.v
 Adjunction/Adj_Facts.v
 Adjunction/Adj_Cat.v
 Adjunction/Univ_Morph.v
+Adjunction/AFT/Solution_Set_Cond.v
 
 #KanExt:
 KanExt/Local.v
