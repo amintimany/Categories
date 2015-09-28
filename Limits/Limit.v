@@ -6,7 +6,7 @@ Require Import Functor.Main.
 Require Import Basic_Cons.Terminal.
 Require Import Ext_Cons.Arrow.
 Require Import Coq_Cats.Type_Cat.Card_Restriction.
-Require Export NatTrans.NatTrans.
+Require Export NatTrans.NatTrans NatTrans.Operations.
 Require Export KanExt.Local KanExt.Global KanExt.GlobalDuality
         KanExt.GlobaltoLocal KanExt.LocaltoGlobal KanExt.LocalFacts.Main.
 Require Export Cat.Cat_Terminal.
@@ -101,6 +101,40 @@ Section Complete_to_Restricted_Limits.
     fun J D _ _ => Global_to_Local_Right _ _ (CC _) D.
 
 End Complete_to_Restricted_Limits.
+
+(** A functor is continuous if it preserces all limits. *)
+Section Continuous.
+  Context
+    {C D : Category}
+    (CC : Complete C)
+    (G : (C –≻ D)%functor)
+  .
+
+  Section Cone_Conv.
+    Context
+      {J : Category}
+      {F : (J –≻ C)%functor}
+      (Cn : Cone F)
+    .
+    
+    Program Definition Cone_Conv : Cone (G ∘ F)%functor
+      :=
+        {|
+          cone_apex :=
+            (G ∘ (cone_apex Cn))%functor;
+          cone_edge :=
+            (((NatTrans_id G) ∘_h (cone_edge Cn)) ∘ (NatTrans_Functor_assoc _ _ _))%nattrans
+        |}
+    .
+
+  End Cone_Conv.
+
+  Definition Continuous :=
+    ∀ (J : Category) (F : (J –≻ C)%functor),
+      is_Cone_Local_Right_KanExt _ _ (Cone_Conv (LRKE (Limit_of F)))
+  .
+
+End Continuous.
 
 (** CoLimits *)
 
@@ -197,3 +231,37 @@ Definition Has_Restr_CoLimits_to_Has_Restr_Limits_Op
        H1
        (Card_Rest_Respect P (Arrow D) (Arrow (D^op)) (Arrow_OP_Iso D) H2)
   ).
+
+(** A functor is co-continuous if it preserces all co-limits. *)
+Section CoContinuous.
+  Context
+    {C D : Category}
+    (CC : CoComplete C)
+    (G : (C –≻ D)%functor)
+  .
+
+  Section CoCone_Conv.
+    Context
+      {J : Category}
+      {F : (J –≻ C)%functor}
+      (Cn : CoCone F)
+    .
+    
+    Program Definition CoCone_Conv : CoCone (G ∘ F)%functor
+      :=
+        {|
+          cone_apex :=
+            ((G ^op) ∘ (cone_apex Cn))%functor;
+          cone_edge := _
+            (((NatTrans_id (G ^op)) ∘_h (cone_edge Cn)) ∘ (NatTrans_Functor_assoc _ _ _))%nattrans
+        |}
+    .
+
+  End CoCone_Conv.
+
+  Definition CoContinuous :=
+    ∀ (J : Category) (F : (J –≻ C)%functor),
+      is_Cone_Local_Right_KanExt _ _ (CoCone_Conv (LRKE (CoLimit_of F)))
+  .
+
+End CoContinuous.
