@@ -20,6 +20,14 @@ are limits. The corresponding duals are dually colimits. *)
 Section Limits.
   Context {C : Category}.
 
+  Universe i.
+
+  Local Monomorphic Definition Constraint : Type@{i} := Set.
+
+  Notation Empty := (Empty : Type@{i}).
+  Notation bool := (bool : Type@{i}).
+  Notation unit := (unit : Type@{i}).
+
   Section Terminal.
 
     Definition Terminal_Producing_Func_fun (x : Empty) : C
@@ -191,13 +199,14 @@ Section Limits.
     Next Obligation.
     Proof.
       intros p h h'.
+      cbn.
       set (H :=
              f_equal
                (fun w
                     :
-                      ((Product_as_Limit_Cone h h')
-                         ∘ Functor_To_1_Cat (Discr_Cat bool)
-                         –≻ Discr_Func Product_Producing_Func_fun)%nattrans
+                      (Product_as_Limit_Cone h h'
+                 ∘ Functor_To_1_Cat (Discr_Cat Datatypes.bool)
+                 –≻ Discr_Func Product_Producing_Func_fun)%nattrans
                 => Trans w true)
                (cone_morph_com (LRKE_morph_ex L (Product_as_Limit_Cone h h')))
           ).
@@ -214,7 +223,7 @@ Section Limits.
                (fun w
                     :
                       ((Product_as_Limit_Cone h h')
-                         ∘ Functor_To_1_Cat (Discr_Cat bool)
+                         ∘ Functor_To_1_Cat (Discr_Cat Datatypes.bool)
                          –≻ Discr_Func Product_Producing_Func_fun)%nattrans
                 => Trans w false)
                (cone_morph_com (LRKE_morph_ex L (Product_as_Limit_Cone h h')))

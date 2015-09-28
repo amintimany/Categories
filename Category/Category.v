@@ -230,18 +230,10 @@ Ltac simpl_ids :=
 .
 
 Ltac simpl_ids_in_I I :=
-  let id_detected B :=
-      let J := fresh "H" in
-      cut (B = id); [intros J; rewrite J in I; clear J | trivial]
-  in
   repeat(
       match type of I with
         | context[(?A ∘ id)%morphism] => rewrite id_unit_right in I
         | context[(id ∘ ?A)%morphism] => rewrite id_unit_left in I
-        | (?A ∘ ?B = ?A)%morphism => id_detected B
-        | (?A = ?A ∘ ?B)%morphism => id_detected B
-        | (?B ∘ ?A = ?A)%morphism => id_detected B
-        | (?A = ?B ∘ ?A)%morphism => id_detected B
       end
     )
 .
