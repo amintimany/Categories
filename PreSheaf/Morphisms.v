@@ -13,6 +13,7 @@ Require Import Basic_Cons.Terminal.
 Require Import PreSheaf.PreSheaf PreSheaf.Terminal.
 Require Import Archetypal.Discr.Discr.
 
+
 (** In this section we show that all components of a monic
 morphism of presheafs are monic. 
 
@@ -24,17 +25,11 @@ morphism at c gives exactly f.
 Section PreSheaf_Monic_components_Monic.
   Context
     {C : Category}
-    {F G : PreSheaf C}
-    (N : @Monic (PShCat C) F G)
-    (c : C)
+    {F : PreSheaf C}
   .
-  
-  Section PreSheaf_Monic_components_Monic_is_Monic.
-    Context
-      (d : Type)
-      (g h : d → (F _o)%object c)
-      (H : (fun x => Trans (mono_morphism N) c (g x)) = (fun x => Trans (mono_morphism N) c (h x)))
-    .
+
+  Section PMCM_PreSheaf_representing_d.
+    Context (c : C) (d : Type).
 
     Local Hint Extern 1 => progress cbn.
 
@@ -46,6 +41,24 @@ Section PreSheaf_Monic_components_Monic.
         |}
     .
 
+  End PMCM_PreSheaf_representing_d.
+
+
+  Context
+    {G : PreSheaf C}
+    (N : @Monic (PShCat C) F G)
+    (c : C)
+  .
+    
+  Section PreSheaf_Monic_components_Monic_is_Monic.
+    Context
+      (d : Type)
+      (g h : d → (F _o)%object c)
+      (H : (fun x => Trans (mono_morphism N) c (g x)) = (fun x => Trans (mono_morphism N) c (h x)))
+    .
+
+(*    Local Hint Extern 1 => progress cbn.*)
+
     Local Hint Extern 1 =>
     match goal with
       [|- context [(F _a)%morphism (?A ∘ ?B)%morphism] ] =>
@@ -54,7 +67,7 @@ Section PreSheaf_Monic_components_Monic.
     
     Program Definition PMCM_PreSheaf_morph_of_function
             (f : d → (F _o)%object c)
-      : (PMCM_PreSheaf_representing_d –≻ F)%nattrans
+      : (PMCM_PreSheaf_representing_d c d –≻ F)%nattrans
       :=
         {|
           Trans := fun o x => (F _a (fst x))%morphism (f (snd x))
@@ -81,7 +94,7 @@ Section PreSheaf_Monic_components_Monic.
       extensionality m.
       assert (W :=
                 f_equal
-                  (fun w : (PMCM_PreSheaf_representing_d –≻ F)%nattrans => Trans w c (id, m))
+                  (fun w : (PMCM_PreSheaf_representing_d c d –≻ F)%nattrans => Trans w c (id, m))
                   (mono_morphism_monomorphic N _ _ _ PMCM_N_co_equalizes)
              ).
       cbn in W.

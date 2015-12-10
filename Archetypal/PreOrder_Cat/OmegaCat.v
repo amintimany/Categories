@@ -179,9 +179,15 @@ Definition OmegaPreOrder :=
     PreOrder_trans := Tle_trans
   |}.
 
-(** The pre-order category ω. *)
-Definition OmegaCat : Category@{i j} := PreOrder_Cat OmegaPreOrder.
+Section OmegaCat.
 
+  Universes i j.
+  
+  (** The pre-order category ω. *)
+  Definition OmegaCat : Category@{i j} := PreOrder_Cat OmegaPreOrder.
+
+End OmegaCat.
+  
 Notation "'ω'" := (OmegaCat) : omegacat_scope.
 
 Lemma le_Tle_n (n : nat) : le_Tle (le_n n) = Tle_n n.
