@@ -42,7 +42,7 @@ Program Definition nat_alg_morph alg' : Algebra_Hom nat_alg alg' :=
       fun x =>
         (fix f (n : nat) :=
         match n with
-        | O => (Constructors alg') (inl TT)
+        | O => (Constructors alg') (inl tt)
         | S n' => (Constructors alg') (inr (f n'))
         end) x
   |}.
@@ -52,7 +52,7 @@ Proof.
   extensionality x.
   destruct x as [|[]]; cbn; trivial.
   repeat apply f_equal.
-  apply UNIT_SINGLETON.
+  match goal with [A : unit |- _] => destruct A; trivial end.
 Qed.
 
 Program Definition nat_alg_init : Initial S_nat_alg_cat :=
@@ -71,8 +71,8 @@ Proof.
   simpl.
   induction x.
   {
-    assert(H1 := equal_f f_com (inl TT)); cbv in H1; rewrite <- H1.
-    assert(H2 := equal_f g_com (inl TT)); cbv in H2; rewrite <- H2.
+    assert(H1 := equal_f f_com (inl tt)); cbv in H1; rewrite <- H1.
+    assert(H2 := equal_f g_com (inl tt)); cbv in H2; rewrite <- H2.
     trivial.
   }
   {
@@ -110,8 +110,8 @@ Program Definition CoNat_coalg : @CoAlgebra Type_Cat S_nat_func :=
   Alg_Carrier := CoNat;
   Constructors :=
     fun x : CoNat =>
-       match x return UNIT + CoNat  with
-       | CoO => inl TT
+       match x return unit + CoNat  with
+       | CoO => inl tt
        | CoS x' => inr x'
        end
 |}.
@@ -131,8 +131,9 @@ Next Obligation. (* coalg_map_com *)
 Proof.
   extensionality x; cbn.
   destruct (Constructors coalg' x) as [x'|x']; cbn; trivial.
-  replace x' with TT; trivial.
-  apply UNIT_SINGLETON.
+  replace x' with tt; trivial.
+  cbn in *.
+  match goal with [A : unit |- _] => destruct A; trivial end.
 Qed.
 
 (* CoNat_coalg_morph defined *)

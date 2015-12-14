@@ -20,14 +20,6 @@ are limits. The corresponding duals are dually colimits. *)
 Section Limits.
   Context {C : Category}.
 
-  Universe i.
-
-  Local Monomorphic Definition Constraint : Type@{i} := Set.
-
-  Notation Empty := (Empty : Type@{i}).
-  Notation bool := (bool : Type@{i}).
-  Notation unit := (unit : Type@{i}).
-
   Section Terminal.
 
     Definition Terminal_Producing_Func_fun (x : Empty) : C
@@ -664,4 +656,3 @@ Section Limits.
   End PullBack.
 
 End Limits.
-  

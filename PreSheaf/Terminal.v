@@ -14,17 +14,17 @@ Section Terminal.
   (** The terminal element of the category of presheafs. *)
   Program Definition PSh_Term_PreSheaf : Functor (C^op) Type_Cat :=
     {|
-      FO := fun _ => UNIT
+      FO := fun _ => unit
     |}.
 
   Local Hint Resolve NatTrans_eq_simplify.
-  Local Hint Resolve UNIT_SINGLETON.
+  Local Hint Extern 1 => match goal with [|- ?A = ?B] => try destruct A; try destruct B; trivial; fail end.  
 
   (** The functor that maps to the unit type in coq is the terminal object of presheafs. *)
   Program Instance PSh_Terminal : Terminal (PShCat C) :=
     {
       terminal := PSh_Term_PreSheaf;
-      t_morph := fun _ => {|Trans := fun _ _ => TT|}
+      t_morph := fun _ => {|Trans := fun _ _ => tt|}
     }.
 
 End Terminal.

@@ -282,7 +282,7 @@ presheaf morphism to F (the domain of the monomorphism N).
 
   Local Hint Extern 1 => unfold PShCat_char_morph_forms_pullback_morph_ex_Trans.
 
-  Local Hint Extern 1 => apply UNIT_SINGLETON.
+  Local Hint Extern 1 => match goal with [|- ?A = ?B :> unit] => try destruct A; try destruct B; trivial; fail end.
 
   Local Obligation Tactic := basic_simpl; auto 7.
   
@@ -358,15 +358,15 @@ Section PShCat_char_morph_unique.
         (H1 :=
            is_pullback_morph_ex_com_1
              hpb
-             (PMCM_PreSheaf_representing_d z UNIT)
-             (PMCM_PreSheaf_morph_of_function z UNIT (fun _ => (G _a)%morphism h y))
+             (PMCM_PreSheaf_representing_d z unit)
+             (PMCM_PreSheaf_morph_of_function z unit (fun _ => (G _a)%morphism h y))
              (
                @PMCM_PreSheaf_morph_of_function
                  C
                  (PSh_Term_PreSheaf C)
                  z
-                 UNIT
-                 (fun _ => TT)
+                 unit
+                 (fun _ => tt)
              )
         ).
       match type of H1 with
@@ -375,8 +375,8 @@ Section PShCat_char_morph_unique.
           [intros H2;
             assert (H3 :=
                       f_equal
-                        (fun w : (PMCM_PreSheaf_representing_d z UNIT –≻ G)%nattrans =>
-                           Trans w z (id, TT))
+                        (fun w : (PMCM_PreSheaf_representing_d z unit –≻ G)%nattrans =>
+                           Trans w z (id, tt))
                         (H1 H2)
                    )
           |]

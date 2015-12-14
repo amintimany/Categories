@@ -2,6 +2,8 @@ Global Set Primitive Projections.
 
 Global Set Universe Polymorphism.
 
+Global Unset Universe Minimization ToSet.
+
 (** The Empty Type. *)
 Inductive Empty : Type :=.
 

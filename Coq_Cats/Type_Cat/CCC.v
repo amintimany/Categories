@@ -5,14 +5,6 @@ Require Import Category.Main.
 Require Import Basic_Cons.CCC.
 Require Import Coq_Cats.Type_Cat.Type_Cat.
 
-(* Local Obligation Tactic := basic_simpl; auto. *)
-
-(* if we use (unit : set) as terminal object then the level of arrows in Type_Cat
-is brought down to set which cuases problems in working with Type_Cat, e.g.,
-for showing Type_Cat has a subobject classifier. 
-*)
-
-(*
 Program Instance unit_Type_term : Terminal Type_Cat :=
 {
   terminal := unit;
@@ -24,26 +16,7 @@ Proof.
   extensionality x.
   destruct (f x); destruct (g x); reflexivity.
 Qed.
- *)
 
-Parameter UNIT : Type.
-
-Parameter TT : UNIT.
-
-Axiom UNIT_SINGLETON : ∀ x y : UNIT, x = y.
-
-(** The type unit in coq is the terminal object of category of types. *)
-Program Instance unit_Type_term : Terminal Type_Cat :=
-{
-  terminal := UNIT;
-  t_morph := fun _ _ => TT
-}.
-
-Next Obligation. (* t_morph_unique *)
-Proof.
-  extensionality x.
-  apply UNIT_SINGLETON.
-Qed.
 
 (** The cartesian product of types is the categorical notion of products in category of types. *)
 Program Definition prod_Product (A B : Type) : @Product Type_Cat A B :=

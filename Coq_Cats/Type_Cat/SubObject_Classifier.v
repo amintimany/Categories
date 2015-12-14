@@ -14,7 +14,7 @@ Local Axiom ConstructiveIndefiniteDescription_Type : forall T : Type, Constructi
 (** The type Prop is the subobject classifier for Type_Cat. With ⊤ mapping the single element of
 the singleton set to (True : Prop) *)
 Section Type_Cat_characteristic_function_unique.
-  Context {A B : Type} (F : @Monic Type_Cat A B) (h : B → Prop) (hpb : is_PullBack (mono_morphism F) (fun _ => TT) h (fun _ => True)).
+  Context {A B : Type} (F : @Monic Type_Cat A B) (h : B → Prop) (hpb : is_PullBack (mono_morphism F) (fun _ => tt) h (fun _ => True)).
 
   Theorem Type_Cat_characteristic_function_unique : h = fun x => (exists y : A, (mono_morphism F) y = x).
   Proof.
@@ -22,10 +22,10 @@ Section Type_Cat_characteristic_function_unique.
     apply PropExt; split.
     {
       intros Hx.
-      cut ((fun _ : UNIT => h x) = (fun _ => True)).
+      cut ((fun _ : unit => h x) = (fun _ => True)).
       {
         intros H.
-        set (W := equal_f (is_pullback_morph_ex_com_1 hpb UNIT (fun _ => x) (fun _ => TT) H) TT).
+        set (W := equal_f (is_pullback_morph_ex_com_1 hpb unit (fun _ => x) (fun _ => tt) H) tt).
         cbn in W.
         eexists; exact W.
       }
@@ -44,12 +44,12 @@ Section Type_Cat_characteristic_function_unique.
 End Type_Cat_characteristic_function_unique.
 
 
-Local Hint Resolve UNIT_SINGLETON.
+Local Hint Extern 1 => match goal with [|- ?A = ?B :> unit] => try destruct A; try destruct B; trivial; fail end.
 
 Program Definition Type_Cat_SubObject_Classifier : SubObject_Classifier Type_Cat :=
   {|
     SOC := Prop;
-    SOC_morph := fun _ : UNIT => True;
+    SOC_morph := fun _ : unit => True;
     SOC_char := fun A B f x => exists y : A, (mono_morphism f) y = x;
     SO_pulback :=
       fun A B f =>
