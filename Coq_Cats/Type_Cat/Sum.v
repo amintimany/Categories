@@ -5,10 +5,10 @@ Require Import Category.Main.
 Require Import Basic_Cons.Product.
 Require Import Coq_Cats.Type_Cat.Type_Cat.
 
-Local Obligation Tactic := basic_simpl; auto 2.
+Local Notation "A + B" := (@Sum Type_Cat A B) : object_scope.
 
 (** The sum of types in coq is the categorical notion of sum in category of types. *)
-Program Definition sum_Sum (A B : Type) : @Sum Type_Cat A B :=
+Program Definition sum_Sum (A B : Type) : (A + B)%object :=
 {|
   product := (A + B)%type;
   Prod_morph_ex :=

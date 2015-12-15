@@ -70,7 +70,7 @@ Lemma Exp_cat_morph_ex_eval_id
     (u =
      Exp_Cat_morph_ex
        (
-         (Exp_Cat_Eval C C') ∘ ((Prod_Func _ Cat_Has_Products) @_a (_, _) (_, _) (u, id Cat C))
+         (Exp_Cat_Eval C C') ∘ ((×ᶠⁿᶜ _ Cat_Has_Products) @_a (_, _) (_, _) (u, id Cat C))
        )
     )%morphism.
 Proof.
@@ -92,7 +92,7 @@ Proof.
 Qed.
 
 (** The exponential for category of categories (functor categories). *)
-Program Definition Cat_Exponential (C C' : Category) : @Exponential Cat _ C C' :=
+Program Definition Cat_Exponential (C C' : Cat) : (C ⇑ C')%object :=
 {|
   exponential := Func_Cat C C';
 

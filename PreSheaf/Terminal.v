@@ -21,7 +21,7 @@ Section Terminal.
   Local Hint Extern 1 => match goal with [|- ?A = ?B] => try destruct A; try destruct B; trivial; fail end.  
 
   (** The functor that maps to the unit type in coq is the terminal object of presheafs. *)
-  Program Instance PSh_Terminal : Terminal (PShCat C) :=
+  Program Instance PSh_Terminal : (𝟙_ (PShCat C))%object :=
     {
       terminal := PSh_Term_PreSheaf;
       t_morph := fun _ => {|Trans := fun _ _ => tt|}

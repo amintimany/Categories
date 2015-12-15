@@ -18,12 +18,16 @@ Arguments t_morph_unique {_} _ _ _ _.
 
 Coercion terminal : Terminal >-> Obj.
 
+Notation "𝟙_ C" := (Terminal C) (at level 75) : object_scope.
+
 (** (The) terminal object is unique up to isomorphism. *)
-Theorem Terminal_iso {C : Category} (T T' : Terminal C) : (T ≃ T')%isomorphism.
+Theorem Terminal_iso {C : Category} (T T' : (𝟙_ C)%object) : (T ≃ T')%isomorphism.
 Proof.
   apply (Build_Isomorphism _ _ _ (t_morph _ _) (t_morph _ _)); apply t_morph_unique.
 Qed.
 
 (** The initial is the dual of the terminal object. *)
-Definition Initial (C : Category) := Terminal (C ^op).
+Definition Initial (C : Category) := (𝟙_ (C ^op))%object.
 Existing Class Initial.
+
+Notation "𝟘_ C" := (Initial C) (at level 75) : object_scope.

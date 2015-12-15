@@ -29,7 +29,7 @@ Section Universal_Morphism_Right_Adjonit.
   Context
     {C D : Category}
     (G : (D –≻ C)%functor)
-    (HU_init : ∀ (x : C), Initial (Comma (Func_From_SingletonCat x) G) )
+    (HU_init : ∀ (x : C), (𝟘_ (Comma (Func_From_SingletonCat x) G))%object )
   .
 
   Local Definition Universal_Morphism_Lem :
@@ -292,7 +292,7 @@ Section Right_Adjoint_Universal_Morphism.
   Qed.
   
   
-  Program Definition Right_Adjoint_Universal_Morphism : Initial (Comma (Func_From_SingletonCat x) G)
+  Program Definition Right_Adjoint_Universal_Morphism : (𝟘_ (Comma (Func_From_SingletonCat x) G))%object
     :=
       {|
         terminal := Right_Adjoint_Universal_Morphism_terminal;
@@ -326,13 +326,13 @@ Section Universal_Morphism_Left_Adjonit.
   Context
     {C D : Category}
     (F : (C –≻ D)%functor)
-    (HU_term : ∀ (x : D), Terminal (Comma F (@Func_From_SingletonCat D x)))
+    (HU_term : ∀ (x : D), (𝟙_ (Comma F (@Func_From_SingletonCat D x)))%object)
   .
 
   Definition Universal_Morphism_Left_Adjonit_HU_init
              (x : (D^op)%category)
     :
-      Initial (Comma ((@Func_From_SingletonCat (D ^op) x)) (F^op))
+      (𝟘_ (Comma ((@Func_From_SingletonCat (D ^op) x)) (F^op)))%object
     :=
       Term_IsoCat
         (
@@ -381,7 +381,7 @@ Section Left_Adjoint_Universal_Morphism.
     (x : D)
   .
 
-  Definition Left_Adjoint_Universal_Morphism : Terminal (Comma F (Const_Func 1 x))
+  Definition Left_Adjoint_Universal_Morphism : (𝟙_ (Comma F (Const_Func 1 x)))%object
     :=
       Term_IsoCat
         (

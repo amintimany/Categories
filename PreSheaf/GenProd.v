@@ -10,7 +10,7 @@ Require Import PreSheaf.PreSheaf.
 Require Import NatTrans.NatTrans NatTrans.Func_Cat.
 
 Section PSh_GenProd.
-  Context (C : Category) (A : Type) (map : A → PreSheaf C).
+  Context (C : Category) (A : Type) (map : A → PShCat C).
 
   Local Notation Fm := (Discr_Func (PShCat C) map) (only parsing).
 
@@ -72,7 +72,7 @@ Section PSh_GenProd.
 
   Local Obligation Tactic := basic_simpl; auto 10.
 
-  Program Definition PSh_GenProd : @GenProd _ (PShCat C) map :=
+  Program Definition PSh_GenProd : (Π map)%object :=
     {|
       LRKE := PSh_GenProd_Cone;
       LRKE_morph_ex :=

@@ -16,7 +16,7 @@ Section Slice_Terminal.
   Local Notation CA z := (Build_Comma_Obj (Functor_id C) (Const_Func 1 c) _ tt z) (only parsing).
 
   (** Every slice category C/c has a terminal object (id c). *)
-  Program Instance Slice_Terminal : Terminal (Slice C c) :=
+  Program Instance Slice_Terminal : (𝟙_ (Slice C c))%object :=
     {
       terminal := CA id;
       t_morph :=
@@ -48,7 +48,7 @@ Section PullBack_Slice_Prod.
   Local Notation CA z := (Build_Comma_Obj (Functor_id C) (Const_Func 1 c) _ tt z) (only parsing).
 
   (** Pullbacks are products in slices. *)
-  Program Definition PullBack_Slice_Prod : @Product (Slice C c) f g :=
+  Program Definition PullBack_Slice_Prod : (f × g)%object :=
     {|
       product := CA ((CMO_hom f) ∘ (pullback_morph_1 PB));
       Pi_1 :=
@@ -164,7 +164,7 @@ Section Slice_Prod_PullBack.
 
   Local Notation CA z := (Build_Comma_Obj (Functor_id C) (Const_Func 1 c) _ tt z) (only parsing).
 
-  Context (PR : Product f g).
+  Context (PR : (f × g)%object).
   
   Program Definition Slice_Prod_PullBack : PullBack (CMO_hom f) (CMO_hom g) :=
     {|

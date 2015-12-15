@@ -69,8 +69,12 @@ Arguments Prod_morph_unique {_ _ _} _ _ _ _ _ _ _ _ _ _.
 
 Coercion product : Product >-> Obj.
 
+Notation "a × b" := (Product a b) : object_scope.
+
+Local Open Scope object_scope.
+
 (** for any pair of objects, their product is unique up to isomorphism. *)
-Theorem Product_iso {C : Category} (c d : Obj) (P : Product c d) (P' : Product c d) : (P ≃ P')%isomorphism.
+Theorem Product_iso {C : Category} (c d : Obj) (P : c × d) (P' : c × d) : (P ≃ P')%isomorphism.
 Proof.
   eapply (Build_Isomorphism _ _ _ (Prod_morph_ex P' P Pi_1 Pi_2) (Prod_morph_ex P P' Pi_1 Pi_2));
   eapply Prod_morph_unique; eauto;
@@ -78,7 +82,7 @@ Proof.
   repeat (rewrite Prod_morph_com_1 || rewrite Prod_morph_com_2); auto.
 Qed.
 
-Definition Has_Products (C : Category) : Type := ∀ a b, Product a b.
+Definition Has_Products (C : Category) : Type := ∀ a b, a × b.
 
 Existing Class Has_Products.
 
@@ -105,18 +109,24 @@ Qed.
 
 Arguments Prod_Func _ _, _ {_}.
 
+Notation "×ᶠⁿᶜ" := Prod_Func : functor_scope.
+
 (** Sum is the dual of product *)
 Definition Sum (C : Category) := @Product (C^op).
 
 Arguments Sum _ _ _, {_} _ _.
 
-Definition Has_Sums (C : Category) : Type :=  ∀ (a b : C), Sum a b.
+Notation "a + b" := (Sum a b) : object_scope.
+
+Definition Has_Sums (C : Category) : Type :=  ∀ (a b : C), (a + b)%object.
 
 Existing Class Has_Sums.
 
 (**
 The sum functor maps each pair of objects (an object of the product category C×C) to their sum in C.
 *)
-Definition Sum_Func {C : Category} {HS : Has_Sums C} : ((C × C) –≻ C)%functor := (Prod_Func (C^op) HS)^op.
+Definition Sum_Func {C : Category} {HS : Has_Sums C} : ((C × C) –≻ C)%functor := (×ᶠⁿᶜ (C^op) HS)^op.
 
 Arguments Sum_Func _ _, _ {_}.
+
+Notation "+ᶠⁿᶜ" := Sum_Func : functor_scope.

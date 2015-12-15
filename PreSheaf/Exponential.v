@@ -10,7 +10,7 @@ Require Import PreSheaf.PreSheaf PreSheaf.Product.
 Require Import Yoneda.Yoneda.
 
 Section Exponential.
-  Context (C : Category) (F G : PreSheaf C).
+  Context (C : Category) (F G : PShCat C).
 
   Local Obligation Tactic := idtac.
 
@@ -153,7 +153,7 @@ presheafs. *)
   Qed.
 
   (** Exponentials of presheafs. *)
-  Program Definition PSh_Exponential : @Exponential (PShCat C) _ F G:=
+  Program Definition PSh_Exponential : (F ⇑ G)%object :=
     {|
       exponential := funspace_psh;
       eval := PSh_Exponential_Eval;

@@ -5,7 +5,7 @@ Require Import Category.Main.
 Require Import Basic_Cons.CCC.
 Require Import Coq_Cats.Type_Cat.Type_Cat.
 
-Program Instance unit_Type_term : Terminal Type_Cat :=
+Program Instance unit_Type_term : (𝟙_ Type_Cat)%object :=
 {
   terminal := unit;
   t_morph := fun _ _=> tt
@@ -18,8 +18,10 @@ Proof.
 Qed.
 
 
+Local Notation "A × B" := (@Product Type_Cat A B) : object_scope.
+
 (** The cartesian product of types is the categorical notion of products in category of types. *)
-Program Definition prod_Product (A B : Type) : @Product Type_Cat A B :=
+Program Definition prod_Product (A B : Type) : (A × B)%object :=
 {|
   product := (A * B)%type;
   Pi_1 := fst;
@@ -42,7 +44,7 @@ Qed.
 Program Instance Type_Cat_Has_Products : Has_Products Type_Cat := prod_Product.
 
 (** The function type in coq is the categorical exponential in the category of types. *)
-Program Definition fun_exp (A B : Type) : @Exponential Type_Cat _ A B :=
+Program Definition fun_exp (A B : Type_Cat) : (A ⇑ B)%object :=
 {|
   exponential := A -> B;
   eval := fun x => (fst x) (snd x);

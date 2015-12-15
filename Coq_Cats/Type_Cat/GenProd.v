@@ -10,7 +10,7 @@ Require Import Basic_Cons.Terminal.
 
 (** In category of types, generalized products are simply dependent prdoducts. *)
 Section Type_Cat_GenProd.
-  Context (A : Type) (map : A → Type).
+  Context (A : Type) (map : A → Type_Cat).
 
   Local Notation Fm := (Discr_Func Type_Cat map) (only parsing).
 
@@ -20,7 +20,7 @@ Section Type_Cat_GenProd.
       cone_edge := {|Trans := fun x y => y x |}
     |}.
 
-  Program Definition Type_Cat_GenProd : @GenProd _ Type_Cat map :=
+  Program Definition Type_Cat_GenProd : (Π map)%object :=
     {|
       LRKE := Type_Cat_GenProd_Cone;
       LRKE_morph_ex :=

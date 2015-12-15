@@ -22,7 +22,7 @@ Section Initial.
   Local Hint Extern 1 => progress cbn in *.
 
   (** The functor that maps to the empty type in coq is the terminal object of presheafs. *)
-  Program Instance PSh_Initial : Initial (PShCat C) :=
+  Program Instance PSh_Initial : (𝟘_ (PShCat C))%object :=
     {|
       terminal := PSh_Init_Func;
       t_morph := fun u => {|Trans := fun x y => _ |}

@@ -9,7 +9,7 @@ Require Import Coq_Cats.Type_Cat.Type_Cat.
 Require Import PreSheaf.PreSheaf.
 
 Section Sum.
-  Context (C : Category) (F G : PreSheaf C).
+  Context (C : Category) (F G : PShCat C).
 
   Local Hint Extern 1 => match goal with [H : (_ + _)%type |- _] => destruct H end.
   Local Hint Extern 1 => match goal with [|- context [(?F _a id)%morphism]] => rewrite (F_id F) end.
@@ -20,14 +20,14 @@ Section Sum.
   end.
   
   (** The pointwise sum of presheafs F and G. *)
-  Program Definition PSh_Sum_Func : PreSheaf C :=
+  Program Definition PSh_Sum_Func : PShCat C :=
     {|
-      FO := fun c => ((F _o c) + (G _o c))%object%type;
+      FO := fun c => ((F _o c) + (G _o c))%type%object;
       FA :=
         fun c d h x =>
-          match x return ((F _o d) + (G _o d))%object%type with
-            | inl xl => inl (F _a h xl)%morphism
-            | inr xr => inr (G _a h xr)%morphism
+          match x return ((F _o d) + (G _o d))%type%object with
+          | inl xl => inl (F _a h xl)%morphism
+          | inr xr => inr (G _a h xr)%morphism
           end
     |}.
 
@@ -43,33 +43,32 @@ Section Sum.
       Trans := fun c x => inr x
     |}.
 
-    Local Hint Extern 1 =>
-    match goal with
-      [|- context [Trans ?f _ ((?F _a)%morphism ?h _)]] =>
-      cbn_rewrite (equal_f (Trans_com f h))
-    end.
+  Local Hint Extern 1 =>
+  match goal with
+    [|- context [Trans ?f _ ((?F _a)%morphism ?h _)]] =>
+    cbn_rewrite (equal_f (Trans_com f h))
+  end.
 
-    (** Pointwise morphism into sum constructed out of two morphisms
+  (** Pointwise morphism into sum constructed out of two morphisms
 from summands. *)
-    Program Definition PSh_Sum_morph_ex
-            (H : PreSheaf C)
-            (f : NatTrans F H)
-            (g : NatTrans G H):
-      NatTrans PSh_Sum_Func H :=
-      {|
-        Trans :=
-          fun c x =>
-            match x return (H _o c)%object with
-            | inl xl => Trans f c xl
-            | inr xr => Trans g c xr
-            end
-      |}.
-    
-  (* Local Hint Resolve NatTrans_eq_simplify.
-  Local Hint Extern 1 => progress cbn in *. *)
-
+  Program Definition PSh_Sum_morph_ex
+          (H : PreSheaf C)
+          (f : NatTrans F H)
+          (g : NatTrans G H):
+    NatTrans PSh_Sum_Func H :=
+    {|
+      Trans :=
+        fun c x =>
+          match x return (H _o c)%object with
+          | inl xl => Trans f c xl
+          | inr xr => Trans g c xr
+          end
+    |}.
+  
+  Local Notation "F + G" := (Sum (PShCat C) F G) : object_scope.
+  
   (** The pointwise sum presheaf is the sum of presheafs. *)
-  Program Definition PSh_Sum : Sum (PShCat C) F G :=
+  Program Definition PSh_Sum : (F + G)%object :=
     {|
       product  := PSh_Sum_Func;
       Pi_1 := PSh_Sum_injl;
@@ -90,7 +89,7 @@ from summands. *)
     + apply (f_equal (fun w : (F –≻ p')%nattrans => Trans w c x1) H1).
     + apply (f_equal (fun w : (G –≻ p')%nattrans => Trans w c x2) H2).
   Qed.
-    
+  
 End Sum.
 
 Instance PSh_Has_Sums (C : Category) : Has_Sums (PShCat C) := PSh_Sum C.

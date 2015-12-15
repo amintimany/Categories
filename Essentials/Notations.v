@@ -54,6 +54,16 @@ Reserved Notation "F ⊣_ucu G" (at level 100, no associativity).
 
 Reserved Notation "a × b" (at level 80, no associativity).
 
+Reserved Notation "a ⇑ b" (at level 79, no associativity).
+
+Reserved Notation "'Π' m" (at level 50, no associativity).
+
+Reserved Notation "'Σ' m" (at level 50, no associativity).
+
+Reserved Notation "'Π_' C ↓ m" (at level 50, no associativity).
+
+Reserved Notation "'Σ_' C ↓ m" (at level 50, no associativity).
+
 Delimit Scope category_scope with category.
 
 Delimit Scope morphism_scope with morphism.

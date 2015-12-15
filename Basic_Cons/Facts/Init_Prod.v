@@ -11,13 +11,17 @@ Require Import Yoneda.Yoneda.
 
 (** 0 × a ≃ 0. where 0 is the initial object *)
 Section Init_Prod.
-  Context {C : Category} {C_CCC : CCC C} {init : Initial C}.
+  Context {C : Category} {C_CCC : CCC C} {init : (𝟘_ C)%object}.
+
+  Local Notation "0" := (terminal init) : object_scope.
+  
+(*  Local Notation "a × b" := (CHP a b) : object_scope. *)
 
   (** Natural transformations to be used with Yoneda. *)
   
   Program Definition Init_Prod_lr a :
-    (((((CoYoneda C) _o) ((Prod_Func C) _o (@terminal _ init, a)))%object)
-      –≻ (((CoYoneda C) _o) init)%object)%nattrans
+    (((((CoYoneda C) _o) ((×ᶠⁿᶜ C) _o (0, a)))%object)
+      –≻ (((CoYoneda C) _o) 0)%object)%nattrans
     :=
       {|
         Trans := fun b f => @t_morph _ init b
@@ -36,8 +40,8 @@ Section Init_Prod.
   Qed.
 
   Program Definition Init_Prod_rl a :
-    (((((CoYoneda C) _o) init)%object)
-       –≻ (((CoYoneda C) _o) ((Prod_Func C) _o (@terminal _ init, a)))%object)%nattrans
+    (((((CoYoneda C) _o) 0)%object)
+       –≻ (((CoYoneda C) _o) ((×ᶠⁿᶜ C) _o (0, a)))%object)%nattrans
     :=
       {|
         Trans := fun c g => compose C (Pi_1 (CCC_HP C init a)) (t_morph init c)
@@ -59,7 +63,7 @@ Section Init_Prod.
   Qed.
 
   Theorem Init_Prod a :
-    (((Prod_Func C) _o (@terminal _ init, a)) ≃ init)%isomorphism.
+    (((×ᶠⁿᶜ C) _o (0, a)%object) ≃ 0)%isomorphism.
   Proof.
     apply (@CoIso (C^op)).
     CoYoneda.

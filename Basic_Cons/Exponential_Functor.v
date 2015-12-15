@@ -13,12 +13,12 @@ The exponential functor maps each pair of objects (a, b) (an object of product c
 *)
 Program Definition Exp_Func {C : Category}
         {hp : Has_Products C}
-        (exps : ∀ a b, Exponential a b)
+        (exps : ∀ a b, (a ⇑ b)%object)
 : ((C^op × C) –≻ C)%functor :=
 {|
   FO := fun x => exps (fst x) (snd x);
   FA := fun a b f => 
-           Exp_morph_ex _ _ ((snd f) ∘ (eval _) ∘ ((Prod_Func C) @_a (_, fst b) (_, fst a) (id (exps (fst a) (snd a)), fst f)))%morphism
+           Exp_morph_ex _ _ ((snd f) ∘ (eval _) ∘ ((×ᶠⁿᶜ C) @_a (_, fst b) (_, fst a) (id (exps (fst a) (snd a)), fst f)))%morphism
 |}.
 
 Next Obligation. (* F_id *)
@@ -55,4 +55,6 @@ Proof.
   cbn; auto.
 Qed.
 
-(* Exponential_Functor defined *)
+Arguments Exp_Func {_ _} _, {_} _ _, _ _ _.
+
+Notation "⇑ᶠⁿᶜ" := Exp_Func : functor_scope.

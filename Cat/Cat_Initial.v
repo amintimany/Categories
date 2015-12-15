@@ -17,7 +17,7 @@ Program Definition Functor_From_Empty_Cat (C' : Category) : (0 –≻ C')%functo
 Local Hint Extern 1 => cbn in *.
 
 (** Empty Cat is the initial category. *)
-Program Instance Cat_Init : Initial Cat :=
+Program Instance Cat_Init : (𝟘_ Cat)%object :=
 {|
   terminal := 0%category;
   t_morph := fun x => Functor_From_Empty_Cat x

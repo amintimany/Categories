@@ -7,9 +7,10 @@ Require Import Cat.Cat.
 Require Import Ext_Cons.Prod_Cat.Prod_Cat Ext_Cons.Prod_Cat.Operations.
 Require Import Basic_Cons.Product.
 
-(** Product in category of categories is imply the product of actegories *)
+Local Notation "A × B" := (@Product Cat A B) : object_scope.
 
-Program Definition Cat_Products (C C' : Category) : @Product Cat C C' :=
+(** Product in category of categories is imply the product of actegories *)
+Program Definition Cat_Products (C C' : Category) : (C × C')%object :=
 {|
   product := (C × C')%category;
 

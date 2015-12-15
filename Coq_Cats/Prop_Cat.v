@@ -20,11 +20,11 @@ Program Definition Prop_Cat : Category := Coq_Cat Prop.
 
 Local Hint Extern 1 => contradiction.
 
-Program Instance False_init : Initial Prop_Cat := {|terminal := False|}.
+Program Instance False_init : (𝟘_ Prop_Cat)%object := {|terminal := False|}.
 
 Local Hint Extern 1 => match goal with |- ?A = ?B :> True => destruct A; destruct B end.
 
-Program Instance True_term : Terminal Prop_Cat := {terminal := True}.
+Program Instance True_term : (𝟙_ Prop_Cat)%object := {terminal := True}.
 
 Local Hint Extern 1 => match goal with |- ?A = ?B :> _ ∧ _ => destruct A; destruct B end.
 
@@ -33,7 +33,9 @@ Local Hint Extern 1 => tauto.
 Section Prod.
   Context (P Q : Prop).
 
-  Program Definition Conj_Product : @Product Prop_Cat P Q := {|product := (P ∧ Q)|}.
+  Local Notation "P × Q" := (Product Prop_Cat P Q) : object_scope.
+  
+  Program Definition Conj_Product : (P × Q)%object := {|product := (P ∧ Q)|}.
   
   Local Obligation Tactic := idtac.
   
@@ -56,10 +58,9 @@ Program Instance Prop_Cat_Has_Products : Has_Products Prop_Cat := Conj_Product.
 Local Hint Extern 1 => match goal with H : _ ∧ _ |- _ => destruct H end.
 
 Section Exp.
-  Context (P Q : Prop).
+  Context (P Q : Prop_Cat).
   
-  Program Definition implication_exp :
-    @Exponential Prop_Cat _ P Q
+  Program Definition implication_exp : (P ⇑ Q)%object
     :=
       {|
         exponential := (P -> Q)
@@ -86,7 +87,10 @@ Local Hint Extern 1 => match goal with H : _ ∨ _ |- _ => destruct H end.
 
 Section Sum.
   Context (P Q : Prop).
-  Program Definition Disj_Sum  : @Sum Prop_Cat P Q := {|product := (P ∨ Q)|}.
+
+  Local Notation "P + Q" := (Sum Prop_Cat P Q) : object_scope.
+  
+  Program Definition Disj_Sum  : (P + Q)%object := {|product := (P ∨ Q)|}.
 
   Local Obligation Tactic := idtac.
 
@@ -105,8 +109,3 @@ Section Sum.
 End Sum.
 
 Program Instance Prop_Cat_Has_Sums : Has_Sums Prop_Cat := Disj_Sum.
-
-
-
-
-

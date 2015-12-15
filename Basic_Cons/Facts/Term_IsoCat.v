@@ -9,9 +9,9 @@ Require Import Cat.Cat Cat.Cat_Iso.
 (** In this section we show that if a category C has a terminal object and D is
 a category isomorphic to C, then D also has a terminal object. *)
 Section Term_IsoCat.
-  Context {C D : Category} (I : (C ≃≃ D ::> Cat)%isomorphism) (trm : Terminal C).
+  Context {C D : Category} (I : (C ≃≃ D ::> Cat)%isomorphism) (trm : (𝟙_ C)%object).
 
-  Program Definition Term_IsoCat : Terminal D
+  Program Definition Term_IsoCat : (𝟙_ D)%object
     :=
       {|
         terminal := ((iso_morphism I) _o)%object trm;

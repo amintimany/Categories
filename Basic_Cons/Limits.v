@@ -77,7 +77,7 @@ Section Limits.
         |}
     .      
       
-    Program Definition Terminal_as_Limit : Terminal C :=
+    Program Definition Terminal_as_Limit : (𝟙_ C)%object :=
       {|
         terminal := L;
         t_morph :=
@@ -175,7 +175,7 @@ Section Limits.
         |}
     .
     
-    Program Definition Product_as_Limit : Product a b :=
+    Program Definition Product_as_Limit : (a × b)%object :=
       {|
         product := L;
         Pi_1 := Trans (cone_edge L) true;

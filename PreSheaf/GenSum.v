@@ -10,7 +10,7 @@ Require Import PreSheaf.PreSheaf.
 Require Import NatTrans.NatTrans NatTrans.Func_Cat.
 
 Section PSh_GenSum.
-  Context (C : Category) (A : Type) (map : A → PreSheaf C).
+  Context (C : Category) (A : Type) (map : A → PShCat C).
 
   Local Notation Fm := (Discr_Func_op (PShCat C) map) (only parsing).
 
@@ -77,7 +77,7 @@ Section PSh_GenSum.
 
   Local Obligation Tactic := basic_simpl; auto 10.
 
-  Program Definition PSh_GenSum : @GenSum _ (PShCat C) map :=
+  Program Definition PSh_GenSum : (Σ map)%object :=
     {|
       LRKE := PSh_GenSum_CoCone;
       LRKE_morph_ex :=
@@ -150,7 +150,7 @@ End PSh_GenSum.
 
 (** In category of types, generalized sums are simply dependent sum types. *)
 Section Type_Cat_GenSum.
-  Context (A : Type) (map : A → Type).
+  Context (A : Type) (map : A → Type_Cat).
 
   Local Notation Fm := (Discr_Func_op Type_Cat map) (only parsing).
 
@@ -161,7 +161,7 @@ Section Type_Cat_GenSum.
       cone_edge := {|Trans := fun x => existT _ x |}
     |}.
     
-   Program Definition Type_Cat_GenSum : @GenSum _ Type_Cat map :=
+   Program Definition Type_Cat_GenSum : (Σ map)%object :=
     {|
       LRKE := Type_Cat_GenSum_CoCone;
       LRKE_morph_ex :=

@@ -18,7 +18,7 @@ Program Definition term_id : (Type_Cat –≻ (Type_Cat × Type_Cat))%functor :=
 |}.
 
 Definition S_nat_func : (Type_Cat –≻ Type_Cat)%functor :=
-  ((@Sum_Func Type_Cat _) ∘ term_id)%functor.
+  ((+ᶠⁿᶜ Type_Cat _) ∘ term_id)%functor.
 
 (* S_nat_func defined *)
 
@@ -55,7 +55,7 @@ Proof.
   match goal with [A : unit |- _] => destruct A; trivial end.
 Qed.
 
-Program Definition nat_alg_init : Initial S_nat_alg_cat :=
+Program Definition nat_alg_init : (𝟘_ S_nat_alg_cat)%object :=
   {|
     terminal := nat_alg;
     t_morph := nat_alg_morph
@@ -138,7 +138,7 @@ Qed.
 
 (* CoNat_coalg_morph defined *)
 
-Program Definition CoNat_alg_term : Initial S_nat_coalg_cat :=
+Program Definition CoNat_alg_term : (𝟘_ S_nat_coalg_cat)%object :=
 {|
   terminal := CoNat_coalg;
   t_morph := CoNat_coalg_morph

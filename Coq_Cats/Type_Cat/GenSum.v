@@ -10,7 +10,7 @@ Require Import Basic_Cons.Terminal.
 
 (** In category of types, generalized sums are simply dependent sum types. *)
 Section Type_Cat_GenSum.
-  Context (A : Type) (map : A → Type).
+  Context (A : Type) (map : A → Type_Cat).
 
   Local Notation Fm := (Discr_Func_op Type_Cat map) (only parsing).
 
@@ -21,7 +21,7 @@ Section Type_Cat_GenSum.
       cone_edge := {|Trans := fun x => existT _ x |}
     |}.
     
-   Program Definition Type_Cat_GenSum : @GenSum _ Type_Cat map :=
+   Program Definition Type_Cat_GenSum : (Σ map)%object :=
     {|
       LRKE := Type_Cat_GenSum_CoCone;
       LRKE_morph_ex :=

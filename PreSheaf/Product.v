@@ -9,22 +9,23 @@ Require Import Basic_Cons.Product.
 Require Import PreSheaf.PreSheaf.
 
 Section Product.
-  Context (C : Category) (F G : PreSheaf C).
+  Context (C : Category) (F G : PShCat C).
 
-  Local Hint Extern 1 => match goal with [F : PreSheaf _ |- _] => rewrite (F_id F) end.
+  
+  Local Hint Extern 1 => match goal with [F : (_ ^op –≻ Type_Cat)%functor |- _] => rewrite (F_id F) end.
   Local Hint Extern 1 =>
   match goal with
-    [F : PreSheaf _ |- context [(F _a (?f ∘ ?g))%morphism]] =>
+    [F : (_ ^op –≻ Type_Cat)%functor |- context [(F _a (?f ∘ ?g))%morphism]] =>
     cbn_rewrite (F_compose F f g)
   end.
-  
+
   (** The pointwise product presheaf. *)
-  Program Definition pointwise_product_psh : Functor (C^op) Type_Cat :=
+  Program Definition pointwise_product_psh : PShCat C :=
     {|
       FO := fun x => ((F _o x) * (G _o x))%object%type;
       FA := fun _ _ f u => (F _a f (fst u), G _a f (snd u))%morphism%object
     |}.
-
+    
   Local Hint Extern 1 =>
   repeat
     match goal with
@@ -33,7 +34,7 @@ Section Product.
     end.
 
   (** The pointwise product presheaf is the product of presheafs. *)
-  Program Definition PSh_Product : @Product (PShCat C) F G:=
+  Program Definition PSh_Product : (F × G)%object :=
     {|
       product := pointwise_product_psh;
       Pi_1 := {| Trans := fun _ => fst |};

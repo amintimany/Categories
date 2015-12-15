@@ -23,8 +23,8 @@ Section GenProd_Eq_Complete.
   Section GenProd_Eq_Limits.
     Context {J : Category}.
 
-    Context {OProd : ∀ (map : J → C), GenProd map}
-            {HProd : ∀ (map : (Arrow J) → C), GenProd map}
+    Context {OProd : ∀ (map : J → C), (Π map)%object}
+            {HProd : ∀ (map : (Arrow J) → C), (Π map)%object}
             {Eqs : Has_Equalizers C}
     .
 
@@ -456,7 +456,7 @@ Section GenProd_Eq_Complete.
 
   Section Restricted_Limits.
     Context (P : Card_Restriction)
-            {CHRP : ∀ (A : Type) (map : A → C), (P A) → GenProd map}
+            {CHRP : ∀ (A : Type) (map : A → C), (P A) → (Π map)%object}
             {HE : Has_Equalizers C}
     .
 
@@ -473,7 +473,7 @@ Section GenProd_Eq_Complete.
   End Restricted_Limits.
 
   Section Complete.
-    Context {CHAP : ∀ (A : Type) (map : A → C), GenProd map} {HE : Has_Equalizers C}.
+    Context {CHAP : ∀ (A : Type) (map : A → C), (Π map)%object} {HE : Has_Equalizers C}.
     
     Definition GenProd_Eq_Complete : Complete C :=
       fun J =>
@@ -492,8 +492,8 @@ Section GenSum_CoEq_Complete.
 
   Section GenSum_CoEq_CoLimits.
     Context {J : Category}
-            {OSum : ∀ (map : J → C), GenSum map}
-            {HSum : ∀ (map : (Arrow J) → C), GenSum map}
+            {OSum : ∀ (map : J → C), (Σ map)%object}
+            {HSum : ∀ (map : (Arrow J) → C), (Σ map)%object}
             {Eqs : Has_CoEqualizers C}
     .
 
@@ -515,7 +515,7 @@ Section GenSum_CoEq_Complete.
 
   Section Restricted_CoLimits.
     Context (P : Card_Restriction)
-            {CHRP : ∀ (A : Type) (map : A → C), (P A) → GenSum map}
+            {CHRP : ∀ (A : Type) (map : A → C), (P A) → (Σ map)%object}
             {HE : Has_CoEqualizers C}
     .
     
@@ -532,7 +532,7 @@ Section GenSum_CoEq_Complete.
   End Restricted_CoLimits.
 
   Section CoComplete.
-    Context {CHAP : ∀ (A : Type) (map : A → C), GenSum map}
+    Context {CHAP : ∀ (A : Type) (map : A → C), (Σ map)%object}
             {HE : Has_CoEqualizers C}
     .
     

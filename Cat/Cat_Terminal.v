@@ -18,7 +18,7 @@ Program Definition Functor_To_1_Cat (C' : Category) : (C' –≻ 1)%functor :=
 |}.
 
 (** Terminal category. *)
-Program Instance Cat_Term : Terminal Cat :=
+Program Instance Cat_Term : (𝟙_ Cat)%object :=
 {
   terminal := 1%category;
 

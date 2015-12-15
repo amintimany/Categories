@@ -25,14 +25,24 @@ Section GenProd_Sum.
 
 End GenProd_Sum.
 
+Arguments GenProd {_}%type {_}%category _, {_} _ _.
+Arguments GenSum {_}%type {_}%category _, {_} _ _.
 
+Notation "'Π' m" := (GenProd m) : object_scope.
+
+Notation "'Σ' m" := (GenSum m) : object_scope.
+
+Notation "'Π_' C ↓ m" := (GenProd C m) : object_scope.
+
+Notation "'Σ_' C ↓ m" := (GenSum C m) : object_scope.
 
 (** The fact That if a category has generalized products of some type, its dual also has
 generalized sums of that type. *)
 
 Section GenProd_to_GenSum.
-  Context {A : Type} {C : Category} {map : A → C} (L : GenProd map).  
-  Definition GenProd_to_GenSum : @GenSum A (C^op) map :=
+  Context {A : Type} {C : Category} {map : A → C} (L : (Π map)%object).
+  
+  Definition GenProd_to_GenSum : (Σ_ (C^op) ↓ map)%object :=
     Local_Right_KanExt_Iso ((@Discr_Func_Iso (C^op) A map)⁻¹) L.
 
 End GenProd_to_GenSum.
@@ -40,9 +50,9 @@ End GenProd_to_GenSum.
 (** The fact That if a category has generalized sums of some type, its dual has
 generalized products of that type. *)
 Section GenSum_to_GenProd.
-  Context {A : Type} {C : Category} {map : A → C} (L : GenSum map).
+  Context {A : Type} {C : Category} {map : A → C} (L : (Σ map)%object).
   
-  Definition GenSum_to_GenProd : @GenProd A (C^op) map :=
+  Definition GenSum_to_GenProd : (Π_ (C^op) ↓ map)%object :=
     Local_Right_KanExt_Iso (Discr_Func_Iso map) L.
 
 End GenSum_to_GenProd.
@@ -54,7 +64,7 @@ some GrnSum from A precomposed with the provided isomorphism.
 *)
 Section GenSum_IsoType.
   Context {A B : Type} (Iso : (A ≃≃ B ::> Type_Cat)%isomorphism) {C : Category}
-          (SM : forall f : A → C, GenSum f).
+          (SM : forall f : A → C, (Σ f)%object).
 
   Program Definition GenSum_IsoType_map_Iso (map : B → C):
     (
@@ -109,7 +119,7 @@ Section GenSum_IsoType.
       ).
   Qed.
   
-  Definition  GenSum_IsoType (map : B → C) : GenSum map :=
+  Definition  GenSum_IsoType (map : B → C) : (Σ map)%object :=
     Local_Right_KanExt_Iso
       (GenSum_IsoType_map_Iso map)
       (

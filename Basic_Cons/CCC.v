@@ -1,3 +1,4 @@
+Require Import Essentials.Notations.
 Require Import Category.Main.
 Require Export Basic_Cons.Terminal.
 Require Export Basic_Cons.Product.
@@ -7,7 +8,7 @@ Require Export Basic_Cons.Exponential_Functor.
 (** Cartesian Closed Category : one that has terminal element, binary products (all finite products) and exponential *)
 Class CCC (C : Category) : Type :=
 {
-  CCC_term : Terminal C;
+  CCC_term : (𝟙_ C)%object;
   CCC_HP : Has_Products C;
   CCC_HEXP : Has_Exponentials C
 }.
