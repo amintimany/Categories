@@ -123,7 +123,7 @@ Ltac revert_clearbody_all :=
  repeat lazymatch goal with H:_ |- _ => try clearbody H; revert H end.
 
 Ltac hyp_stack :=
- constr:($(revert_clearbody_all;constructor)$ : True).
+ constr:(ltac:(revert_clearbody_all;constructor) : True).
 
 Ltac next_hyp hs step last :=
  lazymatch hs with (?hs' ?H) => step H hs' | _ => last end.
