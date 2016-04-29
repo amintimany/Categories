@@ -5,7 +5,8 @@ Require Import Category.Main.
 Require Import Functor.Functor Functor.Const_Func.
 Require Import NatTrans.NatTrans NatTrans.Func_Cat.
 
-(** The functor that maps each object c in C to the constant functor that maps each object of D to c in Func_Cat D C. *)
+(** The functor that maps each object c in C to the 
+    constant functor that maps each object of D to c in Func_Cat D C. *)
 Section Const_Func_Functor.
   Context (C D : Category).
 

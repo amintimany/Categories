@@ -9,11 +9,12 @@ Require Import Cat.Cat Cat.Cat_Iso.
 Require Import NatTrans.NatTrans NatTrans.NatIso.
 Require Import Archetypal.Discr.Discr.
 
-(** This module contains facts about discrete categories and discrete functors involving
-natural transformations. *)
+(** This module contains facts about discrete categories and discrete
+    functors involving natural transformations. *)
 
-(** The fact that dicrete functor from (Discr_Cat A) to Cᵒᵖ is naturally isomorphic to
-the opposite of discrete-opposite functor from (Discr_Cat A)ᵒᵖ to C. *)
+(** The fact that dicrete functor from (Discr_Cat A) to Cᵒᵖ is naturally
+    isomorphic to the opposite of discrete-opposite functor
+    from (Discr_Cat A)ᵒᵖ to C. *)
 Section Discr_Func_Iso.
   Context {C : Category} {A : Type} (Omap : A → C).
 
@@ -48,7 +49,8 @@ Section Func_From_SingletonCat_Opposite.
   
   Program Definition Func_From_SingletonCat_Opposite :
     (
-      ((@Func_From_SingletonCat C x)^op ≃ (@Func_From_SingletonCat (C ^op) x))%functor
+      (((@Func_From_SingletonCat C x)^op)
+         ≃ (@Func_From_SingletonCat (C ^op) x))%functor
     )%natiso
     :=
       {|
@@ -71,8 +73,8 @@ Section Discr_Func_Arrow_Iso.
   (** Let A be the discrete categoty of morphisms of Cᵒᵖ and B be the category
 of morphisms of C. We show that Aᵒᵖ ≃ Bᵒᵖ. *)
   Definition Discr_Cat_ArrowOp_Discr_Cat_Arrow_Op :
-    (((Discr_Cat (Arrow (C^op)))^op)%category
-                                  ≃≃ ((Discr_Cat (Arrow C))^op)%category ::> Cat)%isomorphism
+    ((((Discr_Cat (Arrow (C^op)))^op)%category)
+       ≃≃ ((Discr_Cat (Arrow C))^op)%category ::> Cat)%isomorphism
     :=
       Opposite_Cat_Iso (Discr_Cat_Iso ((Arrow_OP_Iso C)⁻¹))
   .
@@ -81,9 +83,9 @@ of morphisms of C. We show that Aᵒᵖ ≃ Bᵒᵖ. *)
 
   (** Let A be the discrete categoty of morphisms of Cᵒᵖ and B be the category
 of morphisms of C. Let, furthermore, U : B → D be a function we show that
-((Discr_Func_op (fun x : B => U x̂)) ∘ M) ≃ (Discr_Func_op U). Where x̂ is mirrored of x
-(from an arrow of C to an arrow of C)ᵒᵖ and M is Discr_Cat_ArrowOp_Discr_Cat_Arrow_Op
-defined above.
+((Discr_Func_op (fun x : B => U x^) ∘ M) ≃ (Discr_Func_op U). Where x^ is
+mirrored version of x (from an arrow of C to an arrow of Cᵒᵖ) and M is
+Discr_Cat_ArrowOp_Discr_Cat_Arrow_Op defined above.
 *)
   Program Definition Discr_Func_Arrow_Iso :
     (
@@ -108,9 +110,11 @@ defined above.
     
 End Discr_Func_Arrow_Iso.
 
-Local Hint Extern 1 => match goal with [z : Arrow (Discr_Cat _) |- _] => destruct z as [? ? []] end.
+Local Hint Extern 1 =>
+match goal with [z : Arrow (Discr_Cat _) |- _] => destruct z as [? ? []] end.
 
-(** The fact that in discrete categories object type and arrow type are isomorphic. *)
+(** The fact that in discrete categories object type and arrow
+    type are isomorphic. *)
 Program Definition Discr_Hom_Iso (A : Type) :
   (A ≃≃ Arrow (Discr_Cat A) ::> Type_Cat)%isomorphism :=
   (Build_Isomorphism
@@ -126,9 +130,9 @@ Program Definition Discr_Hom_Iso (A : Type) :
 Section Discretize.
   Context {C D : Category} {F G : (C –≻ D)%functor} (N : (F –≻ G)%nattrans).
 
-  (** Discretizes a natural transformation. That is, it forgets about the arrow maps
-of the functors and assumes the functors are just discrete functors, retaining the
-object maps of the functors. *)
+  (** Discretizes a natural transformation. That is, it forgets about the
+      arrow maps of the functors and assumes the functors are just discrete
+      functors, retaining the object maps of the functors. *)
   Program Definition Discretize :
     ((Discr_Func (F _o)%object) –≻ (Discr_Func (G _o)%object))%nattrans
     :=

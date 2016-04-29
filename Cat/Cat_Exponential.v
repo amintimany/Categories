@@ -15,7 +15,8 @@ Require Import Cat.Cat_Product.
 Local Open Scope functor_scope. 
 
 (** Evaluation functor. *)
-Program Definition Exp_Cat_Eval (C C' : Category) : ((Func_Cat C C') × C) –≻ C' :=
+Program Definition Exp_Cat_Eval (C C' : Category) :
+  ((Func_Cat C C') × C) –≻ C' :=
 {|
   FO := fun x => ((fst x) _o (snd x))%object;
   FA := fun A B f => (((fst B) _a (snd f)) ∘ (@Trans _ _ _ _ (fst f) _))%morphism
@@ -70,7 +71,8 @@ Lemma Exp_cat_morph_ex_eval_id
     (u =
      Exp_Cat_morph_ex
        (
-         (Exp_Cat_Eval C C') ∘ ((×ᶠⁿᶜ _ Cat_Has_Products) @_a (_, _) (_, _) (u, id Cat C))
+         (Exp_Cat_Eval C C')
+           ∘ ((×ᶠⁿᶜ _ Cat_Has_Products) @_a (_, _) (_, _) (u, id Cat C))
        )
     )%morphism.
 Proof.

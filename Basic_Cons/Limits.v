@@ -14,8 +14,8 @@ Require Import
 .
         
 
-(** In this module we show that terminal objects, products, equalizers and pullbacks
-are limits. The corresponding duals are dually colimits. *)
+(** In this module we show that terminal objects, products, equalizers and
+    pullbacks are limits. The corresponding duals are dually colimits. *)
 
 Section Limits.
   Context {C : Category}.

@@ -11,15 +11,19 @@ Require Import PreSheaf.PreSheaf.
 Section Sum.
   Context (C : Category) (F G : PShCat C).
 
-  Local Hint Extern 1 => match goal with [H : (_ + _)%type |- _] => destruct H end.
-  Local Hint Extern 1 => match goal with [|- context [(?F _a id)%morphism]] => rewrite (F_id F) end.
+  Local Hint Extern 1 => match goal with
+                          [H : (_ + _)%type |- _] => destruct H
+                        end.
+  Local Hint Extern 1 => match goal with
+                          [|- context [(?F _a id)%morphism]] => rewrite (F_id F)
+                        end.
   Local Hint Extern 1 =>
   match goal with
     [|- context [(?F _a (?f ∘ ?g))%morphism]] =>
     cbn_rewrite (F_compose F f g)
   end.
   
-  (** The pointwise sum of presheafs F and G. *)
+  (** The pointwise sum of presheaves F and G. *)
   Program Definition PSh_Sum_Func : PShCat C :=
     {|
       FO := fun c => ((F _o c) + (G _o c))%type%object;
@@ -67,7 +71,7 @@ from summands. *)
   
   Local Notation "F + G" := (Sum (PShCat C) F G) : object_scope.
   
-  (** The pointwise sum presheaf is the sum of presheafs. *)
+  (** The pointwise sum presheaf is the sum of presheaves. *)
   Program Definition PSh_Sum : (F + G)%object :=
     {|
       product  := PSh_Sum_Func;

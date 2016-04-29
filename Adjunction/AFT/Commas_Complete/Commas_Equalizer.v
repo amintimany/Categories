@@ -51,12 +51,15 @@ Section Commas_Equalizer.
   Definition Eq_CMH_right_f_CMH_right_g :
     Equalizer (CMH_right f) (CMH_right g)
     :=
-      Equalizer_as_Limit _ _ (LimitOf (Equalizer_Producing_Func (CMH_right f) (CMH_right g)))
+      Equalizer_as_Limit
+        _ _ (LimitOf (Equalizer_Producing_Func (CMH_right f) (CMH_right g)))
   .
 
-  Program Definition G_Eq_producing_Func_CMH_right_Eq_producing_Func_G_CMH_right_Iso :
+  Program Definition
+          G_Eq_producing_Func_CMH_right_Eq_producing_Func_G_CMH_right_Iso :
     (
-      ((Equalizer_Producing_Func (G _a (CMH_right f)) (G _a (CMH_right g)))%morphism)
+      ((Equalizer_Producing_Func
+          (G _a (CMH_right f)) (G _a (CMH_right g)))%morphism)
         ≃
         (G ∘ Equalizer_Producing_Func (CMH_right f) (CMH_right g))%functor
     )%natiso
@@ -84,7 +87,8 @@ Section Commas_Equalizer.
   Defined.
   
   Definition Eq_producing_Func_G_CMH_right_Limit :
-    Limit (Equalizer_Producing_Func (G _a (CMH_right f)) (G _a (CMH_right g)))%morphism
+    Limit (Equalizer_Producing_Func
+             (G _a (CMH_right f)) (G _a (CMH_right g)))%morphism
     :=
       Local_Right_KanExt_Iso
         G_Eq_producing_Func_CMH_right_Eq_producing_Func_G_CMH_right_Iso
@@ -97,7 +101,8 @@ Section Commas_Equalizer.
       Equalizer_as_Limit _ _ Eq_producing_Func_G_CMH_right_Limit.
 
   Theorem CMO_hom_a_equalizes :
-    ((G _a (CMH_right f)) ∘ (CMO_hom a))%morphism = ((G _a (CMH_right g)) ∘ (CMO_hom a))%morphism
+    ((G _a (CMH_right f)) ∘ (CMO_hom a))%morphism
+    = ((G _a (CMH_right g)) ∘ (CMO_hom a))%morphism
   .
   Proof.
     rewrite (CMH_com f).
@@ -143,7 +148,8 @@ Section Commas_Equalizer.
   Proof.
     etransitivity;
     [|
-     etransitivity;[apply (equalizer_morph_ex_com Eq_G_CMH_right CMO_hom_a_equalizes)|]
+     etransitivity;
+       [apply (equalizer_morph_ex_com Eq_G_CMH_right CMO_hom_a_equalizes)|]
     ].
     {
       cbn -[equalizer_morph_ex].
@@ -176,7 +182,8 @@ Section Commas_Equalizer.
          ((G _a (CMH_right g)) ∘ (G _a (CMH_right eqm)))%morphism
       )
       by
-        (repeat rewrite <- F_compose; cbn_rewrite (f_equal CMH_right eqmc); trivial)
+        (repeat rewrite <- F_compose;
+          cbn_rewrite (f_equal CMH_right eqmc); trivial)
     .
     match goal with
       [|- (?A ∘ _)%morphism = _] =>
@@ -231,7 +238,8 @@ Section Commas_Equalizer.
               (
                 f_equal
                   (fun w => (G _a w)%morphism)
-                  (equalizer_morph_ex_com Eq_CMH_right_f_CMH_right_g (f_equal CMH_right eqmc)
+                  (equalizer_morph_ex_com
+                     Eq_CMH_right_f_CMH_right_g (f_equal CMH_right eqmc)
                   )
               )
           |

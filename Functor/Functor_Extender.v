@@ -8,9 +8,11 @@ Require Import NatTrans.Main.
 (** Local notations for readability *)
 Local Notation NID := NatTrans_id (only parsing).
 
-Local Hint Extern 1 => progress (repeat (apply NatTrans_eq_simplify; FunExt); cbn in *).
+Local Hint Extern 1 => progress
+                        (repeat (apply NatTrans_eq_simplify; FunExt); cbn in *).
 
-(** for a functor p : C -> C' and a category D, the left functor extender is a functor that maps (as an object) functor F : C' -> D to F ∘ p : C -> D.  *)
+(** for a functor p : C -> C' and a category D, the left functor extender is a
+     functor that maps (as an object) functor F : C' -> D to F ∘ p : C -> D.  *)
 Section Left_Functor_Extender.
   Context {C C' : Category} (p : (C –≻ C')%functor) (D : Category).
 
@@ -23,7 +25,8 @@ Section Left_Functor_Extender.
 
 End Left_Functor_Extender.
 
-(** for a functor p : C -> C' and a category D, the left functor extender is a functor that maps (as an object) functor F : D -> C to p ∘ F : D -> C'.  *)
+(** for a functor p : C -> C' and a category D, the left functor extender is a
+    functor that maps (as an object) functor F : D -> C to p ∘ F : D -> C'.  *)
 Section Right_Functor_Extender.
   Context {C C' : Category} (p : (C –≻ C')%functor) (D : Category).
 
@@ -38,7 +41,8 @@ End Right_Functor_Extender.
 
 (** if two functors are naturally isomorphic then so are left exending with them. *)
 Section Left_Functor_Extender_Iso.
-  Context {C C' : Category} {p p' : (C –≻ C')%functor } (N : (p ≃ p')%natiso) (D : Category).
+  Context {C C' : Category} {p p' : (C –≻ C')%functor}
+          (N : (p ≃ p')%natiso) (D : Category).
 
   Local Hint Extern 1 => (rewrite Trans_com); trivial; fail.
   Local Hint Extern 1 => rewrite <- F_compose.
@@ -77,7 +81,8 @@ End Left_Functor_Extender_Iso.
 
 (** if two functors are naturally isomorphic then so are right exending with them. *)
 Section Right_Functor_Extender_Iso.
-  Context {C C' : Category} {p p' : (C –≻ C')%functor} (N : (p ≃ p')%natiso) (D : Category).
+  Context {C C' : Category} {p p' : (C –≻ C')%functor}
+          (N : (p ≃ p')%natiso) (D : Category).
   
   Local Hint Extern 1 => (rewrite Trans_com); trivial; fail.
   Local Hint Extern 1 => rewrite <- F_compose.
@@ -117,10 +122,13 @@ End Right_Functor_Extender_Iso.
 Section Right_Left_Functor_Extension_Iso.
   Context {B C D E : Category} (F : (B –≻ C)%functor) (G : (D –≻ E)%functor).
   
-  (** It doesn't matter if we first extend from left or right. The resulting functors are isomorphic. *)
+  (** It doesn't matter if we first extend from left or right.
+      The resulting functors are isomorphic. *)
   Program Definition Right_Left_Functor_Extension_Iso :
-    ((((Right_Functor_Extender G B) ∘ (Left_Functor_Extender F D))%functor)
-       ≃ ((Left_Functor_Extender F E) ∘ (Right_Functor_Extender G C))%functor)%natiso :=
+    (
+      (((Right_Functor_Extender G B) ∘ (Left_Functor_Extender F D))%functor)
+        ≃ ((Left_Functor_Extender F E) ∘ (Right_Functor_Extender G C))%functor
+    )%natiso :=
     {|
       iso_morphism := {|Trans := fun h => NatTrans_Functor_assoc_sym F h G |};
       inverse_morphism := {|Trans := fun h => NatTrans_Functor_assoc F h G |}

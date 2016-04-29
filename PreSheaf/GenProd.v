@@ -14,7 +14,9 @@ Section PSh_GenProd.
 
   Local Notation Fm := (Discr_Func (PShCat C) map) (only parsing).
 
-  Local Hint Extern 1 => match goal with [|- context [(?F _a id)%morphism]] => rewrite (F_id F) end.
+  Local Hint Extern 1 => match goal with
+                          [|- context [(?F _a id)%morphism]] => rewrite (F_id F)
+                        end.
   Local Hint Extern 1 =>
   match goal with
     [|- context [(?F _a (?f ∘ ?g))%morphism]] =>
@@ -32,7 +34,8 @@ Section PSh_GenProd.
     |}.
 
   (** The projections of generalized product presheaf. *)
-  Program Definition PSh_GenProd_proj (x : A) : (PSh_GenProd_func –≻ map x)%nattrans :=
+  Program Definition PSh_GenProd_proj (x : A) :
+    (PSh_GenProd_func –≻ map x)%nattrans :=
     {|
       Trans := fun c y => y x
     |}.
@@ -60,9 +63,11 @@ Section PSh_GenProd.
 
   Local Hint Extern 1 => rewrite From_Term_Cat.
   
-  (** The morphism that maps to the generalized product given a map to its components. *)
+  (** The morphism that maps to the generalized product given a map to its
+      components. *)
   Program Definition PSh_GenProd_morph_ex
-          (Cn : LoKan_Cone (Functor_To_1_Cat (Discr_Cat A)) (Discr_Func (PShCat C) map))
+          (Cn : LoKan_Cone (Functor_To_1_Cat
+                              (Discr_Cat A)) (Discr_Func (PShCat C) map))
     : ((Cn _o)%object tt –≻ PSh_GenProd_func)%nattrans :=
     {|
       Trans := fun c y x => Trans (Trans (cone_edge Cn) x) c y
@@ -82,7 +87,9 @@ Section PSh_GenProd.
               {|
                 Trans :=
                   fun x =>
-                    match x as u return ((Cn _o)%object u –≻ PSh_GenProd_func)%nattrans with
+                    match x as u return
+                          ((Cn _o)%object u –≻ PSh_GenProd_func)%nattrans
+                    with
                       tt => PSh_GenProd_morph_ex Cn
                     end
               |}
@@ -109,7 +116,8 @@ Section PSh_GenProd.
           (
             f_equal
               (
-                fun w : (Cn ∘ Functor_To_1_Cat (Discr_Cat A) –≻ Discr_Func (PShCat C) map)%nattrans
+                fun w : (Cn ∘ Functor_To_1_Cat
+                          (Discr_Cat A) –≻ Discr_Func (PShCat C) map)%nattrans
                 => Trans (Trans w u) y
               )
               (cone_morph_com h)
@@ -123,7 +131,8 @@ Section PSh_GenProd.
           (
             f_equal
               (
-                fun w : (Cn ∘ Functor_To_1_Cat (Discr_Cat A) –≻ Discr_Func (PShCat C) map)%nattrans
+                fun w : (Cn ∘ Functor_To_1_Cat
+                          (Discr_Cat A) –≻ Discr_Func (PShCat C) map)%nattrans
                 => Trans (Trans w u) y
               )
               (cone_morph_com h')

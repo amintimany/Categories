@@ -7,7 +7,8 @@ Require Import Adjunction.Adjunction Adjunction.Duality.
 Require Import NatTrans.NatTrans.
 
 Local Open Scope functor_scope.
-(** Adjunctions form a category Adj where objects are categories and an arrow from C to D is a pari of adjoint funtors F : C → D : G. *)
+(** Adjunctions form a category Adj where objects are categories and an arrow 
+    from C to D is a pair of adjoint funtors F : C → D : G. *)
 Section Adjunct_Id.
   Context (C : Category).
 
@@ -25,7 +26,9 @@ Section Adjunct_Compose.
   
   Program Definition Adjunct_Compose : ((F' ∘ F) ⊣ (G ∘ G')) :=
     {|
-      adj_unit := {|Trans := fun c => (G _a ((Trans (adj_unit adj') (F _o c))) ∘ (Trans (adj_unit adj) c))%morphism |};
+      adj_unit :=
+        {|Trans := fun c => (G _a ((Trans (adj_unit adj') (F _o c)))
+                            ∘ (Trans (adj_unit adj) c))%morphism |};
       adj_morph_ex := fun _ _ f => adj_morph_ex adj' (adj_morph_ex adj f)
     |}.
 
@@ -34,7 +37,8 @@ Section Adjunct_Compose.
     rewrite assoc.
     set (W := (Trans_com (adj_unit adj) h)); cbn in W; rewrite W; clear W.
     rewrite assoc_sym.
-    set (W := f_equal (G _a)%morphism (Trans_com (adj_unit adj') ((F _a) h)%morphism));
+    set (W := f_equal (G _a)%morphism
+                      (Trans_com (adj_unit adj') ((F _a) h)%morphism));
       cbn in W; rewrite F_compose in W; rewrite W.
     repeat rewrite F_compose.
     auto.
@@ -49,7 +53,8 @@ Section Adjunct_Compose.
   Next Obligation.
   Proof.
     rewrite assoc_sym.
-    set (W := f_equal (G _a)%morphism (adj_morph_com adj' (adj_morph_ex adj f)));
+    set (W := f_equal (G _a)%morphism
+                      (adj_morph_com adj' (adj_morph_ex adj f)));
       rewrite F_compose in W; cbn in W; rewrite <- W; clear W.
     apply (adj_morph_com adj f).
   Qed.    
@@ -188,7 +193,8 @@ Definition Adjunct_Between (C D : Category) : Type :=
   {F : (C –≻ D) * (D –≻ C) & (fst F) ⊣ (snd F)}
 .
 
-Definition Adjunct_Between_Id (C : Category) : Adjunct_Between C C := existT _ (Functor_id C, Functor_id C) (Adjunct_Id C).
+Definition Adjunct_Between_Id (C : Category) : Adjunct_Between C C :=
+  existT _ (Functor_id C, Functor_id C) (Adjunct_Id C).
   
 Section Adjunct_Between_Compose.
   Context {C D E : Category}
@@ -203,15 +209,18 @@ Section Adjunct_Between_Compose.
 
 End Adjunct_Between_Compose.
 
-Theorem sigT_eq_simplify {A : Type} {P : A → Type} (s s' : sigT P) (H : projT1 s = projT1 s') :
-  match H in _ = Y return P Y with
-    eq_refl => projT2 s
-  end = projT2 s' → s = s'.
+Theorem sigT_eq_simplify {A : Type} {P : A → Type} (s s' : sigT P)
+        (H : projT1 s = projT1 s')
+  : match H in _ = Y return P Y with
+      eq_refl => projT2 s
+    end = projT2 s' → s = s'.
 Proof.
   intros H'.
   destruct s as [s Ps]; destruct s' as [s' Ps'].
-  change (existT P s Ps) with (existT _ (projT1 (existT P s Ps)) (projT2 (existT P s Ps))).
-  change (existT P s' Ps') with (existT _ (projT1 (existT P s' Ps')) (projT2 (existT P s' Ps'))).
+  change (existT P s Ps)
+  with (existT _ (projT1 (existT P s Ps)) (projT2 (existT P s Ps))).
+  change (existT P s' Ps')
+  with (existT _ (projT1 (existT P s' Ps')) (projT2 (existT P s' Ps'))).
   rewrite <- H'.
   clear H'.
   destruct H.
@@ -228,9 +237,11 @@ Section Adjunct_Between_Compose_assoc.
     Adjunct_Between_Compose adj (Adjunct_Between_Compose adj' adj'') =
     Adjunct_Between_Compose (Adjunct_Between_Compose adj adj') adj''.
   Proof.
-    destruct adj as [[F G] adjb]; destruct adj' as [[F' G'] adjb']; destruct adj'' as [[F'' G''] adjb''].
+    destruct adj as [[F G] adjb]; destruct adj' as [[F' G'] adjb'];
+    destruct adj'' as [[F'' G''] adjb''].
     set (W := Functor_assoc (fst (F, G)) (fst (F', G')) (fst (F'', G''))).
-    set (W' := eq_sym (Functor_assoc (snd (F'', G'')) (snd (F', G')) (snd (F, G)))).
+    set (W' := eq_sym (Functor_assoc
+                         (snd (F'', G'')) (snd (F', G')) (snd (F, G)))).
     match type of W with
       ?A = ?B =>
       match type of W' with
@@ -262,7 +273,8 @@ Section Adjunct_Between_Id_unit_left.
   Context {B C: Category}
           (adj : Adjunct_Between B C).
   
-  Theorem Adjunct_Between_Id_unit_left : Adjunct_Between_Compose adj (Adjunct_Between_Id C) = adj.
+  Theorem Adjunct_Between_Id_unit_left :
+    Adjunct_Between_Compose adj (Adjunct_Between_Id C) = adj.
   Proof.
     destruct adj as [[F G] adjb].
     set (W := (Functor_id_unit_left _ _ (fst (F, G)))).
@@ -300,7 +312,8 @@ Section Adjunct_Between_Id_unit_right.
   Context {B C: Category}
           (adj : Adjunct_Between B C).
   
-  Theorem Adjunct_Between_Id_unit_right : Adjunct_Between_Compose (Adjunct_Between_Id B) adj = adj.
+  Theorem Adjunct_Between_Id_unit_right :
+    Adjunct_Between_Compose (Adjunct_Between_Id B) adj = adj.
   Proof.
     destruct adj as [[F G] adjb].
     set (W := (Functor_id_unit_right _ _ (fst (F, G)))).

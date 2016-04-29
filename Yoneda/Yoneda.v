@@ -14,11 +14,14 @@ Local Open Scope nattrans_scope.
 Section Y_emb.
   Context (C : Category).
 
-  (** The dual of the Yoneda embedding for category C – the curry of hom functor of C. *)
-  Definition CoYoneda : (C^op –≻ (Func_Cat C Type_Cat))%functor := Exp_Cat_morph_ex (Hom_Func C).
+  (** The dual of the Yoneda embedding for category C – the curry of hom
+      functor of C. *)
+  Definition CoYoneda : (C^op –≻ (Func_Cat C Type_Cat))%functor :=
+    Exp_Cat_morph_ex (Hom_Func C).
 
   (** The Yoneda embedding for category C – the curry of hom functor of Cᵒᵖ. *)
-  Definition Yoneda : (C –≻ (Func_Cat (C^op) Type_Cat))%functor := Exp_Cat_morph_ex (Hom_Func (C^op)).
+  Definition Yoneda : (C –≻ (Func_Cat (C^op) Type_Cat))%functor :=
+    Exp_Cat_morph_ex (Hom_Func (C^op)).
 
 End Y_emb.
 
@@ -29,10 +32,13 @@ Section Y_Left_Right.
   Definition Y_left :
     ((C^op × (Func_Cat (C^op) Type_Cat)) –≻ Type_Cat)%functor
     :=
-      ((Hom_Func _) ∘ (Prod_Functor ((Yoneda C)^op) (Functor_id (Func_Cat (C^op) Type_Cat))))%functor.
+      ((Hom_Func _)
+         ∘ (Prod_Functor
+              ((Yoneda C)^op) (Functor_id (Func_Cat (C^op) Type_Cat))))%functor.
   
   (** The right hand side of the Yoneda lemma's isomorphism *)
-  Definition Y_right : ((C^op × (Func_Cat (C^op) Type_Cat)) –≻ Type_Cat)%functor :=
+  Definition Y_right
+    : ((C^op × (Func_Cat (C^op) Type_Cat)) –≻ Type_Cat)%functor :=
     ((Exp_Cat_Eval (C^op) Type_Cat) ∘ (Twist_Func _ _))%functor.
 
 End Y_Left_Right.
@@ -75,7 +81,8 @@ Proof.
   apply Y_left_to_right_obligation_1.
 Qed.
 
-(** The natural transformation needed to make the right to left natural transformation of Yoneda lemma. *)
+(** The natural transformation needed to make the right to left natural
+    transformation of Yoneda lemma. *)
 Program Definition Y_right_to_left_NT (C : Category) (c : Obj)
         (F : (C^op –≻ Type_Cat)%functor) (h : (F _o c)%object)
   :
@@ -205,7 +212,8 @@ Definition Yoneda_Emb (C : Category) : Embedding C (Func_Cat (C^op) Type_Cat) :=
 |}.
 
 (** Yoneda is conservative of isomorphisms. *)
-Theorem Yoneda_Iso (C : Category) : forall (c c' : Obj), ((Yoneda C) _o c ≃ (Yoneda C) _o c')%isomorphism → (c ≃ c')%isomorphism.
+Theorem Yoneda_Iso (C : Category) : forall (c c' : Obj),
+    ((Yoneda C) _o c ≃ (Yoneda C) _o c')%isomorphism → (c ≃ c')%isomorphism.
 Proof.
   intros.
   apply (Emb_Conservative _ _ (Yoneda_Emb C) _); trivial.
@@ -214,7 +222,8 @@ Qed.
 Ltac Yoneda := apply Yoneda_Iso.
 
 (** The dual of Yoneda is conservative of isomorphisms. *)
-Theorem CoYoneda_Iso (C : Category) : forall (c c' : Obj), ((CoYoneda C) _o c ≃ (CoYoneda C) _o c')%isomorphism → (c ≃ c')%isomorphism.
+Theorem CoYoneda_Iso (C : Category) : forall (c c' : Obj),
+    ((CoYoneda C) _o c ≃ (CoYoneda C) _o c')%isomorphism → (c ≃ c')%isomorphism.
 Proof.
   intros; Yoneda; trivial.
 Qed.

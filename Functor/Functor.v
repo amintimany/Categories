@@ -4,9 +4,13 @@ Require Import Essentials.Facts_Tactics.
 Require Import Category.Main.
 
 (**
-Fro categories C and C', a functor F : C -> C' consists of an arrow map from objects of C to objects of C' and an arrow map from arrows of C to arrows of C' such that an arrow h : a -> b is mapped to (F h) : F a -> F b.
+Fro categories C and C', a functor F : C -> C' consists of an arrow map from
+objects of C to objects of C' and an arrow map from arrows of C to arrows of C'
+such that an arrow h : a -> b is mapped to (F h) : F a -> F b.
 
-Furthermore, we require functors to map identitiies to identities. Additionally, the immage of the coposition of two arrows must be the same as composition of their images.
+Furthermore, we require functors to map identitiies to identities. Additionally,
+the immage of the coposition of two arrows must be the same as composition of
+their images.
 *)
 Record Functor (C C' : Category) : Type := 
 {
@@ -23,7 +27,8 @@ Record Functor (C C' : Category) : Type :=
   F_compose : ∀ {a b c} (f : (a –≻ b)%morphism) (g : (b –≻ c)%morphism),
       (FA (g ∘ f) = (FA g) ∘ (FA f))%morphism
 
-  (* F_id and F_compose together state the fact that functors are morphisms of categories (preserving the structure of categories!)*)
+  (* F_id and F_compose together state the fact that functors are morphisms of
+ categories (preserving the structure of categories!)*)
 }.
 
 Arguments FO {_ _} _ _.
@@ -78,7 +83,10 @@ Section Functor_eq_simplification.
 
   (** Two functors are equal if their object maps and arrow maps are. *)
   Lemma Functor_eq_simplify (Oeq : F _o = G _o) :
-    ((fun x y => match Oeq in _ = V return ((x –≻ y) → ((V x) –≻ (V y)))%morphism with eq_refl => F  @_a x y end) = G @_a) -> F = G.
+    ((fun x y =>
+        match Oeq in _ = V return ((x –≻ y) → ((V x) –≻ (V y)))%morphism with
+          eq_refl => F  @_a x y
+        end) = G @_a) -> F = G.
   Proof.
     destruct F; destruct G.
     basic_simpl.
@@ -114,7 +122,8 @@ Section Functor_eq_simplification.
     auto.
   Qed.
   
-  (** Fucntor extensionality: two functors are equal of their object maps are equal and their arrow maps are extensionally equal. *)
+  (** Fucntor extensionality: two functors are equal of their object maps are
+      equal and their arrow maps are extensionally equal. *)
   Lemma Functor_extensionality (Oeq : F _o = G _o) :
     (
       ∀ (a b : Obj) (h : (a –≻ b)%morphism),

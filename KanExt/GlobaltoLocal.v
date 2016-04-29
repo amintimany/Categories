@@ -25,40 +25,48 @@ Section Global_to_Local_Right.
   Definition Cone_for_LoKan : LoKan_Cone p F :=
     {|
       cone_apex := (rke _o F)%object;
-      cone_edge := @adj_morph_ex _ _ _ _ (right_kan_ext_adj rke) (rke _o F) F (NatTrans_id _)
+      cone_edge :=
+        @adj_morph_ex _ _ _ _
+                      (right_kan_ext_adj rke) (rke _o F) F (NatTrans_id _)
     |}.
 
   Section Cone_Morph_to_Cone_for_LoKan.
     Context (Cn : LoKan_Cone p F).
 
-    (** We show that any natural transformation from any cone (the apex functor of a cone)
-to (apex functor of) the cone we constructed above remains the same under the following transformation:
+    (** We show that any natural transformation from any cone (the apex functor
+        of a cone) to (apex functor of) the cone we constructed above remains
+        the same under the following transformation:
 
-  morph : Cn ——––>  (rke _o F)
+        morph : Cn ——––>  (rke _o F)
 
-  morph ∘_h (NatTrans_id p) : (Cn ∘ p) ————> ((rke _o F) ∘ p)
+        morph ∘_h (NatTrans_id p) : (Cn ∘ p) ————> ((rke _o F) ∘ p)
 
-  η_{NatTrans_id (rke _o F)} ∘ (morph ∘_h (NatTrans_id p)) : (Cn ∘ p) ————> F
+        η_{NatTrans_id (rke _o F)} ∘ (morph ∘_h (NatTrans_id p)) 
+           : (Cn ∘ p) ————> F
 
-  rke @_a (Cn ∘ p) F (η_{NatTrans_id (rke _o F)} ∘ (morph ∘_h (NatTrans_id p))) : 
-     (rke _o (Cn ∘ p)) ————> (rke _o F)
+        rke @_a (Cn ∘ p) F (η_{NatTrans_id (rke _o F)} 
+                             ∘ (morph ∘_h (NatTrans_id p))) : 
+          (rke _o (Cn ∘ p)) ————> (rke _o F)
 
-  (rke @_a (Cn ∘ p) F (η_{NatTrans_id (rke _o F)} ∘ (morph ∘_h (NatTrans_id p))))
-  ∘ (Trans (adj_unit (right_kan_ext_adj rke)) Cn) : 
-     Cn ————> (rke _o F)
+        (rke @_a (Cn ∘ p) F (η_{NatTrans_id (rke _o F)}
+                               ∘ (morph ∘_h (NatTrans_id p))))
+          ∘ (Trans (adj_unit (right_kan_ext_adj rke)) Cn) : 
+          Cn ————> (rke _o F)
 
 
-  This result is used to show existence and unique ness of cones from Cn to the cone constructed above.
-
+        This result is used to show existence and unique ness of cones from Cn
+        to the cone constructed above.
      *)
     
-    Lemma Cone_Morph_to_Cone_for_LoKan_adj_unit_rke_id (morph : (Cn –≻ ((rke _o)%object F))%nattrans) :
+    Lemma Cone_Morph_to_Cone_for_LoKan_adj_unit_rke_id
+          (morph : (Cn –≻ ((rke _o)%object F))%nattrans) :
       morph =
       (
         (
           (rke @_a)%morphism (Cn ∘ p)%functor F
                  (
-                   (adj_morph_ex (right_kan_ext_adj rke) (NatTrans_id ((rke _o) F)%object))
+                   (adj_morph_ex
+                      (right_kan_ext_adj rke) (NatTrans_id ((rke _o) F)%object))
                      ∘ (morph ∘_h (NatTrans_id p))
                  )
         ) ∘ (Trans (adj_unit (right_kan_ext_adj rke)) Cn)
@@ -66,7 +74,9 @@ to (apex functor of) the cone we constructed above remains the same under the fo
     Proof.
       rewrite (@F_compose); cbn.
       rewrite NatTrans_compose_assoc.
-      cbn_rewrite <- (@Trans_com _ _ _ _ (@adj_unit _ _ _ _ (right_kan_ext_adj rke)) _ _ morph).
+      cbn_rewrite <- (@Trans_com
+                       _ _ _ _
+                       (@adj_unit _ _ _ _ (right_kan_ext_adj rke)) _ _ morph).
       rewrite <- NatTrans_compose_assoc.
       cbn_rewrite <- (
                     @adj_morph_com _ _ _ _
@@ -79,10 +89,14 @@ to (apex functor of) the cone we constructed above remains the same under the fo
       trivial.
     Qed.
 
-    (** Given a cone, we construct a cone morph to the cone morph that we constructed above. *)
-    Program Definition Cone_Morph_to_Cone_for_LoKan : LoKan_Cone_Morph Cn Cone_for_LoKan :=
+    (** Given a cone, we construct a cone morph to the cone morph that we
+        constructed above. *)
+    Program Definition Cone_Morph_to_Cone_for_LoKan :
+      LoKan_Cone_Morph Cn Cone_for_LoKan :=
       {|
-        cone_morph := ((rke _a (cone_edge Cn))%morphism ∘ (Trans (adj_unit (right_kan_ext_adj rke)) Cn))%nattrans
+        cone_morph :=
+          (((rke _a (cone_edge Cn))%morphism)
+             ∘ (Trans (adj_unit (right_kan_ext_adj rke)) Cn))%nattrans
       |}.
 
     Next Obligation.
@@ -120,8 +134,8 @@ to (apex functor of) the cone we constructed above remains the same under the fo
 
 End Global_to_Local_Right.
 
-(** Teh conversion from global left kan extensions to local left kan extensions is jsut
-the dual what we just proved. *)
+(** Teh conversion from global left kan extensions to local left kan extensions
+    is jsut the dual what we just proved. *)
 Section Global_to_Local_Left.
   Context {C C' : Category}
           (p : C –≻ C')

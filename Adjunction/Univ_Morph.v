@@ -255,7 +255,8 @@ Section Right_Adjoint_Universal_Morphism.
     (x : C)
   .
 
-  Program Definition Right_Adjoint_Universal_Morphism_terminal : (Comma (Func_From_SingletonCat x) G)
+  Program Definition Right_Adjoint_Universal_Morphism_terminal :
+    (Comma (Func_From_SingletonCat x) G)
     :=
       {|
         CMO_src := tt;
@@ -292,7 +293,8 @@ Section Right_Adjoint_Universal_Morphism.
   Qed.
   
   
-  Program Definition Right_Adjoint_Universal_Morphism : (𝟘_ (Comma (Func_From_SingletonCat x) G))%object
+  Program Definition Right_Adjoint_Universal_Morphism :
+    (𝟘_ (Comma (Func_From_SingletonCat x) G))%object
     :=
       {|
         terminal := Right_Adjoint_Universal_Morphism_terminal;
@@ -340,7 +342,8 @@ Section Universal_Morphism_Left_Adjonit.
             (
               Isomorphism_Compose
                 (Comma_Opposite_Iso F (@Func_From_SingletonCat D x))
-                (Comma_Left_Func_Iso (@Func_From_SingletonCat_Opposite D x) (F ^op))
+                (Comma_Left_Func_Iso
+                   (@Func_From_SingletonCat_Opposite D x) (F ^op))
             )
         )
         (HU_term x)
@@ -381,7 +384,8 @@ Section Left_Adjoint_Universal_Morphism.
     (x : D)
   .
 
-  Definition Left_Adjoint_Universal_Morphism : (𝟙_ (Comma F (Const_Func 1 x)))%object
+  Definition Left_Adjoint_Universal_Morphism
+    : (𝟙_ (Comma F (Const_Func 1 x)))%object
     :=
       Term_IsoCat
         (
@@ -393,7 +397,8 @@ Section Left_Adjoint_Universal_Morphism.
                     (Inverse_Isomorphism (@Func_From_SingletonCat_Opposite D x))
                     (F ^op)
                 )
-                (Inverse_Isomorphism (Comma_Opposite_Iso F (@Func_From_SingletonCat D x)))
+                (Inverse_Isomorphism
+                   (Comma_Opposite_Iso F (@Func_From_SingletonCat D x)))
             )
         )
         (Right_Adjoint_Universal_Morphism (Adjunct_Duality Adj) x)

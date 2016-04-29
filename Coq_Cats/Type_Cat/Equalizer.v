@@ -52,16 +52,17 @@ Section Equalizer.
 
 End Equalizer.
 
-(** Similar to the category set, in category of types, the coequalizer of two functions
-f,g : A -> B is quotient of B with respect to the equivalence relation ~. Here, ~
-is the equivalence closure of the relation for which we have
+(** Similar to the category set, in category of types, the coequalizer of two
+    functions f,g : A -> B is quotient of B with respect to the equivalence
+relation ~. Here, ~ is the equivalence closure of the relation for which we have
 
 x ~ y if and only if ∃z. (f(z) = x) ∧ (g(z) = y)
 
 *)
 
 
-Program Instance Type_Cat_Has_Equalizers : Has_Equalizers Type_Cat := fun _ _ => Type_Cat_Eq.
+Program Instance Type_Cat_Has_Equalizers : Has_Equalizers Type_Cat :=
+  fun _ _ => Type_Cat_Eq.
 
 Require Import Coq.Relations.Relations Coq.Relations.Relation_Definitions.
 Require Import Coq.Logic.ClassicalChoice Coq.Logic.ChoiceFacts.
@@ -76,13 +77,18 @@ Section CoEqualizer.
 
   Definition CoEq_rel : relation B := clos_refl_sym_trans _ CoEq_rel_base.
 
-  Definition CoEq_rel_refl := equiv_refl _ _ (clos_rst_is_equiv _ CoEq_rel_base).
-  Definition CoEq_rel_sym := equiv_sym _ _ (clos_rst_is_equiv _ CoEq_rel_base).
-  Definition CoEq_rel_trans := equiv_trans _ _ (clos_rst_is_equiv _ CoEq_rel_base).
+  Definition CoEq_rel_refl :=
+    equiv_refl _ _ (clos_rst_is_equiv _ CoEq_rel_base).
+  Definition CoEq_rel_sym :=
+    equiv_sym _ _ (clos_rst_is_equiv _ CoEq_rel_base).
+  Definition CoEq_rel_trans :=
+    equiv_trans _ _ (clos_rst_is_equiv _ CoEq_rel_base).
 
-  Definition CoEq_Type := {P : B → Prop | exists z : B, P z ∧ (∀ (y : B), (P y ↔ CoEq_rel z y))}.
+  Definition CoEq_Type :=
+    {P : B → Prop | exists z : B, P z ∧ (∀ (y : B), (P y ↔ CoEq_rel z y))}.
 
-  Local Axiom ConstructiveIndefiniteDescription_B : ConstructiveIndefiniteDescription_on B.
+  Local Axiom ConstructiveIndefiniteDescription_B :
+    ConstructiveIndefiniteDescription_on B.
   
   Definition CoEq_Choice (ct : CoEq_Type) : {x : B | (proj1_sig ct) x}.
   Proof.
@@ -185,4 +191,5 @@ Section CoEqualizer.
 
 End CoEqualizer.
 
-Program Instance Type_Cat_Has_CoEqualizers : Has_CoEqualizers Type_Cat := fun _ _ => Type_Cat_CoEq.
+Program Instance Type_Cat_Has_CoEqualizers : Has_CoEqualizers Type_Cat :=
+  fun _ _ => Type_Cat_CoEq.

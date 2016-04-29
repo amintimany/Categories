@@ -12,7 +12,7 @@ Require Import PreSheaf.PreSheaf.
 Section Initial.
   Context (C : Category).
   
-  (** The initial element of the category of presheafs. *)
+  (** The initial element of the category of presheaves. *)
   Program Definition PSh_Init_Func : Functor (C^op) Type_Cat :=
     {|
       FO := fun _ => (Empty : Type)
@@ -21,7 +21,8 @@ Section Initial.
   Local Hint Resolve NatTrans_eq_simplify.
   Local Hint Extern 1 => progress cbn in *.
 
-  (** The functor that maps to the empty type in coq is the terminal object of presheafs. *)
+  (** The functor that maps to the empty type in coq is the terminal object of
+      presheaves. *)
   Program Instance PSh_Initial : (𝟘_ (PShCat C))%object :=
     {|
       terminal := PSh_Init_Func;

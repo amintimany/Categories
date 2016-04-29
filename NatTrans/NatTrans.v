@@ -9,9 +9,13 @@ Section NatTrans.
   Context {C C' : Category}.
 
 (**
-For categories C and C' and functors F : C -> C' and F' : C -> C', a natural transformation N : F -> F' is a family of arrows 'Trans N' in the codomain category (here C') indexed by objects of the domain category (here C), Trans N c : F _o c -> F' _o c.
+For categories C and C' and functors F : C -> C' and F' : C -> C', a natural
+transformation N : F -> F' is a family of arrows 'Trans N' in the co-domain
+category (here C') indexed by objects of the domain category (here C),
+Trans N c : F _o c -> F' _o c.
 
-In addition, for all arrows h : c → c' the following diagram must commute (Trans_com):
+In addition, for all arrows h : c → c' the following diagram must
+commute (Trans_com):
 
 #
 <pre>
@@ -33,14 +37,19 @@ Trans_com_sym is the symmetric form of Trans_com.
   Record NatTrans (F F' : (C –≻ C')%functor) :=
     {
       Trans (c : C) : ((F _o c) –≻ (F' _o c))%object%morphism;
-      Trans_com {c c' : C} (h : (c –≻ c')%morphism) : ((Trans c') ∘ F _a h = F' _a h ∘ (Trans c))%morphism;
-      Trans_com_sym {c c' : C} (h : (c –≻ c')%morphism) : (F' _a h ∘ (Trans c) = (Trans c') ∘ F _a h)%morphism
+      Trans_com {c c' : C} (h : (c –≻ c')%morphism) :
+        ((Trans c') ∘ F _a h = F' _a h ∘ (Trans c))%morphism;
+      Trans_com_sym {c c' : C} (h : (c –≻ c')%morphism) :
+        (F' _a h ∘ (Trans c) = (Trans c') ∘ F _a h)%morphism
     }.
 
   Notation "F –≻ F'" := (NatTrans F F') : nattrans_scope.
 
-  (** Two natural transformations are equal if their arrow families are. That is, commutative diagrams are assumed to be equal by proof irrelevance. *)
-  Lemma NatTrans_eq_simplify {F F' : (C –≻ C')%functor} (N N' : (F –≻ F')%nattrans) : (@Trans _ _ N) = (@Trans _ _ N') -> N = N'.
+  (** Two natural transformations are equal if their arrow families are.
+      That is, commutative diagrams are assumed to be equal by
+      proof irrelevance. *)
+  Lemma NatTrans_eq_simplify {F F' : (C –≻ C')%functor}
+        (N N' : (F –≻ F')%nattrans) : (@Trans _ _ N) = (@Trans _ _ N') -> N = N'.
   Proof.
     destruct N; destruct N'.
     basic_simpl.
@@ -63,9 +72,9 @@ Local Open Scope nattrans_scope.
 Section NatTrans_Compose.
   Context {C C' : Category}.
   
-  (** Natural transformations are composable. The arrow family of the result is just the composition of corresponding components in each natural transformation.
-
-Graphically:
+  (** Natural transformations are composable. The arrow family of the result is
+      just the composition of corresponding components in each natural
+      transformation. Graphically:
 #
 <pre>
          F                            F
@@ -85,9 +94,11 @@ Graphically:
 </pre>
 #
 
-This kind of composition is sometimes also called vertical composition of natural transformations.
+This kind of composition is sometimes also called vertical composition of
+natural transformations.
 *)
-  Program Definition NatTrans_compose {F F' F'' : (C –≻ C')%functor} (tr : F –≻ F') (tr' : F' –≻ F'') : (F –≻ F'')%nattrans :=
+  Program Definition NatTrans_compose {F F' F'' : (C –≻ C')%functor}
+          (tr : F –≻ F') (tr' : F' –≻ F'') : (F –≻ F'')%nattrans :=
     {|
       Trans := fun c : Obj => ((Trans tr' c) ∘ (Trans tr c)) % morphism
     |}.
@@ -122,18 +133,21 @@ Section NatTrans_Props.
     apply NatTrans_eq_simplify; cbn; auto.
   Qed.
 
-  (** The identity natural transformation. The arrow family are just all identity arrows: *)
+  (** The identity natural transformation. The arrow family are just
+      all identity arrows: *)
   Program Definition NatTrans_id (F : (C –≻ C')%functor) : F –≻ F :=
     {|
       Trans := fun x : Obj => id
     |}.
 
-  Theorem NatTrans_id_unit_left {F G : (C –≻ C')%functor} (N : F –≻ G) : (NatTrans_id G) ∘ N = N.
+  Theorem NatTrans_id_unit_left {F G : (C –≻ C')%functor} (N : F –≻ G)
+    : (NatTrans_id G) ∘ N = N.
   Proof.
     apply NatTrans_eq_simplify; cbn; auto.
   Qed.
 
-  Theorem NatTrans_id_unit_right {F G : (C –≻ C')%functor} (N : F –≻ G) : N ∘ (NatTrans_id F) = N.
+  Theorem NatTrans_id_unit_right {F G : (C –≻ C')%functor} (N : F –≻ G)
+    : N ∘ (NatTrans_id F) = N.
   Proof.
     apply NatTrans_eq_simplify; cbn; auto.
   Qed.

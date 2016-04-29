@@ -12,7 +12,10 @@ Section Product.
   Context (C : Category) (F G : PShCat C).
 
   
-  Local Hint Extern 1 => match goal with [F : (_ ^op –≻ Type_Cat)%functor |- _] => rewrite (F_id F) end.
+  Local Hint Extern 1 =>
+  match goal with
+    [F : (_ ^op –≻ Type_Cat)%functor |- _] => rewrite (F_id F)
+  end.
   Local Hint Extern 1 =>
   match goal with
     [F : (_ ^op –≻ Type_Cat)%functor |- context [(F _a (?f ∘ ?g))%morphism]] =>
@@ -29,17 +32,19 @@ Section Product.
   Local Hint Extern 1 =>
   repeat
     match goal with
-      [f : (?p –≻ _)%nattrans, h : (_ –≻ _)%morphism, c : _, x : (?p _o)%object _ |- _] =>
+      [f : (?p –≻ _)%nattrans,
+           h : (_ –≻ _)%morphism, c : _, x : (?p _o)%object _ |- _] =>
       cbn_rewrite (equal_f (Trans_com f h) x)
     end.
-
-  (** The pointwise product presheaf is the product of presheafs. *)
+  
+  (** The pointwise product presheaf is the product of presheaves. *)
   Program Definition PSh_Product : (F × G)%object :=
     {|
       product := pointwise_product_psh;
       Pi_1 := {| Trans := fun _ => fst |};
       Pi_2 := {| Trans := fun _ => snd |};
-      Prod_morph_ex := fun p' f g => {|Trans := fun x u => (Trans f x u, Trans g x u) |}
+      Prod_morph_ex :=
+        fun p' f g => {|Trans := fun x u => (Trans f x u, Trans g x u) |}
     |}.
 
   Local Obligation Tactic := idtac.
@@ -60,4 +65,5 @@ Section Product.
 
 End Product.
 
-Instance PSh_Has_Products (C : Category) : Has_Products (PShCat C) := PSh_Product C.
+Instance PSh_Has_Products (C : Category) : Has_Products (PShCat C) :=
+  PSh_Product C.

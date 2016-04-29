@@ -2,15 +2,18 @@ Require Import Essentials.Notations.
 Require Import Essentials.Types.
 Require Import Essentials.Facts_Tactics.
 Require Import Category.Main.
-Require Import Functor.Functor Functor.Functor_Ops Functor.Representable.Hom_Func_Prop.
+Require Import Functor.Functor Functor.Functor_Ops
+        Functor.Representable.Hom_Func_Prop.
 Require Import Functor.Functor_Extender.
 Require Import Ext_Cons.Prod_Cat.Prod_Cat Ext_Cons.Prod_Cat.Operations.
-Require Import NatTrans.NatTrans NatTrans.Operations NatTrans.Func_Cat NatTrans.NatIso.
+Require Import NatTrans.NatTrans NatTrans.Operations
+        NatTrans.Func_Cat NatTrans.NatIso.
 Require Import Adjunction.Adjunction Adjunction.Duality Adjunction.Adj_Facts.
 Require Import KanExt.Global.
 
 (** In this module we establish the dualit of kan extensions.
-That is, the left kan extension along p is just the right kan extension along pᵒᵖ and vice versa.
+That is, the left kan extension along p is just the right kan extension along
+pᵒᵖ and vice versa.
  *)
 Section GlobalDuality.
   Context {C C' : Category} (p : (C –≻ C')%functor) (D : Category).
@@ -22,23 +25,26 @@ Section GlobalDuality.
   Section Left_to_Right.
     Context (lke : Left_KanExt p D).
 
-    (** The natural Isomorphism underlying the right kan extension which is to be shown.
-
-Hom_{Func_Cat Cᵒᵖ Dᵒᵖ}(– ∘ p, –) ≃ Hom_{Func_Cat C'ᵒᵖ Dᵒᵖ}(–, lkeᵒᵖ)
-
- *)
+    (** The natural Isomorphism underlying the right kan extension which is to
+        be shown. 
+        Hom_{Func_Cat Cᵒᵖ Dᵒᵖ}(– ∘ p, –) ≃ Hom_{Func_Cat C'ᵒᵖ Dᵒᵖ}(–, lkeᵒᵖ)
+    *)
     Local Definition KanExt_Left_to_Right_NIso :=
       (
         (
           (
             ((Hom_Func_Cat_Iso (Func_Cat_Op_Iso C' D))
-               ∘_h (NatTrans_id_Iso (Prod_Functor (Functor_id ((Func_Cat C' D) ^op) ^op) (lke^op)))
+               ∘_h (NatTrans_id_Iso
+                      (Prod_Functor
+                         (Functor_id ((Func_Cat C' D) ^op) ^op) (lke^op)))
             )
               ∘ (Hom_Adjunct_Duality (Adj_to_Hom_Adj (left_kan_ext_adj lke)))
           )
             ∘ (((Hom_Func_Cat_Iso (Func_Cat_Op_Iso C D))⁻¹)
                  ∘_h (NatTrans_id_Iso
-                        (Prod_Functor (Left_Functor_Extender p D) (Functor_id (Func_Cat C D) ^op))))
+                        (Prod_Functor
+                           (Left_Functor_Extender p D)
+                           (Functor_id (Func_Cat C D) ^op))))
         )
           ∘_h (NatTrans_id_Iso
                  (Prod_Functor
@@ -49,8 +55,9 @@ Hom_{Func_Cat Cᵒᵖ Dᵒᵖ}(– ∘ p, –) ≃ Hom_{Func_Cat C'ᵒᵖ Dᵒ�
       )%natiso
     .
 
-    (** If we give the trans formations (e.g., function given in the first obligation)
-explicitly "Program" generates obligations for equalitiies that are definitional! *)
+    (** If we give the trans formations (e.g., function given in the first
+        obligation) explicitly "Program" generates obligations for
+        equalities that are definitional! *)
     
     Program Definition KanExt_Left_to_Right :
       Right_KanExt  (p^op) (D^op) :=
@@ -122,8 +129,8 @@ explicitly "Program" generates obligations for equalitiies that are definitional
       match goal with
         [|- _ = ?A] =>
         let w := constr:(
-                   (KanExt_Left_to_Right_NIso ⁻¹ ∘ KanExt_Left_to_Right_NIso)%morphism
-                 )%nattrans
+                   ((KanExt_Left_to_Right_NIso ⁻¹)
+                      ∘ KanExt_Left_to_Right_NIso)%morphism)%nattrans
         in
         change (
             Trans w = A
@@ -138,8 +145,8 @@ explicitly "Program" generates obligations for equalitiies that are definitional
       match goal with
         [|- _ = ?A] =>
         let w := constr:(
-                   (KanExt_Left_to_Right_NIso ∘ KanExt_Left_to_Right_NIso⁻¹)%morphism
-                 )%nattrans
+                   (KanExt_Left_to_Right_NIso
+                      ∘ KanExt_Left_to_Right_NIso⁻¹)%morphism)%nattrans
         in
         change (
             Trans w = A
@@ -154,11 +161,11 @@ explicitly "Program" generates obligations for equalitiies that are definitional
   Section Right_to_Left.
     Context (rke : Right_KanExt p D).
 
-    (** The natural Isomorphism underlying the right kan extension which is to be shown.
+    (** The natural Isomorphism underlying the right kan extension which is
+        to be shown.
 
-Hom_{Func_Cat C'ᵒᵖ Dᵒᵖ}(rke, –) ≃ Hom_{Func_Cat Cᵒᵖ Dᵒᵖ}(–, – ∘ p)
-
- *)
+        Hom_{Func_Cat C'ᵒᵖ Dᵒᵖ}(rke, –) ≃ Hom_{Func_Cat Cᵒᵖ Dᵒᵖ}(–, – ∘ p)
+     *)
     Local Definition KanExt_Right_to_Left_NIso :=
       (
         (
@@ -176,7 +183,8 @@ Hom_{Func_Cat C'ᵒᵖ Dᵒᵖ}(rke, –) ≃ Hom_{Func_Cat Cᵒᵖ Dᵒᵖ}(–
           )
             ∘ (
               ((Hom_Func_Cat_Iso (Func_Cat_Op_Iso C' D))⁻¹)
-                ∘_h (NatTrans_id_Iso (Prod_Functor rke (Functor_id (Func_Cat C' D) ^op))))
+                ∘_h (NatTrans_id_Iso
+                       (Prod_Functor rke (Functor_id (Func_Cat C' D) ^op))))
         )
           ∘_h
           (NatTrans_id_Iso
@@ -260,8 +268,8 @@ Hom_{Func_Cat C'ᵒᵖ Dᵒᵖ}(rke, –) ≃ Hom_{Func_Cat Cᵒᵖ Dᵒᵖ}(–
       match goal with
         [|- _ = ?A] =>
         let w := constr:(
-                   (KanExt_Right_to_Left_NIso ⁻¹ ∘ KanExt_Right_to_Left_NIso)%morphism
-                 )%nattrans
+                   ((KanExt_Right_to_Left_NIso ⁻¹)
+                      ∘ KanExt_Right_to_Left_NIso)%morphism)%nattrans
         in
         change (
             Trans w = A
@@ -276,8 +284,8 @@ Hom_{Func_Cat C'ᵒᵖ Dᵒᵖ}(rke, –) ≃ Hom_{Func_Cat Cᵒᵖ Dᵒᵖ}(–
       match goal with
         [|- _ = ?A] =>
         let w := constr:(
-                   (KanExt_Right_to_Left_NIso ∘ KanExt_Right_to_Left_NIso⁻¹)%morphism
-                 )%nattrans
+                   (KanExt_Right_to_Left_NIso
+                      ∘ KanExt_Right_to_Left_NIso⁻¹)%morphism)%nattrans
         in
         change (
             Trans w = A

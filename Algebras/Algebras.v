@@ -10,8 +10,8 @@ Section Algebras.
   Context {C : Category} (T : (C –≻ C)%functor).
 
 
-  (** A T-Algebra in category C for an endo-functor T : C → C is a pair (U, h) where
-U is an object of C and h : T _o U → U is an arrow in C. *)
+  (** A T-Algebra in category C for an endo-functor T : C → C is a pair (U, h) 
+      where U is an object of C and h : T _o U → U is an arrow in C. *)
   Record Algebra : Type :=
     {
       Alg_Carrier : C;
@@ -42,13 +42,15 @@ such that the following diagram commutes:
     {
       Alg_map : (Alg_Carrier alg) –≻ (Alg_Carrier alg');
 
-      Alg_map_com : ((Constructors alg') ∘ (T _a Alg_map) = Alg_map ∘ (Constructors alg))%morphism
+      Alg_map_com : ((Constructors alg') ∘ (T _a Alg_map)
+                     = Alg_map ∘ (Constructors alg))%morphism
     }.
 
   Arguments Alg_map {_ _} _.
   Arguments Alg_map_com {_ _} _.
 
-  (** Composition of algebra homomorphisms. The algebra maps are simply composed. *)
+  (** Composition of algebra homomorphisms. The algebra maps are simply
+      composed. *)
   Program Definition Algebra_Hom_compose
           {alg alg' alg'' : Algebra}
           (h : Algebra_Hom alg alg')
@@ -70,8 +72,8 @@ such that the following diagram commutes:
     auto.
   Qed.
 
-  (** Two algebra maps are equal if their underlying maps are. The commutative diagrams
-are equated with proof irrelevance. *)
+  (** Two algebra maps are equal if their underlying maps are. The commutative
+      diagrams are equated with proof irrelevance. *)
   Lemma Algebra_Hom_eq_simplify (alg alg' : Algebra)
         (ah ah' : Algebra_Hom alg alg')
     : (Alg_map ah) = (Alg_map ah') -> ah = ah'.
@@ -125,7 +127,8 @@ are equated with proof irrelevance. *)
       Hom := Algebra_Hom;
       compose := @Algebra_Hom_compose;
       assoc := @Algebra_Hom_compose_assoc;
-      assoc_sym := fun _ _ _ _ _ _ _ => eq_sym (@Algebra_Hom_compose_assoc _ _ _ _ _ _ _);
+      assoc_sym := fun _ _ _ _ _ _ _ =>
+                     eq_sym (@Algebra_Hom_compose_assoc _ _ _ _ _ _ _);
       id := Algebra_Hom_id;
       id_unit_left := @Algebra_Hom_id_unit_left;
       id_unit_right := @Algebra_Hom_id_unit_right

@@ -22,11 +22,15 @@ Local Hint Extern 1 => contradiction.
 
 Program Instance False_init : (𝟘_ Prop_Cat)%object := {|terminal := False|}.
 
-Local Hint Extern 1 => match goal with |- ?A = ?B :> True => destruct A; destruct B end.
+Local Hint Extern 1 => match goal with
+                        |- ?A = ?B :> True => destruct A; destruct B
+                      end.
 
 Program Instance True_term : (𝟙_ Prop_Cat)%object := {terminal := True}.
 
-Local Hint Extern 1 => match goal with |- ?A = ?B :> _ ∧ _ => destruct A; destruct B end.
+Local Hint Extern 1 => match goal with
+                        |- ?A = ?B :> _ ∧ _ => destruct A; destruct B
+                      end.
 
 Local Hint Extern 1 => tauto.
 
@@ -79,7 +83,8 @@ Section Exp.
 
 End Exp.
 
-Program Instance Prop_Cat_Has_Exponentials : Has_Exponentials Prop_Cat := implication_exp.
+Program Instance Prop_Cat_Has_Exponentials : Has_Exponentials Prop_Cat :=
+  implication_exp.
 
 Program Instance Prop_Cat_CCC : CCC Prop_Cat.
 

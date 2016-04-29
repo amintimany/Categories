@@ -5,7 +5,8 @@ Require Import Category.Main.
 Require Import Functor.Functor.
 
 (** 
-Opposite of a functor F : C -> D is a functor F^op : C^op -> D^op with the same object and arrow maps.
+Opposite of a functor F : C -> D is a functor F^op : C^op -> D^op with the same
+object and arrow maps.
  *)
 Section Opposite_Functor.
   Context {C D : Category} (F : (C –≻ D)%functor).
@@ -25,7 +26,8 @@ End Opposite_Functor.
 
 Notation "F '^op'" := (Opposite_Functor F) : functor_scope.
 
-(* We can compose functors. The object and arrow maps are simply function compositions of object and arrow maps. *)
+(* We can compose functors. The object and arrow maps are simply function
+   compositions of object and arrow maps. *)
 Section Functor_Compose.
   Context {C C' C'' : Category} (F : (C –≻ C')%functor) (F' : (C' –≻ C'')%functor).
 

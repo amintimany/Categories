@@ -36,10 +36,18 @@ Section Prod_Adj.
   Proof.
     intros c d f [g1 g2] [h1 h2] H1 H2.
     cbn in *.
-    replace g1 with (Pi_1 ∘ f)%morphism; [|rewrite H1; rewrite assoc_sym; rewrite Prod_morph_com_1; rewrite assoc; rewrite Prod_morph_com_1; auto].
-    replace g2 with (Pi_2 ∘ f)%morphism; [|rewrite H1; rewrite assoc_sym; rewrite Prod_morph_com_2; rewrite assoc; rewrite Prod_morph_com_2; auto].
-    replace h1 with (Pi_1 ∘ f)%morphism; [|rewrite H2; rewrite assoc_sym; rewrite Prod_morph_com_1; rewrite assoc; rewrite Prod_morph_com_1; auto].
-    replace h2 with (Pi_2 ∘ f)%morphism; [|rewrite H2; rewrite assoc_sym; rewrite Prod_morph_com_2; rewrite assoc; rewrite Prod_morph_com_2; auto]; trivial.
+    replace g1 with (Pi_1 ∘ f)%morphism;
+      [|rewrite H1; rewrite assoc_sym; rewrite Prod_morph_com_1;
+        rewrite assoc; rewrite Prod_morph_com_1; auto].
+    replace g2 with (Pi_2 ∘ f)%morphism;
+      [|rewrite H1; rewrite assoc_sym; rewrite Prod_morph_com_2;
+        rewrite assoc; rewrite Prod_morph_com_2; auto].
+    replace h1 with (Pi_1 ∘ f)%morphism;
+      [|rewrite H2; rewrite assoc_sym; rewrite Prod_morph_com_1;
+        rewrite assoc; rewrite Prod_morph_com_1; auto].
+    replace h2 with (Pi_2 ∘ f)%morphism;
+      [|rewrite H2; rewrite assoc_sym; rewrite Prod_morph_com_2;
+        rewrite assoc; rewrite Prod_morph_com_2; auto]; trivial.
   Qed.
 
 End Prod_Adj.
@@ -48,7 +56,11 @@ End Prod_Adj.
 Section Sum_Adj.
   Context (C : Category) (HS : Has_Sums C).
 
-  Hint Extern 1 => eapply Prod_morph_unique; eauto; repeat rewrite assoc_sym; repeat rewrite Prod_morph_com_1; repeat rewrite Prod_morph_com_2; repeat rewrite assoc; repeat rewrite Prod_morph_com_1; repeat rewrite Prod_morph_com_2.
+  Hint Extern 1 =>
+  eapply Prod_morph_unique; eauto; repeat rewrite assoc_sym;
+  repeat rewrite Prod_morph_com_1; repeat rewrite Prod_morph_com_2;
+  repeat rewrite assoc; repeat rewrite Prod_morph_com_1;
+  repeat rewrite Prod_morph_com_2.
   
   Program Definition Sum_Adj : ((+ᶠⁿᶜ C HS) ⊣ (Diag_Func C))%functor :=
     {|
@@ -192,7 +204,9 @@ Section Prod_Exp_Adj.
     intros c c' f g h H1 H2.
     rewrite H1 in H2; clear H1.
     cbn in *.
-    replace (Prod_morph_ex (HP (HE x (HP c x)) x) (HP (HE x (HP c x)) x) (id ∘ Pi_1) (id ∘ Pi_2)) with (id (HP (HE x (HP c x)) x)) in H2.
+    replace (Prod_morph_ex
+               (HP (HE x (HP c x)) x) (HP (HE x (HP c x)) x)
+               (id ∘ Pi_1) (id ∘ Pi_2)) with (id (HP (HE x (HP c x)) x)) in H2.
     {
       rewrite id_unit_right in H2.
       set (M := curry_compose); unfold curry in M; cbn in M; rewrite M in H2.

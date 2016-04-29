@@ -12,8 +12,8 @@ Require Import KanExt.Local.
 
 Local Open Scope functor_scope.
 
-(** A local kan extension is pointwise if it is preserved by representable functors.
-In other words, in the following diagram,
+(** A local kan extension is pointwise if it is preserved by representable
+    functors. In other words, in the following diagram,
 
 #
 <pre>
@@ -27,9 +27,10 @@ In other words, in the following diagram,
      C' ———–———
 </pre>
 #
-where R is the left/right local kan extension of F along p, and G is a representable
-functor and we have (G ∘ R) is the left/right kan extension of (G ∘ F) along p.
- *)
+where R is the left/right local kan extension of F along p, and G is a
+representable functor and we have (G ∘ R) is the left/right kan extension
+of (G ∘ F) along p.
+*)
 
 (** Pointwise-ness for local left kan extensions. *)
 Section Pointwise_LRKE.

@@ -11,7 +11,8 @@ Require Import NatTrans.NatTrans NatTrans.NatIso.
 Local Open Scope morphism_scope.
 
 (**
-A comma category for Functors F : B → C and G : D → C is a category whose objects are arrows in C
+A comma category for Functors F : B → C and G : D → C is a category whose
+objects are arrows in C
 
 #
 <pre>   
@@ -19,7 +20,8 @@ A comma category for Functors F : B → C and G : D → C is a category whose ob
 </pre>
 #
 
-for x an object of B and y an object of D. Arrows of comma are commutative diagrams in C:
+for x an object of B and y an object of D. Arrows of comma are commutative
+diagrams in C:
 
 #
 <pre>
@@ -51,14 +53,17 @@ Section Comma.
     {
       CMH_left : (CMO_src a) –≻ (CMO_src b);
       CMH_right : (CMO_trg a) –≻ (CMO_trg b);
-      CMH_com :  ((G _a CMH_right) ∘ (@CMO_hom a) = (@CMO_hom b) ∘ (F _a CMH_left))%morphism
+      CMH_com :  ((G _a CMH_right) ∘ (@CMO_hom a) =
+                  (@CMO_hom b) ∘ (F _a CMH_left))%morphism
     }.
 
   Arguments CMH_left {_ _} _.
   Arguments CMH_right {_ _} _.
   Arguments CMH_com {_ _} _.
 
-  Theorem Comma_Hom_eq_simplify {a b : Comma_Obj} (h h' : Comma_Hom a b) : (@CMH_left _ _ h) = (@CMH_left _ _ h') → (@CMH_right _ _ h) = (@CMH_right _ _ h') → h = h'.
+  Theorem Comma_Hom_eq_simplify {a b : Comma_Obj} (h h' : Comma_Hom a b) :
+    (@CMH_left _ _ h) = (@CMH_left _ _ h') →
+    (@CMH_right _ _ h) = (@CMH_right _ _ h') → h = h'.
   Proof.
     intros H1 H2.
     destruct h; destruct h'.
@@ -86,7 +91,10 @@ Section Comma.
     auto.
   Qed.
 
-  Theorem Comma_Hom_compose_assoc {a b c d : Comma_Obj} (h : Comma_Hom a b) (h' : Comma_Hom b c) (h'' : Comma_Hom c d) : Comma_Hom_compose h (Comma_Hom_compose h' h'') = Comma_Hom_compose (Comma_Hom_compose h h') h''.
+  Theorem Comma_Hom_compose_assoc {a b c d : Comma_Obj} (h : Comma_Hom a b)
+          (h' : Comma_Hom b c) (h'' : Comma_Hom c d) :
+    Comma_Hom_compose h (Comma_Hom_compose h' h'') =
+    Comma_Hom_compose (Comma_Hom_compose h h') h''.
   Proof.                    
     apply Comma_Hom_eq_simplify; cbn; auto.
   Qed.    
@@ -97,12 +105,14 @@ Section Comma.
       CMH_right := id
     |}.
 
-  Theorem Comma_Hom_id_unit_left {a b : Comma_Obj} (h : Comma_Hom a b) : Comma_Hom_compose h (Comma_Hom_id b) = h.
+  Theorem Comma_Hom_id_unit_left {a b : Comma_Obj} (h : Comma_Hom a b) :
+    Comma_Hom_compose h (Comma_Hom_id b) = h.
   Proof.
     apply Comma_Hom_eq_simplify; cbn; auto.
   Qed.
 
-  Theorem Comma_Hom_id_unit_right {a b : Comma_Obj} (h : Comma_Hom a b) : Comma_Hom_compose (Comma_Hom_id a) h = h.
+  Theorem Comma_Hom_id_unit_right {a b : Comma_Obj} (h : Comma_Hom a b) :
+    Comma_Hom_compose (Comma_Hom_id a) h = h.
   Proof.
     apply Comma_Hom_eq_simplify; cbn; auto.
   Qed.
@@ -136,8 +146,8 @@ Arguments CMH_left {_ _ _ _ _ _ _} _.
 Arguments CMH_right {_ _ _ _ _ _ _} _.
 Arguments CMH_com {_ _ _ _ _ _ _} _.
 
-(** In this section we show that the opposite the comma category of (Comma F G) is
-isomorphic to the comma category (Comma Gᵒᵖ Fᵒᵖ).
+(** In this section we show that the opposite the comma category of (Comma F G)
+is isomorphic to the comma category (Comma Gᵒᵖ Fᵒᵖ).
  *)
 Section Comma_Opposite_Iso.
   Context {B C D : Category} (F : (B –≻ C)%functor) (G : (D –≻ C)%functor).
@@ -369,7 +379,8 @@ Section Comma_Right_Func_Iso.
 End Comma_Right_Func_Iso.
 
 (**
-Slice, coslice and arrow categories are special cases of comma categories defined below:
+Slice, coslice and arrow categories are special cases of comma categories
+defined below:
 *)
 
 Section Slice_CoSlice.
@@ -378,7 +389,8 @@ Section Slice_CoSlice.
   (**
    The Slice of Category C with respect to c:
      Objects : Arrows of C ending in c
-     Arrows: for g : a → c and h : b → c, an arrow from g to h is a pair of arrows f : a → b s.t. the ollowing commutes:
+     Arrows: for g : a → c and h : b → c, an arrow from g to h is a pair of
+       arrows f : a → b s.t. the ollowing commutes:
 
 #
 <pre>
@@ -400,7 +412,8 @@ Section Slice_CoSlice.
   (**
    The Slice of Category C with respect to c:
      Objects : Arrows of C ending in c
-     Arrows: for g : a → c and h : b → c, an arrow from g to h is a pair of arrows f : a → b s.t. the ollowing commutes:
+     Arrows: for g : a → c and h : b → c, 
+       an arrow from g to h is a pair of arrows f : a → b s.t. the ollowing commutes:
 
 #
 <pre>
@@ -426,7 +439,8 @@ Section Arrow_Cat.
   (**
    The Arrow Category of C:
      Objects : Arrows of C
-     Arrows: for g : a → b and h : c → d, an arrow from g to h is a pair of arrows (f,f') s.t. the ollowing commutes:
+     Arrows: for g : a → b and h : c → d,
+       an arrow from g to h is a pair of arrows (f,f') s.t. the ollowing commutes:
 
 #
 <pre>

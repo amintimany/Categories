@@ -12,7 +12,10 @@ Local Open Scope functor_scope.
 (**
 Given functor p : C -> C', we define the global kan extension along p operation.
 
-To define it, notice Left_Functor_Extender p D. It functor which maps (as objects) a functor F : C' -> D to F ∘ p : C -> D. The global left/right kan extension operation along p is simply the left/right adjoint to this functor. 
+To define it, notice Left_Functor_Extender p D. It functor which maps
+(as objects) a functor F : C' -> D to F ∘ p : C -> D. The global
+left/right kan extension operation along p is simply the left/right
+adjoint to this functor. 
 
 *)
 Section KanExtension.

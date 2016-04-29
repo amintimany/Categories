@@ -21,7 +21,9 @@ Section Arrow.
 
   Coercion Arr : Arrow >-> Hom.
   
-  (** An arrow (in the appropriate category, e.g., comma) from arrow f : a -> b to arrow g : c -> d is a pair of arrows h1 : a -> c and h2 : b -> d that makes the following diagram commute:
+  (** An arrow (in the appropriate category, e.g., comma)
+    from arrow f : a -> b to arrow g : c -> d is a pair of arrows h1 : a -> c
+    and h2 : b -> d that makes the following diagram commute:
 #
 <pre>
           f
@@ -50,7 +52,9 @@ h1 |              | h2
   Section Arrow_Hom_eq_simplify.
     Context {a b : Arrow C} (f g : Arrow_Hom a b).
     
-    (** Two arrow homomorphisms are equal if the arrows between theor domains and codomain are respectively equal. In other words, we don't cate about the proof of the diagram commuting. *)
+    (** Two arrow homomorphisms are equal if the arrows between theor domains
+        and codomain are respectively equal. In other words, we don't care about
+        the proof of the diagram commuting. *)
     Lemma Arrow_Hom_eq_simplify : Arr_H f = Arr_H g → Arr_H' f = Arr_H' g → f = g.
     Proof.
       destruct f; destruct g.
@@ -65,7 +69,8 @@ h1 |              | h2
   Section Compose_id.
     Context {x y z} (h : Arrow_Hom x y) (h' : Arrow_Hom y z).
 
-    (** Composition of arrow homomorphisms. We basicall need to show that in the following diagram, the bigger diagram commutes if the smaller ones do.
+    (** Composition of arrow homomorphisms. We basicall need to show that in the
+        following diagram, the bigger diagram commutes if the smaller ones do.
 #
 <pre>
            f
@@ -100,7 +105,8 @@ h1' |              | h2'
       auto.
     Qed.
 
-    (** The identity arrow morphism. We simply need to show that the following diagram commutes:
+    (** The identity arrow morphism. We simply need to show that the following
+        diagram commutes:
 #
 <pre>
           f
@@ -135,14 +141,18 @@ Arguments Arr_H {_ _ _} _ : clear implicits.
 Arguments Arr_H' {_ _ _} _ : clear implicits.
 Arguments Arr_Hom_com {_ _ _} _ : clear implicits.
 
-(** an arrow in a category is also an arrow in the opposite category. The domain and codomain are simply swapped. *)
-Program Definition Arrow_to_Arrow_OP (C : Category) (ar : Arrow C) : Arrow (C ^op) :=
+(** an arrow in a category is also an arrow in the opposite category. 
+    The domain and codomain are simply swapped. *)
+Program Definition Arrow_to_Arrow_OP (C : Category) (ar : Arrow C) :
+  Arrow (C ^op) :=
   {|
     Arr := ar
   |}.
 
-(** The type of arrows of a category and the type of arrows of its opposite are isomorphic. *)
-Program Definition Arrow_OP_Iso (C : Category) : ((Arrow C) ≃≃ (Arrow (C ^op)) ::> Type_Cat)%isomorphism :=
+(** The type of arrows of a category and the type of arrows of its opposite are
+     isomorphic. *)
+Program Definition Arrow_OP_Iso (C : Category) :
+  ((Arrow C) ≃≃ (Arrow (C ^op)) ::> Type_Cat)%isomorphism :=
   {|
     iso_morphism := Arrow_to_Arrow_OP C;
     inverse_morphism := Arrow_to_Arrow_OP (C ^op)

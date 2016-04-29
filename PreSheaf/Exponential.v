@@ -14,15 +14,16 @@ Section Exponential.
 
   Local Obligation Tactic := idtac.
 
-  (** The exponential in category of presheafs is the presheaf that maps each object
-c of C to the set of natural transformations (Y(c) × F –≻ G). Where Y is the Yoneda
-embedding, and × is the product of presheafs.
+  (** The exponential in category of presheaves is the presheaf that maps each
+      object c of C to the set of natural transformations (Y(c) × F –≻ G).
+      Where Y is the Yoneda embedding, and × is the product of presheaves.
 
-This presheaf, maps an arrow h : c –≻ c' in C to the natural transformation (
-morphisms in category of presheafs are natural transformations) that maps
-a natural transformation u to the natural transformation
-that maps an objet x of C to the function that given v : ((c' –≻ x : Cᵒᵖ) * F(x))
-gives (Trans u x (((fst v) ∘ f)%morphism, (snd v)))
+      This presheaf, maps an arrow h : c –≻ c' in C to the natural
+      transformation ( morphisms in category of presheaves are natural
+      transformations) that maps a natural transformation u to the natural
+      transformation that maps an objet x of C to the function that given
+      v : ((c' –≻ x : Cᵒᵖ) * F(x)) gives
+      (Trans u x (((fst v) ∘ f)%morphism, (snd v)))
  *)
   Program Definition funspace_psh : Functor (C^op) Type_Cat :=
     {|
@@ -75,7 +76,7 @@ gives (Trans u x (((fst v) ∘ f)%morphism, (snd v)))
   Qed.
 
   (** The evaluation morphism (natural transformation) for exponentials of
-presheafs. *)
+      presheaves. *)
   Program Definition PSh_Exponential_Eval :
     (pointwise_product_psh C funspace_psh F –≻ G)%nattrans
     :=
@@ -99,7 +100,7 @@ presheafs. *)
   Qed.
 
   (** The currying morphism (natural transformation) for exponentials of
-presheafs. *)
+      presheaves. *)
   Program Definition PSh_Exponential_Curry
           (x : (C ^op –≻ Type_Cat)%functor)
           (u : (pointwise_product_psh C x F –≻ G)%nattrans)
@@ -152,7 +153,7 @@ presheafs. *)
     apply PSh_Exponential_Curry_obligation_3.
   Qed.
 
-  (** Exponentials of presheafs. *)
+  (** Exponentials of presheaves. *)
   Program Definition PSh_Exponential : (F ⇑ G)%object :=
     {|
       exponential := funspace_psh;
@@ -182,7 +183,8 @@ presheafs. *)
     extensionality p.
     extensionality q.
     cbn in *.
-    assert (H1 := f_equal (fun w => w p (z _a (fst q) y, snd q)%morphism) H1'); clear H1'.
+    assert (H1 := f_equal (fun w => w p (z _a (fst q) y, snd q)%morphism) H1');
+      clear H1'.
     cbn in H1.
     cbn_rewrite (equal_f (Trans_com u (fst q)) y) in H1.
     cbn_rewrite (equal_f (Trans_com u' (fst q)) y) in H1.
@@ -192,4 +194,5 @@ presheafs. *)
 
 End Exponential.
 
-Instance PSh_Has_Exponentials (C : Category) : Has_Exponentials (PShCat C) := PSh_Exponential C.
+Instance PSh_Has_Exponentials (C : Category) : Has_Exponentials (PShCat C) :=
+  PSh_Exponential C.

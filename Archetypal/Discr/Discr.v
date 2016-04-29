@@ -60,8 +60,8 @@ Section Discr.
 
   (** Discrete category – one in which has no arrow but identitities. 
 Note that this definition is not necessarily a discrete cat in Coq as UIP is not
-generally provable. We simply assume so by implicitly assuming object type to have UIP.
-In HoTT terms, we assume obj to be a HSet. *)
+generally provable. We simply assume so by implicitly assuming object type to
+have UIP. In HoTT terms, we assume obj to be a hSet. *)
   Program Definition Discr_Cat : Category :=
     {|
       Obj := obj;
@@ -74,7 +74,8 @@ End Discr.
 
 Definition Type_n (n : nat) : Type := {x : nat| x < n}.
 
-Notation "'Discr_n' n" := (Discr_Cat (Type_n n)) (at level 200, n bigint) : category_scope.
+Notation "'Discr_n' n" :=
+  (Discr_Cat (Type_n n)) (at level 200, n bigint) : category_scope.
 
 (** Any discrete category is ismorphic to its dual. *)
 Section Discr_Cat_Dual_Iso.
@@ -188,7 +189,8 @@ Section Discr_Func.
     |}.
 
   (** The discrete-opposite functor – a functor from the opposite of a
-discrete category of type A to a category C based on a function from A to objects of C. *)
+      discrete category of type A to a category C based on a function
+      from A to objects of C. *)
   Program Definition Discr_Func_op : ((Discr_Cat A)^op –≻ C)%functor :=
     {|
       FO := Omap;

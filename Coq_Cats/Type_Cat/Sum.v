@@ -7,7 +7,8 @@ Require Import Coq_Cats.Type_Cat.Type_Cat.
 
 Local Notation "A + B" := (@Sum Type_Cat A B) : object_scope.
 
-(** The sum of types in coq is the categorical notion of sum in category of types. *)
+(** The sum of types in coq is the categorical notion of sum in category of
+    types. *)
 Program Definition sum_Sum (A B : Type) : (A + B)%object :=
 {|
   product := (A + B)%type;

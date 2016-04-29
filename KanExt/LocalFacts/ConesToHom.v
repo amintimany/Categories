@@ -27,7 +27,8 @@ Section Local_Right_KanExt_to_Hom_Local_Right_KanExt.
   Program Definition Local_Right_KanExt_to_Hom_Local_Right_KanExt_Iso_LR :
     (((@Fix_Bi_Func_2 _ (Func_Cat C D) _ F (Hom_Func (Func_Cat C D)))
         ∘ (Left_Functor_Extender p D)^op)
-       –≻ (@Fix_Bi_Func_2 _ (Func_Cat C' D) _ lrke (Hom_Func (Func_Cat C' D))))%nattrans :=
+       –≻ (@Fix_Bi_Func_2 _ (Func_Cat C' D)
+                          _ lrke (Hom_Func (Func_Cat C' D))))%nattrans :=
     {|
       Trans :=  fun c h => LRKE_morph_ex lrke {|cone_apex := c; cone_edge := h|}
     |}.
@@ -45,7 +46,8 @@ Section Local_Right_KanExt_to_Hom_Local_Right_KanExt.
            (LoKan_Cone_Morph_compose
               _
               _
-              (Build_LoKan_Cone_Morph p F A {|cone_apex := c; cone_edge := x|} h eq_refl) C
+              (Build_LoKan_Cone_Morph
+                 p F A {|cone_apex := c; cone_edge := x|} h eq_refl) C
            )
         )
       end
@@ -86,7 +88,7 @@ Section Local_Right_KanExt_to_Hom_Local_Right_KanExt.
     apply Local_Right_KanExt_to_Hom_Local_Right_KanExt_Iso_RL_obligation_1.
   Qed.
 
-    (** Conversion from Local_Right_KanExt Hom_Local_Right_KanExt isomorphism. *)
+  (** Conversion from Local_Right_KanExt Hom_Local_Right_KanExt isomorphism. *)
   Program Definition Local_Right_KanExt_to_Hom_Local_Right_KanExt :
     Hom_Local_Right_KanExt p F :=
     {|
@@ -94,7 +96,8 @@ Section Local_Right_KanExt_to_Hom_Local_Right_KanExt.
       HLRKE_Iso :=
         {|
           iso_morphism := Local_Right_KanExt_to_Hom_Local_Right_KanExt_Iso_LR;
-          inverse_morphism := Local_Right_KanExt_to_Hom_Local_Right_KanExt_Iso_RL
+          inverse_morphism :=
+            Local_Right_KanExt_to_Hom_Local_Right_KanExt_Iso_RL
         |}
     |}.
 
@@ -103,7 +106,8 @@ Section Local_Right_KanExt_to_Hom_Local_Right_KanExt.
     apply NatTrans_eq_simplify.
     extensionality h; extensionality x.
     symmetry.
-    apply (cone_morph_com (LRKE_morph_ex lrke {| cone_apex := h; cone_edge := x |})).
+    apply (cone_morph_com
+             (LRKE_morph_ex lrke {| cone_apex := h; cone_edge := x |})).
   Qed.
 
   Next Obligation.

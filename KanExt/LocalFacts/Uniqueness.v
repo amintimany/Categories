@@ -135,7 +135,8 @@ the category of cones. *)
   Section Local_Right_KanExt_terminal.
     Context (rke : Local_Right_KanExt p F).
 
-    Program Definition Local_Right_KanExt_terminal : (𝟙_ LoKan_Cone_Cat)%object :=
+    Program Definition Local_Right_KanExt_terminal
+      : (𝟙_ LoKan_Cone_Cat)%object :=
       {|
         terminal := LRKE rke;
         t_morph := LRKE_morph_ex rke

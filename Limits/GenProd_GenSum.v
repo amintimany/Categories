@@ -36,8 +36,8 @@ Notation "'Π_' C ↓ m" := (GenProd C m) : object_scope.
 
 Notation "'Σ_' C ↓ m" := (GenSum C m) : object_scope.
 
-(** The fact That if a category has generalized products of some type, its dual also has
-generalized sums of that type. *)
+(** The fact That if a category has generalized products of some type,
+    its dual also has generalized sums of that type. *)
 
 Section GenProd_to_GenSum.
   Context {A : Type} {C : Category} {map : A → C} (L : (Π map)%object).
@@ -57,10 +57,11 @@ Section GenSum_to_GenProd.
 
 End GenSum_to_GenProd.
 
-(** If we have GenSum for all functions from a type A, where A is isomorphic to B
-we have all GenSum for all functions from B. We show this by showing that for the
-underlying functor of any GenSum from B is isomorphic to the underlying functor of
-some GrnSum from A precomposed with the provided isomorphism.
+(** If we have GenSum for all functions from a type A, where A is isomorphic
+to B we have all GenSum for all functions from B. We show this by showing
+that for the underlying functor of any GenSum from B is isomorphic to the
+underlying functor of some GenSum from A pre-composed with the provided
+isomorphism.
 *)
 Section GenSum_IsoType.
   Context {A B : Type} (Iso : (A ≃≃ B ::> Type_Cat)%isomorphism) {C : Category}
@@ -68,8 +69,13 @@ Section GenSum_IsoType.
 
   Program Definition GenSum_IsoType_map_Iso (map : B → C):
     (
-      (((Discr_Func_op map)^op)%functor
-        ≃≃ ((Discr_Func_op (fun x : A => map ((iso_morphism Iso) x)) ∘ (iso_morphism (Opposite_Cat_Iso (Inverse_Isomorphism (Discr_Cat_Iso Iso)))))^op)%functor
+      ((((Discr_Func_op map)^op)%functor)
+         ≃≃ ((Discr_Func_op
+                (fun x : A => map ((iso_morphism Iso) x))
+                ∘ (iso_morphism (Opposite_Cat_Iso
+                                   (Inverse_Isomorphism
+                                      (Discr_Cat_Iso Iso)))))^op
+            )%functor
         ::> Func_Cat _ _)%isomorphism
     )%morphism
     :=
@@ -79,7 +85,8 @@ Section GenSum_IsoType.
             Trans :=
               Trans
                 (iso_morphism
-                   (IsoCat_NatIso (Opposite_Cat_Iso (Discr_Cat_Iso Iso)) (Discr_Func_op map))
+                   (IsoCat_NatIso (Opposite_Cat_Iso
+                                     (Discr_Cat_Iso Iso)) (Discr_Func_op map))
                 )
           |};
         inverse_morphism :=
@@ -87,7 +94,8 @@ Section GenSum_IsoType.
             Trans :=
               Trans
                 (inverse_morphism
-                   (IsoCat_NatIso (Opposite_Cat_Iso (Discr_Cat_Iso Iso)) (Discr_Func_op map))
+                   (IsoCat_NatIso (Opposite_Cat_Iso
+                                     (Discr_Cat_Iso Iso)) (Discr_Func_op map))
                 )
           |}
       |}
@@ -101,7 +109,8 @@ Section GenSum_IsoType.
           Trans
           (
             right_inverse
-              (IsoCat_NatIso (Opposite_Cat_Iso (Discr_Cat_Iso Iso)) (Discr_Func_op map))
+              (IsoCat_NatIso (Opposite_Cat_Iso
+                                (Discr_Cat_Iso Iso)) (Discr_Func_op map))
           )
       ).
   Qed.
@@ -114,7 +123,8 @@ Section GenSum_IsoType.
           Trans
           (
             left_inverse
-              (IsoCat_NatIso (Opposite_Cat_Iso (Discr_Cat_Iso Iso)) (Discr_Func_op map))
+              (IsoCat_NatIso (Opposite_Cat_Iso
+                                (Discr_Cat_Iso Iso)) (Discr_Func_op map))
           )
       ).
   Qed.

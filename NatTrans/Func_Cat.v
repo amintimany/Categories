@@ -23,7 +23,8 @@ Program Definition Func_Cat (C C' : Category) : Category :=
 
   assoc := fun _ _ _ _ _ _ _ => @NatTrans_compose_assoc _ _ _ _ _ _ _ _ _;
              
-  assoc_sym := fun _ _ _ _ _ _ _ => eq_sym (@NatTrans_compose_assoc _ _ _ _ _ _ _ _ _);
+  assoc_sym :=
+    fun _ _ _ _ _ _ _ => eq_sym (@NatTrans_compose_assoc _ _ _ _ _ _ _ _ _);
 
   id_unit_right := @NatTrans_id_unit_right _ _;
   
@@ -33,8 +34,10 @@ Program Definition Func_Cat (C C' : Category) : Category :=
 Section Opposite_Func_Cat.
   Context (C D : Category).
 
-  (** Functor from functor category to its opposite. Maps each functor to its opposite. *)
-  Program Definition Op_Func_Cat_to_Func_Cat_Op : ((Func_Cat C D)^op –≻ (Func_Cat (C^op) (D^op)))%functor :=
+  (** Functor from functor category to its opposite. Maps each functor
+       to its opposite. *)
+  Program Definition Op_Func_Cat_to_Func_Cat_Op
+    : ((Func_Cat C D)^op –≻ (Func_Cat (C^op) (D^op)))%functor :=
     {|
       FO := Opposite_Functor;
       FA := fun _ _ => Opposite_NatTrans;
@@ -42,8 +45,10 @@ Section Opposite_Func_Cat.
       F_compose := fun _ _ _ _ _ => NatTrans_compose_Op _ _ 
     |}.
 
-  (** Functor from the opposite of a functor category to it. Maps each functor to its opposite. *)
-  Program Definition Func_Cat_Op_to_Op_Func_Cat : ((Func_Cat (C^op) (D^op)) –≻ (Func_Cat C D)^op)%functor :=
+  (** Functor from the opposite of a functor category to it. Maps each functor
+      to its opposite. *)
+  Program Definition Func_Cat_Op_to_Op_Func_Cat
+    : ((Func_Cat (C^op) (D^op)) –≻ (Func_Cat C D)^op)%functor :=
     {|
       FO := Opposite_Functor;
       FA := fun _ _ => Opposite_NatTrans;
@@ -51,8 +56,11 @@ Section Opposite_Func_Cat.
       F_compose := fun _ _ _ N N' => NatTrans_compose_Op N N'
     |}.
   
-  (** The opposite of the category of functors from C to D is naturally isomorphic to the category of functors from C^op to D^op. *)
-  Program Definition Func_Cat_Op_Iso : (((Func_Cat C D)^op)%category ≃≃ (Func_Cat (C^op) (D^op)) ::> Cat) %isomorphism :=
+  (** The opposite of the category of functors from C to D is naturally
+       isomorphic to the category of functors from C^op to D^op. *)
+  Program Definition Func_Cat_Op_Iso
+    : ((((Func_Cat C D)^op)%category)
+         ≃≃ (Func_Cat (C^op) (D^op)) ::> Cat) %isomorphism :=
     {|
       iso_morphism := Op_Func_Cat_to_Func_Cat_Op;
       inverse_morphism := Func_Cat_Op_to_Op_Func_Cat

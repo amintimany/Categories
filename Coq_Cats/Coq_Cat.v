@@ -3,7 +3,8 @@ Require Import Essentials.Types.
 Require Import Essentials.Facts_Tactics.
 Require Import Category.Main.
 
-(** The general form a category whose objects are types (in some universe) and arrows are functions among them. *)
+(** The general form a category whose objects are types (in some universe) and
+     arrows are functions among them. *)
 
 Notation Coq_Cat U :=
 {|

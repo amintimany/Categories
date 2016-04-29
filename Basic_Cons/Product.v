@@ -8,7 +8,8 @@ Require Import Functor.Main.
 Local Open Scope morphism_scope.
 
 (**
-Given two objects a and b, their product a×b is an object such that there are two projections from it to a and b:
+Given two objects a and b, their product a×b is an object such that there are
+two projections from it to a and b:
 
 #
 <pre>
@@ -17,7 +18,8 @@ Given two objects a and b, their product a×b is an object such that there are t
                 a <—–——– a×b ———–—> b
 </pre>
 #
-such that for any object z with two projections to a and b, there is a unique arrow h that makes the following diagram commute:
+such that for any object z with two projections to a and b, there is a unique
+arrow h that makes the following diagram commute:
 
 #
 <pre>
@@ -50,7 +52,8 @@ Record Product {C : Category} (c d : C) : Type :=
   Prod_morph_com_2 : ∀ (p' : Obj) (r1 : p' –≻ c) (r2 : p' –≻ d),
       (Pi_2 ∘ (Prod_morph_ex p' r1 r2))%morphism = r2;
   
-  Prod_morph_unique : ∀ (p' : Obj) (r1 : p' –≻ c) (r2 : p' –≻ d) (f g : p' –≻ product),
+  Prod_morph_unique :
+    ∀ (p' : Obj) (r1 : p' –≻ c) (r2 : p' –≻ d) (f g : p' –≻ product),
       Pi_1 ∘ f = r1
       → Pi_2 ∘ f = r2
       → Pi_1 ∘ g = r1
@@ -74,9 +77,12 @@ Notation "a × b" := (Product a b) : object_scope.
 Local Open Scope object_scope.
 
 (** for any pair of objects, their product is unique up to isomorphism. *)
-Theorem Product_iso {C : Category} (c d : Obj) (P : c × d) (P' : c × d) : (P ≃ P')%isomorphism.
+Theorem Product_iso {C : Category} (c d : Obj) (P : c × d) (P' : c × d)
+  : (P ≃ P')%isomorphism.
 Proof.
-  eapply (Build_Isomorphism _ _ _ (Prod_morph_ex P' P Pi_1 Pi_2) (Prod_morph_ex P P' Pi_1 Pi_2));
+  eapply (Build_Isomorphism _ _ _
+                            (Prod_morph_ex P' P Pi_1 Pi_2)
+                            (Prod_morph_ex P P' Pi_1 Pi_2));
   eapply Prod_morph_unique; eauto;
   rewrite <- assoc;
   repeat (rewrite Prod_morph_com_1 || rewrite Prod_morph_com_2); auto.
@@ -87,9 +93,11 @@ Definition Has_Products (C : Category) : Type := ∀ a b, a × b.
 Existing Class Has_Products.
 
 (**
-The product functor maps each pair of objects (an object of the product category C×C) to their product in C.
+The product functor maps each pair of objects (an object of the product
+category C×C) to their product in C.
 *)
-Program Definition Prod_Func (C : Category) {HP : Has_Products C} : ((C × C) –≻ C)%functor :=
+Program Definition Prod_Func (C : Category) {HP : Has_Products C}
+  : ((C × C) –≻ C)%functor :=
 {|
   FO := fun x => HP (fst x) (snd x); 
   FA := fun a b f => Prod_morph_ex _ _ ((fst f) ∘ Pi_1) ((snd f) ∘ Pi_2)
@@ -97,12 +105,14 @@ Program Definition Prod_Func (C : Category) {HP : Has_Products C} : ((C × C) �
 
 Next Obligation. (* F_id *)  
 Proof.
-  eapply Prod_morph_unique; try reflexivity; [rewrite Prod_morph_com_1|rewrite Prod_morph_com_2]; auto.
+  eapply Prod_morph_unique;
+  try reflexivity; [rewrite Prod_morph_com_1|rewrite Prod_morph_com_2]; auto.
 Qed.  
 
 Next Obligation. (* F_compose *)  
 Proof.
-  eapply Prod_morph_unique; try ((rewrite Prod_morph_com_1 || rewrite Prod_morph_com_2); reflexivity);
+  eapply Prod_morph_unique;
+  try ((rewrite Prod_morph_com_1 || rewrite Prod_morph_com_2); reflexivity);
   repeat rewrite <- assoc; (rewrite Prod_morph_com_1 || rewrite Prod_morph_com_2);
   rewrite assoc; (rewrite Prod_morph_com_1 || rewrite Prod_morph_com_2); auto.
 Qed.
@@ -123,9 +133,11 @@ Definition Has_Sums (C : Category) : Type :=  ∀ (a b : C), (a + b)%object.
 Existing Class Has_Sums.
 
 (**
-The sum functor maps each pair of objects (an object of the product category C×C) to their sum in C.
+The sum functor maps each pair of objects (an object of the product category
+C×C) to their sum in C.
 *)
-Definition Sum_Func {C : Category} {HS : Has_Sums C} : ((C × C) –≻ C)%functor := (×ᶠⁿᶜ (C^op) HS)^op.
+Definition Sum_Func {C : Category} {HS : Has_Sums C} : ((C × C) –≻ C)%functor :=
+  (×ᶠⁿᶜ (C^op) HS)^op.
 
 Arguments Sum_Func _ _, _ {_}.
 

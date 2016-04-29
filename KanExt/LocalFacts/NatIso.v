@@ -15,7 +15,8 @@ Require Import KanExt.Local
 
 Local Open Scope functor_scope.
 
-(** This module contains facts about local kan extensions involving natural isomorphisms. *)
+(** This module contains facts about local kan extensions involving natural
+    isomorphism. *)
 
 (** Any two naturally isomorphic functors have the same kan extensions –
 stated with hom functor definition of local kan extensions. *)
@@ -75,7 +76,8 @@ Section Iso_Hom_Local_Right_KanExt.
     {|
       HLRKE := hlrke';
       HLRKE_Iso :=
-        ((Fix_Bi_Func_2_object_NatIso (Hom_Func (Func_Cat C' D)) N) ∘ ihlrke)%isomorphism
+        ((Fix_Bi_Func_2_object_NatIso (Hom_Func (Func_Cat C' D)) N)
+           ∘ ihlrke)%isomorphism
     |}.
 
 End Iso_Hom_Local_Right_KanExt.
@@ -118,14 +120,17 @@ Section Hom_Local_Right_KanExt_Iso_along.
           {D : Category} {F : C –≻ D}
           (hlrke : Hom_Local_Right_KanExt p F).
 
-  Program Definition Hom_Local_Right_KanExt_Iso_along : Hom_Local_Right_KanExt p' F :=
+  Program Definition Hom_Local_Right_KanExt_Iso_along
+    : Hom_Local_Right_KanExt p' F :=
     {|
       HLRKE := hlrke;
       HLRKE_Iso :=
         (
           (HLRKE_Iso hlrke)
             ∘ (
-              (NatTrans_id_Iso (@Fix_Bi_Func_2 _ (Func_Cat C D) _ F (Hom_Func (Func_Cat C D))))
+              (NatTrans_id_Iso
+                 (@Fix_Bi_Func_2
+                    _ (Func_Cat C D) _ F (Hom_Func (Func_Cat C D))))
                 ∘_h ((Left_Functor_Extender_Iso N D)^op)
             )
         )%isomorphism%natiso

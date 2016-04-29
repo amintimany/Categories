@@ -17,7 +17,8 @@ Section Type_Cat_GenSum.
   (** The cocone for the colimit of generalized sum. *)
   Program Definition Type_Cat_GenSum_CoCone : CoCone Fm :=
     {|
-      cone_apex := {|FO := fun _ => {x : A & (Fm _o x)%object}; FA := fun _ _ _ h => h|};
+      cone_apex := {|FO := fun _ => {x : A & (Fm _o x)%object};
+                     FA := fun _ _ _ h => h|};
       cone_edge := {|Trans := fun x => existT _ x |}
     |}.
     
@@ -62,7 +63,8 @@ Section Type_Cat_GenSum.
     set (hc' := (
                  f_equal
                    (fun w :
-                          ((Cn ∘ (Functor_To_1_Cat (Discr_Cat A)^op) ^op) –≻ Fm^op)%nattrans
+                        ((Cn ∘ (Functor_To_1_Cat (Discr_Cat A)^op) ^op)
+                           –≻ Fm^op)%nattrans
                     =>
                       Trans w y1 y2) hc
                )

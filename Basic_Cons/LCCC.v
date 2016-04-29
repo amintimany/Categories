@@ -8,12 +8,15 @@ Require Import Ext_Cons.Arrow.
 Require Import Archetypal.Discr.Discr.
 Require Import Functor.Const_Func Functor.Functor_Ops.
 
-(** A category is locally cartesian closed if all its slices are cartesian closed!. *)
+(** A category is locally cartesian closed if all its slices are
+    cartesian closed!. *)
 Section Slice_Terminal.
   Context (C : Category) (c : C).
 
-  (** Notation for easier construction of objects of comma out of an arrow z : ? → c. *)
-  Local Notation CA z := (Build_Comma_Obj (Functor_id C) (Const_Func 1 c) _ tt z) (only parsing).
+  (** Notation for easier construction of objects of comma out of an arrow
+      z : ? → c. *)
+  Local Notation CA z :=
+    (Build_Comma_Obj (Functor_id C) (Const_Func 1 c) _ tt z) (only parsing).
 
   (** Every slice category C/c has a terminal object (id c). *)
   Program Instance Slice_Terminal : (𝟙_ (Slice C c))%object :=
@@ -42,10 +45,13 @@ Section Slice_Terminal.
 End Slice_Terminal.
   
 Section PullBack_Slice_Prod.
-  Context {C : Category} {c : C} {f g : Slice C c} (PB : PullBack (CMO_hom f) (CMO_hom g)).
+  Context {C : Category} {c : C} {f g : Slice C c}
+          (PB : PullBack (CMO_hom f) (CMO_hom g)).
 
-  (** Notation for easier construction of objects of comma out of an arrow z : ? → c. *)
-  Local Notation CA z := (Build_Comma_Obj (Functor_id C) (Const_Func 1 c) _ tt z) (only parsing).
+  (** Notation for easier construction of objects of comma out of an arrow
+      z : ? → c. *)
+  Local Notation CA z :=
+    (Build_Comma_Obj (Functor_id C) (Const_Func 1 c) _ tt z) (only parsing).
 
   (** Pullbacks are products in slices. *)
   Program Definition PullBack_Slice_Prod : (f × g)%object :=
@@ -146,7 +152,9 @@ Section PullBack_Slice_Prod.
     cbn in H1', H2'.
     apply Comma_Hom_eq_simplify; cbn in *.
     {
-      apply (pullback_morph_ex_unique PB _ (pullback_morph_1 PB ∘ CMH_left h) (pullback_morph_2 PB ∘ CMH_left h)); auto.
+      apply (pullback_morph_ex_unique
+               PB _ (pullback_morph_1 PB ∘ CMH_left h)
+               (pullback_morph_2 PB ∘ CMH_left h)); auto.
       repeat rewrite assoc_sym.
       apply (f_equal (fun x => compose _ x)).
       apply (pullback_morph_com PB).
@@ -162,7 +170,8 @@ End PullBack_Slice_Prod.
 Section Slice_Prod_PullBack.
   Context {C : Category} {c : C} {f g : Slice C c}.
 
-  Local Notation CA z := (Build_Comma_Obj (Functor_id C) (Const_Func 1 c) _ tt z) (only parsing).
+  Local Notation CA z :=
+    (Build_Comma_Obj (Functor_id C) (Const_Func 1 c) _ tt z) (only parsing).
 
   Context (PR : (f × g)%object).
   
@@ -171,7 +180,13 @@ Section Slice_Prod_PullBack.
       pullback := (CMO_src (@product _ _ _ PR));
       pullback_morph_1 := CMH_left (Pi_1 PR);
       pullback_morph_2 := CMH_left (Pi_2 PR);
-      pullback_morph_ex := fun p r1 r2 H => CMH_left (Prod_morph_ex PR (CA ((CMO_hom f) ∘ r1)) (Build_Comma_Hom _ _ (CA ((CMO_hom f) ∘ r1)) f r1 tt _) (Build_Comma_Hom _ _ (CA ((CMO_hom f) ∘ r1)) g r2 tt _))
+      pullback_morph_ex :=
+        fun p r1 r2 H => CMH_left (Prod_morph_ex
+                                  PR (CA ((CMO_hom f) ∘ r1))
+                                  (Build_Comma_Hom _ _ (CA ((CMO_hom f) ∘ r1))
+                                                   f r1 tt _)
+                                  (Build_Comma_Hom _ _ (CA ((CMO_hom f) ∘ r1))
+                                                   g r2 tt _))
     |}.
 
   Local Obligation Tactic := idtac.  
@@ -188,14 +203,26 @@ Section Slice_Prod_PullBack.
   Proof.
     intros p r1 r2 H.
     cbn in *.
-    exact (f_equal CMH_left (Prod_morph_com_1 PR (CA ((CMO_hom f) ∘ r1)) (Build_Comma_Hom _ _ (CA ((CMO_hom f) ∘ r1)) f r1 tt _) (Build_Comma_Hom _ _ (CA ((CMO_hom f) ∘ r1)) g r2 tt _))).
+    exact (f_equal
+             CMH_left
+             (Prod_morph_com_1 PR (CA ((CMO_hom f) ∘ r1))
+                               (Build_Comma_Hom _ _ (CA ((CMO_hom f) ∘ r1))
+                                                f r1 tt _)
+                               (Build_Comma_Hom _ _ (CA ((CMO_hom f) ∘ r1))
+                                                g r2 tt _))).
   Qed.
   
   Next Obligation.
   Proof.
     intros p r1 r2 H.
     cbn in *.
-    exact (f_equal CMH_left (Prod_morph_com_2 PR (CA ((CMO_hom f) ∘ r1)) (Build_Comma_Hom _ _ (CA ((CMO_hom f) ∘ r1)) f r1 tt _) (Build_Comma_Hom _ _ (CA ((CMO_hom f) ∘ r1)) g r2 tt _))).
+    exact (f_equal
+             CMH_left
+             (Prod_morph_com_2 PR (CA ((CMO_hom f) ∘ r1))
+                               (Build_Comma_Hom _ _ (CA ((CMO_hom f) ∘ r1))
+                                                f r1 tt _)
+                               (Build_Comma_Hom _ _ (CA ((CMO_hom f) ∘ r1))
+                                                g r2 tt _))).
   Qed.
 
   Next Obligation.
@@ -231,7 +258,9 @@ Section Slice_Prod_PullBack.
        )
     )%morphism.
     apply f_equal.
-    eapply (Prod_morph_unique PR (CA (CMO_hom f ∘ CMH_left (Pi_1 PR) ∘ h2)%morphism)); eauto; apply Comma_Hom_eq_simplify; auto.
+    eapply (Prod_morph_unique
+              PR (CA (CMO_hom f ∘ CMH_left (Pi_1 PR) ∘ h2)%morphism));
+      eauto; apply Comma_Hom_eq_simplify; auto.
     Unshelve.
     {
       unfold V1T; clear V1T; cbn.
@@ -302,7 +331,7 @@ Section Slice_Has_Prod_Has_PullBack.
   
 End Slice_Has_Prod_Has_PullBack.
     
-(** Locally Cartesian Closed Category : one in which all slices are cartesian closed *)
+(** Locally Cartesian Closed Category : one in which all
+    slices are cartesian closed *)
 Definition LCCC (C : Category) : Type := ∀ (c : C), CCC (Slice C c).
 Existing Class LCCC.
-

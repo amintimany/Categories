@@ -8,4 +8,5 @@ Require Import Coq_Cats.Type_Cat.Type_Cat.
 Local Obligation Tactic := program_simpl; auto 3.
 
 (** The empty type is the initial object of category of types. *)
-Program Instance Empty_init : (𝟘_ Type_Cat)%object := {|terminal := (Empty : Type)|}.
+Program Instance Empty_init : (𝟘_ Type_Cat)%object :=
+  {|terminal := (Empty : Type)|}.

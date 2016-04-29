@@ -3,11 +3,11 @@ Require Import Functor.Functor Functor.Functor_Ops.
 
 Local Open Scope functor_scope.
 
-(** Cat, the category of (small) categories, is a category whose objects are (small) categories
-and morphisms are functors.
+(** Cat, the category of (small) categories, is a category whose objects are
+    (small) categories and morphisms are functors.
 
-In this development, the (relative) smallness/largeness is represented by universe levels and
-universe polymorphism of Coq.
+In this development, the (relative) smallness/largeness is represented by
+universe levels and universe polymorphism of Coq.
 *)
 Definition Cat : Category :=
 {|

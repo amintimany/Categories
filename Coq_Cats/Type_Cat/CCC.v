@@ -20,7 +20,8 @@ Qed.
 
 Local Notation "A × B" := (@Product Type_Cat A B) : object_scope.
 
-(** The cartesian product of types is the categorical notion of products in category of types. *)
+(** The cartesian product of types is the categorical notion of products in
+    category of types. *)
 Program Definition prod_Product (A B : Type) : (A × B)%object :=
 {|
   product := (A * B)%type;
@@ -43,7 +44,8 @@ Qed.
 
 Program Instance Type_Cat_Has_Products : Has_Products Type_Cat := prod_Product.
 
-(** The function type in coq is the categorical exponential in the category of types. *)
+(** The function type in coq is the categorical exponential in the category of
+    types. *)
 Program Definition fun_exp (A B : Type_Cat) : (A ⇑ B)%object :=
 {|
   exponential := A -> B;
@@ -69,5 +71,3 @@ Program Instance Type_Cat_Has_Exponentials : Has_Exponentials Type_Cat := fun_ex
 (* Category of Types is cartesian closed *)
 
 Program Instance Type_Cat_CCC : CCC Type_Cat.
-
-

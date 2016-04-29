@@ -6,7 +6,8 @@ Require Import Functor.Functor Functor.Functor_Ops.
 Require Import Coq_Cats.Type_Cat.Type_Cat.
 Require Import Ext_Cons.Prod_Cat.Prod_Cat.
 Require Import Cat.Cat.
-Require Import NatTrans.NatTrans NatTrans.Operations NatTrans.Func_Cat NatTrans.NatIso.
+Require Import NatTrans.NatTrans NatTrans.Operations NatTrans.Func_Cat
+        NatTrans.NatIso.
 
 Local Open Scope isomorphism_scope.
 Local Open Scope morphism_scope.
@@ -16,7 +17,8 @@ Local Open Scope object_scope.
 Section Opposite_Cat_Iso.
   Context {C D : Category} (I : C ≃≃ D ::> Cat).
 
-  Program Definition Opposite_Cat_Iso : (C^op)%category ≃≃ (D^op)%category ::> Cat
+  Program Definition Opposite_Cat_Iso :
+    (C^op)%category ≃≃ (D^op)%category ::> Cat
     :=
       {|
         iso_morphism := ((iso_morphism I)^op)%functor;
@@ -43,43 +45,53 @@ End Opposite_Cat_Iso.
 Section Cat_IConv.
   Context {C D : Category} (I : C ≃≃ D ::> Cat).
 
-  (** Object conversion through an isomorphism and its inverse isomorphism gives back the same object. *)
-  Definition Cat_Iso_Obj_conv (c : C) : c = (((inverse_morphism I) _o) (((iso_morphism I) _o) c))%object.
+  (** Object conversion through an isomorphism and its inverse isomorphism
+      gives back the same object. *)
+  Definition Cat_Iso_Obj_conv (c : C) :
+    c = (((inverse_morphism I) _o) (((iso_morphism I) _o) c))%object.
   Proof.
-    change (I ⁻¹ _o ((iso_morphism I) _o c)) with ((I ⁻¹ ∘ I)%morphism _o c)%object;
+    change (I ⁻¹ _o ((iso_morphism I) _o c))
+    with ((I ⁻¹ ∘ I)%morphism _o c)%object;
     rewrite (left_inverse I); trivial.
   Qed.
 
-  (** Homomorphism types remain the smae after object conversion through an isomorphism and its inverse isomorphism. *)
+  (** Homomorphism types remain the smae after object conversion through an
+      isomorphism and its inverse isomorphism. *)
   Definition Cat_Iso_Hom_conv (c c' : C) :
     ((((inverse_morphism I) _o) (((iso_morphism I) _o) c))
       –≻
-      (((inverse_morphism I) _o) (((iso_morphism I) _o) c')))%morphism = (c –≻ c').
+      (((inverse_morphism I) _o) (((iso_morphism I) _o) c')))%morphism
+    = (c –≻ c').
   Proof.
     do 2 rewrite <- Cat_Iso_Obj_conv; trivial.
   Defined.
 
-  (** Type conversion to the original hom type after conversion with an isomorphism and its inverse. *)
+  (** Type conversion to the original hom type after conversion with 
+      an isomorphism and its inverse. *)
   Definition Cat_Iso_conv_inv {c c' : C}
              (h :
                 (((inverse_morphism I) _o) (((iso_morphism I) _o) c))
-                  –≻ (((inverse_morphism I) _o) (((iso_morphism I) _o) c'))) : c –≻ c' :=
+                  –≻ (((inverse_morphism I) _o) (((iso_morphism I) _o) c')))
+    : c –≻ c' :=
     match Cat_Iso_Hom_conv c c' in _ = Y return Y with
       eq_refl => h
     end.
 
-  (** Heterogenous equality of type conversion to the original hom type after conversion with an isomorphism and its inverse. *)
+  (** Heterogenous equality of type conversion to the original hom type after
+      conversion with an isomorphism and its inverse. *)
   Theorem Cat_Iso_conv_inv_JMeq {c c' : C}
           (h :
              (((inverse_morphism I) _o) (((iso_morphism I) _o) c))
-               –≻ (((inverse_morphism I) _o) (((iso_morphism I) _o) c'))) : Cat_Iso_conv_inv h ~= h.
+               –≻ (((inverse_morphism I) _o) (((iso_morphism I) _o) c')))
+    : Cat_Iso_conv_inv h ~= h.
   Proof.
     unfold Cat_Iso_conv_inv.
     destruct Cat_Iso_Hom_conv.
     trivial.
   Qed.
 
-  (** Type conversion to the original hom type after conversion with the inverse of an isomorphism and that isomorphism. *)
+  (** Type conversion to the original hom type after conversion with the
+      inverse of an isomorphism and that isomorphism. *)
   Definition Cat_Iso_conv {c c' : C} (h : c –≻ c') :
     (((inverse_morphism I) _o) (((iso_morphism I) _o) c))
       –≻ (((inverse_morphism I) _o) (((iso_morphism I) _o) c'))
@@ -88,7 +100,8 @@ Section Cat_IConv.
       eq_refl => h
     end.
   
-  (** Heterogenous equality of type conversion to the original hom type after conversion with the inverse of an isomorphism and that isomorphism. *)
+  (** Heterogenous equality of type conversion to the original hom type after
+      conversion with the inverse of an isomorphism and that isomorphism. *)
   Theorem Cat_Iso_conv_JMeq {c c' : C} (h : c –≻ c') : Cat_Iso_conv h ~= h.
   Proof.
     unfold Cat_Iso_conv.
@@ -96,14 +109,18 @@ Section Cat_IConv.
     trivial.
   Qed.
 
-  (** Conversion once through an isomrphism and its inverse and once through its inverse and it gives back the same arrow as we strated with. *)
-  Theorem Cat_Iso_conv_inv_Cat_Iso_conv {c c' : C} (h : c –≻ c') : Cat_Iso_conv_inv (Cat_Iso_conv h) = h.
+  (** Conversion once through an isomrphism and its inverse and once through
+      its inverse and it gives back the same arrow as we strated with. *)
+  Theorem Cat_Iso_conv_inv_Cat_Iso_conv {c c' : C} (h : c –≻ c')
+    : Cat_Iso_conv_inv (Cat_Iso_conv h) = h.
   Proof.
     unfold Cat_Iso_conv_inv, Cat_Iso_conv.
     destruct Cat_Iso_Hom_conv; trivial.
   Qed.
 
-  (** Conversion once through the inverse of an isomrphism and that isomorphism and once through that isomorphism and its inverse gives back the same arrow as we strated with. *)
+  (** Conversion once through the inverse of an isomrphism and that isomorphism
+      and once through that isomorphism and its inverse gives back the same
+      arrow as we strated with. *)
   Theorem Cat_Iso_conv_Cat_Iso_conv_inv {c c' : C}
           (h :
              (((inverse_morphism I) _o) (((iso_morphism I) _o) c))
@@ -115,7 +132,8 @@ Section Cat_IConv.
     destruct Cat_Iso_Hom_conv; trivial.
   Qed. 
 
-  (** Conversion of an arrow through an ismorphism and its inverse (after correcting the homorphism type) is the same arrow as we started with. *)
+  (** Conversion of an arrow through an isomorphism and its inverse (after
+      correcting the homorphism type) is the same arrow as we started with. *)
   Theorem Cat_Iso_conv_inv_I_inv_I {c c' : C} (h : c –≻ c') :
     Cat_Iso_conv_inv (((inverse_morphism I) _a) (((iso_morphism I) _a) h)) = h.
   Proof.
@@ -143,7 +161,8 @@ Section Cat_IConv.
                –≻ (((inverse_morphism I) _o) (((iso_morphism I) _o) c''))
           )
     :
-      Cat_Iso_conv_inv (compose C h h') = compose C (Cat_Iso_conv_inv h) (Cat_Iso_conv_inv h').
+      Cat_Iso_conv_inv (compose C h h')
+      = compose C (Cat_Iso_conv_inv h) (Cat_Iso_conv_inv h').
   Proof.
     unfold Cat_Iso_conv_inv, Cat_Iso_Hom_conv.
     do 3 destruct Cat_Iso_Obj_conv; trivial.
@@ -154,8 +173,12 @@ End Cat_IConv.
 Section Cat_Iso_inv.
   Context {C D : Category} (I : C ≃≃ D ::> Cat).
 
-  (** The main theorem of this module. Given an isomorphism I between categories C and D, for each morphism h: Hom (I _o c) (I _o c') in D, there is a morphism g in C such that the conversion of h through I (I _a g) gives back the smae arrow, i.e., h = (I _a h). *)
-  Theorem Cat_Iso_inv {c c' : C} (h : ((iso_morphism I) _o c) –≻ ((iso_morphism I) _o c'))
+  (** The main theorem of this module. Given an isomorphism I between
+      categories C and D, for each morphism h: Hom (I _o c) (I _o c')
+      in D, there is a morphism g in C such that the conversion of h
+      through I (I _a g) gives back the smae arrow, i.e., h = (I _a h). *)
+  Theorem Cat_Iso_inv
+          {c c' : C} (h : ((iso_morphism I) _o c) –≻ ((iso_morphism I) _o c'))
     : {g : c –≻ c' | h = ((iso_morphism I) _a g)}.
   Proof.
     exists (Cat_Iso_conv_inv I ((inverse_morphism I) _a h)).
@@ -183,7 +206,8 @@ Given I : C ≃ D for categories C and D and F : D -> E, F ∘ (I ∘ I⁻¹) an
 naturally isomorphic.
 *)
 Section IsoCat_NatIso.
-  Context {C D : Category} (I : (C ≃≃ D ::> Cat)%morphism) {E : Category} (F : (D –≻ E)%functor).
+  Context {C D : Category} (I : (C ≃≃ D ::> Cat)%morphism)
+          {E : Category} (F : (D –≻ E)%functor).
 
   Program Definition IsoCat_NatIso :
     ((F ∘ ((iso_morphism I) ∘ (I⁻¹)%morphism))%functor ≃ F)%natiso :=

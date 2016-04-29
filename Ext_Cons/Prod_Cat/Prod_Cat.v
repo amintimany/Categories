@@ -7,7 +7,9 @@ Require Import Cat.Cat.
 
 (* Product Category *)
 
-(** The product of two categories has as objects pairs of objects (first component from the first category and the second component from the second category) and as arrows pairs of arrows.
+(** The product of two categories has as objects pairs of objects (first
+component from the first category and the second component from the second
+category) and as arrows pairs of arrows.
  *)
 
 Local Open Scope morphism_scope.

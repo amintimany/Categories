@@ -36,8 +36,8 @@ Proof.
   trivial.
 Qed.  
 
-(** A functor from terminal category maps all arrows (any arrow is just the identity)
-to the identity arrow. *)
+(** A functor from terminal category maps all arrows (any arrow is just the
+    identity) to the identity arrow. *)
 Section From_Term_Cat.
   Context {C : Category} (F : (1 –≻ C)%functor).
 
@@ -50,7 +50,8 @@ Section From_Term_Cat.
 
 End From_Term_Cat.
 
-(** Any two functors from a category to the terminal categoy are naturally isomorphic. *)
+(** Any two functors from a category to the terminal categoy are naturally
+    isomorphic. *)
 Program Definition Functor_To_1_Cat_Iso
         {C : Category}
         (F F' : (C –≻ 1)%functor)

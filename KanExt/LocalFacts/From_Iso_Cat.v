@@ -13,7 +13,8 @@ Require Import Cat.Cat.
 
 Local Open Scope functor_scope.
 
-(** Given I : C ≃ D for C and D categories we have KanExt (p ∘ I) (F ∘ I) if we have KanExt p F. *)
+(** Given I : C ≃ D for C and D categories we have KanExt (p ∘ I) (F ∘ I) if
+    we have KanExt p F. *)
 Section KanExt_From_Isomorphic_Cat.
   Context {C D : Category}
           (I : (C ≃≃ D ::> Cat)%isomorphism)
@@ -89,7 +90,8 @@ Section KanExt_From_Isomorphic_Cat.
       Functor_Simplify.
       simpl_ids.
       match goal with
-        [|- _ = ((match ?e with _ => _ end) ∘ _ ∘ (match ?e with _ => _ end))%morphism] =>
+        [|- _ = ((match ?e with _ => _ end)
+                  ∘ _ ∘ (match ?e with _ => _ end))%morphism] =>
         generalize e
       end.
       intros e.
@@ -100,7 +102,8 @@ Section KanExt_From_Isomorphic_Cat.
       destruct H.
       match goal with
         [|- _ = (?A ∘ _ ∘ ?B)%morphism] =>
-        cutrewrite (A = id); [cutrewrite (B = id)|]; try (apply JMeq_eq; destruct e; trivial)
+        cutrewrite (A = id);
+          [cutrewrite (B = id)|]; try (apply JMeq_eq; destruct e; trivial)
       end.
       {
         auto.
@@ -133,7 +136,8 @@ Section KanExt_From_Isomorphic_Cat.
       Functor_Simplify.
       simpl_ids.
       match goal with
-        [|- ((match ?e with _ => _ end) ∘ _ ∘ (match ?e with _ => _ end))%morphism = _] =>
+        [|- ((match ?e with _ => _ end)
+              ∘ _ ∘ (match ?e with _ => _ end))%morphism = _] =>
         destruct e
       end.
       auto.
@@ -184,8 +188,10 @@ Section KanExt_From_Isomorphic_Cat.
       simpl_ids.
       match goal with
         [|-
-         ((match ?e with _ => _ end) ∘ _ ∘ (match ?e with _ => _ end))%morphism =
-         (((match ?e with _ => _ end) ∘ _ ∘ (match ?e with _ => _ end)) ∘ _)%morphism
+         ((match ?e with _ => _ end)
+            ∘ _ ∘ (match ?e with _ => _ end))%morphism =
+         (((match ?e with _ => _ end)
+             ∘ _ ∘ (match ?e with _ => _ end)) ∘ _)%morphism
         ] =>
         generalize e
       end.

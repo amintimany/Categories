@@ -2,7 +2,8 @@ Require Import Essentials.Notations.
 Require Import Essentials.Types.
 Require Import Essentials.Facts_Tactics.
 Require Import Category.Main.
-Require Import Functor.Functor Functor.Functor_Ops Functor.Representable.Hom_Func.
+Require Import Functor.Functor Functor.Functor_Ops
+        Functor.Representable.Hom_Func.
 Require Import Functor.Functor_Extender.
 Require Import NatTrans.Main.
 Require Import Ext_Cons.Prod_Cat.Main.
@@ -14,8 +15,8 @@ Local Notation FCAT := Func_Cat (only parsing).
 
 Local Open Scope functor_scope.
 
-(** Local right kan extensions are preserved by right adjoints and local left kan extensions are
-preserved by left adjoints. *)
+(** Local right kan extensions are preserved by right adjoints and local left
+    kan extensions are preserved by left adjoints. *)
 Section Right_Adjoint_Preserves_Hom_Local_Right_KanExt.
   Context
     {C C' : Category}
@@ -29,7 +30,8 @@ Section Right_Adjoint_Preserves_Hom_Local_Right_KanExt.
     (adj : UCU_Adjunct L R)
   .
   
-  (** Hom_Func_{Func_Cat C E}(- ∘ p, R ∘ F) ≃ Hom_Func_{Func_Cat C D}(L ∘ - ∘ p, F) *)
+  (** Hom_Func_{Func_Cat C E}(- ∘ p, R ∘ F)
+        ≃ Hom_Func_{Func_Cat C D}(L ∘ - ∘ p, F) *)
   Local Definition Ext_p_F_Hom_Adjunct_Lifted :=
     ((
         ((Fix_Bi_Func_2_NatIso (Hom_Adjunct_Lifted adj C) F)
@@ -52,7 +54,8 @@ Section Right_Adjoint_Preserves_Hom_Local_Right_KanExt.
   Local Definition Conv_2 :=
     (
       (
-        (NatTrans_id_Iso (@Fix_Bi_Func_2 _ (Func_Cat _ _) _ F (Hom_Func (Func_Cat C D))))
+        (NatTrans_id_Iso (@Fix_Bi_Func_2
+                            _ (Func_Cat _ _) _ F (Hom_Func (Func_Cat C D))))
           ∘_h ((Right_Left_Functor_Extension_Iso p L)⁻¹)^op
       )⁻¹
     )%isomorphism%natiso.
@@ -95,7 +98,8 @@ Section Right_Adjoint_Preserves_Hom_Local_Right_KanExt.
     (
       (
         (
-          (Fix_Bi_Func_2_NatIso (Func_Prod_of_ids_NatIso (Hom_Func (Func_Cat C E))) (R ∘ F))
+          (Fix_Bi_Func_2_NatIso
+             (Func_Prod_of_ids_NatIso (Hom_Func (Func_Cat C E))) (R ∘ F))
             ∘ (Fix_Bi_2_Func_Prod_Func_NatIso
                  (Functor_id (Func_Cat C E) ^op)
                  (Right_Functor_Extender R C)
@@ -127,7 +131,8 @@ Section Right_Adjoint_Preserves_Hom_Local_Right_KanExt.
   .
   
   Definition Local_Preservation_Iso :=
-    (Right_simplifier ∘ (Local_Preservation_Iso_underlying ∘ Left_simplifier))%isomorphism
+    (Right_simplifier ∘ (Local_Preservation_Iso_underlying
+                           ∘ Left_simplifier))%isomorphism
   .
 
   Definition Right_Adjoint_Preserves_Hom_Local_Right_KanExt :

@@ -5,7 +5,8 @@ Require Import Category.Main.
 Require Import Functor.Main.
 Require Import Cat.Cat.
 Require Import Ext_Cons.Prod_Cat.Prod_Cat Ext_Cons.Prod_Cat.Operations.
-Require Import NatTrans.NatTrans NatTrans.Operations NatTrans.Func_Cat NatTrans.NatIso.
+Require Import NatTrans.NatTrans NatTrans.Operations NatTrans.Func_Cat
+        NatTrans.NatIso.
 
 (** Facts about products of acategories involving natural transformations. *)
   
@@ -19,7 +20,8 @@ Section Prod_Functor_NatTrans.
           {F' G' : (C' –≻ D')%functor}
           (N' : (F' –≻ G')%nattrans).
 
-  Program Definition Prod_Functor_NatTrans : ((Prod_Functor F F') –≻ (Prod_Functor G G'))%nattrans :=
+  Program Definition Prod_Functor_NatTrans :
+    ((Prod_Functor F F') –≻ (Prod_Functor G G'))%nattrans :=
     {|
       Trans := fun c => (Trans N (fst c), Trans N' (snd c))
     |}.
@@ -41,7 +43,8 @@ Section Prod_Functor_NatTrans_id.
           {C' D' : Category} {F' : (C' –≻ D')%functor}.
 
   Theorem Prod_Functor_NatTrans_id :
-    Prod_Functor_NatTrans (NatTrans_id F) (NatTrans_id F') = NatTrans_id (Prod_Functor F F').
+    Prod_Functor_NatTrans (NatTrans_id F) (NatTrans_id F') =
+    NatTrans_id (Prod_Functor F F').
   Proof.
     apply NatTrans_eq_simplify; trivial.
   Qed.    
@@ -58,7 +61,9 @@ Section Prod_Functor_NatTrans_compose.
           (N1' : (F' –≻ G')%nattrans)
           (N2' : (G' –≻ H')%nattrans).
 
-  Theorem Prod_Functor_NatTrans_compose : ((Prod_Functor_NatTrans N2 N2') ∘ (Prod_Functor_NatTrans N1 N1') = Prod_Functor_NatTrans (N2 ∘ N1) (N2' ∘ N1'))%nattrans.
+  Theorem Prod_Functor_NatTrans_compose :
+    ((Prod_Functor_NatTrans N2 N2') ∘ (Prod_Functor_NatTrans N1 N1') =
+     Prod_Functor_NatTrans (N2 ∘ N1) (N2' ∘ N1'))%nattrans.
   Proof.
     apply NatTrans_eq_simplify; trivial.
   Qed.
@@ -74,10 +79,12 @@ Section Prod_Functor_NatIso.
           (N' : (F' ≃ G')%natiso)
   .
 
-  Program Definition Prod_Functor_NatIso : ((Prod_Functor F F') ≃ (Prod_Functor G G'))%natiso :=
+  Program Definition Prod_Functor_NatIso :
+    ((Prod_Functor F F') ≃ (Prod_Functor G G'))%natiso :=
     {|
       iso_morphism := Prod_Functor_NatTrans (iso_morphism N) (iso_morphism N');
-      inverse_morphism := Prod_Functor_NatTrans (inverse_morphism N) (inverse_morphism N')
+      inverse_morphism :=
+        Prod_Functor_NatTrans (inverse_morphism N) (inverse_morphism N')
     |}.
 
   Next Obligation.
@@ -209,7 +216,9 @@ Section Fix_Bi_Func_2_NatIso.
   Proof.
     apply NatTrans_eq_simplify; extensionality c.
     cbn.
-    change (Trans (inverse_morphism N) (c, G) ∘ Trans (iso_morphism N) (c, G))%morphism with (Trans ((inverse_morphism N) ∘ (iso_morphism N)) (c, G)).
+    change (Trans (inverse_morphism N) (c, G) ∘
+                  Trans (iso_morphism N) (c, G))%morphism
+    with (Trans ((inverse_morphism N) ∘ (iso_morphism N)) (c, G)).
     cbn_rewrite (left_inverse N); trivial.
   Qed.
 
@@ -217,7 +226,9 @@ Section Fix_Bi_Func_2_NatIso.
   Proof.
     apply NatTrans_eq_simplify; extensionality c.
     cbn.
-    change (Trans (iso_morphism N) (c, G) ∘ Trans (inverse_morphism N) (c, G))%morphism with (Trans ((iso_morphism N) ∘ (inverse_morphism N)) (c, G)).
+    change (Trans (iso_morphism N) (c, G) ∘
+                  Trans (inverse_morphism N) (c, G))%morphism
+    with (Trans ((iso_morphism N) ∘ (inverse_morphism N)) (c, G)).
     cbn_rewrite (right_inverse N); trivial.
   Qed.
 
@@ -236,7 +247,8 @@ Section Fix_Bi_Func_1_Functor_id_swap_NatIso.
   
   Program Definition Fix_Bi_Func_1_Functor_id_swap_NatIso :
     (
-      (@Fix_Bi_Func_1 (Func_Cat _ _) _ _ G ( F' ∘ (Prod_Functor (Functor_id _) F)))%functor
+      (@Fix_Bi_Func_1 (Func_Cat _ _) _ _ G
+                      ( F' ∘ (Prod_Functor (Functor_id _) F)))%functor
         ≃ ((@Fix_Bi_Func_1 (Func_Cat _ _) _ _ G F') ∘ F)%functor)%natiso :=
     {|
       iso_morphism :=
@@ -264,7 +276,8 @@ Section Fix_Bi_Func_2_Functor_id_swap_NatIso.
   
   Program Definition Fix_Bi_Func_2_Functor_id_swap_NatIso :
     (
-      ((@Fix_Bi_Func_2 _ (Func_Cat _ _) _ G (F' ∘ (Prod_Functor F (Functor_id _))))%functor)
+      ((@Fix_Bi_Func_2 _ (Func_Cat _ _) _ G
+                       (F' ∘ (Prod_Functor F (Functor_id _))))%functor)
         ≃((@Fix_Bi_Func_2 _ (Func_Cat _ _) _ G F') ∘ F)%functor)%natiso :=
     {|
       iso_morphism :=
@@ -294,7 +307,10 @@ Section Fix_Bi_1_Func_Prod_Func_NatIso.
   Program Definition Fix_Bi_1_Func_Prod_Func_NatIso :
     (
       ((Fix_Bi_Func_1 x (G ∘ (Prod_Functor F F')))%functor)
-        ≃ ((Fix_Bi_Func_1 (F _o x) (G ∘ (Prod_Functor (Functor_id C) F'))))%functor)%natiso :=
+        ≃ ((Fix_Bi_Func_1 (F _o x)
+                          (G ∘ (Prod_Functor (Functor_id C) F')))
+          )%functor
+    )%natiso :=
     {|
       iso_morphism := {|Trans := fun c => id|};
       inverse_morphism := {|Trans := fun c => id|}
@@ -317,7 +333,10 @@ Section Fix_Bi_2_Func_Prod_Func_NatIso.
   Program Definition Fix_Bi_2_Func_Prod_Func_NatIso :
     (
       ((Fix_Bi_Func_2 x (G ∘ (Prod_Functor F F')))%functor)
-        ≃ (Fix_Bi_Func_2 (F' _o x) (G ∘  (Prod_Functor F (Functor_id D))))%functor)%natiso :=
+        ≃ (Fix_Bi_Func_2 (F' _o x)
+                         (G ∘  (Prod_Functor F (Functor_id D)))
+          )%functor
+    )%natiso :=
     {|
       iso_morphism := {|Trans := fun c => id|};
       inverse_morphism := {|Trans := fun c => id|}
@@ -349,7 +368,8 @@ Section Fix_Bi_Func_1_object_NatTrans.
   .
 
   Program Definition Fix_Bi_Func_1_object_NatTrans :
-    ((@Fix_Bi_Func_1 (Func_Cat _ _) _ _ G F) –≻ (@Fix_Bi_Func_1 (Func_Cat _ _) _ _ G' F))%nattrans
+    ((@Fix_Bi_Func_1 (Func_Cat _ _) _ _ G F)
+       –≻ (@Fix_Bi_Func_1 (Func_Cat _ _) _ _ G' F))%nattrans
      :=
     {|
       Trans := fun c => (F @_a (G, c) (G', c) (N, id))%morphism
@@ -418,7 +438,8 @@ Section Fix_Bi_Func_2_object_NatTrans.
   .
 
   Program Definition Fix_Bi_Func_2_object_NatTrans :
-    ((@Fix_Bi_Func_2 _ (Func_Cat _ _) _ G F) –≻ (@Fix_Bi_Func_2 _ (Func_Cat _ _) _ G' F))%nattrans
+    ((@Fix_Bi_Func_2 _ (Func_Cat _ _) _ G F)
+       –≻ (@Fix_Bi_Func_2 _ (Func_Cat _ _) _ G' F))%nattrans
     :=
     {|
       Trans := fun c => (F @_a (c, G) (c, G') (id, N))%morphism

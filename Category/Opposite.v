@@ -3,7 +3,9 @@ Require Import Essentials.Types.
 Require Import Essentials.Facts_Tactics.
 Require Import Category.Category.
 
-(** The oposite of a category C is a category with same objects where the arrows are inverted. As a result, f ∘_Cᵒᵖ g is just g ∘_C f and consequently, assoc is assoc_sym (reversed with arrow arguments) and vice versa. Similarly, id_unit_left and id_unit_right are also swapped. *)
+(** The oposite of a category C is a category with the same objects where the arrows are inverted. 
+As a result, f ∘_Cᵒᵖ g is just g ∘_C f and consequently, assoc is assoc_sym (reversed with arrow
+arguments) and vice versa. Similarly, id_unit_left and id_unit_right are also swapped. *)
 
 Definition Opposite (C : Category) : Category :=
 {|

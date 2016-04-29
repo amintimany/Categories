@@ -23,7 +23,11 @@ Section Hom_Adjunct_left_iso.
 
 
   (** If F ≃ F' and (F ⊣_hom G) then (F' ⊣_hom G) *)
-  Definition Hom_Adjunct_left_iso : F' ⊣_hom G := (adj ∘ ((NatTrans_id_Iso (Hom_Func D)) ∘_h (Prod_Functor_NatIso (N^op) (NatTrans_id_Iso (Functor_id D)))))%isomorphism%natiso.
+  Definition Hom_Adjunct_left_iso : F' ⊣_hom G :=
+    (adj ∘ ((NatTrans_id_Iso (Hom_Func D))
+              ∘_h (Prod_Functor_NatIso
+                     (N^op) (NatTrans_id_Iso (Functor_id D))))
+    )%isomorphism%natiso.
 
 End Hom_Adjunct_left_iso.
 
@@ -36,7 +40,10 @@ Section Hom_Adjunct_right_iso.
   .
 
   (** If G ≃ G' and (F ⊣_hom G) then (F ⊣_hom G') *)
-  Definition Hom_Adjunct_right_iso : F ⊣_hom G' := Hom_Adjunct_Duality (Hom_Adjunct_left_iso ((N^op)⁻¹)%isomorphism%natiso (Hom_Adjunct_Duality adj)).
+  Definition Hom_Adjunct_right_iso : F ⊣_hom G' :=
+    Hom_Adjunct_Duality
+      (Hom_Adjunct_left_iso
+         ((N^op)⁻¹)%isomorphism%natiso (Hom_Adjunct_Duality adj)).
 
 End Hom_Adjunct_right_iso.
 
@@ -49,7 +56,8 @@ Section Adjunct_left_iso.
   .
 
   (** If F ≃ F' and (F ⊣ G) then (F' ⊣ G) *)
-  Definition Adjunct_left_iso : F' ⊣ G := Hom_Adj_to_Adj (Hom_Adjunct_left_iso N (Adj_to_Hom_Adj adj)).
+  Definition Adjunct_left_iso : F' ⊣ G :=
+    Hom_Adj_to_Adj (Hom_Adjunct_left_iso N (Adj_to_Hom_Adj adj)).
 
 End Adjunct_left_iso.
 
@@ -62,7 +70,8 @@ Section Adjunct_right_iso.
   .
 
   (** If G ≃ G' and (F ⊣ G) then (F ⊣ G') *)
-  Definition Adjunct_right_iso : F ⊣ G' := Hom_Adj_to_Adj (Hom_Adjunct_right_iso N (Adj_to_Hom_Adj adj)).
+  Definition Adjunct_right_iso : F ⊣ G' :=
+    Hom_Adj_to_Adj (Hom_Adjunct_right_iso N (Adj_to_Hom_Adj adj)).
 
 End Adjunct_right_iso.
 
@@ -148,8 +157,8 @@ Section Adjunct_right_unique.
 
 End Adjunct_right_unique.
 
-(** If F ⊣_ucu G then Hom_{Func_Cat B D}(Fᵒᵖ ∘ –, –) ≃ Hom_{Func_Cat B C}(–, G ∘ —)
- *)
+(** If F ⊣_ucu G then
+    Hom_{Func_Cat B D}(Fᵒᵖ ∘ –, –) ≃ Hom_{Func_Cat B C}(–, G ∘ —) *)
 Section Hom_Adjunct_Lifted.
   Context {C D : Category}
           {F : C –≻ D}
@@ -186,7 +195,10 @@ Section Hom_Adjunct_Lifted.
   Program Definition Hom_Adjunct_Lifted_LR : (LEFT –≻ RIGHT)%nattrans :=
     {|
       Trans := fun c h =>
-                 ((((NatTrans_id G) ∘_h h) ∘ ((NatTrans_Functor_assoc (fst c) F G) ∘ ((ucu_adj_unit adj) ∘_h (NatTrans_id (fst c))))) ∘ (NatTrans_to_compose_id _))%nattrans
+                 ((((NatTrans_id G) ∘_h h)
+                     ∘ ((NatTrans_Functor_assoc (fst c) F G)
+                          ∘ ((ucu_adj_unit adj) ∘_h (NatTrans_id (fst c)))))
+                    ∘ (NatTrans_to_compose_id _))%nattrans
     |}.
 
   Next Obligation.
@@ -209,7 +221,12 @@ Section Hom_Adjunct_Lifted.
 
   Program Definition Hom_Adjunct_Lifted_RL : (RIGHT –≻ LEFT)%nattrans :=
     {|
-      Trans := fun c h => ((NatTrans_from_compose_id _) ∘ ((((ucu_adj_counit adj) ∘_h (NatTrans_id (snd c))) ∘ (NatTrans_Functor_assoc_sym (snd c) G F)) ∘ ((NatTrans_id F) ∘_h h)))%nattrans
+      Trans := fun c h =>
+                 ((NatTrans_from_compose_id _)
+                    ∘ ((((ucu_adj_counit adj)
+                           ∘_h (NatTrans_id (snd c)))
+                          ∘ (NatTrans_Functor_assoc_sym (snd c) G F))
+                         ∘ ((NatTrans_id F) ∘_h h)))%nattrans
     |}.
     
   Next Obligation.
@@ -250,7 +267,8 @@ Section Hom_Adjunct_Lifted.
     cbn_rewrite (Trans_com (ucu_adj_counit adj) (Trans h y)). 
     rewrite assoc.
     simpl_ids; trivial.
-    set (W := f_equal (fun w => Trans w (c1 _o y)) (ucu_adj_left_id adj)); cbn in W; simpl_ids in W; apply W.
+    set (W := f_equal (fun w => Trans w (c1 _o y)) (ucu_adj_left_id adj));
+      cbn in W; simpl_ids in W; apply W.
   Qed.
 
   Next Obligation.
@@ -267,8 +285,10 @@ Section Hom_Adjunct_Lifted.
     cbn_rewrite <- (Trans_com (ucu_adj_unit adj) (Trans h y)).
     rewrite assoc_sym.
     simpl_ids; trivial.
-    set (W := f_equal (fun w => Trans w (c2 _o y)) (ucu_adj_right_id adj)); cbn in W;
-    repeat rewrite F_compose in W; repeat rewrite F_id in W; simpl_ids in W; apply W.
+    set (W := f_equal (fun w => Trans w (c2 _o y)) (ucu_adj_right_id adj));
+      cbn in W;
+      repeat rewrite F_compose in W; repeat rewrite F_id in W; simpl_ids in W;
+      apply W.
   Qed.
 
 End Hom_Adjunct_Lifted.

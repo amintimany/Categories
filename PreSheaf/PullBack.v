@@ -9,7 +9,8 @@ Require Import Coq_Cats.Type_Cat.Type_Cat.
 Require Import PreSheaf.PreSheaf.
 
 Section PSh_PullBack.
-  Context (C : Category) {F G I : PreSheaf C} (f : (F –≻ I)%nattrans) (g : (G –≻ I)%nattrans).
+  Context (C : Category) {F G I : PreSheaf C}
+          (f : (F –≻ I)%nattrans) (g : (G –≻ I)%nattrans).
 
   Local Hint Extern 1 =>
   match goal with
@@ -18,7 +19,9 @@ Section PSh_PullBack.
     destruct x as [x H]
   end.
 
-  Local Hint Extern 1 => match goal with [|- context [(?F _a id)%morphism]] => rewrite (F_id F) end.
+  Local Hint Extern 1 => match goal with
+                          [|- context [(?F _a id)%morphism]] => rewrite (F_id F)
+                        end.
   Local Hint Extern 1 =>
   match goal with
     [|- context [(?F _a (?f ∘ ?g))%morphism]] =>
@@ -47,17 +50,20 @@ Section PSh_PullBack.
         fun c c' h x =>
           exist
             _
-            ((F _a h (fst (proj1_sig x)))%morphism, (G _a h (snd (proj1_sig x)))%morphism)
+            ((F _a h (fst (proj1_sig x)))%morphism,
+             (G _a h (snd (proj1_sig x)))%morphism)
             _
     |}.
 
-  (** The morphism from the pullback to the domain object of the first morphism. *)
+  (** The morphism from the pullback to the domain object of the first
+      morphism. *)
   Program Definition PSh_PullBack_morph_1 : (PSh_PullBack_Func –≻ F)%nattrans :=
     {|
       Trans := fun c x => fst (proj1_sig x)
     |}.
 
-  (** The morphism from the pullback to the domain object of the second morphism. *)
+  (** The morphism from the pullback to the domain object of the second
+      morphism. *)
   Program Definition PSh_PullBack_morph_2 : (PSh_PullBack_Func –≻ G)%nattrans :=
     {|
       Trans := fun c x => snd (proj1_sig x)
@@ -81,7 +87,7 @@ Section PSh_PullBack.
               (f_equal (fun w : (p' –≻ I)%nattrans => Trans w c x) H)
       |}.
 
-  (** The pointwise pullback presheaf is the pullback of presheafs. *)
+  (** The pointwise pullback presheaf is the pullback of presheaves. *)
   Program Definition PSh_PullBack : @PullBack (PShCat C) _ _ _ f g :=
     {|
       pullback := PSh_PullBack_Func;
@@ -100,8 +106,10 @@ Section PSh_PullBack.
     apply NatTrans_eq_simplify.
     extensionality c.
     extensionality x.
-    assert (H1' := f_equal (fun w : (p' –≻ F)%nattrans => Trans w c x) H1); clear H1.
-    assert (H2' := f_equal (fun w : (p' –≻ G)%nattrans => Trans w c x) H2); clear H2.
+    assert (H1' := f_equal (fun w : (p' –≻ F)%nattrans => Trans w c x) H1);
+      clear H1.
+    assert (H2' := f_equal (fun w : (p' –≻ G)%nattrans => Trans w c x) H2);
+      clear H2.
     cbn in *.
     match goal with
       [|- ?A = ?B] => destruct A as [[? ?] ?]; destruct B as [[? ?] ?]

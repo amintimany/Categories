@@ -9,8 +9,9 @@ Section PullBack.
   Context {C : Category} {a b x : C} (f : a –≻ x) (g : b –≻ x).
 
   (**
-Given two arrows f : a -> x and g : b -> x, their pullback is an object p together
-with two arrows π₁ : p -> a and π₂ : p -> b such that the follwoing diagram commutes:
+Given two arrows f : a -> x and g : b -> x, their pullback is an object p
+together with two arrows π₁ : p -> a and π₂ : p -> b such that the following
+diagram commutes:
 
 #
 <pre>
@@ -25,8 +26,8 @@ with two arrows π₁ : p -> a and π₂ : p -> b such that the follwoing diagra
 </pre>
 #
 
-Provided that for any object q and arrows p1 : q -> a and p2 : q -> b that the following
-diagram commutes:
+Provided that for any object q and arrows p1 : q -> a and p2 : q -> b that the
+following diagram commutes:
 
 #
 <pre>
@@ -61,7 +62,8 @@ there is a unique arrow h : q -> p that makes the following diagram commute:
 </pre>
 #
 
-We usually use a half square in the corner of p to denote p is the pullback of f and g. Like so:
+We usually use a half square in the corner of p to denote p is the pullback of
+f and g. Like so:
 #
 <pre>
         π₂   
@@ -148,7 +150,8 @@ End PullBack.
 
 (** The predicate form of pullback: *)
 Section is_PullBack.
-  Context {C : Category} {a b x pb : C} (p1 : pb –≻ a) (p2 : pb –≻ b) (f : a –≻ x) (g : b –≻ x).
+  Context {C : Category} {a b x pb : C} (p1 : pb –≻ a)
+          (p2 : pb –≻ b) (f : a –≻ x) (g : b –≻ x).
 
   Local Open Scope morphism_scope.
   
@@ -180,8 +183,8 @@ Section is_PullBack.
 
 End is_PullBack.
 
-Definition Has_PullBacks (C : Category) : Type := ∀ (a b c : C) (f : a –≻ c) (g : b –≻ c),
-    PullBack f g.
+Definition Has_PullBacks (C : Category) : Type :=
+  ∀ (a b c : C) (f : a –≻ c) (g : b –≻ c), PullBack f g.
 
 Existing Class Has_PullBacks.
 
@@ -207,7 +210,8 @@ Section is_PullBack_PullBack.
   Context {C : Category} {a b x pb : C} {p1 : pb –≻ a} {p2 : pb –≻ b} {f : a –≻ x}
           {g : b –≻ x} (iPB : is_PullBack p1 p2 f g).
 
-  (** The predicate form of pullbacks implies the compact from of pullbacks. See above for details.*)
+  (** The predicate form of pullbacks implies the compact from of pullbacks.
+       See above for details.*)
   Definition is_PullBack_PullBack : PullBack f g :=
     {|
       pullback := pb;
@@ -215,24 +219,33 @@ Section is_PullBack_PullBack.
       pullback_morph_2 := p2;
       pullback_morph_com := is_pullback_morph_com iPB;
       pullback_morph_ex := fun p' pm1 pm2 => is_pullback_morph_ex iPB p' pm1 pm2;
-      pullback_morph_ex_com_1 := fun p' pm1 pm2 pmc => is_pullback_morph_ex_com_1 iPB p' pm1 pm2 pmc;
-      pullback_morph_ex_com_2 := fun p' pm1 pm2 pmc => is_pullback_morph_ex_com_2 iPB p' pm1 pm2 pmc;
-      pullback_morph_ex_unique := fun p' pm1 pm2 pmc u u' => is_pullback_morph_ex_unique iPB p' pm1 pm2 pmc u u'
+      pullback_morph_ex_com_1 :=
+        fun p' pm1 pm2 pmc => is_pullback_morph_ex_com_1 iPB p' pm1 pm2 pmc;
+      pullback_morph_ex_com_2 :=
+        fun p' pm1 pm2 pmc => is_pullback_morph_ex_com_2 iPB p' pm1 pm2 pmc;
+      pullback_morph_ex_unique :=
+        fun p' pm1 pm2 pmc u u' => is_pullback_morph_ex_unique iPB p' pm1 pm2 pmc u u'
     |}.
 
 End is_PullBack_PullBack.
 
 Section PullBack_is_PullBack.
-  Context {C : Category} {a b x : C} {f : a –≻ x} {g : b –≻ x} (PB : PullBack f g).
+  Context {C : Category} {a b x : C} {f : a –≻ x}
+          {g : b –≻ x} (PB : PullBack f g).
 
-  (** Compact form of pullback implies the predicate form of pullback. See above for details. *)
-  Definition PullBack_is_PullBack : is_PullBack (pullback_morph_1 PB) (pullback_morph_2 PB) f g :=
+  (** Compact form of pullback implies the predicate form of pullback.
+      See above for details. *)
+  Definition PullBack_is_PullBack :
+    is_PullBack (pullback_morph_1 PB) (pullback_morph_2 PB) f g :=
     {|
       is_pullback_morph_com := pullback_morph_com PB;
       is_pullback_morph_ex := fun p' pm1 pm2 => pullback_morph_ex PB p' pm1 pm2;
-      is_pullback_morph_ex_com_1 := fun p' pm1 pm2 pmc => pullback_morph_ex_com_1 PB p' pm1 pm2 pmc;
-      is_pullback_morph_ex_com_2 := fun p' pm1 pm2 pmc => pullback_morph_ex_com_2 PB p' pm1 pm2 pmc;
-      is_pullback_morph_ex_unique := fun p' pm1 pm2 pmc u u' => pullback_morph_ex_unique PB p' pm1 pm2 pmc u u'
+      is_pullback_morph_ex_com_1 :=
+        fun p' pm1 pm2 pmc => pullback_morph_ex_com_1 PB p' pm1 pm2 pmc;
+      is_pullback_morph_ex_com_2 :=
+        fun p' pm1 pm2 pmc => pullback_morph_ex_com_2 PB p' pm1 pm2 pmc;
+      is_pullback_morph_ex_unique :=
+        fun p' pm1 pm2 pmc u u' => pullback_morph_ex_unique PB p' pm1 pm2 pmc u u'
     |}.
 
 End PullBack_is_PullBack.
@@ -242,6 +255,7 @@ Definition PushOut (C : Category) := @PullBack (C^op).
 
 Arguments PushOut _ {_ _ _} _ _, {_ _ _ _} _ _.
 
-Definition Has_PushOuts (C : Category) : Type := ∀ (a b c : C) (f : c –≻ a) (g : c –≻ b), PushOut f g.
+Definition Has_PushOuts (C : Category) : Type :=
+  ∀ (a b c : C) (f : c –≻ a) (g : c –≻ b), PushOut f g.
 
 Existing Class Has_PushOuts.

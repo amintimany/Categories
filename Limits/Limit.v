@@ -13,14 +13,15 @@ Require Export Cat.Cat_Terminal.
 
 Local Open Scope functor_scope.
 
-(** Definition of limits and colimits using right and left kan extensions along the functor to
-the terminal category. *)
+(** Definition of limits and colimits using right and left kan extensions
+    along the functor to the terminal category. *)
 Section Limit.
   Context {J C : Category} (D : J –≻ C).
 
   Definition Cone := LoKan_Cone (Functor_To_1_Cat J) D.
 
-  Definition Cone_Morph Cn Cn' := @LoKan_Cone_Morph _ _ (Functor_To_1_Cat J) _ D Cn Cn'.
+  Definition Cone_Morph Cn Cn' :=
+    @LoKan_Cone_Morph _ _ (Functor_To_1_Cat J) _ D Cn Cn'.
   
   Definition Limit : Type := Local_Right_KanExt (Functor_To_1_Cat J) D.
 
@@ -32,7 +33,8 @@ Section Limit.
 
   Coercion cone_to_obj : Cone >-> Obj.
 
-  Definition is_Limit (Cn : Cone) := is_Cone_Local_Right_KanExt (Functor_To_1_Cat J) D Cn.
+  Definition is_Limit (Cn : Cone) :=
+    is_Cone_Local_Right_KanExt (Functor_To_1_Cat J) D Cn.
 
   Definition is_Limit_Limit {Cn : Cone} (il : is_Limit Cn) : Limit :=
     is_Cone_Local_Right_KanExt_Local_Right_KanExt (Functor_To_1_Cat J) D il.
@@ -70,12 +72,15 @@ Proof (
       (right_inverse (Local_Right_KanExt_unique _ _ l l'))
   ).
 
-(** Proposition stating that category C has all limits of cardinality specified by P *)
+(** Proposition stating that category C has all limits of cardinality
+    specified by P *)
 Definition Has_Restr_Limits (C : Category) (P : Card_Restriction) :=
   ∀ {J : Category} (D : J –≻ C), P J → P (Arrow J) → Limit D.
 
-(** A complete category has all limits – here it has global right kan extension *)
-Definition Complete (C : Category) := ∀ J : Category, Right_KanExt (Functor_To_1_Cat J) C.
+(** A complete category has all limits – here it has global
+    right kan extension *)
+Definition Complete (C : Category) :=
+  ∀ J : Category, Right_KanExt (Functor_To_1_Cat J) C.
 
 Existing Class Complete.
 
@@ -89,7 +94,8 @@ Section Restricted_Limits_to_Complete.
   Context {C : Category} {P : Card_Restriction} (HRL : Has_Restr_Limits C P).
 
   Definition No_Restriction_Complete : (∀ t, P t) → Complete C :=
-    fun All_Ps J => Local_to_Global_Right _ _ (fun D => HRL _ D (All_Ps J) (All_Ps (Arrow J))).
+    fun All_Ps J => Local_to_Global_Right
+                   _ _ (fun D => HRL _ D (All_Ps J) (All_Ps (Arrow J))).
 
 End Restricted_Limits_to_Complete.
 
@@ -123,7 +129,8 @@ Section Continuous.
           cone_apex :=
             (G ∘ (cone_apex Cn))%functor;
           cone_edge :=
-            (((NatTrans_id G) ∘_h (cone_edge Cn)) ∘ (NatTrans_Functor_assoc _ _ _))%nattrans
+            (((NatTrans_id G)
+                ∘_h (cone_edge Cn)) ∘ (NatTrans_Functor_assoc _ _ _))%nattrans
         |}
     .
 
@@ -149,35 +156,43 @@ Section CoLimit.
 
   Definition CoLimit := Local_Left_KanExt (Functor_To_1_Cat J) D.
 
-  Definition is_CoLimit (Cn : CoCone) := is_Cone_Local_Right_KanExt (Functor_To_1_Cat (J^op)) (D^op) Cn.
+  Definition is_CoLimit (Cn : CoCone) :=
+    is_Cone_Local_Right_KanExt (Functor_To_1_Cat (J^op)) (D^op) Cn.
 
   Definition is_CoLimit_CoLimit {Cn : CoCone} (il : is_CoLimit Cn) : CoLimit :=
-    is_Cone_Local_Right_KanExt_Local_Right_KanExt (Functor_To_1_Cat (J^op)) (D^op) il.
+    is_Cone_Local_Right_KanExt_Local_Right_KanExt
+      (Functor_To_1_Cat (J^op)) (D^op) il.
 
   Definition CoLimit_is_CoLimit {L : CoLimit} : is_CoLimit L :=
-    Local_Right_KanExt_is_Cone_Local_Right_KanExt (Functor_To_1_Cat (J^op)) (D^op) L.
+    Local_Right_KanExt_is_Cone_Local_Right_KanExt
+      (Functor_To_1_Cat (J^op)) (D^op) L.
 
 End CoLimit.
 
-(** Proposition stating that category C has all colimits of cardinality specified by P *)
+(** Proposition stating that category C has all colimits of
+    cardinality specified by P *)
 Definition Has_Restr_CoLimits (C : Category) (P : Card_Restriction) :=
   ∀ {J : Category} (D : J –≻ C), P J → P (Arrow J) → CoLimit D.
 
-(** A cocomplete category has all colimits – here it has global left kan extension *)
-Definition CoComplete (C : Category) := ∀ J : Category, Left_KanExt (Functor_To_1_Cat J) C.
+(** A cocomplete category has all colimits – here it has global
+    left kan extension *)
+Definition CoComplete (C : Category) :=
+  ∀ J : Category, Left_KanExt (Functor_To_1_Cat J) C.
 
 Existing Class CoComplete.
 
 (** If a category is cocomplete, we can produce all colimits. *)
-Definition CoLimitOf {C D : Category} {H : CoComplete D} (F : C –≻ D) : CoLimit F :=
-  Global_to_Local_Left _ _ (H _) F.
+Definition CoLimitOf {C D : Category} {H : CoComplete D} (F : C –≻ D) :
+  CoLimit F := Global_to_Local_Left _ _ (H _) F.
 
 (** If a category is complete, its dual is cocomplete *)
-Definition Complete_to_CoComplete_Op {C : Category} {CC : Complete C} : CoComplete (C ^op) :=
-  fun D => KanExt_Right_to_Left (Functor_To_1_Cat D ^op) C (CC (D ^op)%category).
+Definition Complete_to_CoComplete_Op {C : Category} {CC : Complete C}
+  : CoComplete (C ^op) :=
+fun D => KanExt_Right_to_Left (Functor_To_1_Cat D ^op) C (CC (D ^op)%category).
 
 (** If a category is cocomplete, its dual is complete *)
-Definition CoComplete_to_Complete_Op {C : Category} {CC : CoComplete C} : Complete (C ^op) :=
+Definition CoComplete_to_Complete_Op {C : Category} {CC : CoComplete C}
+  : Complete (C ^op) :=
     fun D => KanExt_Left_to_Right (Functor_To_1_Cat D ^op) C (CC (D ^op)%category).
 
 (** A category having restricted colimitis where the restriction always holds 
@@ -253,7 +268,8 @@ Section CoContinuous.
           cone_apex :=
             ((G ^op) ∘ (cone_apex Cn))%functor;
           cone_edge := _
-            (((NatTrans_id (G ^op)) ∘_h (cone_edge Cn)) ∘ (NatTrans_Functor_assoc _ _ _))%nattrans
+                         (((NatTrans_id (G ^op)) ∘_h (cone_edge Cn))
+                            ∘ (NatTrans_Functor_assoc _ _ _))%nattrans
         |}
     .
 

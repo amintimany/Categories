@@ -72,7 +72,8 @@ Section Functor_Image.
                       Forall_Links ch (
                                      fun x y g =>
                                      ∃ (c d : Obj) (h : c –≻ d)
-                                       (Fca : (F _o c)%object = x) (Fdb : (F _o d)%object = y),
+                                       (Fca : (F _o c)%object = x)
+                                       (Fdb : (F _o d)%object = y),
                                        match Fca in (_ = Z) return Z –≻ _ with
                                          eq_refl =>
                                          match Fdb in (_ = Y) return _ –≻ Y with

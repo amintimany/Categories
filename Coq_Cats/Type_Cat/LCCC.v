@@ -34,13 +34,14 @@ Section CCC_Slice_A.
 
   (** Here we show that slices have exponentials. *)
 
-  (** Given two arrows f : Y → A and g : Y → A, the exponential gᶠ is an arrow from
-       {(z, u)| z : A, u : (f⁻¹ z) → (g⁻¹ z)}
-to A that maps a pair (z, u) to z.
+  (** 
+Given two arrows f : Y → A and g : Y → A, the exponential gᶠ is an arrow
+from {(z, u)| z : A, u : (f⁻¹ z) → (g⁻¹ z)} to A that maps a pair
+(z, u) to z.
       
-Intuitively, exponentials are representatives of the set of morphisms between objects.
-Recall thatin a slice, a morphism from f : X → A to g : Y → A is a morphism h : X → Y
-that makes the following diagram commute.
+Intuitively, exponentials are representatives of the set of morphisms between
+objects. Recall that in a slice, a morphism from f : X → A to g : Y → A is a
+morphism h : X → Y that makes the following diagram commute.
 
          h
     X ——————–> Y
@@ -51,9 +52,8 @@ that makes the following diagram commute.
     ↓ ↙
     A
 
-Therefore, for any element z : A, arrows from (f⁻¹ z) to (g⁻¹ z) are precisely those
-that make the diagram commute.
-
+Therefore, for any element z : A, arrows from (f⁻¹ z) to (g⁻¹ z) are precisely
+those that make the diagram commute.
 *)
   
   Context (f g : Slice Type_Cat A).
@@ -64,14 +64,15 @@ that make the diagram commute.
     (
       CO
         (
-          fun m : {x : A & (Pre_Image (CMO_hom f) x) → (Pre_Image (CMO_hom g) x)} =>
-            projT1 m
+          fun m : {x : A & (Pre_Image (CMO_hom f) x) → (Pre_Image (CMO_hom g) x)}
+          => projT1 m
         )
     ) (only parsing).
   
   Local Obligation Tactic := idtac.
 
-  Program Definition Type_Cat_LExp : @Exponential (Slice Type_Cat A) Type_Cat_Slice_Prod f g :=
+  Program Definition Type_Cat_LExp :
+    @Exponential (Slice Type_Cat A) Type_Cat_Slice_Prod f g :=
     {|
       exponential := EXP;
       eval :=
@@ -83,7 +84,9 @@ that make the diagram commute.
           (@Const_Func 1 Type_Cat A)
           _
           _
-          (fun w => proj1_sig ((projT2 (fst (proj1_sig w))) (exist _ (snd (proj1_sig w)) _)))
+          (fun w =>
+             proj1_sig
+               ((projT2 (fst (proj1_sig w))) (exist _ (snd (proj1_sig w)) _)))
           tt
           _
       ;
@@ -134,7 +137,9 @@ that make the diagram commute.
   Proof.
     intros z h w v.
     symmetry.
-    exact (equal_f (CMH_com h) (exist _ (w, proj1_sig v) (Type_Cat_LExp_obligation_3 z h w v))).
+    exact (equal_f
+             (CMH_com h)
+             (exist _ (w, proj1_sig v) (Type_Cat_LExp_obligation_3 z h w v))).
   Qed.
 
   Next Obligation.
@@ -220,7 +225,8 @@ that make the diagram commute.
       set (H2' := (equal_f (f_equal CMH_left H2) M));clearbody H2'; clear H2.
       cbn in H2'.
       match type of H2' with
-        proj1_sig (projT2 (CMH_left u x) ?w) = proj1_sig (projT2 (CMH_left u' x) ?w') =>
+        proj1_sig (projT2 (CMH_left u x) ?w) =
+        proj1_sig (projT2 (CMH_left u' x) ?w') =>
         cutrewrite
           (w =
            (

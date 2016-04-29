@@ -9,7 +9,8 @@ Require Import Cat.Cat Cat.Cat_Iso.
 (** In this section we show that if a category C has a terminal object and D is
 a category isomorphic to C, then D also has a terminal object. *)
 Section Term_IsoCat.
-  Context {C D : Category} (I : (C ≃≃ D ::> Cat)%isomorphism) (trm : (𝟙_ C)%object).
+  Context {C D : Category}
+          (I : (C ≃≃ D ::> Cat)%isomorphism) (trm : (𝟙_ C)%object).
 
   Program Definition Term_IsoCat : (𝟙_ D)%object
     :=
@@ -18,11 +19,14 @@ Section Term_IsoCat.
         t_morph :=
           fun c =>
             match
-              f_equal (fun w : (D –≻ D)%functor => (w _o)%object c) (right_inverse I)
+              f_equal (fun w : (D –≻ D)%functor => (w _o)%object c)
+                      (right_inverse I)
               in _ = u return
               (u –≻ _)%morphism
             with
-              eq_refl => ((iso_morphism I) _a ((t_morph trm ((I⁻¹)%morphism _o c))))%morphism
+              eq_refl => ((iso_morphism I) _a ((t_morph
+                                                 trm ((I⁻¹)%morphism _o c)))
+                        )%morphism
             end;
         t_morph_unique :=
           fun c f g => _
@@ -31,7 +35,9 @@ Section Term_IsoCat.
 
   Next Obligation.
   Proof.
-    assert (H := f_equal (fun w : (C –≻ C)%functor => (w _o)%object (terminal trm)) (left_inverse I)).
+    assert (H := f_equal
+                   (fun w : (C –≻ C)%functor => (w _o)%object (terminal trm))
+                   (left_inverse I)).
     cbn in H.
     cut (
         match H in _ = u return
@@ -51,7 +57,8 @@ Section Term_IsoCat.
       destruct H.
       match type of H2 with
         ?A = ?B =>
-        assert (((iso_morphism I) _a A) = ((iso_morphism I) _a B))%morphism by (rewrite H2; trivial)
+        assert (((iso_morphism I) _a A) = ((iso_morphism I) _a B))%morphism
+          by (rewrite H2; trivial)
       end.
       rewrite <- (Cat_Iso_conv_inv_I_inv_I (Inverse_Isomorphism I) f).
       rewrite <- (Cat_Iso_conv_inv_I_inv_I (Inverse_Isomorphism I) g).

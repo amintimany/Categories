@@ -8,7 +8,8 @@ Record PreOrder : Type :=
 {
   PreOrder_car :> Type;
   
-  PreOrder_rel :> PreOrder_car → PreOrder_car → Type where "a ≤ b" := (PreOrder_rel a b);
+  PreOrder_rel :> PreOrder_car → PreOrder_car → Type
+  where "a ≤ b" := (PreOrder_rel a b);
 
   PreOrder_rel_isProp : ∀ x y (h h' : PreOrder_rel x y), h = h'; 
 

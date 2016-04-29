@@ -9,7 +9,8 @@ Require Import Basic_Cons.Exponential.
 
 Local Obligation Tactic := idtac.
 (**
-The exponential functor maps each pair of objects (a, b) (an object of product category Cᵒᵖ × C -> C) to the exponential bᵃ.
+The exponential functor maps each pair of objects (a, b) (an object of product
+category Cᵒᵖ × C -> C) to the exponential bᵃ.
 *)
 Program Definition Exp_Func {C : Category}
         {hp : Has_Products C}
@@ -18,7 +19,12 @@ Program Definition Exp_Func {C : Category}
 {|
   FO := fun x => exps (fst x) (snd x);
   FA := fun a b f => 
-           Exp_morph_ex _ _ ((snd f) ∘ (eval _) ∘ ((×ᶠⁿᶜ C) @_a (_, fst b) (_, fst a) (id (exps (fst a) (snd a)), fst f)))%morphism
+          Exp_morph_ex
+            _ _
+            ((snd f) ∘ (eval _)
+                     ∘ ((×ᶠⁿᶜ C) @_a
+                                 (_, fst b) (_, fst a)
+                                 (id (exps (fst a) (snd a)), fst f)))%morphism
 |}.
 
 Next Obligation. (* F_id *)

@@ -15,7 +15,9 @@ Section PSh_GenSum.
   Local Notation Fm := (Discr_Func_op (PShCat C) map) (only parsing).
 
   Local Hint Extern 1 => match goal with [h : {x : _ & _} |- _] => destruct x end.
-  Local Hint Extern 1 => match goal with [|- context [(?F _a id)%morphism]] => rewrite (F_id F) end.
+  Local Hint Extern 1 => match goal with
+                          [|- context [(?F _a id)%morphism]] => rewrite (F_id F)
+                        end.
   Local Hint Extern 1 =>
   match goal with
     [|- context [(?F _a (?f ∘ ?g))%morphism]] =>
@@ -29,11 +31,13 @@ Section PSh_GenSum.
         fun c =>
           {x : A & ((Fm _o x) _o c)%object};
       FA :=
-        fun _ _ h x => existT _ (projT1 x) ((map (projT1 x) _a h (projT2 x))%morphism)
+        fun _ _ h x => existT _ (projT1 x)
+                           ((map (projT1 x) _a h (projT2 x))%morphism)
     |}.
     
   (** The injection of generalized sum presheaf. *)
-  Program Definition PSh_GenProd_inj (x : A) : (map x –≻ PSh_GenSum_func)%nattrans :=
+  Program Definition PSh_GenProd_inj (x : A) :
+    (map x –≻ PSh_GenSum_func)%nattrans :=
     {|
       Trans := fun c y => existT _ x y
     |}.
@@ -62,7 +66,8 @@ Section PSh_GenSum.
   Local Hint Extern 1 => rewrite From_Term_Cat.
 
 
-  (** The morphism that maps to the generalized product given a map to its components. *)
+  (** The morphism that maps to the generalized product given a map to its
+      components. *)
   Program Definition PSh_GenSum_morph_ex
           (Cn : LoKan_Cone
                   (Functor_To_1_Cat (Discr_Cat A ^op) ^op)
@@ -87,9 +92,11 @@ Section PSh_GenSum.
               {|
                 Trans :=
                   fun x => _
-                    match x as u return (PSh_GenSum_func –≻ (Cn _o)%object u)%nattrans with
-                      tt => PSh_GenSum_morph_ex Cn
-                    end
+                          match x as u return
+                                (PSh_GenSum_func –≻ (Cn _o)%object u)%nattrans
+                          with
+                            tt => PSh_GenSum_morph_ex Cn
+                          end
               |}
           |}
     |}.
@@ -157,7 +164,8 @@ Section Type_Cat_GenSum.
   (** The cocone for the colimit of generalized sum. *)
   Program Definition Type_Cat_GenSum_CoCone : CoCone Fm :=
     {|
-      cone_apex := {|FO := fun _ => {x : A & (Fm _o x)%object}; FA := fun _ _ _ h => h|};
+      cone_apex :=
+        {|FO := fun _ => {x : A & (Fm _o x)%object}; FA := fun _ _ _ h => h|};
       cone_edge := {|Trans := fun x => existT _ x |}
     |}.
     
@@ -202,7 +210,8 @@ Section Type_Cat_GenSum.
     set (hc' := (
                  f_equal
                    (fun w :
-                          ((Cn ∘ (Functor_To_1_Cat (Discr_Cat A)^op) ^op) –≻ Fm^op)%nattrans
+                        ((Cn ∘ (Functor_To_1_Cat
+                                  (Discr_Cat A)^op) ^op) –≻ Fm^op)%nattrans
                     =>
                       Trans w y1 y2) hc
                )

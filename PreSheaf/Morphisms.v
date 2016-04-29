@@ -15,7 +15,7 @@ Require Import Archetypal.Discr.Discr.
 
 
 (** In this section we show that all components of a monic
-morphism of presheafs are monic. 
+morphism of presheaves are monic. 
 
 We do this by showing that given a monic morphism of presheaves
 N : F ≫–> G we can convert any function from f : A → (F c) to
@@ -54,7 +54,8 @@ Section PreSheaf_Monic_components_Monic.
     Context
       (d : Type)
       (g h : d → (F _o)%object c)
-      (H : (fun x => Trans (mono_morphism N) c (g x)) = (fun x => Trans (mono_morphism N) c (h x)))
+      (H : (fun x => Trans (mono_morphism N) c (g x))
+           = (fun x => Trans (mono_morphism N) c (h x)))
     .
 
 (*    Local Hint Extern 1 => progress cbn.*)
@@ -75,7 +76,8 @@ Section PreSheaf_Monic_components_Monic.
     .
 
     Theorem PMCM_N_co_equalizes :
-      ((mono_morphism N) ∘ (PMCM_PreSheaf_morph_of_function g))%nattrans = ((mono_morphism N) ∘ (PMCM_PreSheaf_morph_of_function h))%nattrans.
+      ((mono_morphism N) ∘ (PMCM_PreSheaf_morph_of_function g))%nattrans
+      = ((mono_morphism N) ∘ (PMCM_PreSheaf_morph_of_function h))%nattrans.
     Proof.
       apply NatTrans_eq_simplify.
       extensionality x.
@@ -94,7 +96,8 @@ Section PreSheaf_Monic_components_Monic.
       extensionality m.
       assert (W :=
                 f_equal
-                  (fun w : (PMCM_PreSheaf_representing_d c d –≻ F)%nattrans => Trans w c (id, m))
+                  (fun w : (PMCM_PreSheaf_representing_d c d –≻ F)%nattrans =>
+                     Trans w c (id, m))
                   (mono_morphism_monomorphic N _ _ _ PMCM_N_co_equalizes)
              ).
       cbn in W.
@@ -116,7 +119,7 @@ Section PreSheaf_Monic_components_Monic.
 End PreSheaf_Monic_components_Monic.
 
 (** In this section we show that all components of an epic
-morphism of presheafs are epic.
+morphism of presheaves are epic.
 
 We do this by showing that given an epic morphism of presheaves
 N : F –≫ G we can convert any function from f : (G c) → A to
@@ -135,7 +138,8 @@ Section PreSheaf_Epic_components_Epic.
     Context
       (d : Type)
       (g h : (G _o)%object c → d)
-      (H : (fun x => g (Trans (mono_morphism N) c x)) = (fun x => h (Trans (mono_morphism N) c x)))
+      (H : (fun x => g (Trans (mono_morphism N) c x)) =
+           (fun x => h (Trans (mono_morphism N) c x)))
     .
 
     Local Hint Extern 1 => progress cbn.
@@ -186,7 +190,8 @@ Section PreSheaf_Epic_components_Epic.
       extensionality m.
       assert (W :=
                 f_equal
-                  (fun w : (G –≻ PECE_PreSheaf_representing_d)%nattrans => Trans w c m id)
+                  (fun w : (G –≻ PECE_PreSheaf_representing_d)%nattrans =>
+                     Trans w c m id)
                   (mono_morphism_monomorphic N _ _ _ PECE_N_co_equalizes)
              ).
       cbn in W.
@@ -207,7 +212,9 @@ End PreSheaf_Epic_components_is_Epic.
   
 End PreSheaf_Epic_components_Epic.
 
-Local Hint Extern 1 => match goal with [|- context [(?F _a id)%morphism]] => rewrite (F_id F) end.
+Local Hint Extern 1 => match goal with
+                        [|- context [(?F _a id)%morphism]] => rewrite (F_id F)
+                      end.
 Local Hint Extern 1 =>
 match goal with
   [|- context [(?F _a (?f ∘ ?g))%morphism]] =>
@@ -327,7 +334,9 @@ Section Monic_PreSheaf_Iso_Monic_Factorization.
     :=
       {|
         FO := fun x => @Monic_Image_of _ _ (Trans (mono_morphism N) x);
-        FA := fun c c' h x => existT _ (G _a h (projT1 x))%morphism (exist _ (F _a h (proj1_sig (projT2 x)))%morphism _)
+        FA := fun c c' h x =>
+                existT _ (G _a h (projT1 x))%morphism
+                       (exist _ (F _a h (proj1_sig (projT2 x)))%morphism _)
       |}
   .
   
@@ -364,7 +373,8 @@ Section Monic_PreSheaf_Iso_Monic_Factorization.
     .
     apply is_Monic_components_is_Monic.
     intros c.
-    set (W := fun A B f H => mono_morphism_monomorphic (@Monic_Iso_Monic_Factor_Monic A B f H)).
+    set (W := fun A B f H => mono_morphism_monomorphic
+                            (@Monic_Iso_Monic_Factor_Monic A B f H)).
     unfold is_Monic in *.
     cbn in *.
     apply W.
@@ -407,7 +417,7 @@ into to presheaf morphisms one epic and one monic.
 
 This result is inherited from that in Type_Cat and is proven similarly.
 The only difference is that in Type_Cat the epimorphism is split epic
-while in presheafs, the morphisms back are not guaranteed to form a
+while in presheaves, the morphisms back are not guaranteed to form a
 natural transformation.
 *)
 Section PreSheaf_Epic_Monic_Factorization.
@@ -470,7 +480,8 @@ Section PreSheaf_Epic_Monic_Factorization.
         Trans := fun x => @From_Image_forward _ _ (Trans N x)
       |}.
   
-  Definition PreSheaf_Epic_Monic_Factor_Monic : @Monic (PShCat C) PreSheaf_Image_of G.
+  Definition PreSheaf_Epic_Monic_Factor_Monic :
+    @Monic (PShCat C) PreSheaf_Image_of G.
   Proof.
     eapply (@is_Monic_Monic
               (PShCat C)
@@ -481,7 +492,8 @@ Section PreSheaf_Epic_Monic_Factorization.
     .
     apply is_Monic_components_is_Monic.
     intros c.
-    set (W := fun A B f => mono_morphism_monomorphic (@Epic_Monic_Factor_Monic A B f)).
+    set (W := fun A B f => mono_morphism_monomorphic
+                          (@Epic_Monic_Factor_Monic A B f)).
     unfold is_Monic in *; cbn in *.
     apply W.
   Defined.
@@ -495,7 +507,8 @@ Section PreSheaf_Epic_Monic_Factorization.
         Trans := fun x => To_Image (Trans N x)
       |}.
 
-  Definition PreSheaf_Epic_Monic_Factor_Epic : @Epic (PShCat C) F PreSheaf_Image_of.
+  Definition PreSheaf_Epic_Monic_Factor_Epic :
+    @Epic (PShCat C) F PreSheaf_Image_of.
   Proof.
     eapply (@is_Monic_Monic
               ((PShCat C) ^op)
@@ -505,7 +518,9 @@ Section PreSheaf_Epic_Monic_Factorization.
            )
     .
     apply is_Epic_components_is_Epic.
-    set (W := fun A B f => mono_morphism_monomorphic (is_split_Monic_Monic (@Epic_Monic_Factor_split_Epic A B f))).
+    set (W := fun A B f => mono_morphism_monomorphic
+                          (is_split_Monic_Monic
+                             (@Epic_Monic_Factor_split_Epic A B f))).
     unfold is_Epic, is_Monic in *; cbn in *.
     intros c.
     apply W.

@@ -23,7 +23,8 @@ Section Monic_Iso_Monic_Factorization.
   
   Definition Monic_From_Image_forward : Monic_Image_of → B := fun x => projT1 x.
 
-  Program Definition Monic_Iso_Monic_Factor_Monic : @Monic Type_Cat Monic_Image_of B :=
+  Program Definition Monic_Iso_Monic_Factor_Monic :
+    @Monic Type_Cat Monic_Image_of B :=
     {|
       mono_morphism := Monic_From_Image_forward;
       mono_morphism_monomorphic := fun T g h => _
@@ -103,16 +104,17 @@ Section Monic_Iso_Monic_Factorization.
     
 End Monic_Iso_Monic_Factorization.
 
-(** In the following we show a similar result for any funtion. That is, we show that any function
-can be split into a split epic function followed by a monic function. Here the split epic function
-is not an isomorphism. 
+(** In the following we show a similar result for any funtion. That is, we show
+    that any function can be split into a split epic function followed by a
+    monic function. Here the split epic function is not an isomorphism. 
 
 The monic is from the domain of the function to its image.
 The epic function is from the image of the function to its codomain.
 *)
 Require Import Coq.Logic.ChoiceFacts.
 
-Local Axiom ConstructiveIndefiniteDescription_Type : forall T : Type, ConstructiveIndefiniteDescription_on T.
+Local Axiom ConstructiveIndefiniteDescription_Type :
+  forall T : Type, ConstructiveIndefiniteDescription_on T.
 
 (** In this section we show that any morphism in Type_Cat (function
 in Coq) can be split in to two morphisms where one is monic and the
@@ -143,9 +145,11 @@ Section split_Epic_Monic_Factorization.
   Definition To_Image : A → Image_of :=
     fun a => exist _ (f a) (ex_intro _ a eq_refl).
   
-  Definition From_Image_back : Image_of → A := fun x => proj1_sig (ConstructiveIndefiniteDescription_Type _ _ (proj2_sig x)).
+  Definition From_Image_back : Image_of → A :=
+    fun x => proj1_sig (ConstructiveIndefiniteDescription_Type _ _ (proj2_sig x)).
   
-  Theorem From_Image_back_form_split_epic : ∀ (x : Image_of), To_Image (From_Image_back x) = x.
+  Theorem From_Image_back_form_split_epic :
+    ∀ (x : Image_of), To_Image (From_Image_back x) = x.
   Proof.
     intros x.
     apply sig_proof_irrelevance.
@@ -159,7 +163,8 @@ Section split_Epic_Monic_Factorization.
     trivial.
   Qed.
 
-  Program Definition Epic_Monic_Factor_split_Epic : @is_split_Epic Type_Cat _ _ To_Image :=
+  Program Definition Epic_Monic_Factor_split_Epic :
+    @is_split_Epic Type_Cat _ _ To_Image :=
     {|
       is_split_monic_left_inverse := From_Image_back
     |}.

@@ -4,7 +4,8 @@ Require Import Essentials.Facts_Tactics.
 Require Import Category.Main.
 Require Import Ext_Cons.Prod_Cat.Prod_Cat Ext_Cons.Prod_Cat.Operations.
 Require Import Functor.Main.
-Require Import Functor.Representable.Hom_Func Functor.Representable.Hom_Func_Prop.
+Require Import Functor.Representable.Hom_Func
+        Functor.Representable.Hom_Func_Prop.
 Require Import NatTrans.Main.
 
 Local Open Scope functor_scope.
@@ -13,23 +14,30 @@ Local Open Scope functor_scope.
 Local Notation NID := NatTrans_id (only parsing).
 Local Notation FCAT := Func_Cat (only parsing).
 
-(** This module contains different definitions of adjunctions and their conversion. *)
+(** This module contains different definitions of adjunctions and
+    their conversion. *)
 
-(** The left hand side of the isomorphism for adjunctions defined through hom functor. *)
-Notation Hom_Adj_Left C D F G := ((Hom_Func D) ∘ (Prod_Functor (F^op) (@Functor_id D)))%functor (only parsing).
+(** The left hand side of the isomorphism for adjunctions defined
+    through hom functor. *)
+Notation Hom_Adj_Left C D F G :=
+  ((Hom_Func D) ∘ (Prod_Functor (F^op) (@Functor_id D)))%functor (only parsing).
 
-(* The right hand side of the isomorphism for adjunctions defined through hom functor. *)
-Notation Hom_Adj_Right C D F G := ((Hom_Func C) ∘ (Prod_Functor (@Functor_id (C^op)) G))%functor (only parsing).
+(* The right hand side of the isomorphism for adjunctions defined
+   through hom functor. *)
+Notation Hom_Adj_Right C D F G :=
+  ((Hom_Func C) ∘ (Prod_Functor (@Functor_id (C^op)) G))%functor (only parsing).
 
 Local Obligation Tactic := idtac.
 
 Section Adjunction.
   Context {C D : Category} (F : C –≻ D) (G : D –≻ C).
 
-  (** This is the definition of adjunctions taken as them main definition in this development. 
-Functor F : C -> D is the left adjoint to functor G : D -> C if there is a natural transformation
-η : (Functor_id C) -> (G ∘ F) and for any arrow f : c -> (G _o d) there is a unique arrow
- f̂ : (F _o c) d such that the following diagram commutes:
+  (** This is the definition of adjunctions taken as them main definition in
+      this development.  Functor F : C -> D is the left adjoint to functor
+      G : D -> C if there is a natural transformation
+      η : (Functor_id C) -> (G ∘ F) and for any arrow f : c -> (G _o d)
+      there is a unique arrow
+      f̂f^: (F _o c) d such that the following diagram commutes:
 
 #
 <pre>
@@ -38,7 +46,7 @@ Functor F : C -> D is the left adjoint to functor G : D -> C if there is a natur
          c —————————–> (G _o d)
          |               ↗
          |             /
-     η_c |           /  G _a f̧̂
+     η_c |           /  G _a  f^
          |         /
          ↓       /
    (G _o (F _o c))
@@ -50,7 +58,8 @@ Functor F : C -> D is the left adjoint to functor G : D -> C if there is a natur
   {
     adj_unit : ((Functor_id C) –≻ (G ∘ F))%nattrans;
     
-    adj_morph_ex {c : C} {d : D} (f : (c –≻ (G _o d)%object)%morphism) : ((F _o c)%object –≻ d)%morphism;
+    adj_morph_ex {c : C} {d : D} (f : (c –≻ (G _o d)%object)%morphism) :
+      ((F _o c)%object –≻ d)%morphism;
     
     adj_morph_com {c : C} {d : D} (f : (c –≻ (G _o d))%morphism%object) :
       f = ((G _a (adj_morph_ex f)) ∘ (Trans adj_unit c))%morphism;
@@ -67,7 +76,9 @@ Functor F : C -> D is the left adjoint to functor G : D -> C if there is a natur
   Arguments adj_morph_com _ {_ _} _.
   Arguments adj_morph_unique _ {_ _} _ _ _ _ _.
 
-  Theorem Adjunct_eq_simplify (adj adj' : Adjunct) : adj_unit adj = @adj_unit adj' → @adj_morph_ex adj = @adj_morph_ex adj' → adj = adj'.
+  Theorem Adjunct_eq_simplify (adj adj' : Adjunct) :
+    adj_unit adj = @adj_unit adj' →
+    @adj_morph_ex adj = @adj_morph_ex adj' → adj = adj'.
   Proof.
     destruct adj; destruct adj'; basic_simpl.
     ElimEq.
@@ -75,22 +86,24 @@ Functor F : C -> D is the left adjoint to functor G : D -> C if there is a natur
     reflexivity.
   Qed.
 
-  (** The hom functor definition of adjunction. F : C -> D is the left adjoint to G : D -> C if
-           Hom_D(Fᵒᵖ, –) ≃ Hom_C(–, G)
+  (** The hom functor definition of adjunction. F : C -> D is the left adjoint
+       to G : D -> C if Hom_D(Fᵒᵖ, –) ≃ Hom_C(–, G)
 *)  
-  Definition Hom_Adjunct := (Hom_Adj_Left _ _ F G ≃ Hom_Adj_Right _ _ F G)%natiso.
+  Definition Hom_Adjunct :=
+    (Hom_Adj_Left _ _ F G ≃ Hom_Adj_Right _ _ F G)%natiso.
 
   
-  (** The unit-counit definition of adjunctions. F : C -> D is the left adjoint to G : D -> C if there
-are two natural transformations η : (Functor_id C) -> (G ∘ F) and ε : (F ∘ G) -> (Functor_id D) such that
- we have the following two equalities hold:
+  (** The unit-counit definition of adjunctions. F : C -> D is the left adjoint
+      to G : D -> C if there are two natural transformations
+      η : (Functor_id C) -> (G ∘ F) and ε : (F ∘ G) -> (Functor_id D) such that
+      we have the following two equalities hold:
 
-  (ε ∘_h (NatTrans_id F)) ∘ ((NatTrans_id F) ∘_h η) = (NatTrans_id F)
+     (ε ∘_h (NatTrans_id F)) ∘ ((NatTrans_id F) ∘_h η) = (NatTrans_id F)
 
-  ((NatTrans_id FG) ∘_h ε) ∘ (η ∘_h (NatTrans_id G)) = (NatTrans_id G)
+     ((NatTrans_id FG) ∘_h ε) ∘ (η ∘_h (NatTrans_id G)) = (NatTrans_id G)
 
-  In practice, we have compose some other natural transformations within the above equalities to correct
-the types. Therefore, we have:
+     In practice, we have compose some other natural transformations within
+     the above equalities to correct the types. Therefore, we have:
 *)
   Record UCU_Adjunct :=
     {
@@ -98,9 +111,19 @@ the types. Therefore, we have:
       
       ucu_adj_counit : ((F ∘ G) –≻ (Functor_id D))%nattrans;
 
-      ucu_adj_left_id : ((NatTrans_from_compose_id _) ∘ ((((ucu_adj_counit ∘_h (NID F)) ∘ (NatTrans_Functor_assoc_sym _ _ _)) ∘ ((NID F) ∘_h ucu_adj_unit)) ∘ (NatTrans_to_id_compose _)))%nattrans = (NID F);
+      ucu_adj_left_id : ((NatTrans_from_compose_id _)
+                           ∘ ((((ucu_adj_counit ∘_h (NID F))
+                                  ∘ (NatTrans_Functor_assoc_sym _ _ _))
+                                 ∘ ((NID F) ∘_h ucu_adj_unit))
+                                ∘ (NatTrans_to_id_compose _)))%nattrans
+                        = (NID F);
       
-      ucu_adj_right_id : ((NatTrans_from_id_compose _) ∘ (((((NID G) ∘_h ucu_adj_counit) ∘ (NatTrans_Functor_assoc _ _ _)) ∘ (ucu_adj_unit ∘_h (NID G))) ∘ (NatTrans_to_compose_id _)))%nattrans = (NID G)
+      ucu_adj_right_id : ((NatTrans_from_id_compose _)
+                            ∘ (((((NID G) ∘_h ucu_adj_counit)
+                                   ∘ (NatTrans_Functor_assoc _ _ _))
+                                  ∘ (ucu_adj_unit ∘_h (NID G)))
+                                 ∘ (NatTrans_to_compose_id _)))%nattrans
+                         = (NID G)
     }.
 
   Arguments ucu_adj_unit : clear implicits.
@@ -119,7 +142,8 @@ the types. Therefore, we have:
     Program Definition UCU_Adj_to_Adj : (F ⊣ G)%functor :=
       {|
         adj_unit := ucu_adj_unit Adj;
-        adj_morph_ex := fun _ _ h => ((Trans (ucu_adj_counit Adj) _) ∘ (F _a h))%morphism
+        adj_morph_ex :=
+          fun _ _ h => ((Trans (ucu_adj_counit Adj) _) ∘ (F _a h))%morphism
       |}.
 
     Next Obligation.
@@ -139,13 +163,15 @@ the types. Therefore, we have:
       rewrite H1 in H2; clear H1.
       apply (f_equal (F _a)%morphism) in H2.
       do 2 rewrite F_compose in H2.
-      apply (f_equal (fun w => compose w (Trans (ucu_adj_counit Adj) _))) in H2; cbn in H2.
+      apply (f_equal (fun w => compose w (Trans (ucu_adj_counit Adj) _))) in H2;
+        cbn in H2.
       repeat rewrite assoc_sym in H2.
      cbn_rewrite (@Trans_com _ _ _ _ (ucu_adj_counit Adj) _ _ g) in H2.
       cbn_rewrite (@Trans_com _ _ _ _ (ucu_adj_counit Adj) _ _ h) in H2.
       repeat rewrite assoc in H2.
       set (W := f_equal (fun w => Trans w c) (ucu_adj_left_id Adj));
-        cbn in W; repeat rewrite F_id in W; simpl_ids in W; rewrite W in H2; clear W.
+        cbn in W; repeat rewrite F_id in W; simpl_ids in W; rewrite W in H2;
+        clear W.
       auto.
     Qed.
 
@@ -191,7 +217,8 @@ the types. Therefore, we have:
       rewrite F_compose.
       rewrite F_id.
       rewrite assoc.
-      cbn_rewrite <- (@Trans_com _ _ _ _ (adj_unit Adj) _ _ (Trans (adj_unit Adj) x)). 
+      cbn_rewrite <- (@Trans_com
+                       _ _ _ _ (adj_unit Adj) _ _ (Trans (adj_unit Adj) x)). 
       rewrite assoc_sym.
       simpl_ids; trivial.
       symmetry.
@@ -211,8 +238,10 @@ the types. Therefore, we have:
   Section Adj_Hom_Adj.
     Context (Adj : (F ⊣ G)%functor).
 
-    (** Conversion from adjunction to hom functor adjunction – the left to right natural transformation. *)
-    Program Definition Adj_to_Hom_Adj_LR : ((Hom_Adj_Left _ _ F G) –≻ (Hom_Adj_Right _ _ F G))%nattrans :=
+    (** Conversion from adjunction to hom functor adjunction – the left to right
+        natural transformation. *)
+    Program Definition Adj_to_Hom_Adj_LR :
+      ((Hom_Adj_Left _ _ F G) –≻ (Hom_Adj_Right _ _ F G))%nattrans :=
     {|
       Trans := fun c h => ((G _a h) ∘ (Trans (adj_unit Adj) _))%morphism
     |}.
@@ -234,8 +263,10 @@ the types. Therefore, we have:
       apply Adj_to_Hom_Adj_LR_obligation_1.
     Qed.
 
-    (** Conversion from adjunction to hom functor adjunction – the right to left natural transformation. *)
-    Program Definition Adj_to_Hom_Adj_RL : ((Hom_Adj_Right _ _ F G) –≻ (Hom_Adj_Left _ _ F G))%nattrans :=
+    (** Conversion from adjunction to hom functor adjunction – the right to left
+        natural transformation. *)
+    Program Definition Adj_to_Hom_Adj_RL :
+      ((Hom_Adj_Right _ _ F G) –≻ (Hom_Adj_Left _ _ F G))%nattrans :=
     {|
       Trans := fun c h => adj_morph_ex Adj h
     |}.
@@ -250,7 +281,9 @@ the types. Therefore, we have:
       repeat rewrite assoc.
       refine (@f_equal _ _ (fun x => @compose _ _ _ _ x _) _ _ _).
       change (G _a (F _a h1))%morphism with ((G ∘ F) _a h1)%morphism.
-      refine (eq_trans _ (@f_equal _ _ (fun x => @compose _ _ _ _ x _) _ _ (Trans_com (adj_unit Adj) h1))).
+      refine (eq_trans _ (@f_equal
+                            _ _ (fun x => @compose _ _ _ _ x _)
+                            _ _ (Trans_com (adj_unit Adj) h1))).
       rewrite assoc_sym.
       rewrite <- adj_morph_com; trivial.
     Qed.
@@ -262,7 +295,8 @@ the types. Therefore, we have:
     Qed.
 
     (** Conversion from adjunction to hom functor adjunction. *)
-    Program Definition Adj_to_Hom_Adj : (F ⊣_hom G)%functor := NatIso _ _ Adj_to_Hom_Adj_LR Adj_to_Hom_Adj_RL _ _.
+    Program Definition Adj_to_Hom_Adj : (F ⊣_hom G)%functor :=
+      NatIso _ _ Adj_to_Hom_Adj_LR Adj_to_Hom_Adj_RL _ _.
     
     Next Obligation.
       basic_simpl; FunExt.
@@ -283,14 +317,22 @@ the types. Therefore, we have:
     (** Conversion from hom functor adjunction to adjunction. *)
     Program Definition Hom_Adj_to_Adj : (F ⊣ G)%functor :=
       {|
-        adj_unit := {| Trans := fun c => Trans (iso_morphism Adj) (c, F _o c)%object id |};
+        adj_unit :=
+          {| Trans := fun c => Trans (iso_morphism Adj) (c, F _o c)%object id |};
         adj_morph_ex := fun _ _ f => Trans (inverse_morphism Adj) (_, _) f
       |}.
     
     Next Obligation.
       intros c c' h.
-      set (H := @equal_f _ _ _ _ (@Trans_com _ _ _ _ (iso_morphism Adj) (c', F _o c')%object (c, F _o c')%object (h, id)) id).
-      set (H' := (@equal_f _ _ _ _ (@Trans_com _ _ _ _ (iso_morphism Adj) (c, F _o c)%object (c, F _o c')%object (id c, F _a h)%morphism) id)).
+      set (H := @equal_f
+                  _ _ _ _ (@Trans_com
+                             _ _ _ _ (iso_morphism Adj) (c', F _o c')%object
+                             (c, F _o c')%object (h, id)) id).
+      set (H' := (@equal_f
+                    _ _ _ _ (@Trans_com
+                               _ _ _ _ (iso_morphism Adj) (c, F _o c)%object
+                               (c, F _o c')%object (id c, F _a h)%morphism) id)
+          ).
       cbn in *.
       rewrite F_id in H.
       rewrite F_id in H'.
@@ -307,11 +349,17 @@ the types. Therefore, we have:
 
     Next Obligation.
       intros c d f; cbn.
-      set (H := @equal_f _ _ _ _ (@Trans_com _ _ _ _ (iso_morphism Adj) (c, F _o c)%object (c, d) (id, Trans (inverse_morphism Adj) (c, d) f)) id); cbn in H.
+      set (H := @equal_f
+                  _ _ _ _ (@Trans_com
+                             _ _ _ _ (iso_morphism Adj)
+                             (c, F _o c)%object (c, d)
+                             (id, Trans (inverse_morphism Adj) (c, d) f)) id);
+        cbn in H.
       rewrite F_id in H.
       simpl_ids in H.
       etransitivity; [|eassumption].
-      change (f = Trans (NatTrans_compose (inverse_morphism Adj) (iso_morphism Adj)) (_, _) f).
+      change (f = Trans (NatTrans_compose
+                           (inverse_morphism Adj) (iso_morphism Adj)) (_, _) f).
       set (H' := right_inverse Adj); cbn in H'.
       rewrite H'.
       cbn; auto.
@@ -320,12 +368,24 @@ the types. Therefore, we have:
     Next Obligation.
       intros c d f g h H1 H2.
       cbn in *.
-      cut (Trans (NatTrans_compose (iso_morphism Adj) (inverse_morphism Adj)) (_, _) g = Trans (NatTrans_compose (iso_morphism Adj) (inverse_morphism Adj)) (_, _) h); [intros H'|].
+      cut (Trans (NatTrans_compose
+                    (iso_morphism Adj) (inverse_morphism Adj)) (_, _) g
+           = Trans (NatTrans_compose
+                      (iso_morphism Adj) (inverse_morphism Adj)) (_, _) h);
+        [intros H'|].
       + set (H'' := left_inverse Adj); cbn in H''.
         rewrite H'' in H'.
         cbn in H'; auto.
-      + set (Hg := @equal_f _ _ _ _ (@Trans_com _ _ _ _ (iso_morphism Adj) (c, F _o c)%object (c, d) (id, g)) id); cbn in Hg; rewrite F_id in Hg; simpl_ids in Hg.
-        set (Hh := @equal_f _ _ _ _ (@Trans_com _ _ _ _ (iso_morphism Adj) (c, F _o c)%object (c, d) (id, h)) id); cbn in Hh; rewrite F_id in Hh; simpl_ids in Hh.
+      + set (Hg := @equal_f
+                     _ _ _ _ (@Trans_com
+                                _ _ _ _ (iso_morphism Adj) (c, F _o c)%object
+                                (c, d) (id, g)) id); cbn in Hg;
+        rewrite F_id in Hg; simpl_ids in Hg.
+        set (Hh := @equal_f
+                     _ _ _ _ (@Trans_com
+                                _ _ _ _ (iso_morphism Adj) (c, F _o c)%object
+                                (c, d) (id, h)) id); cbn in Hh;
+        rewrite F_id in Hh; simpl_ids in Hh.
         cbn.
         rewrite Hg, Hh; rewrite <- H1, <- H2; trivial.
     Qed.        

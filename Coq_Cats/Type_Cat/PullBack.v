@@ -5,8 +5,8 @@ Require Import Category.Main.
 Require Import Basic_Cons.CCC Basic_Cons.PullBack.
 Require Import Coq_Cats.Type_Cat.Type_Cat.
 
-(** Type_Cat has pullbacks. The pullback of two functions f : a → b and g : c → b is
-{(x, y) | f x = g y} *)
+(** Type_Cat has pullbacks. The pullback of two functions f : a → b and 
+    g : c → b is {(x, y) | f x = g y} *)
 Section PullBack.
   Context {A B C : Type} (f : A → C) (g : B → C).
 
@@ -56,4 +56,5 @@ Section PullBack.
 
 End PullBack.
 
-Instance Type_Cat_Has_PullBacks : Has_PullBacks Type_Cat := fun a b c f g => Type_Cat_PullBack f g.
+Instance Type_Cat_Has_PullBacks : Has_PullBacks Type_Cat :=
+  fun a b c f g => Type_Cat_PullBack f g.

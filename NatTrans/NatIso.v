@@ -13,12 +13,16 @@ Local Open Scope nattrans_scope.
 Notation "a ≃ b" := (a ≃≃ b ::> Func_Cat _ _)%isomorphism : natiso_scope.
 
 Section NatIso.
-  Context {C C' : Category} (F G : (C –≻ C')%functor) (n : F –≻ G) (n' : G –≻ F).
+  Context {C C' : Category} (F G : (C –≻ C')%functor)
+          (n : F –≻ G) (n' : G –≻ F).
 
-  (** Two ntural transformation for which individual arrows of arrow families form isomorphism form natural isomorphisms. *)
+  (** Two natural transformation for which individual arrows of arrow
+      families form isomorphism form natural isomorphisms. *)
   Program Definition NatIso
-          (H : (∀ (c : Obj), (Trans n c) ∘ (Trans n' c) = (id (G _o c)))%morphism)
-          (H' : (∀ (c : Obj), (Trans n' c) ∘ (Trans n c) = (id (F _o c)))%morphism)
+          (H : (∀ (c : Obj), (Trans n c) ∘ (Trans n' c)
+                             = (id (G _o c)))%morphism)
+          (H' : (∀ (c : Obj), (Trans n' c) ∘ (Trans n c)
+                              = (id (F _o c)))%morphism)
     : (F ≃ G)%natiso
     := (Build_Isomorphism (Func_Cat _ _) _ _ n n' _ _).
 
@@ -28,20 +32,25 @@ Section NatTrans_id_Iso.
   Context {C D : Category} (F : (C –≻ D)%functor).
 
   (** The identity natural transformation is a natural isomorphism. *)
-  Definition NatTrans_id_Iso : (F ≃ F)%natiso := @Isomorphism_id (Func_Cat _ _) F.
+  Definition NatTrans_id_Iso :
+    (F ≃ F)%natiso := @Isomorphism_id (Func_Cat _ _) F.
 
 End NatTrans_id_Iso.
 
 (** Horizontal composition of natural isomorphisms is a natural isomorphism. *)
 Section NatIso_hor_comp.
-  Context {C D E : Category} {F F' : (C –≻ D)%functor} {G G' : (D –≻ E)%functor} (N : (F ≃ F')%natiso) (N' : (G ≃ G')%natiso).
+  Context {C D E : Category} {F F' : (C –≻ D)%functor}
+          {G G' : (D –≻ E)%functor} (N : (F ≃ F')%natiso)
+          (N' : (G ≃ G')%natiso).
 
   Local Obligation Tactic := idtac.
 
-  Program Definition NatIso_hor_comp : ((G ∘ F)%functor ≃ (G' ∘ F')%functor)%natiso :=
+  Program Definition NatIso_hor_comp
+    : ((G ∘ F)%functor ≃ (G' ∘ F')%functor)%natiso :=
     {|
       iso_morphism := ((iso_morphism N') ∘_h (iso_morphism N))%nattrans;
-      inverse_morphism := ((inverse_morphism N') ∘_h (inverse_morphism N))%nattrans
+      inverse_morphism :=
+        ((inverse_morphism N') ∘_h (inverse_morphism N))%nattrans
     |}.
 
   Next Obligation.
@@ -101,9 +110,12 @@ Section Embedding_mono.
 
   Local Obligation Tactic := idtac.
 
-  (** For an embeding F and functors G and G', F ∘ G ≃ F ∘ G' implies there is a natrual transformation from G to G'. We will use this to show that G and G' are naturally isomorphic below. *)
+  (** For an embeding F and functors G and G', F ∘ G ≃ F ∘ G' implies
+      there is a natural transformation from G to G'. We will use
+      this to show that G and G' are naturally isomorphic below. *)
   Section Embedding_mono_NT.
-    Context {G G' : (B –≻ C)%functor} (H : ((F ∘ G)%functor ≃ (F ∘ G')%functor)%natiso).
+    Context {G G' : (B –≻ C)%functor}
+            (H : ((F ∘ G)%functor ≃ (F ∘ G')%functor)%natiso).
     
     Program Definition Embedding_mono_NT :  G –≻ G' :=
       {|
@@ -127,7 +139,8 @@ Section Embedding_mono.
 
   End Embedding_mono_NT.
 
-  Context {G G' : (B –≻ C)%functor} (H : ((F ∘ G)%functor ≃ (F ∘ G')%functor)%natiso).
+  Context {G G' : (B –≻ C)%functor}
+          (H : ((F ∘ G)%functor ≃ (F ∘ G')%functor)%natiso).
   
   (** For an embeding F and functors G and G', F ∘ G ≃ F ∘ G' implies G ≃ G'. *)
   Program Definition Embedding_mono : (G ≃ G')%natiso  :=
@@ -144,8 +157,8 @@ Section Embedding_mono.
     cbn_rewrite (proj2_sig (Emb_Full _ (Trans (iso_morphism H) c))).
     cbn_rewrite (proj2_sig (Emb_Full _ (Trans (inverse_morphism H) c))).
     rewrite F_id.
-    change (Trans (inverse_morphism H) c ∘ Trans (iso_morphism H) c)%morphism with
-    (Trans ((inverse_morphism H) ∘ (iso_morphism H))%nattrans c).
+    change (Trans (inverse_morphism H) c ∘ Trans (iso_morphism H) c)%morphism
+    with (Trans ((inverse_morphism H) ∘ (iso_morphism H))%nattrans c).
     cbn_rewrite (left_inverse H).
     trivial.
   Qed.
@@ -158,8 +171,8 @@ Section Embedding_mono.
     cbn_rewrite (proj2_sig (Emb_Full _ (Trans (iso_morphism H) c))).
     cbn_rewrite (proj2_sig (Emb_Full _ (Trans (inverse_morphism H) c))).
     rewrite F_id.
-    change (Trans (iso_morphism H) c ∘ Trans (inverse_morphism H) c)%morphism with
-    (Trans ((iso_morphism H) ∘ (inverse_morphism H))%nattrans c).
+    change (Trans (iso_morphism H) c ∘ Trans (inverse_morphism H) c)%morphism
+    with (Trans ((iso_morphism H) ∘ (inverse_morphism H))%nattrans c).
     cbn_rewrite (right_inverse H).
     trivial.
   Qed.    
@@ -173,7 +186,8 @@ Section NatIso_Functor_assoc.
           (H : (C3 –≻ C4)%functor).
   
   (** Natrual isomorphism form of functor composition associativity. *)
-  Program Definition NatIso_Functor_assoc : (((H ∘ G) ∘ F)%functor ≃ (H ∘ (G ∘ F))%functor)%natiso :=
+  Program Definition NatIso_Functor_assoc
+    : (((H ∘ G) ∘ F)%functor ≃ (H ∘ (G ∘ F))%functor)%natiso :=
     {|
       iso_morphism := NatTrans_Functor_assoc F G H;
       inverse_morphism := NatTrans_Functor_assoc_sym F G H

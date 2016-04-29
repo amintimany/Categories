@@ -21,9 +21,12 @@ Section Exp_Cat_morph_ex_compose.
           (G : B –≻ C'')
   .
 
-  (** This is the more specific case of curry_compose. Proven separately for cat because of universe polymorphism issues that prevent cat to both have expoenentials and type_cat in it. *)
+  (** This is the more specific case of curry_compose. Proven separately for cat
+      because of universe polymorphism issues that prevent cat to both have
+      expoenentials and type_cat in it. *)
   Theorem Exp_Cat_morph_ex_compose :
-    Exp_Cat_morph_ex (F ∘ (Prod_Functor G (Functor_id C))) = (Exp_Cat_morph_ex F) ∘ G.
+    Exp_Cat_morph_ex (F ∘ (Prod_Functor G (Functor_id C)))
+    = (Exp_Cat_morph_ex F) ∘ G.
   Proof.
     Func_eq_simpl.
     {
@@ -51,7 +54,8 @@ Section Exp_Cat_morph_ex_compose_Iso.
   Local Hint Extern 1 => apply NatTrans_eq_simplify; cbn.
   
   Program Definition Exp_Cat_morph_ex_compose_Iso_RL :
-    ((Exp_Cat_morph_ex (F ∘ (Prod_Functor G (Functor_id C)))) –≻ ((Exp_Cat_morph_ex F) ∘ G))%nattrans :=
+    ((Exp_Cat_morph_ex (F ∘ (Prod_Functor G (Functor_id C))))
+       –≻ ((Exp_Cat_morph_ex F) ∘ G))%nattrans :=
     {|
       Trans :=
         fun c =>
@@ -61,7 +65,8 @@ Section Exp_Cat_morph_ex_compose_Iso.
     |}.
 
   Program Definition Exp_Cat_morph_ex_compose_Iso_LR :
-    (((Exp_Cat_morph_ex F) ∘ G) –≻ (Exp_Cat_morph_ex (F ∘ (Prod_Functor G (Functor_id C)))))%nattrans
+    (((Exp_Cat_morph_ex F) ∘ G)
+       –≻ (Exp_Cat_morph_ex (F ∘ (Prod_Functor G (Functor_id C)))))%nattrans
     :=
     {|
       Trans :=
@@ -72,7 +77,9 @@ Section Exp_Cat_morph_ex_compose_Iso.
     |}.
     
   (** This is the isomorphic form of the theorem above. *)
-  Program Definition Exp_Cat_morph_ex_compose_Iso : ((Exp_Cat_morph_ex (F ∘ (Prod_Functor G (Functor_id C))))%functor ≃ ((Exp_Cat_morph_ex F) ∘ G)%functor)%natiso :=
+  Program Definition Exp_Cat_morph_ex_compose_Iso :
+    (((Exp_Cat_morph_ex (F ∘ (Prod_Functor G (Functor_id C))))%functor)
+       ≃ ((Exp_Cat_morph_ex F) ∘ G)%functor)%natiso :=
     {|
       iso_morphism := Exp_Cat_morph_ex_compose_Iso_RL;
       inverse_morphism := Exp_Cat_morph_ex_compose_Iso_LR
@@ -84,15 +91,18 @@ Section Exp_Cat_morph_ex_NT.
   Context {C C' C'' : Category}
           {F F' : (C'' × C) –≻  C'}
           (N : (F –≻ F')%nattrans).
-  (** If we have a natural transformation from F to F' then we have a natural transformation from (curry F) to (curry F'). *)
+  (** If we have a natural transformation from F to F' then we have a natural
+      transformation from (curry F) to (curry F'). *)
   Program Definition Exp_Cat_morph_ex_NT :
     ((Exp_Cat_morph_ex F) –≻ (Exp_Cat_morph_ex F'))%nattrans :=
     {|
       Trans := fun d =>
                  {|
                    Trans := fun c => Trans N (d, c);
-                   Trans_com := fun c c' h => @Trans_com _ _ _ _ N (d, c) (d ,c') (id,  h);
-                   Trans_com_sym := fun c c' h => @Trans_com_sym _ _ _ _ N (d, c) (d ,c') (id,  h)
+                   Trans_com :=
+                     fun c c' h => @Trans_com _ _ _ _ N (d, c) (d ,c') (id,  h);
+                   Trans_com_sym :=
+                     fun c c' h => @Trans_com_sym _ _ _ _ N (d, c) (d ,c') (id,  h)
                  |}
     |}.
 
@@ -116,8 +126,10 @@ Section Exp_Cat_morph_ex_Iso.
           (N : (F ≃ F')%natiso)
   .
 
-  (** If F is naturally isomorphic to F' then (curry F) is naturally isomorphic to (curry F'). *)
-  Program Definition Exp_Cat_morph_ex_Iso : (Exp_Cat_morph_ex F ≃ Exp_Cat_morph_ex F')%natiso :=
+  (** If F is naturally isomorphic to F' then (curry F) is naturally
+      isomorphic to (curry F'). *)
+  Program Definition Exp_Cat_morph_ex_Iso :
+    (Exp_Cat_morph_ex F ≃ Exp_Cat_morph_ex F')%natiso :=
     {|
       iso_morphism := Exp_Cat_morph_ex_NT (iso_morphism N);
       inverse_morphism := Exp_Cat_morph_ex_NT (inverse_morphism N)
@@ -127,7 +139,8 @@ Section Exp_Cat_morph_ex_Iso.
   Proof.
     apply NatTrans_eq_simplify; extensionality x; cbn.
     apply NatTrans_eq_simplify; extensionality y; cbn.
-    change (Trans (N⁻¹) (x, y) ∘ Trans (iso_morphism N) (x, y))%morphism with (Trans (N⁻¹ ∘ N)%morphism (x, y)).
+    change (Trans (N⁻¹) (x, y) ∘ Trans (iso_morphism N) (x, y))%morphism
+    with (Trans (N⁻¹ ∘ N)%morphism (x, y)).
     rewrite left_inverse; trivial.
   Qed.
 
@@ -135,7 +148,8 @@ Section Exp_Cat_morph_ex_Iso.
   Proof.
     apply NatTrans_eq_simplify; extensionality x; cbn.
     apply NatTrans_eq_simplify; extensionality y; cbn.
-    change (Trans (iso_morphism N) (x, y) ∘ Trans (N⁻¹) (x, y))%morphism with (Trans (N ∘ (N⁻¹))%morphism (x, y)).
+    change (Trans (iso_morphism N) (x, y) ∘ Trans (N⁻¹) (x, y))%morphism
+    with (Trans (N ∘ (N⁻¹))%morphism (x, y)).
     rewrite right_inverse; trivial.
   Qed.
 
@@ -147,7 +161,8 @@ Section Exp_Cat_morph_ex_inverse_NT.
           (N : ((Exp_Cat_morph_ex F) –≻ (Exp_Cat_morph_ex F'))%nattrans).
 
 
-  (** If we have a natural transformation from (curry F) to (curry F') then we have a natural transformation from F to F'. *)
+  (** If we have a natural transformation from (curry F) to (curry F') then
+      we have a natural transformation from F to F'. *)
   Program Definition Exp_Cat_morph_ex_inverse_NT : (F –≻ F')%nattrans :=
     {|
       Trans := fun d => Trans (Trans N (fst d)) (snd d)
@@ -158,7 +173,9 @@ Section Exp_Cat_morph_ex_inverse_NT.
   Next Obligation.
   Proof.  
     intros [d1 d2] [d1' d2'] [h1 h2]; cbn in *.
-    replace (F @_a (_, _) (_, _) (h1, h2))%morphism with ((F @_a (_, _) (_, _) (id d1', h2)) ∘ (F @_a (_, _) (_, _) (h1, id d2)))%morphism by auto.
+    replace (F @_a (_, _) (_, _) (h1, h2))%morphism
+    with ((F @_a (_, _) (_, _) (id d1', h2))
+            ∘ (F @_a (_, _) (_, _) (h1, id d2)))%morphism by auto.
     rewrite assoc_sym.   
     cbn_rewrite (Trans_com (Trans N d1') h2).
     rewrite assoc.
@@ -182,7 +199,8 @@ Section Exp_Cat_morph_ex_inverse_Iso.
           (N : (Exp_Cat_morph_ex F ≃ Exp_Cat_morph_ex F')%natiso)
   .
 
-  (** If (curry F) is naturally isomorphic  to (curry F') then we have that F is naturally isomorphic to F'. *)
+  (** If (curry F) is naturally isomorphic  to (curry F') then we have that F is
+      naturally isomorphic to F'. *)
   Program Definition Exp_Cat_morph_ex_inverse_Iso :  (F ≃ F')%natiso :=
     {|
       iso_morphism := Exp_Cat_morph_ex_inverse_NT (iso_morphism N);

@@ -117,7 +117,8 @@ Qed.
 
 Hint Resolve pair_eq. 
 
-(** Tactics to apply a tactic to all hypothesis in an effiecient way. This is due to Jonathan's (jonikelee@gmail.com) message on coq-club *)
+(** Tactics to apply a tactic to all hypothesis in an efficient way.
+This is due to Jonathan's (jonikelee@gmail.com) message on coq-club *)
 
 Ltac revert_clearbody_all :=
  repeat lazymatch goal with H:_ |- _ => try clearbody H; revert H end.
