@@ -51,7 +51,7 @@ Section Complete_SSC_Initial.
   (** The product of objects producing SSC. *)
   Definition SSC_Prod : (Π (SSC_Objs SSC))%object
     :=
-      (𝓛𝓲𝓶 (Discr_Func (SSC_Objs SSC))).
+      (LimitOf (Discr_Func (SSC_Objs SSC))).
 
   (** SSC_Prod is weakly initial. I.e., it has an arrow (not necessarily unique)
 to any other object. *)
@@ -79,7 +79,7 @@ returns SSC_Prod.  *)
   (** The product of SSC_Prod with endomorphisms as index. *)
   Definition Endo_Prod : (Π endomorph_const)%object
     :=
-      (𝓛𝓲𝓶 (Discr_Func endomorph_const)).
+      (LimitOf (Discr_Func endomorph_const)).
 
 
   (** Cone to (Discr_Func endomorph_const) that maps to ids. *)
@@ -132,7 +132,7 @@ returns SSC_Prod.  *)
       Equalizer_as_Limit
         morph_to_Endo_Prod_endomorphs
         morph_to_Endo_Prod_ids
-        (𝓛𝓲𝓶
+        (LimitOf
            (Equalizer_Producing_Func
               morph_to_Endo_Prod_endomorphs
               morph_to_Endo_Prod_ids)
@@ -214,7 +214,7 @@ f, g : V –≻ d, their equalizer (U, e : U –≻ V).
         Equalizer_as_Limit
           f
           g
-          (𝓛𝓲𝓶 (Equalizer_Producing_Func f g))
+          (LimitOf (Equalizer_Producing_Func f g))
     .
 
     Theorem equalizer_of_morphs_from_ids_endomorphs_equalizer_iso_RI :

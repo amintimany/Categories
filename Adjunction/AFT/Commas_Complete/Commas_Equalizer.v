@@ -51,7 +51,7 @@ Section Commas_Equalizer.
   Definition Eq_CMH_right_f_CMH_right_g :
     Equalizer (CMH_right f) (CMH_right g)
     :=
-      Equalizer_as_Limit _ _ (𝓛𝓲𝓶 (Equalizer_Producing_Func (CMH_right f) (CMH_right g)))
+      Equalizer_as_Limit _ _ (LimitOf (Equalizer_Producing_Func (CMH_right f) (CMH_right g)))
   .
 
   Program Definition G_Eq_producing_Func_CMH_right_Eq_producing_Func_G_CMH_right_Iso :

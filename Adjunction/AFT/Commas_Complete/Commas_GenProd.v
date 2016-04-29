@@ -48,7 +48,7 @@ Section Commas_GenProd.
   Context {A : Type} (f : A → (Comma (Func_From_SingletonCat x) G)).
 
   Definition GenProd_fun_conv : (Π (fun_conv f))%object :=
-    𝓛𝓲𝓶 (Discr_Func (fun_conv f)).
+    LimitOf (Discr_Func (fun_conv f)).
 
   Program Definition f_Cone : Cone (G ∘ (Discr_Func (fun_conv f)))%functor
     :=

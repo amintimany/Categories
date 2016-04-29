@@ -29,7 +29,7 @@ Section Complete_Preorder.
 
   Local Definition Arr_y := (fun w : (Arrow C) => y).
   
-  Local Definition LimOf_Arr_y := (𝓛𝓲𝓶 (Discr_Func Arr_y)).
+  Local Definition LimOf_Arr_y := (LimitOf (Discr_Func Arr_y)).
 
   Local Definition GenProd_of_const_Hom_x_y :=
     Type_Cat_GenProd

@@ -80,7 +80,7 @@ Definition Complete (C : Category) := ∀ J : Category, Right_KanExt (Functor_To
 Existing Class Complete.
 
 (** If a category is complete, we can produce all limits. *)
-Definition 𝓛𝓲𝓶 {C D : Category} {H : Complete D} (F : C –≻ D) : Limit F :=
+Definition LimitOf {C D : Category} {H : Complete D} (F : C –≻ D) : Limit F :=
   Global_to_Local_Right _ _ (H _) F.
 
 (** A category having restricted limitis where the restriction always holds 
@@ -131,7 +131,7 @@ Section Continuous.
 
   Definition Continuous :=
     ∀ (J : Category) (F : (J –≻ C)%functor),
-      is_Cone_Local_Right_KanExt _ _ (Cone_Conv (LRKE (𝓛𝓲𝓶 F)))
+      is_Cone_Local_Right_KanExt _ _ (Cone_Conv (LRKE (LimitOf F)))
   .
 
 End Continuous.
@@ -169,7 +169,7 @@ Definition CoComplete (C : Category) := ∀ J : Category, Left_KanExt (Functor_T
 Existing Class CoComplete.
 
 (** If a category is cocomplete, we can produce all colimits. *)
-Definition 𝓒𝓸𝓛𝓲𝓶 {C D : Category} {H : CoComplete D} (F : C –≻ D) : CoLimit F :=
+Definition CoLimitOf {C D : Category} {H : CoComplete D} (F : C –≻ D) : CoLimit F :=
   Global_to_Local_Left _ _ (H _) F.
 
 (** If a category is complete, its dual is cocomplete *)
@@ -261,7 +261,7 @@ Section CoContinuous.
 
   Definition CoContinuous :=
     ∀ (J : Category) (F : (J –≻ C)%functor),
-      is_Cone_Local_Right_KanExt _ _ (CoCone_Conv (LRKE (𝓒𝓸𝓛𝓲𝓶 F)))
+      is_Cone_Local_Right_KanExt _ _ (CoCone_Conv (LRKE (CoLimitOf F)))
   .
 
 End CoContinuous.
