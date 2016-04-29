@@ -100,7 +100,7 @@ Section Curry_UnCurry.
 
   (** Given a arrow f: a×b -> c in a category with exponentials, the curry of f is f̂ 
 in the definition of Exponential above. *)
-  Definition 𝓒𝓾𝓻𝓻𝔂 :
+  Definition curry :
     forall {a b c : C},
       (((×ᶠⁿᶜ C) _o (a, b))%object –≻ c) → (a –≻ (HE b c)) :=
     fun {a b c : C} (f : ((×ᶠⁿᶜ C) _o (a, b))%object –≻ c) =>
@@ -108,7 +108,7 @@ in the definition of Exponential above. *)
 
   (** Given an arrow f: a -> cᵇ, uncurry of f is the arrow (eval_cᵇ ∘ <id_b, f>): a×b -> c.
 See definition of Exponential above for details. *)
-  Definition 𝓤𝓷𝓒𝓾𝓻𝓻𝔂 : forall {a b c : C},
+  Definition uncurry : forall {a b c : C},
       (a –≻ (HE b c)) → (((×ᶠⁿᶜ C) _o (a, b))%object –≻ c) :=
     fun {a b c : C} (f : a –≻ (HE b c)) =>
       ((eval (HE b c)) ∘ ((×ᶠⁿᶜ C) @_a (_, _) (_, _) (f, id C b)))%morphism.
@@ -118,18 +118,18 @@ See definition of Exponential above for details. *)
 
     (** See definition of curry and uncurry above for details. Frollows immediately from
 the definition of Exponential above. *)
-    Theorem curry_uncurry (f : a –≻ (HE b c)) : 𝓒𝓾𝓻𝓻𝔂 (𝓤𝓷𝓒𝓾𝓻𝓻𝔂 f) = f.
+    Theorem curry_uncurry (f : a –≻ (HE b c)) : curry (uncurry f) = f.
     Proof.
-      unfold 𝓒𝓾𝓻𝓻𝔂, 𝓤𝓷𝓒𝓾𝓻𝓻𝔂.
+      unfold curry, uncurry.
       eapply Exp_morph_unique; trivial.
       rewrite <- Exp_morph_com; trivial.
     Qed.
     
     (** See definition of curry and uncurry above for details. Frollows immediately from
 the definition of Exponential above. *)
-    Theorem uncurry_curry (f : ((×ᶠⁿᶜ C) _o (a, b))%object –≻ c) : 𝓤𝓷𝓒𝓾𝓻𝓻𝔂 (𝓒𝓾𝓻𝓻𝔂 f) = f.
+    Theorem uncurry_curry (f : ((×ᶠⁿᶜ C) _o (a, b))%object –≻ c) : uncurry (curry f) = f.
     Proof.
-      unfold 𝓒𝓾𝓻𝓻𝔂, 𝓤𝓷𝓒𝓾𝓻𝓻𝔂.
+      unfold curry, uncurry.
       rewrite <- Exp_morph_com; trivial.
     Qed.
 
@@ -139,7 +139,7 @@ the definition of Exponential above. *)
     Context {a b c : C}.
 
     (** See definition of curry above for details. Frollows immediately from uncurry_curry above. *)
-    Theorem curry_injective (f g : ((×ᶠⁿᶜ C) _o (a, b))%object –≻ c) : 𝓒𝓾𝓻𝓻𝔂 f = 𝓒𝓾𝓻𝓻𝔂 g → f = g.
+    Theorem curry_injective (f g : ((×ᶠⁿᶜ C) _o (a, b))%object –≻ c) : curry f = curry g → f = g.
     Proof.
       intros H.
       rewrite <- (uncurry_curry f); rewrite <- (uncurry_curry g).
@@ -147,7 +147,7 @@ the definition of Exponential above. *)
     Qed.
 
     (** See definition of uncurry above for details. Frollows immediately from curry_uncurry above. *)
-    Theorem uncurry_injective (f g : a –≻ (HE b c)) : 𝓤𝓷𝓒𝓾𝓻𝓻𝔂 f = 𝓤𝓷𝓒𝓾𝓻𝓻𝔂 g → f = g.
+    Theorem uncurry_injective (f g : a –≻ (HE b c)) : uncurry f = uncurry g → f = g.
     Proof.
       intros H.
       rewrite <- (curry_uncurry f); rewrite <- (curry_uncurry g).
@@ -161,9 +161,9 @@ the definition of Exponential above. *)
 
     (** composing with curry is equivalent to compose and then curry: *)
     Lemma curry_compose (f : ((×ᶠⁿᶜ C) _o (a, b))%object –≻ c) {z : C} (g : z –≻ a)
-      : (𝓒𝓾𝓻𝓻𝔂 f) ∘ g = 𝓒𝓾𝓻𝓻𝔂 (f ∘ (Prod_morph_ex _ _ (g ∘ Pi_1) Pi_2)).
+      : (curry f) ∘ g = curry (f ∘ (Prod_morph_ex _ _ (g ∘ Pi_1) Pi_2)).
     Proof.
-      unfold 𝓒𝓾𝓻𝓻𝔂.
+      unfold curry.
       eapply Exp_morph_unique; eauto.
       rewrite <- Exp_morph_com.
       match goal with
@@ -180,7 +180,7 @@ the definition of Exponential above. *)
       match goal with
           [|- (?A ∘ ?B = ?C ∘ ?B)%morphism] => cutrewrite (A = C); trivial
       end.
-      transitivity (𝓤𝓷𝓒𝓾𝓻𝓻𝔂 (𝓒𝓾𝓻𝓻𝔂 f)); [unfold 𝓒𝓾𝓻𝓻𝔂, 𝓤𝓷𝓒𝓾𝓻𝓻𝔂; cbn; auto|apply uncurry_curry].
+      transitivity (uncurry (curry f)); [unfold curry, uncurry; cbn; auto|apply uncurry_curry].
     Qed.      
 
   End curry_compose.

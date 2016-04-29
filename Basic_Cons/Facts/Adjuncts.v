@@ -116,13 +116,13 @@ Section Prod_Exp_Adj.
     :=
     {|
       adj_unit := {|Trans := fun c => Exp_morph_ex (HE x (HP c x)) c id|};
-      adj_morph_ex := fun c c' h => 𝓤𝓷𝓒𝓾𝓻𝓻𝔂 _ h
+      adj_morph_ex := fun c c' h => uncurry _ h
     |}.
 
   Next Obligation.
   Proof.
     eapply Exp_morph_unique; eauto; cbn.
-    set (M := curry_compose); unfold 𝓒𝓾𝓻𝓻𝔂 in M; cbn in M; rewrite M.
+    set (M := curry_compose); unfold curry in M; cbn in M; rewrite M.
     cbn_rewrite <- (@Exp_morph_com C HP _ _ (HE x (HP c' x))).
     rewrite M.
     cbn_rewrite <- (@Exp_morph_com C HP _ _ (HE x (HP c' x))).
@@ -157,7 +157,7 @@ Section Prod_Exp_Adj.
 
   Next Obligation.
   Proof.
-    set (M := curry_compose); unfold 𝓒𝓾𝓻𝓻𝔂 in M; cbn in M; rewrite M.
+    set (M := curry_compose); unfold curry in M; cbn in M; rewrite M.
     eapply Exp_morph_unique; eauto; cbn.
     cbn_rewrite <- (@Exp_morph_com C HP _ _ (HE x d)).
     replace (
@@ -173,7 +173,7 @@ Section Prod_Exp_Adj.
       repeat rewrite assoc.
       rewrite <- (id_unit_left _ _ Pi_2).
       cbn_rewrite <- (@Exp_morph_com C HP _ _ (HE x (HP c x))).
-      unfold 𝓤𝓷𝓒𝓾𝓻𝓻𝔂; cbn.
+      unfold uncurry; cbn.
       auto.
     }
     {
@@ -195,7 +195,7 @@ Section Prod_Exp_Adj.
     replace (Prod_morph_ex (HP (HE x (HP c x)) x) (HP (HE x (HP c x)) x) (id ∘ Pi_1) (id ∘ Pi_2)) with (id (HP (HE x (HP c x)) x)) in H2.
     {
       rewrite id_unit_right in H2.
-      set (M := curry_compose); unfold 𝓒𝓾𝓻𝓻𝔂 in M; cbn in M; rewrite M in H2.
+      set (M := curry_compose); unfold curry in M; cbn in M; rewrite M in H2.
       rewrite assoc in H2.
       rewrite <- (id_unit_left _ _ Pi_2) in H2.
       cbn_rewrite <- (@Exp_morph_com C HP) in H2.
