@@ -11,7 +11,7 @@ Require Import KanExt.Pointwise.
 Require Import Ext_Cons.Prod_Cat.Prod_Cat Ext_Cons.Prod_Cat.Operations.
 Require Import Coq_Cats.Type_Cat.Type_Cat.
 Require Import NatTrans.Main.
-Require Import Cat.Cat_Terminal.
+Require Import Cat.Terminal.
 Require Import Functor.Representable.Representable.
 
 Local Open Scope functor_scope.

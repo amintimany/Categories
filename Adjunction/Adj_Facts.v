@@ -2,12 +2,14 @@ Require Import Essentials.Notations.
 Require Import Essentials.Types.
 Require Import Essentials.Facts_Tactics.
 Require Import Category.Main.
-Require Import Ext_Cons.Prod_Cat.Prod_Cat Ext_Cons.Prod_Cat.Nat_Facts Ext_Cons.Prod_Cat.Operations.
+Require Import Ext_Cons.Prod_Cat.Prod_Cat Ext_Cons.Prod_Cat.Nat_Facts
+        Ext_Cons.Prod_Cat.Operations.
 Require Import Functor.Main.
-Require Import Functor.Representable.Hom_Func Functor.Representable.Hom_Func_Prop.
+Require Import Functor.Representable.Hom_Func
+        Functor.Representable.Hom_Func_Prop.
 Require Import NatTrans.Main.
 Require Import Adjunction.Adjunction Adjunction.Duality.
-Require Import Cat.Cat Cat.Cat_Exponential Cat.Cat_Exponential_Facts.
+Require Import Cat.Cat Cat.Exponential Cat.Exponential_Facts.
 Require Import Yoneda.Yoneda.
 Require Import Functor.Functor_Extender.
 

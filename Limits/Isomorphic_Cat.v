@@ -3,7 +3,7 @@ Require Import Essentials.Types.
 Require Import Essentials.Facts_Tactics.
 Require Import Category.Main.
 Require Import Functor.Main.
-Require Import Cat.Cat Cat.Cat_Terminal.
+Require Import Cat.Cat Cat.Terminal.
 Require Import Limits.Limit.
 Require Import KanExt.LocalFacts.From_Iso_Cat.
 Require Import Cat.Cat_Iso.

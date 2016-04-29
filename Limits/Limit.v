@@ -9,7 +9,7 @@ Require Import Coq_Cats.Type_Cat.Card_Restriction.
 Require Export NatTrans.NatTrans NatTrans.Operations.
 Require Export KanExt.Local KanExt.Global KanExt.GlobalDuality
         KanExt.GlobaltoLocal KanExt.LocaltoGlobal KanExt.LocalFacts.Main.
-Require Export Cat.Cat_Terminal.
+Require Export Cat.Terminal.
 
 Local Open Scope functor_scope.
 

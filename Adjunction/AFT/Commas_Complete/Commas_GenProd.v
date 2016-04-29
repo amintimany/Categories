@@ -16,7 +16,7 @@ Require Import
         Basic_Cons.Limits
 .
 Require Import Archetypal.Discr.Discr.
-Require Import Cat.Cat_Terminal.
+Require Import Cat.Terminal.
 
 (** We show that if C is a complete category and G : C –≻ D preserves limits,
 then every comma category (Comma (Func_From_SingletonCat x) G) for (x : D) has

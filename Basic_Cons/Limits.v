@@ -5,7 +5,7 @@ Require Import Category.Main.
 Require Import Functor.Main.
 Require Import Limits.Limit.
 Require Import Archetypal.Discr.Discr.
-Require Import Cat.Cat_Terminal.
+Require Import Cat.Terminal.
 Require Import
         Basic_Cons.Terminal
         Basic_Cons.Product

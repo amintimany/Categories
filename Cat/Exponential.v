@@ -8,7 +8,7 @@ Require Import Ext_Cons.Prod_Cat.Prod_Cat Ext_Cons.Prod_Cat.Operations.
 Require Import Basic_Cons.Product.
 Require Import Basic_Cons.Exponential.
 Require Import NatTrans.NatTrans NatTrans.Func_Cat.
-Require Import Cat.Cat_Product.
+Require Import Cat.Product.
 
 (** The exponential in cat is jsut the functor category. *)
 

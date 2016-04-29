@@ -80,12 +80,12 @@ Algebras/Main.v
 
 #Cat:
 Cat/Cat.v
-Cat/Cat_Initial.v
-Cat/Cat_Terminal.v
-Cat/Cat_Product.v
-Cat/Cat_Exponential.v
-Cat/Cat_Exponential_Facts.v
-Cat/Cat_CCC.v
+Cat/Initial.v
+Cat/Terminal.v
+Cat/Product.v
+Cat/Exponential.v
+Cat/Exponential_Facts.v
+Cat/CCC.v
 Cat/Facts.v
 Cat/Cat_Iso.v
 
