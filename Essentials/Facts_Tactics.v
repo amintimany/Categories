@@ -6,6 +6,20 @@ Require Export Coq.Program.Equality.
 Require Export Coq.Logic.FunctionalExtensionality.
 Require Export Coq.Logic.ProofIrrelevance.
 
+Definition equal_f : ∀ {A B : Type} {f g : A → B}, f = g → ∀ x : A, f x = g x.
+Proof.
+  intros A B f g H x.
+  destruct H; reflexivity.
+Defined.
+
+Definition f_equal : ∀ (A B : Type) (f : A → B) (x y : A), x = y → f x = f y.
+Proof.
+  intros A B f x y H.
+  destruct H; reflexivity.
+Defined.
+
+Arguments f_equal [_ _] _ [_ _] _.
+
 Ltac basic_simpl :=
   let simpl_prod _ :=
       match goal with
@@ -33,7 +47,8 @@ Ltac basic_simpl :=
 
 Global Obligation Tactic := basic_simpl; auto.
 
-(** A tactic to apply proof irrelevance on all proofs of the same type in the context. *)
+(** A tactic to apply proof irrelevance on all proofs of the same type in the
+ context. *)
 Ltac PIR :=
   let pir_helper _ :=
       match goal with
@@ -54,22 +69,22 @@ Hint Extern 1 => progress ElimEq.
 
 (** A tactic to simplify terms before rewriting them. *)
 
-Ltac cbn_rewrite W := 
+Ltac cbn_rewrite W :=
   let H := fresh "H" in
   set (H := W); cbn in H; rewrite H; clear H
 .
 
-Ltac cbn_rewrite_in W V := 
+Ltac cbn_rewrite_in W V :=
   let H := fresh "H" in
   set (H := W); cbn in H; rewrite H in V; clear H
 .
-                                                
-Ltac cbn_rewrite_back W := 
+
+Ltac cbn_rewrite_back W :=
   let H := fresh "H" in
   set (H := W); cbn in H; rewrite <- H; clear H
 .
 
-Ltac cbn_rewrite_back_in W V := 
+Ltac cbn_rewrite_back_in W V :=
   let H := fresh "H" in
   set (H := W); cbn in H; rewrite <- H in V; clear H
 .
@@ -92,7 +107,7 @@ Qed.
 Hint Extern 2 (exist ?A _ _ = exist ?A _ _) => apply sig_proof_irrelevance.
 
 (* Automating use of functional_extensionality *)
-Ltac FunExt := 
+Ltac FunExt :=
 progress (
     repeat (
         match goal with
@@ -109,13 +124,13 @@ Hint Extern 1 => FunExt.
 Lemma pair_eq (A B : Type) (a b : A * B) : fst a = fst b → snd a = snd b → a = b.
 Proof.
   intros H1 H2.
-  destruct a; destruct b.  
+  destruct a; destruct b.
   cbn in *.
   repeat match goal with [H : _ = _|-_] => destruct H end.
   trivial.
 Qed.
 
-Hint Resolve pair_eq. 
+Hint Resolve pair_eq.
 
 (** Tactics to apply a tactic to all hypothesis in an efficient way.
 This is due to Jonathan's (jonikelee@gmail.com) message on coq-club *)

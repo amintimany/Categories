@@ -12,7 +12,7 @@ Furthermore, we require functors to map identitiies to identities. Additionally,
 the immage of the coposition of two arrows must be the same as composition of
 their images.
 *)
-Record Functor (C C' : Category) : Type := 
+Record Functor (C C' : Category) : Type :=
 {
   (** Object map *)
   FO : C → C';
@@ -22,7 +22,7 @@ Record Functor (C C' : Category) : Type :=
 
   (** Mapping of identities *)
   F_id : ∀ c, FA (id c) = id (FO c);
-  
+
   (** Functor commuting with composition *)
   F_compose : ∀ {a b c} (f : (a –≻ b)%morphism) (g : (b –≻ c)%morphism),
       (FA (g ∘ f) = (FA g) ∘ (FA f))%morphism
@@ -121,7 +121,7 @@ Section Functor_eq_simplification.
   Proof.
     auto.
   Qed.
-  
+
   (** Fucntor extensionality: two functors are equal of their object maps are
       equal and their arrow maps are extensionally equal. *)
   Lemma Functor_extensionality (Oeq : F _o = G _o) :
@@ -159,3 +159,23 @@ Ltac Func_eq_simpl :=
   end.
 
 Hint Extern 3 => Func_eq_simpl.
+
+Section Functor_eq.
+  Context {C C' : Category} (F G : (C –≻ C')%functor).
+
+  Lemma Functor_eq_morph (H : F = G) :
+    ∃ (H : ∀ x, F _o x = G _o x),
+    ∀ x y (h : (x –≻ y)%morphism),
+      match H x in _ = V return (V –≻ _)%morphism with
+         eq_refl =>
+         match H y in _ = V return (_ –≻ V)%morphism with
+           eq_refl => F _a h
+         end
+       end = G _a h.
+  Proof.
+    exists (equal_f (f_equal FO H)).
+    intros x y h.
+    destruct H; trivial.
+  Qed.
+
+End Functor_eq.
