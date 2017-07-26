@@ -117,14 +117,15 @@ Program Definition CoNat_coalg : @CoAlgebra Type_Cat S_nat_func :=
 |}.
 
 (* morphism from another alg to CoNat_coalg *)
-Program Definition CoNat_coalg_morph coalg' : CoAlgebra_Hom CoNat_coalg coalg' :=
-  {|
-    Alg_map :=
-      cofix f (x : Alg_Carrier coalg') : CoNat :=
-        match Constructors coalg' x return CoNat with
-        | inl _ => CoO
-        | inr s => CoS (f s)
-        end
+Program Definition CoNat_coalg_morph coalg' : CoAlgebra_Hom CoNat_coalg coalg'
+  :=
+{|
+  Alg_map :=
+    cofix f (x : Alg_Carrier coalg') : CoNat :=
+      match Constructors coalg' x return CoNat with
+      | inl _ => CoO
+      | inr s => CoS (f s)
+      end
 |}.
 
 Next Obligation. (* coalg_map_com *)
@@ -137,6 +138,18 @@ Proof.
 Qed.
 
 (* CoNat_coalg_morph defined *)
+
+(* The following two lemmas help go around Bug 5215. *)
+
+Lemma inl_inr A B (x : A) (y : B) : inl x = inr y → False.
+Proof.
+  inversion 1.
+Qed.
+
+Lemma inr_inl A B (x : A) (y : B) : inr x = inl y → False.
+Proof.
+  inversion 1.
+Qed.
 
 Program Definition CoNat_alg_term : (𝟘_ S_nat_coalg_cat)%object :=
 {|
@@ -153,10 +166,16 @@ Proof.
   intros x.
   assert(H1 := equal_f (@Alg_map_com _ _ _ _ f) x); cbn in H1.
   assert(H2 := equal_f (@Alg_map_com _ _ _ _ g) x); cbn in H2.
-  destruct (Constructors d x); destruct ((Alg_map f) x); destruct ((Alg_map g) x); try discriminate; try constructor.
+  destruct (Constructors d x); destruct ((Alg_map f) x);
+    destruct ((Alg_map g) x); try constructor;
+      repeat match goal with
+               H : _ = _ |- _ =>
+               try (apply inl_inr in H || apply inr_inl in H); tauto
+             end.
   inversion H1; inversion H2.
   trivial.
 Qed.
+
 
 
 

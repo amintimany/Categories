@@ -19,14 +19,14 @@ Section GlobalDuality.
   Context {C C' : Category} (p : (C –≻ C')%functor) (D : Category).
 
   (** We establish this duality though hom functor definition of adjunction. *)
-  
+
   Local Obligation Tactic := idtac.
-  
+
   Section Left_to_Right.
     Context (lke : Left_KanExt p D).
 
     (** The natural Isomorphism underlying the right kan extension which is to
-        be shown. 
+        be shown.
         Hom_{Func_Cat Cᵒᵖ Dᵒᵖ}(– ∘ p, –) ≃ Hom_{Func_Cat C'ᵒᵖ Dᵒᵖ}(–, lkeᵒᵖ)
     *)
     Local Definition KanExt_Left_to_Right_NIso :=
@@ -58,7 +58,7 @@ Section GlobalDuality.
     (** If we give the trans formations (e.g., function given in the first
         obligation) explicitly "Program" generates obligations for
         equalities that are definitional! *)
-    
+
     Program Definition KanExt_Left_to_Right :
       Right_KanExt  (p^op) (D^op) :=
       {|
@@ -78,7 +78,7 @@ Section GlobalDuality.
                 |}
             |}
       |}.
-    
+
     Next Obligation.
     Proof.
       exact (fun c => Trans (iso_morphism KanExt_Left_to_Right_NIso) c).
@@ -107,7 +107,7 @@ Section GlobalDuality.
     Defined.
 
     Next Obligation.
-    Proof.    
+    Proof.
       intros c c' h.
       set (w := Trans_com (inverse_morphism KanExt_Left_to_Right_NIso) h).
       etransitivity; [etransitivity;[| apply w]|];
@@ -128,9 +128,9 @@ Section GlobalDuality.
       apply NatTrans_eq_simplify.
       match goal with
         [|- _ = ?A] =>
-        let w := constr:(
+        let w := constr:((
                    ((KanExt_Left_to_Right_NIso ⁻¹)
-                      ∘ KanExt_Left_to_Right_NIso)%morphism)%nattrans
+                      ∘ KanExt_Left_to_Right_NIso)%morphism)%nattrans)
         in
         change (
             Trans w = A
@@ -138,15 +138,15 @@ Section GlobalDuality.
       end.
       rewrite (left_inverse KanExt_Left_to_Right_NIso); trivial.
     Qed.
-      
+
     Next Obligation.
     Proof.
       apply NatTrans_eq_simplify.
       match goal with
         [|- _ = ?A] =>
-        let w := constr:(
+        let w := constr:((
                    (KanExt_Left_to_Right_NIso
-                      ∘ KanExt_Left_to_Right_NIso⁻¹)%morphism)%nattrans
+                      ∘ KanExt_Left_to_Right_NIso⁻¹)%morphism)%nattrans)
         in
         change (
             Trans w = A
@@ -267,9 +267,9 @@ Section GlobalDuality.
       apply NatTrans_eq_simplify.
       match goal with
         [|- _ = ?A] =>
-        let w := constr:(
+        let w := constr:((
                    ((KanExt_Right_to_Left_NIso ⁻¹)
-                      ∘ KanExt_Right_to_Left_NIso)%morphism)%nattrans
+                      ∘ KanExt_Right_to_Left_NIso)%morphism)%nattrans)
         in
         change (
             Trans w = A
@@ -277,15 +277,15 @@ Section GlobalDuality.
       end.
       rewrite (left_inverse KanExt_Right_to_Left_NIso); trivial.
     Qed.
-      
+
     Next Obligation.
     Proof.
       apply NatTrans_eq_simplify.
       match goal with
         [|- _ = ?A] =>
-        let w := constr:(
+        let w := constr:((
                    (KanExt_Right_to_Left_NIso
-                      ∘ KanExt_Right_to_Left_NIso⁻¹)%morphism)%nattrans
+                      ∘ KanExt_Right_to_Left_NIso⁻¹)%morphism)%nattrans)
         in
         change (
             Trans w = A
@@ -293,7 +293,7 @@ Section GlobalDuality.
       end.
       rewrite (right_inverse KanExt_Right_to_Left_NIso); trivial.
     Qed.
-    
+
   End Right_to_Left.
-    
+
 End GlobalDuality.

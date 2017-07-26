@@ -31,7 +31,7 @@ Section Hom_Local_Right_KanExt_to_Local_Right_KanExt.
         Trans (inverse_morphism (HLRKE_Iso hlrke)) hlrke (NatTrans_id hlrke)
     |}.
 
-  (** The cone we just constructed is (as we will prove) the local kan 
+  (** The cone we just constructed is (as we will prove) the local kan
       extension and thus the terminal cone. So we abbreviate it as TCONE. *)
   Local Notation TCONE :=
     Hom_Local_Right_KanExt_to_Local_Right_KanExt_Terminal_Cone (only parsing).
@@ -40,7 +40,7 @@ Section Hom_Local_Right_KanExt_to_Local_Right_KanExt.
 local kan extension. *)
   Section Hom_Local_Right_KanExt_to_Local_Right_KanExt_Morph_to_Terminal_Cone.
     Context (Cn : LoKan_Cone p F).
-    
+
     Program Definition
             Hom_Local_Right_KanExt_to_Local_Right_KanExt_Morph_to_Terminal_Cone :
       LoKan_Cone_Morph Cn TCONE :=
@@ -65,7 +65,7 @@ local kan extension. *)
         [|- ?A = ?B] =>
         match type of W with
           ?X = _ =>
-          cut (X A = X B);
+          cut (X A = X B); simpl;
             [rewrite (equal_f W A); rewrite (equal_f W B); trivial|clear W]
         end
       end.
@@ -95,7 +95,7 @@ local kan extension. *)
             (right_inverse (HLRKE_Iso hlrke))
         ).
       cbn; auto.
-    Qed.      
+    Qed.
 
   End Hom_Local_Right_KanExt_to_Local_Right_KanExt_Morph_to_Terminal_Cone.
 
@@ -135,7 +135,7 @@ local kan extension. *)
       apply f_equal.
       etransitivity;
         [symmetry; apply (cone_morph_com h) | apply (cone_morph_com h')].
-    Qed.     
+    Qed.
 
   End
     Hom_Local_Right_KanExt_to_Local_Right_KanExt_Morph_to_Terminal_Cone_unique.
@@ -150,5 +150,5 @@ local kan extension. *)
       LRKE_morph_unique :=
         @Hom_Local_Right_KanExt_to_Local_Right_KanExt_Morph_to_Terminal_Cone_unique
     |}.
-    
+
 End Hom_Local_Right_KanExt_to_Local_Right_KanExt.

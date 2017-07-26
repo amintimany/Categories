@@ -6,7 +6,7 @@ Require Import Coq_Cats.Type_Cat.Type_Cat.
 
 Section Arrow.
   Local Open Scope morphism_scope.
-  
+
   (** The type accomodating all arrows of a category C. *)
   Record Arrow (C : Category) :=
     {
@@ -15,12 +15,12 @@ Section Arrow.
       Arr : Orig –≻ Targ
     }.
 
-  Arguments Orig {_} _ : clear implicits.
-  Arguments Targ {_} _ : clear implicits.
-  Arguments Arr {_} _ : clear implicits.
+  Arguments Orig {_} _.
+  Arguments Targ {_} _.
+  Arguments Arr {_} _.
 
   Coercion Arr : Arrow >-> Hom.
-  
+
   (** An arrow (in the appropriate category, e.g., comma)
     from arrow f : a -> b to arrow g : c -> d is a pair of arrows h1 : a -> c
     and h2 : b -> d that makes the following diagram commute:
@@ -43,15 +43,15 @@ h1 |              | h2
       Arr_H' : (Targ a) –≻ (Targ b);
       Arr_Hom_com : Arr_H' ∘ (Arr a) = (Arr b) ∘ Arr_H
     }.
-  Arguments Arr_H {_ _ _} _ : clear implicits.
-  Arguments Arr_H' {_ _ _} _ : clear implicits.
-  Arguments Arr_Hom_com {_ _ _} _ : clear implicits.
+  Arguments Arr_H {_ _ _} _.
+  Arguments Arr_H' {_ _ _} _.
+  Arguments Arr_Hom_com {_ _ _} _.
 
   Context (C : Category).
 
   Section Arrow_Hom_eq_simplify.
     Context {a b : Arrow C} (f g : Arrow_Hom a b).
-    
+
     (** Two arrow homomorphisms are equal if the arrows between theor domains
         and codomain are respectively equal. In other words, we don't care about
         the proof of the diagram commuting. *)
@@ -133,13 +133,13 @@ End Arrow.
 
 Hint Extern 1 (?A = ?B :> Arrow_Hom _ _) => apply Arrow_Hom_eq_simplify; simpl.
 
-Arguments Orig {_} _ : clear implicits.
-Arguments Targ {_} _ : clear implicits.
-Arguments Arr {_} _ : clear implicits.
+Arguments Orig {_} _.
+Arguments Targ {_} _.
+Arguments Arr {_} _.
 
-Arguments Arr_H {_ _ _} _ : clear implicits.
-Arguments Arr_H' {_ _ _} _ : clear implicits.
-Arguments Arr_Hom_com {_ _ _} _ : clear implicits.
+Arguments Arr_H {_ _ _} _.
+Arguments Arr_H' {_ _ _} _.
+Arguments Arr_Hom_com {_ _ _} _.
 
 (** an arrow in a category is also an arrow in the opposite category. 
     The domain and codomain are simply swapped. *)
