@@ -1,16 +1,16 @@
-Require Import Essentials.Notations.
-Require Import Essentials.Types.
-Require Import Essentials.Facts_Tactics.
-Require Import Category.Main.
-Require Import Functor.Main.
-Require Import Ext_Cons.Comma.
-Require Import Limits.Limit.
-Require Import Archetypal.Discr.Discr.
-Require Import
+From Categories Require Import Essentials.Notations.
+From Categories Require Import Essentials.Types.
+From Categories Require Import Essentials.Facts_Tactics.
+From Categories Require Import Category.Main.
+From Categories Require Import Functor.Main.
+From Categories Require Import Ext_Cons.Comma.
+From Categories Require Import Limits.Limit.
+From Categories Require Import Archetypal.Discr.Discr.
+From Categories Require Import
         Adjunction.Adjunction
         Adjunction.Univ_Morph
 .
-Require Import
+From Categories Require Import
         Adjunction.AFT.Solution_Set_Cond
         Adjunction.AFT.Commas_Complete.Commas_Complete
 .

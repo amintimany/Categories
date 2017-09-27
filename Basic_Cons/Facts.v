@@ -1,1 +1,1 @@
-Require Export Basic_Cons.Facts.Main.
+From Categories Require Export Basic_Cons.Facts.Main.

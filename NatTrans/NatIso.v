@@ -1,10 +1,10 @@
-Require Import Essentials.Notations.
-Require Import Essentials.Types.
-Require Import Essentials.Facts_Tactics.
-Require Import Category.Main.
-Require Import Functor.Functor Functor.Functor_Ops Functor.Functor_Properties.
-Require Import Cat.Cat.
-Require Import NatTrans.NatTrans NatTrans.Func_Cat NatTrans.Operations.
+From Categories Require Import Essentials.Notations.
+From Categories Require Import Essentials.Types.
+From Categories Require Import Essentials.Facts_Tactics.
+From Categories Require Import Category.Main.
+From Categories Require Import Functor.Functor Functor.Functor_Ops Functor.Functor_Properties.
+From Categories Require Import Cat.Cat.
+From Categories Require Import NatTrans.NatTrans NatTrans.Func_Cat NatTrans.Operations.
 
 Local Hint Extern 1 => apply NatTrans_eq_simplify; cbn.
 

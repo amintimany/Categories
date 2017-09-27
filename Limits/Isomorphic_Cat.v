@@ -1,12 +1,12 @@
-Require Import Essentials.Notations.
-Require Import Essentials.Types.
-Require Import Essentials.Facts_Tactics.
-Require Import Category.Main.
-Require Import Functor.Main.
-Require Import Cat.Cat Cat.Terminal.
-Require Import Limits.Limit.
-Require Import KanExt.LocalFacts.From_Iso_Cat.
-Require Import Cat.Cat_Iso.
+From Categories Require Import Essentials.Notations.
+From Categories Require Import Essentials.Types.
+From Categories Require Import Essentials.Facts_Tactics.
+From Categories Require Import Category.Main.
+From Categories Require Import Functor.Main.
+From Categories Require Import Cat.Cat Cat.Terminal.
+From Categories Require Import Limits.Limit.
+From Categories Require Import KanExt.LocalFacts.From_Iso_Cat.
+From Categories Require Import Cat.Cat_Iso.
 
 (** Given I : C ≃ D for C and D categories we have limit of (F ∘ I)
     if we have limit of F. *)

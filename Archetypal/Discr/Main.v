@@ -1,2 +1,2 @@
-Require Export Archetypal.Discr.Discr.
-Require Export Archetypal.Discr.NatFacts.
+From Categories Require Export Archetypal.Discr.Discr.
+From Categories Require Export Archetypal.Discr.NatFacts.

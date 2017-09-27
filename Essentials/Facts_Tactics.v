@@ -1,5 +1,5 @@
-Require Import Essentials.Notations.
-Require Import Essentials.Types.
+From Categories Require Import Essentials.Notations.
+From Categories Require Import Essentials.Types.
 
 Require Export Coq.Program.Tactics.
 Require Export Coq.Program.Equality.

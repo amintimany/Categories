@@ -1,14 +1,14 @@
-Require Import Essentials.Notations.
-Require Import Essentials.Types.
-Require Import Essentials.Facts_Tactics.
-Require Import Category.Main.
-Require Import Functor.Main.
-Require Import Cat.Cat.
-Require Import Ext_Cons.Prod_Cat.Prod_Cat Ext_Cons.Prod_Cat.Operations.
-Require Import Basic_Cons.Product.
-Require Import Basic_Cons.Exponential.
-Require Import NatTrans.NatTrans NatTrans.Func_Cat NatTrans.NatIso.
-Require Import Cat.Product Cat.Exponential.
+From Categories Require Import Essentials.Notations.
+From Categories Require Import Essentials.Types.
+From Categories Require Import Essentials.Facts_Tactics.
+From Categories Require Import Category.Main.
+From Categories Require Import Functor.Main.
+From Categories Require Import Cat.Cat.
+From Categories Require Import Ext_Cons.Prod_Cat.Prod_Cat Ext_Cons.Prod_Cat.Operations.
+From Categories Require Import Basic_Cons.Product.
+From Categories Require Import Basic_Cons.Exponential.
+From Categories Require Import NatTrans.NatTrans NatTrans.Func_Cat NatTrans.NatIso.
+From Categories Require Import Cat.Product Cat.Exponential.
 
 (** Facts about exponentials in Cat. *)
 

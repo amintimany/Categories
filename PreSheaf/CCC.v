@@ -1,12 +1,12 @@
-Require Import Essentials.Notations.
-Require Import Essentials.Types.
-Require Import Essentials.Facts_Tactics.
-Require Import Category.Main.
-Require Import Basic_Cons.CCC.
-Require Import PreSheaf.PreSheaf.
-Require Export PreSheaf.Terminal.
-Require Export PreSheaf.Product.
-Require Export PreSheaf.Exponential.
+From Categories Require Import Essentials.Notations.
+From Categories Require Import Essentials.Types.
+From Categories Require Import Essentials.Facts_Tactics.
+From Categories Require Import Category.Main.
+From Categories Require Import Basic_Cons.CCC.
+From Categories Require Import PreSheaf.PreSheaf.
+From Categories Require Export PreSheaf.Terminal.
+From Categories Require Export PreSheaf.Product.
+From Categories Require Export PreSheaf.Exponential.
 
 (** Category of presheaves over C is cartesian closed. *)
 Program Instance PShCat_CCC (C : Category) : CCC (PShCat C)

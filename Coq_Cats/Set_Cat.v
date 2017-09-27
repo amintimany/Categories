@@ -1,5 +1,5 @@
-Require Import Category.Main.
-Require Import Coq_Cats.Coq_Cat.
+From Categories Require Import Category.Main.
+From Categories Require Import Coq_Cats.Coq_Cat.
   
 (*
 **********************************************************

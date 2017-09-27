@@ -1,9 +1,9 @@
-Require Import Essentials.Notations.
-Require Import Essentials.Types.
-Require Import Essentials.Facts_Tactics.
-Require Import Category.Main.
-Require Import Functor.Functor.
-Require Import Functor.Functor_Ops.
+From Categories Require Import Essentials.Notations.
+From Categories Require Import Essentials.Types.
+From Categories Require Import Essentials.Facts_Tactics.
+From Categories Require Import Category.Main.
+From Categories Require Import Functor.Functor.
+From Categories Require Import Functor.Functor_Ops.
 
 Local Open Scope functor_scope.
 

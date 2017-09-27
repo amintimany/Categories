@@ -1,11 +1,11 @@
-Require Import Essentials.Notations.
-Require Import Essentials.Types.
-Require Import Essentials.Facts_Tactics.
-Require Import Category.Main.
-Require Import Functor.Functor Functor.Functor_Ops Functor.Functor_Properties.
-Require Import NatTrans.NatTrans NatTrans.Func_Cat NatTrans.NatIso.
-Require Import Adjunction.Adjunction Adjunction.Adj_Facts.
-Require Import KanExt.Global KanExt.LocalFacts.NatIso
+From Categories Require Import Essentials.Notations.
+From Categories Require Import Essentials.Types.
+From Categories Require Import Essentials.Facts_Tactics.
+From Categories Require Import Category.Main.
+From Categories Require Import Functor.Functor Functor.Functor_Ops Functor.Functor_Properties.
+From Categories Require Import NatTrans.NatTrans NatTrans.Func_Cat NatTrans.NatIso.
+From Categories Require Import Adjunction.Adjunction Adjunction.Adj_Facts.
+From Categories Require Import KanExt.Global KanExt.LocalFacts.NatIso
         KanExt.LocaltoGlobal KanExt.GlobaltoLocal
 .
 

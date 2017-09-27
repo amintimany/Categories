@@ -1,9 +1,9 @@
-Require Import Essentials.Notations.
-Require Import Essentials.Types.
-Require Import Essentials.Facts_Tactics.
+From Categories Require Import Essentials.Notations.
+From Categories Require Import Essentials.Types.
+From Categories Require Import Essentials.Facts_Tactics.
 
 (** The basic definition of a category *)
-Class Category : Type :=
+Cumulative Class Category : Type :=
 {
   (** Type of Objects *)
   Obj : Type;

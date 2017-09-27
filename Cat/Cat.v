@@ -1,5 +1,5 @@
-Require Import Category.Main.
-Require Import Functor.Functor Functor.Functor_Ops.
+From Categories Require Import Category.Main.
+From Categories Require Import Functor.Functor Functor.Functor_Ops.
 
 Local Open Scope functor_scope.
 

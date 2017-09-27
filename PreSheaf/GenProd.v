@@ -1,13 +1,13 @@
-Require Import Essentials.Notations.
-Require Import Essentials.Types.
-Require Import Essentials.Facts_Tactics.
-Require Import Category.Main.
-Require Import Functor.Main.
-Require Import Coq_Cats.Type_Cat.Type_Cat.
-Require Import Limits.Limit Limits.GenProd_GenSum.
-Require Import Archetypal.Discr.Discr.
-Require Import PreSheaf.PreSheaf.
-Require Import NatTrans.NatTrans NatTrans.Func_Cat.
+From Categories Require Import Essentials.Notations.
+From Categories Require Import Essentials.Types.
+From Categories Require Import Essentials.Facts_Tactics.
+From Categories Require Import Category.Main.
+From Categories Require Import Functor.Main.
+From Categories Require Import Coq_Cats.Type_Cat.Type_Cat.
+From Categories Require Import Limits.Limit Limits.GenProd_GenSum.
+From Categories Require Import Archetypal.Discr.Discr.
+From Categories Require Import PreSheaf.PreSheaf.
+From Categories Require Import NatTrans.NatTrans NatTrans.Func_Cat.
 
 Section PSh_GenProd.
   Context (C : Category) (A : Type) (map : A → PShCat C).

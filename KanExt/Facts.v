@@ -1,2 +1,2 @@
-Require Export KanExt.GlobalFacts.
-Require Export KanExt.LocalFacts.Main.
+From Categories Require Export KanExt.GlobalFacts.
+From Categories Require Export KanExt.LocalFacts.Main.

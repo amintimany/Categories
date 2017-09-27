@@ -1,7 +1,7 @@
-Require Export KanExt.Global.
-Require Export KanExt.Local.
-Require Export KanExt.GlobaltoLocal.
-Require Export KanExt.LocaltoGlobal.
-Require Export KanExt.GlobalDuality.
-Require Export KanExt.Pointwise.
-Require Export KanExt.Preservation.
+From Categories Require Export KanExt.Global.
+From Categories Require Export KanExt.Local.
+From Categories Require Export KanExt.GlobaltoLocal.
+From Categories Require Export KanExt.LocaltoGlobal.
+From Categories Require Export KanExt.GlobalDuality.
+From Categories Require Export KanExt.Pointwise.
+From Categories Require Export KanExt.Preservation.

@@ -1,9 +1,9 @@
-Require Import Category.Main.
-Require Import Ext_Cons.Prod_Cat.Prod_Cat Ext_Cons.Prod_Cat.Operations.
-Require Import Functor.Main.
-Require Import Functor.Representable.Hom_Func Functor.Representable.Hom_Func_Prop.
-Require Import NatTrans.NatTrans NatTrans.NatIso.
-Require Import Adjunction.Adjunction.
+From Categories Require Import Category.Main.
+From Categories Require Import Ext_Cons.Prod_Cat.Prod_Cat Ext_Cons.Prod_Cat.Operations.
+From Categories Require Import Functor.Main.
+From Categories Require Import Functor.Representable.Hom_Func Functor.Representable.Hom_Func_Prop.
+From Categories Require Import NatTrans.NatTrans NatTrans.NatIso.
+From Categories Require Import Adjunction.Adjunction.
 
 Local Open Scope functor_scope.
 

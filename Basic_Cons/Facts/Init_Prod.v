@@ -1,13 +1,13 @@
-Require Import Essentials.Notations.
-Require Import Essentials.Types.
-Require Import Essentials.Facts_Tactics.
-Require Import Category.Main.
-Require Import Functor.Main.
+From Categories Require Import Essentials.Notations.
+From Categories Require Import Essentials.Types.
+From Categories Require Import Essentials.Facts_Tactics.
+From Categories Require Import Category.Main.
+From Categories Require Import Functor.Main.
 
-Require Import Basic_Cons.CCC.
+From Categories Require Import Basic_Cons.CCC.
 
-Require Import NatTrans.NatTrans NatTrans.NatIso.
-Require Import Yoneda.Yoneda.
+From Categories Require Import NatTrans.NatTrans NatTrans.NatIso.
+From Categories Require Import Yoneda.Yoneda.
 
 (** 0 × a ≃ 0. where 0 is the initial object *)
 Section Init_Prod.

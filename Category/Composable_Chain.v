@@ -1,7 +1,7 @@
-Require Import Essentials.Notations.
-Require Import Essentials.Types.
-Require Import Essentials.Facts_Tactics.
-Require Import Category.Category.
+From Categories Require Import Essentials.Notations.
+From Categories Require Import Essentials.Types.
+From Categories Require Import Essentials.Facts_Tactics.
+From Categories Require Import Category.Category.
 Local Open Scope morphism_scope.
 
 (** A composable chain in a category from a to b is a single arrow from a to b

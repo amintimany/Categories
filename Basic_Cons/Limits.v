@@ -1,12 +1,12 @@
-Require Import Essentials.Notations.
-Require Import Essentials.Types.
-Require Import Essentials.Facts_Tactics.
-Require Import Category.Main.
-Require Import Functor.Main.
-Require Import Limits.Limit.
-Require Import Archetypal.Discr.Discr.
-Require Import Cat.Terminal.
-Require Import
+From Categories Require Import Essentials.Notations.
+From Categories Require Import Essentials.Types.
+From Categories Require Import Essentials.Facts_Tactics.
+From Categories Require Import Category.Main.
+From Categories Require Import Functor.Main.
+From Categories Require Import Limits.Limit.
+From Categories Require Import Archetypal.Discr.Discr.
+From Categories Require Import Cat.Terminal.
+From Categories Require Import
         Basic_Cons.Terminal
         Basic_Cons.Product
         Basic_Cons.Equalizer

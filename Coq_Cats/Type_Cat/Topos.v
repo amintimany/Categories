@@ -1,11 +1,11 @@
-Require Import Category.Main.
-Require Import Topos.Topos.
-Require Import Limits.Limit.
-Require Import Coq_Cats.Type_Cat.Card_Restriction.
-Require Import Coq_Cats.Type_Cat.Type_Cat.
-Require Import Coq_Cats.Type_Cat.CCC.
-Require Import Coq_Cats.Type_Cat.Complete.
-Require Import Coq_Cats.Type_Cat.SubObject_Classifier. 
+From Categories Require Import Category.Main.
+From Categories Require Import Topos.Topos.
+From Categories Require Import Limits.Limit.
+From Categories Require Import Coq_Cats.Type_Cat.Card_Restriction.
+From Categories Require Import Coq_Cats.Type_Cat.Type_Cat.
+From Categories Require Import Coq_Cats.Type_Cat.CCC.
+From Categories Require Import Coq_Cats.Type_Cat.Complete.
+From Categories Require Import Coq_Cats.Type_Cat.SubObject_Classifier. 
 
 Instance Type_Cat_Topos : Topos :=
   {

@@ -1,7 +1,7 @@
-Require Import Essentials.Notations.
-Require Import Essentials.Types.
-Require Import Essentials.Facts_Tactics.
-Require Import Category.Main.
+From Categories Require Import Essentials.Notations.
+From Categories Require Import Essentials.Types.
+From Categories Require Import Essentials.Facts_Tactics.
+From Categories Require Import Category.Main.
 
 (** The solution set condition. In Freyd's adjoint functor theorem
 it is assumed that (Comma (Func_From_SingletonCat x) G) satisfies
@@ -25,16 +25,16 @@ Arguments SSC_Type {_} _.
 Arguments SSC_Objs {_} _ _.
 Arguments SSC_jointly_weakly_initial {_} _ _.
 
-Require Import Limits.Limit Limits.GenProd_GenSum.
-Require Import Functor.Functor.
-Require Import NatTrans.NatTrans.
-Require Import
+From Categories Require Import Limits.Limit Limits.GenProd_GenSum.
+From Categories Require Import Functor.Functor.
+From Categories Require Import NatTrans.NatTrans.
+From Categories Require Import
         Basic_Cons.Terminal
         Basic_Cons.Equalizer
         Basic_Cons.Limits
         Basic_Cons.Facts.Equalizer_Monic
 .
-Require Import Archetypal.Discr.Discr.
+From Categories Require Import Archetypal.Discr.Discr.
 
 
 (** We show that a category that is complete and satisfies solution 

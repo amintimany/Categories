@@ -1,5 +1,5 @@
-Require Export Limits.Limit.
-Require Export Limits.GenProd_GenSum.
-Require Export Limits.GenProd_Eq_Limits.
-Require Export Limits.Isomorphic_Cat.
-Require Export Limits.Pointwise.
+From Categories Require Export Limits.Limit.
+From Categories Require Export Limits.GenProd_GenSum.
+From Categories Require Export Limits.GenProd_Eq_Limits.
+From Categories Require Export Limits.Isomorphic_Cat.
+From Categories Require Export Limits.Pointwise.

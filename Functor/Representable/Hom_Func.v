@@ -1,10 +1,10 @@
-Require Import Essentials.Notations.
-Require Import Essentials.Types.
-Require Import Essentials.Facts_Tactics.
-Require Import Category.Main.
-Require Import Functor.Functor.
-Require Import Coq_Cats.Type_Cat.Type_Cat.
-Require Import Ext_Cons.Prod_Cat.Prod_Cat.
+From Categories Require Import Essentials.Notations.
+From Categories Require Import Essentials.Types.
+From Categories Require Import Essentials.Facts_Tactics.
+From Categories Require Import Category.Main.
+From Categories Require Import Functor.Functor.
+From Categories Require Import Coq_Cats.Type_Cat.Type_Cat.
+From Categories Require Import Ext_Cons.Prod_Cat.Prod_Cat.
 
 
 (** The hom-functor is a functor that maps a pair of objects (a, b)

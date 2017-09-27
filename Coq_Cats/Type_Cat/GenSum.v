@@ -1,12 +1,12 @@
-Require Import Essentials.Notations.
-Require Import Essentials.Types.
-Require Import Essentials.Facts_Tactics.
-Require Import Category.Main.
-Require Import Functor.Main.
-Require Import Coq_Cats.Type_Cat.Type_Cat.
-Require Import Limits.Limit Limits.GenProd_GenSum.
-Require Import Archetypal.Discr.Discr.
-Require Import Basic_Cons.Terminal.
+From Categories Require Import Essentials.Notations.
+From Categories Require Import Essentials.Types.
+From Categories Require Import Essentials.Facts_Tactics.
+From Categories Require Import Category.Main.
+From Categories Require Import Functor.Main.
+From Categories Require Import Coq_Cats.Type_Cat.Type_Cat.
+From Categories Require Import Limits.Limit Limits.GenProd_GenSum.
+From Categories Require Import Archetypal.Discr.Discr.
+From Categories Require Import Basic_Cons.Terminal.
 
 (** In category of types, generalized sums are simply dependent sum types. *)
 Section Type_Cat_GenSum.

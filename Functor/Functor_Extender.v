@@ -1,9 +1,9 @@
-Require Import Essentials.Notations.
-Require Import Essentials.Types.
-Require Import Essentials.Facts_Tactics.
-Require Import Category.Main.
-Require Import Functor.Functor Functor.Functor_Ops.
-Require Import NatTrans.Main.
+From Categories Require Import Essentials.Notations.
+From Categories Require Import Essentials.Types.
+From Categories Require Import Essentials.Facts_Tactics.
+From Categories Require Import Category.Main.
+From Categories Require Import Functor.Functor Functor.Functor_Ops.
+From Categories Require Import NatTrans.Main.
 
 (** Local notations for readability *)
 Local Notation NID := NatTrans_id (only parsing).

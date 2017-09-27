@@ -1,9 +1,9 @@
-Require Import Essentials.Notations.
-Require Import Category.Main.
-Require Export Basic_Cons.Terminal.
-Require Export Basic_Cons.Product.
-Require Export Basic_Cons.Exponential.
-Require Export Basic_Cons.Exponential_Functor.
+From Categories Require Import Essentials.Notations.
+From Categories Require Import Category.Main.
+From Categories Require Export Basic_Cons.Terminal.
+From Categories Require Export Basic_Cons.Product.
+From Categories Require Export Basic_Cons.Exponential.
+From Categories Require Export Basic_Cons.Exponential_Functor.
 
 (** Cartesian Closed Category : one that has terminal element, binary products
     (all finite products) and exponential *)

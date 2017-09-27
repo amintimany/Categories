@@ -1,10 +1,10 @@
-Require Import Essentials.Notations.
-Require Import Essentials.Types.
-Require Import Essentials.Facts_Tactics.
-Require Import Category.Main.
-Require Import Topos.SubObject_Classifier.
-Require Import Basic_Cons.Terminal Basic_Cons.PullBack.
-Require Import Coq_Cats.Type_Cat.Type_Cat Coq_Cats.Type_Cat.CCC.
+From Categories Require Import Essentials.Notations.
+From Categories Require Import Essentials.Types.
+From Categories Require Import Essentials.Facts_Tactics.
+From Categories Require Import Category.Main.
+From Categories Require Import Topos.SubObject_Classifier.
+From Categories Require Import Basic_Cons.Terminal Basic_Cons.PullBack.
+From Categories Require Import Coq_Cats.Type_Cat.Type_Cat Coq_Cats.Type_Cat.CCC.
 Require Import Coq.Logic.ChoiceFacts.
 Require Coq.Logic.ClassicalFacts.
 

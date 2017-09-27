@@ -1,7 +1,7 @@
-Require Export Basic_Cons.CCC.
-Require Export Basic_Cons.Equalizer.
-Require Export Basic_Cons.PullBack.
-Require Export Basic_Cons.LCCC.
+From Categories Require Export Basic_Cons.CCC.
+From Categories Require Export Basic_Cons.Equalizer.
+From Categories Require Export Basic_Cons.PullBack.
+From Categories Require Export Basic_Cons.LCCC.
 
 
 

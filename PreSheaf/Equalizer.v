@@ -1,12 +1,12 @@
-Require Import Essentials.Notations.
-Require Import Essentials.Types.
-Require Import Essentials.Facts_Tactics.
-Require Import Category.Main.
-Require Import Functor.Main.
-Require Import Basic_Cons.Equalizer.
-Require Import Coq_Cats.Type_Cat.Type_Cat Coq_Cats.Type_Cat.Equalizer.
-Require Import NatTrans.NatTrans NatTrans.Func_Cat.
-Require Import PreSheaf.PreSheaf.
+From Categories Require Import Essentials.Notations.
+From Categories Require Import Essentials.Types.
+From Categories Require Import Essentials.Facts_Tactics.
+From Categories Require Import Category.Main.
+From Categories Require Import Functor.Main.
+From Categories Require Import Basic_Cons.Equalizer.
+From Categories Require Import Coq_Cats.Type_Cat.Type_Cat Coq_Cats.Type_Cat.Equalizer.
+From Categories Require Import NatTrans.NatTrans NatTrans.Func_Cat.
+From Categories Require Import PreSheaf.PreSheaf.
 
 Local Obligation Tactic := idtac.
 

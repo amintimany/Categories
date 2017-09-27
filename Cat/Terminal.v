@@ -1,12 +1,12 @@
-Require Import Essentials.Notations.
-Require Import Essentials.Types.
-Require Import Essentials.Facts_Tactics.
-Require Import Category.Main.
-Require Import Functor.Main.
-Require Import Cat.Cat.
-Require Import Basic_Cons.Terminal.
-Require Import Archetypal.Discr.Discr.
-Require Import NatTrans.NatTrans NatTrans.NatIso.
+From Categories Require Import Essentials.Notations.
+From Categories Require Import Essentials.Types.
+From Categories Require Import Essentials.Facts_Tactics.
+From Categories Require Import Category.Main.
+From Categories Require Import Functor.Main.
+From Categories Require Import Cat.Cat.
+From Categories Require Import Basic_Cons.Terminal.
+From Categories Require Import Archetypal.Discr.Discr.
+From Categories Require Import NatTrans.NatTrans NatTrans.NatIso.
 
 (** The unique functor to the terminal category. *)
 Program Definition Functor_To_1_Cat (C' : Category) : (C' –≻ 1)%functor :=

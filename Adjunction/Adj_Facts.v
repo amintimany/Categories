@@ -1,17 +1,17 @@
-Require Import Essentials.Notations.
-Require Import Essentials.Types.
-Require Import Essentials.Facts_Tactics.
-Require Import Category.Main.
-Require Import Ext_Cons.Prod_Cat.Prod_Cat Ext_Cons.Prod_Cat.Nat_Facts
+From Categories Require Import Essentials.Notations.
+From Categories Require Import Essentials.Types.
+From Categories Require Import Essentials.Facts_Tactics.
+From Categories Require Import Category.Main.
+From Categories Require Import Ext_Cons.Prod_Cat.Prod_Cat Ext_Cons.Prod_Cat.Nat_Facts
         Ext_Cons.Prod_Cat.Operations.
-Require Import Functor.Main.
-Require Import Functor.Representable.Hom_Func
+From Categories Require Import Functor.Main.
+From Categories Require Import Functor.Representable.Hom_Func
         Functor.Representable.Hom_Func_Prop.
-Require Import NatTrans.Main.
-Require Import Adjunction.Adjunction Adjunction.Duality.
-Require Import Cat.Cat Cat.Exponential Cat.Exponential_Facts.
-Require Import Yoneda.Yoneda.
-Require Import Functor.Functor_Extender.
+From Categories Require Import NatTrans.Main.
+From Categories Require Import Adjunction.Adjunction Adjunction.Duality.
+From Categories Require Import Cat.Cat Cat.Exponential Cat.Exponential_Facts.
+From Categories Require Import Yoneda.Yoneda.
+From Categories Require Import Functor.Functor_Extender.
 
 Local Open Scope functor_scope.
 

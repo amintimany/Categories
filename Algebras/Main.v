@@ -1,1 +1,1 @@
-Require Export Algebras.Algebras.
+From Categories Require Export Algebras.Algebras.

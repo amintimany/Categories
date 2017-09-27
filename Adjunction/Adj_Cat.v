@@ -1,10 +1,10 @@
-Require Import Essentials.Notations.
-Require Import Essentials.Types.
-Require Import Essentials.Facts_Tactics.
-Require Import Category.Main.
-Require Import Functor.Main.
-Require Import Adjunction.Adjunction Adjunction.Duality.
-Require Import NatTrans.NatTrans.
+From Categories Require Import Essentials.Notations.
+From Categories Require Import Essentials.Types.
+From Categories Require Import Essentials.Facts_Tactics.
+From Categories Require Import Category.Main.
+From Categories Require Import Functor.Main.
+From Categories Require Import Adjunction.Adjunction Adjunction.Duality.
+From Categories Require Import NatTrans.NatTrans.
 
 Local Open Scope functor_scope.
 (** Adjunctions form a category Adj where objects are categories and an arrow 

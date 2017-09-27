@@ -1,9 +1,9 @@
-Require Import Essentials.Notations.
-Require Import Essentials.Types.
-Require Import Essentials.Facts_Tactics.
-Require Import Category.Main.
-Require Import Basic_Cons.Equalizer.
-Require Import Coq_Cats.Type_Cat.Type_Cat.
+From Categories Require Import Essentials.Notations.
+From Categories Require Import Essentials.Types.
+From Categories Require Import Essentials.Facts_Tactics.
+From Categories Require Import Category.Main.
+From Categories Require Import Basic_Cons.Equalizer.
+From Categories Require Import Coq_Cats.Type_Cat.Type_Cat.
 
 Local Obligation Tactic := idtac.
 
@@ -67,12 +67,12 @@ Program Instance Type_Cat_Has_Equalizers : Has_Equalizers Type_Cat :=
 Require Import Coq.Relations.Relations Coq.Relations.Relation_Definitions.
 Require Import Coq.Logic.ClassicalChoice Coq.Logic.ChoiceFacts.
 Require Coq.Logic.ClassicalFacts.
-                                         
+
 Section CoEqualizer.
   Context {A B : Type} (f g : A → B).
 
   Local Obligation Tactic := idtac.
-  
+
   Definition CoEq_rel_base : relation B := fun x y => exists z, f z = x ∧ g z = y.
 
   Definition CoEq_rel : relation B := clos_refl_sym_trans _ CoEq_rel_base.
@@ -89,7 +89,7 @@ Section CoEqualizer.
 
   Local Axiom ConstructiveIndefiniteDescription_B :
     ConstructiveIndefiniteDescription_on B.
-  
+
   Definition CoEq_Choice (ct : CoEq_Type) : {x : B | (proj1_sig ct) x}.
   Proof.
     apply ConstructiveIndefiniteDescription_B.
@@ -115,8 +115,8 @@ Section CoEqualizer.
     {
       apply (CoEq_rel_trans _ _ _ Hx H).
     }
-  Qed.    
-    
+  Qed.
+
   Program Definition Type_Cat_CoEq  : CoEqualizer Type_Cat f g :=
     {|
       equalizer := CoEq_Type
@@ -131,17 +131,17 @@ Section CoEqualizer.
     apply CoEq_rel_refl.
     intros z; split; intros; trivial.
   Defined.
- 
+
   Next Obligation.
   Proof.
     extensionality x.
     apply sig_proof_irrelevance.
     extensionality y.
     apply CoEq_rel_Ext.
-  Qed.    
+  Qed.
 
   Next Obligation.
-  Proof.  
+  Proof.
     intros T F H x.
     exact (F (proj1_sig (CoEq_Choice x))).
   Defined.

@@ -1,5 +1,5 @@
-Require Export Category.Category.
-Require Export Category.Morph.
-Require Export Category.Opposite.
-Require Export Category.SubCategory.
-Require Export Category.Composable_Chain.
+From Categories Require Export Category.Category.
+From Categories Require Export Category.Morph.
+From Categories Require Export Category.Opposite.
+From Categories Require Export Category.SubCategory.
+From Categories Require Export Category.Composable_Chain.

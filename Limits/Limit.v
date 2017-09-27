@@ -1,15 +1,15 @@
-Require Import Essentials.Notations.
-Require Import Essentials.Types.
-Require Import Essentials.Facts_Tactics.
-Require Import Category.Main.
-Require Import Functor.Main.
-Require Import Basic_Cons.Terminal.
-Require Import Ext_Cons.Arrow.
-Require Import Coq_Cats.Type_Cat.Card_Restriction.
-Require Export NatTrans.NatTrans NatTrans.Operations.
-Require Export KanExt.Local KanExt.Global KanExt.GlobalDuality
+From Categories Require Import Essentials.Notations.
+From Categories Require Import Essentials.Types.
+From Categories Require Import Essentials.Facts_Tactics.
+From Categories Require Import Category.Main.
+From Categories Require Import Functor.Main.
+From Categories Require Import Basic_Cons.Terminal.
+From Categories Require Import Ext_Cons.Arrow.
+From Categories Require Import Coq_Cats.Type_Cat.Card_Restriction.
+From Categories Require Export NatTrans.NatTrans NatTrans.Operations.
+From Categories Require Export KanExt.Local KanExt.Global KanExt.GlobalDuality
         KanExt.GlobaltoLocal KanExt.LocaltoGlobal KanExt.LocalFacts.Main.
-Require Export Cat.Terminal.
+From Categories Require Export Cat.Terminal.
 
 Local Open Scope functor_scope.
 

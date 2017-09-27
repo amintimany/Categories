@@ -1,9 +1,9 @@
-Require Import Essentials.Notations.
-Require Import Essentials.Types.
-Require Import Essentials.Facts_Tactics.
-Require Import Category.Main.
-Require Import Functor.Main.
-Require Import Archetypal.PreOrder_Cat.PreOrder_Cat.
+From Categories Require Import Essentials.Notations.
+From Categories Require Import Essentials.Types.
+From Categories Require Import Essentials.Facts_Tactics.
+From Categories Require Import Category.Main.
+From Categories Require Import Functor.Main.
+From Categories Require Import Archetypal.PreOrder_Cat.PreOrder_Cat.
 
 Require Import Coq.Arith.Arith.
 
@@ -39,7 +39,7 @@ Proof.
   intros H1 H2.
   induction H2; auto.
 Defined.
-  
+
 Definition Tle_remS (n m : nat) : S n ≤ S m → n ≤ m.
 Proof.
   revert n.
@@ -58,7 +58,7 @@ Proof.
   apply IHn.
   apply Tle_remS; trivial.
 Qed.
-  
+
 (** Tle is decidable. This is crutial in conversion from le to Tle. *)
 Definition Tle_dec (n m : nat) : (n ≤ m) + ((n ≤ m) → False).
 Proof.
@@ -129,7 +129,7 @@ Proof.
     {
       contradict H1; clear.
       induction m; auto.
-    }      
+    }
     {
       subst.
       contradict H1; clear.
@@ -164,7 +164,7 @@ Proof.
       {
         apply f_equal.
         apply IHTle.
-      }        
+      }
   }
 Qed.
 
@@ -181,7 +181,7 @@ Definition OmegaPreOrder :=
 
 (** The pre-order category ω. *)
 Definition OmegaCat : Category := PreOrder_Cat OmegaPreOrder.
-  
+
 Notation "'ω'" := (OmegaCat) : omegacat_scope.
 
 Lemma le_Tle_n (n : nat) : le_Tle (le_n n) = Tle_n n.

@@ -1,13 +1,13 @@
-Require Import Essentials.Notations.
-Require Import Essentials.Types.
-Require Import Essentials.Facts_Tactics.
-Require Import Category.Main.
-Require Import Functor.Main.
-Require Import Ext_Cons.Arrow.
-Require Import Coq_Cats.Type_Cat.Type_Cat.
-Require Import Cat.Cat Cat.Cat_Iso.
-Require Import NatTrans.NatTrans NatTrans.NatIso.
-Require Import Archetypal.Discr.Discr.
+From Categories Require Import Essentials.Notations.
+From Categories Require Import Essentials.Types.
+From Categories Require Import Essentials.Facts_Tactics.
+From Categories Require Import Category.Main.
+From Categories Require Import Functor.Main.
+From Categories Require Import Ext_Cons.Arrow.
+From Categories Require Import Coq_Cats.Type_Cat.Type_Cat.
+From Categories Require Import Cat.Cat Cat.Cat_Iso.
+From Categories Require Import NatTrans.NatTrans NatTrans.NatIso.
+From Categories Require Import Archetypal.Discr.Discr.
 
 (** This module contains facts about discrete categories and discrete
     functors involving natural transformations. *)

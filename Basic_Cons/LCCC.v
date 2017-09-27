@@ -1,12 +1,12 @@
-Require Import Essentials.Notations.
-Require Import Essentials.Types.
-Require Import Essentials.Facts_Tactics.
-Require Import Category.Main.
-Require Import Basic_Cons.CCC Basic_Cons.PullBack.
-Require Import Ext_Cons.Comma.
-Require Import Ext_Cons.Arrow.
-Require Import Archetypal.Discr.Discr.
-Require Import Functor.Const_Func Functor.Functor_Ops.
+From Categories Require Import Essentials.Notations.
+From Categories Require Import Essentials.Types.
+From Categories Require Import Essentials.Facts_Tactics.
+From Categories Require Import Category.Main.
+From Categories Require Import Basic_Cons.CCC Basic_Cons.PullBack.
+From Categories Require Import Ext_Cons.Comma.
+From Categories Require Import Ext_Cons.Arrow.
+From Categories Require Import Archetypal.Discr.Discr.
+From Categories Require Import Functor.Const_Func Functor.Functor_Ops.
 
 (** A category is locally cartesian closed if all its slices are
     cartesian closed!. *)

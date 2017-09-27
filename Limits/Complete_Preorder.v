@@ -1,14 +1,14 @@
-Require Import Essentials.Notations.
-Require Import Essentials.Types.
-Require Import Essentials.Facts_Tactics.
-Require Import Category.Main.
-Require Import Functor.Functor Functor.Const_Func Functor.Functor_Ops.
-Require Import Ext_Cons.Prod_Cat.Prod_Cat Ext_Cons.Prod_Cat.Operations.
-Require Import NatTrans.Operations NatTrans.NatIso.
-Require Import Archetypal.Discr.Discr.
-Require Import Limits.Limit Limits.Pointwise.
-Require Import Ext_Cons.Arrow.
-Require Import Coq_Cats.Type_Cat.Type_Cat Coq_Cats.Type_Cat.GenProd.
+From Categories Require Import Essentials.Notations.
+From Categories Require Import Essentials.Types.
+From Categories Require Import Essentials.Facts_Tactics.
+From Categories Require Import Category.Main.
+From Categories Require Import Functor.Functor Functor.Const_Func Functor.Functor_Ops.
+From Categories Require Import Ext_Cons.Prod_Cat.Prod_Cat Ext_Cons.Prod_Cat.Operations.
+From Categories Require Import NatTrans.Operations NatTrans.NatIso.
+From Categories Require Import Archetypal.Discr.Discr.
+From Categories Require Import Limits.Limit Limits.Pointwise.
+From Categories Require Import Ext_Cons.Arrow.
+From Categories Require Import Coq_Cats.Type_Cat.Type_Cat Coq_Cats.Type_Cat.GenProd.
 
 (**
   This file shows that if a category is complete, then for any pair of objects

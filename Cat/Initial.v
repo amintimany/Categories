@@ -1,11 +1,11 @@
-Require Import Essentials.Notations.
-Require Import Essentials.Types.
-Require Import Essentials.Facts_Tactics.
-Require Import Category.Category.
-Require Import Functor.Main.
-Require Import Cat.Cat.
-Require Import Basic_Cons.Terminal.
-Require Import Archetypal.Discr.Discr.
+From Categories Require Import Essentials.Notations.
+From Categories Require Import Essentials.Types.
+From Categories Require Import Essentials.Facts_Tactics.
+From Categories Require Import Category.Category.
+From Categories Require Import Functor.Main.
+From Categories Require Import Cat.Cat.
+From Categories Require Import Basic_Cons.Terminal.
+From Categories Require Import Archetypal.Discr.Discr.
 
 (** The unique functor from the initial category to any other. *)
 Program Definition Functor_From_Empty_Cat (C' : Category) : (0 –≻ C')%functor :=

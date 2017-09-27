@@ -1,8 +1,8 @@
-Require Import Category.Main.
-Require Import Limits.Limit.
-Require Import Coq_Cats.Type_Cat.Card_Restriction.
-Require Import Basic_Cons.CCC.
-Require Import Topos.SubObject_Classifier.
+From Categories Require Import Category.Main.
+From Categories Require Import Limits.Limit.
+From Categories Require Import Coq_Cats.Type_Cat.Card_Restriction.
+From Categories Require Import Basic_Cons.CCC.
+From Categories Require Import Topos.SubObject_Classifier.
 
 Class Topos : Type :=
   {

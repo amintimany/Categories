@@ -1,13 +1,13 @@
-Require Import Essentials.Notations.
-Require Import Essentials.Types.
-Require Import Essentials.Facts_Tactics.
-Require Import Category.Main.
-Require Import Functor.Main.
-Require Import Basic_Cons.Product.
-Require Import Basic_Cons.Exponential Basic_Cons.Exponential_Functor.
-Require Import Adjunction.Adjunction.
-Require Import Ext_Cons.Prod_Cat.Operations.
-Require Import NatTrans.NatTrans.
+From Categories Require Import Essentials.Notations.
+From Categories Require Import Essentials.Types.
+From Categories Require Import Essentials.Facts_Tactics.
+From Categories Require Import Category.Main.
+From Categories Require Import Functor.Main.
+From Categories Require Import Basic_Cons.Product.
+From Categories Require Import Basic_Cons.Exponential Basic_Cons.Exponential_Functor.
+From Categories Require Import Adjunction.Adjunction.
+From Categories Require Import Ext_Cons.Prod_Cat.Operations.
+From Categories Require Import NatTrans.NatTrans.
 
 (** Δ ⊣ × *)
 Section Prod_Adj.

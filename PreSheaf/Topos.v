@@ -1,11 +1,11 @@
-Require Import Category.Main.
-Require Import Topos.Topos.
-Require Import Limits.Limit.
-Require Import Coq_Cats.Type_Cat.Card_Restriction.
-Require Import PreSheaf.PreSheaf.
-Require Import PreSheaf.CCC.
-Require Import PreSheaf.Complete.
-Require Import PreSheaf.SubObject_Classifier. 
+From Categories Require Import Category.Main.
+From Categories Require Import Topos.Topos.
+From Categories Require Import Limits.Limit.
+From Categories Require Import Coq_Cats.Type_Cat.Card_Restriction.
+From Categories Require Import PreSheaf.PreSheaf.
+From Categories Require Import PreSheaf.CCC.
+From Categories Require Import PreSheaf.Complete.
+From Categories Require Import PreSheaf.SubObject_Classifier. 
 
 Instance Type_Cat_Topos (C : Category) : Topos :=
   {

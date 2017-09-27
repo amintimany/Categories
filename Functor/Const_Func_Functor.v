@@ -1,9 +1,9 @@
-Require Import Essentials.Notations.
-Require Import Essentials.Types.
-Require Import Essentials.Facts_Tactics.
-Require Import Category.Main.
-Require Import Functor.Functor Functor.Const_Func.
-Require Import NatTrans.NatTrans NatTrans.Func_Cat.
+From Categories Require Import Essentials.Notations.
+From Categories Require Import Essentials.Types.
+From Categories Require Import Essentials.Facts_Tactics.
+From Categories Require Import Category.Main.
+From Categories Require Import Functor.Functor Functor.Const_Func.
+From Categories Require Import NatTrans.NatTrans NatTrans.Func_Cat.
 
 (** The functor that maps each object c in C to the 
     constant functor that maps each object of D to c in Func_Cat D C. *)

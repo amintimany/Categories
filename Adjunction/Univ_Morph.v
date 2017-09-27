@@ -1,14 +1,14 @@
-Require Import Essentials.Notations.
-Require Import Essentials.Types.
-Require Import Essentials.Facts_Tactics.
-Require Import Category.Main.
-Require Import Functor.Main.
-Require Import NatTrans.Main.
-Require Import Adjunction.Adjunction Adjunction.Duality.
-Require Import Ext_Cons.Comma.
-Require Import Basic_Cons.Terminal Basic_Cons.Facts.Term_IsoCat.
-Require Import Cat.Cat_Iso.
-Require Import Archetypal.Discr.Discr Archetypal.Discr.NatFacts.
+From Categories Require Import Essentials.Notations.
+From Categories Require Import Essentials.Types.
+From Categories Require Import Essentials.Facts_Tactics.
+From Categories Require Import Category.Main.
+From Categories Require Import Functor.Main.
+From Categories Require Import NatTrans.Main.
+From Categories Require Import Adjunction.Adjunction Adjunction.Duality.
+From Categories Require Import Ext_Cons.Comma.
+From Categories Require Import Basic_Cons.Terminal Basic_Cons.Facts.Term_IsoCat.
+From Categories Require Import Cat.Cat_Iso.
+From Categories Require Import Archetypal.Discr.Discr Archetypal.Discr.NatFacts.
 
 (** A functor G : D –≻ C has a left adjoint if and only if
 the comma category (Comma (Func_From_SingletonCat x) G) has

@@ -1,12 +1,12 @@
-Require Import Essentials.Notations.
-Require Import Essentials.Types.
-Require Import Essentials.Facts_Tactics.
-Require Import Category.Main.
-Require Import Basic_Cons.CCC Basic_Cons.LCCC Basic_Cons.PullBack.
-Require Import Ext_Cons.Comma.
-Require Import Coq_Cats.Type_Cat.Type_Cat Coq_Cats.Type_Cat.PullBack.
-Require Import Archetypal.Discr.Discr.
-Require Import Functor.Functor_Ops Functor.Const_Func.
+From Categories Require Import Essentials.Notations.
+From Categories Require Import Essentials.Types.
+From Categories Require Import Essentials.Facts_Tactics.
+From Categories Require Import Category.Main.
+From Categories Require Import Basic_Cons.CCC Basic_Cons.LCCC Basic_Cons.PullBack.
+From Categories Require Import Ext_Cons.Comma.
+From Categories Require Import Coq_Cats.Type_Cat.Type_Cat Coq_Cats.Type_Cat.PullBack.
+From Categories Require Import Archetypal.Discr.Discr.
+From Categories Require Import Functor.Functor_Ops Functor.Const_Func.
 
 (** Type_Cat is locally cartesian closed. *)
 Section CCC_Slice_A.

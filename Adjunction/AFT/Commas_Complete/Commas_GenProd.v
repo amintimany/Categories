@@ -1,22 +1,22 @@
-Require Import Essentials.Notations.
-Require Import Essentials.Types.
-Require Import Essentials.Facts_Tactics.
-Require Import Category.Main.
-Require Import
+From Categories Require Import Essentials.Notations.
+From Categories Require Import Essentials.Types.
+From Categories Require Import Essentials.Facts_Tactics.
+From Categories Require Import Category.Main.
+From Categories Require Import
         Limits.Limit
         Limits.GenProd_GenSum
         Limits.GenProd_Eq_Limits
 .
-Require Import Functor.Functor Functor.Functor_Ops.
-Require Import NatTrans.Main.
-Require Import Ext_Cons.Comma.
-Require Import
+From Categories Require Import Functor.Functor Functor.Functor_Ops.
+From Categories Require Import NatTrans.Main.
+From Categories Require Import Ext_Cons.Comma.
+From Categories Require Import
         Basic_Cons.Terminal
         Basic_Cons.Equalizer
         Basic_Cons.Limits
 .
-Require Import Archetypal.Discr.Discr.
-Require Import Cat.Terminal.
+From Categories Require Import Archetypal.Discr.Discr.
+From Categories Require Import Cat.Terminal.
 
 (** We show that if C is a complete category and G : C –≻ D preserves limits,
 then every comma category (Comma (Func_From_SingletonCat x) G) for (x : D) has

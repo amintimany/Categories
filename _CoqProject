@@ -175,4 +175,4 @@ PreSheaf/Topos.v
 #Demo:
 Demo/Demo.v
 
--R . Categories
+-Q . Categories

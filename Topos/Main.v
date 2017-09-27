@@ -1,2 +1,2 @@
-Require Export Topos.Topos.
-Require Export Topos.SubObject_Classifier.
+From Categories Require Export Topos.Topos.
+From Categories Require Export Topos.SubObject_Classifier.

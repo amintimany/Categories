@@ -1,17 +1,17 @@
-Require Import Essentials.Notations.
-Require Import Essentials.Types.
-Require Import Essentials.Facts_Tactics.
-Require Import Category.Main.
-Require Import Functor.Main.
-Require Import Ext_Cons.Arrow.
-Require Import Basic_Cons.Terminal.
-Require Import Basic_Cons.Equalizer.
-Require Import Basic_Cons.Facts.Equalizer_Monic.
-Require Import Coq_Cats.Type_Cat.Card_Restriction.
-Require Import Archetypal.Discr.Discr Archetypal.Discr.NatFacts.
+From Categories Require Import Essentials.Notations.
+From Categories Require Import Essentials.Types.
+From Categories Require Import Essentials.Facts_Tactics.
+From Categories Require Import Category.Main.
+From Categories Require Import Functor.Main.
+From Categories Require Import Ext_Cons.Arrow.
+From Categories Require Import Basic_Cons.Terminal.
+From Categories Require Import Basic_Cons.Equalizer.
+From Categories Require Import Basic_Cons.Facts.Equalizer_Monic.
+From Categories Require Import Coq_Cats.Type_Cat.Card_Restriction.
+From Categories Require Import Archetypal.Discr.Discr Archetypal.Discr.NatFacts.
 
-Require Import Limits.GenProd_GenSum.
-Require Import Limits.Limit.
+From Categories Require Import Limits.GenProd_GenSum.
+From Categories Require Import Limits.Limit.
 
 Local Open Scope functor_scope.
 

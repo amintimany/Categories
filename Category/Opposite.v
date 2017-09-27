@@ -1,7 +1,7 @@
-Require Import Essentials.Notations.
-Require Import Essentials.Types.
-Require Import Essentials.Facts_Tactics.
-Require Import Category.Category.
+From Categories Require Import Essentials.Notations.
+From Categories Require Import Essentials.Types.
+From Categories Require Import Essentials.Facts_Tactics.
+From Categories Require Import Category.Category.
 
 (** The oposite of a category C is a category with the same objects where the arrows are inverted. 
 As a result, f ∘_Cᵒᵖ g is just g ∘_C f and consequently, assoc is assoc_sym (reversed with arrow

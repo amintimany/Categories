@@ -1,18 +1,18 @@
-Require Import Essentials.Notations.
-Require Import Essentials.Types.
-Require Import Essentials.Facts_Tactics.
-Require Import Category.Main.
-Require Import Functor.Main Functor.Representable.Hom_Func.
-Require Import Basic_Cons.Terminal.
-Require Import Ext_Cons.Arrow.
-Require Import Coq_Cats.Type_Cat.Card_Restriction.
-Require Import Limits.Limit.
-Require Import KanExt.Pointwise.
-Require Import Ext_Cons.Prod_Cat.Prod_Cat Ext_Cons.Prod_Cat.Operations.
-Require Import Coq_Cats.Type_Cat.Type_Cat.
-Require Import NatTrans.Main.
-Require Import Cat.Terminal.
-Require Import Functor.Representable.Representable.
+From Categories Require Import Essentials.Notations.
+From Categories Require Import Essentials.Types.
+From Categories Require Import Essentials.Facts_Tactics.
+From Categories Require Import Category.Main.
+From Categories Require Import Functor.Main Functor.Representable.Hom_Func.
+From Categories Require Import Basic_Cons.Terminal.
+From Categories Require Import Ext_Cons.Arrow.
+From Categories Require Import Coq_Cats.Type_Cat.Card_Restriction.
+From Categories Require Import Limits.Limit.
+From Categories Require Import KanExt.Pointwise.
+From Categories Require Import Ext_Cons.Prod_Cat.Prod_Cat Ext_Cons.Prod_Cat.Operations.
+From Categories Require Import Coq_Cats.Type_Cat.Type_Cat.
+From Categories Require Import NatTrans.Main.
+From Categories Require Import Cat.Terminal.
+From Categories Require Import Functor.Representable.Representable.
 
 Local Open Scope functor_scope.
 

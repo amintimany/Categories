@@ -1,13 +1,13 @@
-Require Import Essentials.Notations.
-Require Import Essentials.Types.
-Require Import Essentials.Facts_Tactics.
-Require Import Category.Main.
-Require Import Functor.Main.
-Require Import Topos.SubObject_Classifier.
-Require Import Basic_Cons.Terminal Basic_Cons.PullBack.
-Require Import NatTrans.NatTrans NatTrans.Func_Cat.
-Require Import Coq_Cats.Type_Cat.CCC Coq_Cats.Type_Cat.Morphisms.
-Require Import
+From Categories Require Import Essentials.Notations.
+From Categories Require Import Essentials.Types.
+From Categories Require Import Essentials.Facts_Tactics.
+From Categories Require Import Category.Main.
+From Categories Require Import Functor.Main.
+From Categories Require Import Topos.SubObject_Classifier.
+From Categories Require Import Basic_Cons.Terminal Basic_Cons.PullBack.
+From Categories Require Import NatTrans.NatTrans NatTrans.Func_Cat.
+From Categories Require Import Coq_Cats.Type_Cat.CCC Coq_Cats.Type_Cat.Morphisms.
+From Categories Require Import
         PreSheaf.PreSheaf
         PreSheaf.Terminal
         PreSheaf.PullBack
@@ -46,7 +46,7 @@ Section Sieve.
       (fun _ _ => True)
       (fun _ _ _ _ _ => I)
   .
-  
+
 End Sieve.
 
 (** The presheaf that maps each object to the set of its sieves. *)
@@ -65,13 +65,13 @@ Section Sieve_PreSheaf.
   .
 
   Local Obligation Tactic := idtac.
-  
+
   Next Obligation.
   Proof.
     intros c c' h S x f H y g.
     rewrite assoc_sym.
     apply (proj2_sig S); trivial.
-  Qed.    
+  Qed.
 
   Next Obligation.
   Proof.
@@ -84,7 +84,7 @@ Section Sieve_PreSheaf.
   Qed.
 
   Next Obligation.
-  Proof.      
+  Proof.
     intros a b c f g.
     extensionality S.
     apply sig_proof_irrelevance.
@@ -104,7 +104,7 @@ Section Sieve_PreSheaf.
       |}.
 
   Local Hint Extern 1 => progress cbn.
-  
+
   Next Obligation.
   Proof.
     intros c c' h.
@@ -117,7 +117,7 @@ Section Sieve_PreSheaf.
   Proof.
     symmetry.
     apply True_PreSheaf_morphism_obligation_1.
-  Qed.    
+  Qed.
 
 End Sieve_PreSheaf.
 
@@ -127,7 +127,7 @@ Section PShCat_char_morph.
     {F G : PreSheaf C}
     (N : @Monic (PShCat C) F G)
   .
-    
+
   Local Obligation Tactic := idtac.
 
   (** The characteristic morphism of a presheaf morphism. *)
@@ -163,7 +163,7 @@ Section PShCat_char_morph.
     cbn in *.
     cbn_rewrite (F_compose G h g).
     trivial.
-  Qed.    
+  Qed.
 
   Next Obligation.
   Proof.
@@ -220,7 +220,7 @@ presheaf morphism to F (the domain of the monomorphism N).
         {|
           Trans := PShCat_char_morph_forms_pullback_morph_ex_Trans
         |}.
-    
+
     Next Obligation.
     Proof.
     intros c c' h.
@@ -249,14 +249,14 @@ presheaf morphism to F (the domain of the monomorphism N).
     Proof.
       symmetry.
       apply PShCat_char_morph_forms_pullback_morph_ex_obligation_1.
-    Qed.      
+    Qed.
 
   End PShCat_char_morph_forms_pullback_morph_ex.
 
   Local Hint Extern 1 => match goal with
                           [|- context [(?F _a id)%morphism]] => rewrite (F_id F)
                         end.
-  
+
   Local Hint Extern 1 => apply PropExt; intuition.
 
   Local Hint Extern 1 =>
@@ -294,7 +294,7 @@ presheaf morphism to F (the domain of the monomorphism N).
                         end.
 
   Local Obligation Tactic := basic_simpl; auto 7.
-  
+
   Program Definition PShCat_char_morph_forms_pullback :
     is_PullBack
       (mono_morphism N) (t_morph (PSh_Terminal C) F)
@@ -306,7 +306,7 @@ presheaf morphism to F (the domain of the monomorphism N).
   .
 
   Local Obligation Tactic := idtac.
-  
+
   Next Obligation.
   Proof.
     intros p' pm1 pm2 H1 g h H2 _ H4 _.
@@ -333,7 +333,7 @@ presheaf morphism to F (the domain of the monomorphism N).
     end.
     Unshelve.
     auto.
-  Qed.    
+  Qed.
 
 End PShCat_char_morph.
 
@@ -435,7 +435,7 @@ Section PShCat_char_morph_unique.
               in _ = u return u
             with
               eq_refl => I
-            end                 
+            end
           ).
       }
       {

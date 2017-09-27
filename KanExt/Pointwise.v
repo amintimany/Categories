@@ -1,14 +1,14 @@
-Require Import Essentials.Notations.
-Require Import Essentials.Types.
-Require Import Essentials.Facts_Tactics.
-Require Import Category.Main.
-Require Import Functor.Functor Functor.Functor_Ops
+From Categories Require Import Essentials.Notations.
+From Categories Require Import Essentials.Types.
+From Categories Require Import Essentials.Facts_Tactics.
+From Categories Require Import Category.Main.
+From Categories Require Import Functor.Functor Functor.Functor_Ops
         Functor.Representable.Hom_Func
         Functor.Representable.Representable.
-Require Import Ext_Cons.Prod_Cat.Prod_Cat Ext_Cons.Prod_Cat.Operations.
-Require Import Coq_Cats.Type_Cat.Type_Cat.
-Require Import NatTrans.NatTrans NatTrans.Operations NatTrans.Func_Cat.
-Require Import KanExt.Local.
+From Categories Require Import Ext_Cons.Prod_Cat.Prod_Cat Ext_Cons.Prod_Cat.Operations.
+From Categories Require Import Coq_Cats.Type_Cat.Type_Cat.
+From Categories Require Import NatTrans.NatTrans NatTrans.Operations NatTrans.Func_Cat.
+From Categories Require Import KanExt.Local.
 
 Local Open Scope functor_scope.
 

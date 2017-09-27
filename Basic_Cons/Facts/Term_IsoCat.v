@@ -1,10 +1,10 @@
-Require Import Essentials.Notations.
-Require Import Essentials.Types.
-Require Import Essentials.Facts_Tactics.
-Require Import Category.Main.
-Require Import Functor.Functor Functor.Functor_Ops.
-Require Import Basic_Cons.Terminal.
-Require Import Cat.Cat Cat.Cat_Iso.
+From Categories Require Import Essentials.Notations.
+From Categories Require Import Essentials.Types.
+From Categories Require Import Essentials.Facts_Tactics.
+From Categories Require Import Category.Main.
+From Categories Require Import Functor.Functor Functor.Functor_Ops.
+From Categories Require Import Basic_Cons.Terminal.
+From Categories Require Import Cat.Cat Cat.Cat_Iso.
 
 (** In this section we show that if a category C has a terminal object and D is
 a category isomorphic to C, then D also has a terminal object. *)

@@ -1,15 +1,15 @@
-Require Import Essentials.Notations.
-Require Import Essentials.Types.
-Require Import Essentials.Facts_Tactics.
-Require Import Category.Main.
-Require Import Functor.Functor Functor.Functor_Ops.
-Require Import NatTrans.NatTrans NatTrans.Operations
+From Categories Require Import Essentials.Notations.
+From Categories Require Import Essentials.Types.
+From Categories Require Import Essentials.Facts_Tactics.
+From Categories Require Import Category.Main.
+From Categories Require Import Functor.Functor Functor.Functor_Ops.
+From Categories Require Import NatTrans.NatTrans NatTrans.Operations
         NatTrans.Func_Cat NatTrans.NatIso.
-Require Import KanExt.Local
+From Categories Require Import KanExt.Local
         KanExt.LocalFacts.HomToCones
         KanExt.LocalFacts.ConesToHom
         KanExt.LocalFacts.Uniqueness.
-Require Import Cat.Cat.
+From Categories Require Import Cat.Cat.
 
 Local Open Scope functor_scope.
 

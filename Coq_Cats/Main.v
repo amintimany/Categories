@@ -1,5 +1,5 @@
-Require Export Type_Cat.Facts.
-Require Export Set_Cat.
-Require Export Prop_Cat.
+From Categories Require Export Type_Cat.Facts.
+From Categories Require Export Set_Cat.
+From Categories Require Export Prop_Cat.
 
 

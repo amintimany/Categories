@@ -1,5 +1,5 @@
-Require Export Cat.Initial.
-Require Export Cat.Terminal.
-Require Export Cat.Product.
-Require Export Cat.Exponential.
-Require Export Cat.CCC.
+From Categories Require Export Cat.Initial.
+From Categories Require Export Cat.Terminal.
+From Categories Require Export Cat.Product.
+From Categories Require Export Cat.Exponential.
+From Categories Require Export Cat.CCC.

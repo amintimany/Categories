@@ -1,12 +1,12 @@
-Require Import Essentials.Notations.
-Require Import Essentials.Types.
-Require Import Essentials.Facts_Tactics.
-Require Import Category.Category Category.Morph Category.Opposite.
-Require Import Ext_Cons.Arrow.
-Require Import Functor.Functor Functor.Functor_Ops Const_Func.
-Require Import Archetypal.Discr.Discr.
-Require Import Cat.Cat Cat.Cat_Iso.
-Require Import NatTrans.NatTrans NatTrans.NatIso.
+From Categories Require Import Essentials.Notations.
+From Categories Require Import Essentials.Types.
+From Categories Require Import Essentials.Facts_Tactics.
+From Categories Require Import Category.Category Category.Morph Category.Opposite.
+From Categories Require Import Ext_Cons.Arrow.
+From Categories Require Import Functor.Functor Functor.Functor_Ops Const_Func.
+From Categories Require Import Archetypal.Discr.Discr.
+From Categories Require Import Cat.Cat Cat.Cat_Iso.
+From Categories Require Import NatTrans.NatTrans NatTrans.NatIso.
 
 Local Open Scope morphism_scope.
 
