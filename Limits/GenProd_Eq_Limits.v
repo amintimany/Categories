@@ -19,7 +19,7 @@ Section GenProd_Eq_Complete.
   Context {C : Category}.
 
   Local Ltac ElimUnit := repeat match goal with [H : unit |- _] => destruct H end.
-  
+
   Section GenProd_Eq_Limits.
     Context {J : Category}.
 
@@ -41,7 +41,7 @@ Section GenProd_Eq_Complete.
           cone_apex := Const_Func 1 (OPR _o tt);
           cone_edge := {|Trans := fun f => Trans (cone_edge OPR) (Targ f)|}
         |}.
-      
+
       Definition Projs : (OPR –≻ HPR)%morphism :=
         Trans (LRKE_morph_ex HPR Projs_Cone) tt.
 
@@ -130,13 +130,13 @@ Section GenProd_Eq_Complete.
       Proof.
         symmetry.
         apply Lim_Cone_obligation_1.
-      Qed.        
+      Qed.
 
       Section Every_Cone_Equalizes.
         Context (Cn : Cone D).
 
         Local Hint Extern 1 => progress cbn.
-        
+
         Program Definition Cone_to_DF_DCone : Cone (DF (D _o)%object) :=
           {|
             cone_apex := Cn;
@@ -147,10 +147,10 @@ Section GenProd_Eq_Complete.
                 (Discr_Func ((Cn ∘ (Functor_To_1_Cat J))%functor _o)%object) _
                 {|Trans := fun _ => id |} (Discretize (cone_edge Cn))
           |}.
-        
+
         Definition From_Cone_to_OPR : (Cn –≻ OPR)%morphism :=
           Trans (LRKE_morph_ex OPR Cone_to_DF_DCone) tt.
-        
+
         Program Definition Cone_to_DF_DTrag_Cone : Cone (DF DTarg) :=
           {|
             cone_apex := Cn;
@@ -312,7 +312,7 @@ Section GenProd_Eq_Complete.
           cbn_rewrite <- (@Trans_com _ _ _ _ Cn).
           rewrite From_Term_Cat; auto.
         Qed.
-        
+
         Lemma From_Cone_to_Obj_Prod_Equalizes :
           (Projs ∘ From_Cone_to_OPR = D_imgs ∘ From_Cone_to_OPR)%morphism.
         Proof.
@@ -325,7 +325,7 @@ Section GenProd_Eq_Complete.
           end.
           match goal with
             [|- Trans ?A tt = Trans ?B tt] =>
-            cutrewrite (A = B); trivial
+            assert (A = B) as Heq; [|rewrite Heq]; trivial
           end.
           apply (LRKE_morph_unique HPR).
         Qed.
@@ -349,7 +349,7 @@ Section GenProd_Eq_Complete.
         Proof.
           ElimUnit.
           rewrite From_Term_Cat; auto.
-        Qed.          
+        Qed.
 
         Next Obligation.
           symmetry.
@@ -391,7 +391,7 @@ Section GenProd_Eq_Complete.
           cbn in H.
           rewrite From_Term_Cat in H; simpl_ids in H.
           trivial.
-        Qed.          
+        Qed.
 
       End Every_Cone_Equalizes.
 
@@ -425,10 +425,10 @@ Section GenProd_Eq_Complete.
         Proof.
           symmetry.
           apply Cone_Morph_to_Lim_Cone_Cone_Morph_to_OPR_obligation_1.
-        Qed.          
+        Qed.
 
         Next Obligation.
-        Proof.        
+        Proof.
           apply NatTrans_eq_simplify.
           extensionality x.
           cbn.
@@ -443,7 +443,7 @@ Section GenProd_Eq_Complete.
           rewrite From_Term_Cat; simpl_ids.
           rewrite assoc in H.
           trivial.
-        Qed.          
+        Qed.
 
       End Cone_Morph_to_Lim_Cone_Cone_Morph_to_OPR.
 
@@ -471,7 +471,7 @@ Section GenProd_Eq_Complete.
         apply (@mono_morphism_monomorphic
                  _ _ _ (@Equalizer_Monic _ _ _ _ _ (Eqs _ _ Projs D_imgs))).
         trivial.
-      Qed.        
+      Qed.
 
     End Limits_Exist.
   End GenProd_Eq_Limits.
@@ -491,13 +491,13 @@ Section GenProd_Eq_Complete.
           HE
           D
     .
-    
+
   End Restricted_Limits.
 
   Section Complete.
     Context {CHAP : ∀ (A : Type) (map : A → C), (Π map)%object}
             {HE : Has_Equalizers C}.
-    
+
     Definition GenProd_Eq_Complete : Complete C :=
       fun J =>
         Local_to_Global_Right
@@ -505,7 +505,7 @@ Section GenProd_Eq_Complete.
           _
           (fun D => @Lim_Cone_is_Limit J (CHAP J) (CHAP (Arrow J)) HE D)
     .
-    
+
   End Complete.
 
 End GenProd_Eq_Complete.
@@ -541,7 +541,7 @@ Section GenSum_CoEq_Complete.
             {CHRP : ∀ (A : Type) (map : A → C), (P A) → (Σ map)%object}
             {HE : Has_CoEqualizers C}
     .
-    
+
     Definition Restr_GenSum_CoEq_Restr_CoLimits : Has_Restr_CoLimits C P :=
       fun J D PJ PA =>
         @CoLim_CoCone_is_CoLimit
@@ -551,14 +551,14 @@ Section GenSum_CoEq_Complete.
           HE
           D
     .
-    
+
   End Restricted_CoLimits.
 
   Section CoComplete.
     Context {CHAP : ∀ (A : Type) (map : A → C), (Σ map)%object}
             {HE : Has_CoEqualizers C}
     .
-    
+
     Definition GenSum_CoEq_CoComplete : CoComplete C :=
       fun J =>
         Local_to_Global_Left
@@ -566,7 +566,7 @@ Section GenSum_CoEq_Complete.
           _
           (fun D => @CoLim_CoCone_is_CoLimit J (CHAP J) (CHAP (Arrow J)) HE D)
     .
-    
+
   End CoComplete.
 
 End GenSum_CoEq_Complete.

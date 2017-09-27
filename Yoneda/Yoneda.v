@@ -77,7 +77,7 @@ Qed.
 
 Next Obligation.
 Proof.
-  symmetry.
+  symmetry; simpl.
   apply Y_left_to_right_obligation_1.
 Qed.
 
@@ -105,7 +105,7 @@ Qed.
 
 Next Obligation.
 Proof.
-  symmetry.
+  symmetry; simpl.
   apply Y_right_to_left_NT_obligation_1.
 Qed.
 
@@ -143,7 +143,7 @@ Qed.
 
 Next Obligation.
 Proof.
-  symmetry.
+  symmetry; simpl.
   apply Y_right_to_left_obligation_1.
 Qed.
 
@@ -160,7 +160,7 @@ Proof.
 Qed.
 
 Next Obligation.
-  intros C [c F]; FunExt; cbn in *.
+  simpl; intros C [c F]; FunExt.
   apply NatTrans_eq_simplify.
   FunExt.
   cbn in *.

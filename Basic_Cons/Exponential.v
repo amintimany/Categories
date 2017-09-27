@@ -88,9 +88,9 @@ Proof.
       [|- (_ ∘ ?M)%morphism = _] =>
       match M with
         (?U _a (?A ∘ ?B, ?C))%morphism =>
-        cutrewrite (M = (U @_a (_, _) (_, _) (A, C))
-                          ∘ (U @_a (_, _) (_, _) (B, C)))%morphism;
-          [|simpl_ids; rewrite <- F_compose; simpl; simpl_ids; trivial]
+        assert (M = (U @_a (_, _) (_, _) (A, C))
+                          ∘ (U @_a (_, _) (_, _) (B, C)))%morphism as HM;
+          [simpl_ids; rewrite <- F_compose; simpl; simpl_ids; trivial|rewrite HM]
       end
   end;
   rewrite <- assoc;
@@ -113,7 +113,7 @@ Section Curry_UnCurry.
     fun {a b c : C} (f : ((×ᶠⁿᶜ C) _o (a, b))%object –≻ c) =>
       Exp_morph_ex (HE b c) _ f.
 
-  (** Given an arrow f: a -> cᵇ, uncurry of f is the arrow 
+  (** Given an arrow f: a -> cᵇ, uncurry of f is the arrow
       (eval_cᵇ ∘ <id_b, f>): a×b -> c.
       See definition of Exponential above for details. *)
   Definition uncurry : forall {a b c : C},
@@ -132,7 +132,7 @@ Section Curry_UnCurry.
       eapply Exp_morph_unique; trivial.
       rewrite <- Exp_morph_com; trivial.
     Qed.
-    
+
     (** See definition of curry and uncurry above for details.
         Follows immediately from the definition of Exponential above. *)
     Theorem uncurry_curry (f : ((×ᶠⁿᶜ C) _o (a, b))%object –≻ c) :
@@ -147,7 +147,7 @@ Section Curry_UnCurry.
   Section injectivity.
     Context {a b c : C}.
 
-    (** See definition of curry above for details. Follows immediately from 
+    (** See definition of curry above for details. Follows immediately from
         uncurry_curry above. *)
     Theorem curry_injective (f g : ((×ᶠⁿᶜ C) _o (a, b))%object –≻ c) :
       curry f = curry g → f = g.
@@ -157,7 +157,7 @@ Section Curry_UnCurry.
       rewrite H; trivial.
     Qed.
 
-    (** See definition of uncurry above for details. 
+    (** See definition of uncurry above for details.
         Follows immediately from curry_uncurry above. *)
     Theorem uncurry_injective (f g : a –≻ (HE b c)) :
       uncurry f = uncurry g → f = g.
@@ -197,7 +197,7 @@ Section Curry_UnCurry.
       end.
       transitivity (uncurry (curry f));
         [unfold curry, uncurry; cbn; auto|apply uncurry_curry].
-    Qed.      
+    Qed.
 
   End curry_compose.
 

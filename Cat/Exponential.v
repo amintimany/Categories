@@ -12,7 +12,7 @@ Require Import Cat.Product.
 
 (** The exponential in cat is jsut the functor category. *)
 
-Local Open Scope functor_scope. 
+Local Open Scope functor_scope.
 
 (** Evaluation functor. *)
 Program Definition Exp_Cat_Eval (C C' : Category) :
@@ -97,9 +97,7 @@ Qed.
 Program Definition Cat_Exponential (C C' : Cat) : (C ⇑ C')%object :=
 {|
   exponential := Func_Cat C C';
-
   eval := Exp_Cat_Eval C C';
-  
   Exp_morph_ex := fun C'' F => @Exp_Cat_morph_ex C C' C'' F
 |}.
 
@@ -114,11 +112,17 @@ Qed.
 Local Obligation Tactic := idtac.
 
 Next Obligation. (* Exp_morph_unique *)
-Proof.  
-  intros C C' z f u u' H1 H2.
-  rewrite H1 in H2; clear H1.
-  assert (H3 := @f_equal _ _ Exp_Cat_morph_ex _ _ H2).
-  repeat rewrite <- Exp_cat_morph_ex_eval_id in H3; trivial.
+Proof.
+  intros C C' z f u u' H1 H2; simpl in *.
+  match type of H1 with
+    _ = ?A => match type of H2 with
+               _ = ?B => assert (A = B) as H3; auto; clear H1 H2
+             end
+  end.
+  assert (H4 := @f_equal _ _ Exp_Cat_morph_ex _ _ H3).
+  etransitivity; [apply Exp_cat_morph_ex_eval_id|].
+  etransitivity; [|symmetry; apply Exp_cat_morph_ex_eval_id].
+  trivial.
 Qed.
 
 (* Cat_Exponentials defined *)

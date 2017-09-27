@@ -1,4 +1,5 @@
 Makefile
+Makefile.conf
 *~
 *.glob
 *.v.d

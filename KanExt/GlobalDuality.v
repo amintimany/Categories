@@ -86,7 +86,7 @@ Section GlobalDuality.
 
     Next Obligation.
     Proof.
-      intros c c' h.
+      intros c c' h; simpl.
       set (w := Trans_com (iso_morphism KanExt_Left_to_Right_NIso) h).
       etransitivity; [etransitivity;[| apply w]|];
       clear w; trivial; cbn.
@@ -97,7 +97,7 @@ Section GlobalDuality.
 
     Next Obligation.
     Proof.
-      symmetry.
+      symmetry; simpl.
       apply KanExt_Left_to_Right_obligation_2.
     Qed.
 
@@ -108,7 +108,7 @@ Section GlobalDuality.
 
     Next Obligation.
     Proof.
-      intros c c' h.
+      intros c c' h; simpl.
       set (w := Trans_com (inverse_morphism KanExt_Left_to_Right_NIso) h).
       etransitivity; [etransitivity;[| apply w]|];
       clear w; trivial; cbn.
@@ -119,13 +119,13 @@ Section GlobalDuality.
 
     Next Obligation.
     Proof.
-      symmetry.
+      symmetry; simpl.
       apply KanExt_Left_to_Right_obligation_5.
     Qed.
 
     Next Obligation.
     Proof.
-      apply NatTrans_eq_simplify.
+      apply NatTrans_eq_simplify; simpl.
       match goal with
         [|- _ = ?A] =>
         let w := constr:((
@@ -141,7 +141,7 @@ Section GlobalDuality.
 
     Next Obligation.
     Proof.
-      apply NatTrans_eq_simplify.
+      apply NatTrans_eq_simplify; simpl.
       match goal with
         [|- _ = ?A] =>
         let w := constr:((
@@ -225,7 +225,7 @@ Section GlobalDuality.
 
     Next Obligation.
     Proof.
-      intros c c' h.
+      intros c c' h; simpl.
       set (w := Trans_com (iso_morphism KanExt_Right_to_Left_NIso) h).
       etransitivity; [etransitivity;[| apply w]|];
       clear w; trivial; cbn.
@@ -236,7 +236,7 @@ Section GlobalDuality.
 
     Next Obligation.
     Proof.
-      symmetry.
+      symmetry; simpl.
       apply KanExt_Right_to_Left_obligation_2.
     Qed.
 
@@ -247,7 +247,7 @@ Section GlobalDuality.
 
     Next Obligation.
     Proof.
-      intros c c' h.
+      intros c c' h; simpl.
       set (w := Trans_com (inverse_morphism KanExt_Right_to_Left_NIso) h).
       etransitivity; [etransitivity;[| apply w]|];
       clear w; trivial; cbn.
@@ -258,13 +258,13 @@ Section GlobalDuality.
 
     Next Obligation.
     Proof.
-      symmetry.
+      symmetry; simpl.
       apply KanExt_Right_to_Left_obligation_5.
     Qed.
 
     Next Obligation.
     Proof.
-      apply NatTrans_eq_simplify.
+      apply NatTrans_eq_simplify; simpl.
       match goal with
         [|- _ = ?A] =>
         let w := constr:((
@@ -280,7 +280,7 @@ Section GlobalDuality.
 
     Next Obligation.
     Proof.
-      apply NatTrans_eq_simplify.
+      apply NatTrans_eq_simplify; simpl.
       match goal with
         [|- _ = ?A] =>
         let w := constr:((

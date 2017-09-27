@@ -50,7 +50,7 @@ Section Exponential.
     simpl_ids in W.
     rewrite assoc_sym.
     trivial.
-  Qed.    
+  Qed.
 
   Next Obligation.
   Proof.
@@ -91,7 +91,7 @@ Section Exponential.
     set (W := equal_f (Trans_com (fst u) h) (id, snd u)).
     cbn in W.
     auto.
-  Qed.    
+  Qed.
 
   Next Obligation.
   Proof.
@@ -131,7 +131,7 @@ Section Exponential.
 
   Next Obligation.
   Proof.
-    symmetry.
+    symmetry; simpl.
     apply PSh_Exponential_Curry_obligation_1.
   Qed.
 
@@ -149,7 +149,7 @@ Section Exponential.
 
   Next Obligation.
   Proof.
-    symmetry.
+    symmetry; simpl.
     apply PSh_Exponential_Curry_obligation_3.
   Qed.
 
@@ -190,7 +190,7 @@ Section Exponential.
     cbn_rewrite (equal_f (Trans_com u' (fst q)) y) in H1.
     cbn in H1.
     auto.
-  Qed.    
+  Qed.
 
 End Exponential.
 

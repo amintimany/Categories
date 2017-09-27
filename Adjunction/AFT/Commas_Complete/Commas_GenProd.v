@@ -42,7 +42,7 @@ Section Commas_GenProd.
     Context {A : Type} (f : A → (Comma (Func_From_SingletonCat x) G)).
 
     Definition fun_conv (y : A) : C := CMO_trg (f y).
-    
+
   End fun_conv.
 
   Context {A : Type} (f : A → (Comma (Func_From_SingletonCat x) G)).
@@ -75,7 +75,7 @@ Section Commas_GenProd.
 
   Section Comma_GenProd_Cone.
     Local Unset Transparent Obligations.
-    
+
     Program Definition Comma_GenProd_Cone : Cone (Discr_Func f) :=
       {|
         cone_apex :=
@@ -120,7 +120,7 @@ Section Commas_GenProd.
     Qed.
 
   End Comma_GenProd_Cone.
-  
+
   Program Definition Cone_f_Cone_fun_conv_f (Cn : Cone (Discr_Func f)) :
     Cone (Discr_Func (fun_conv f)) :=
     {|
@@ -138,7 +138,7 @@ Section Commas_GenProd.
 
   Section Cone_f_Cone_Morph_from_f_Cone.
     Context (Cn : Cone (Discr_Func f)).
-    
+
     Local Obligation Tactic := idtac.
 
     Program Definition Cone_f_Cone_Morph_from_f_Cone  :
@@ -162,12 +162,12 @@ Section Commas_GenProd.
             |}
         |}
     .
-    
+
     Next Obligation.
     Proof.
       basic_simpl; auto 10.
     Qed.
-    
+
     Next Obligation.
     Proof.
       symmetry.
@@ -206,7 +206,7 @@ Section Commas_GenProd.
     Context (Cn : Cone (Discr_Func f)).
 
     Local Unset Transparent Obligations.
-    
+
     Program Definition Comma_GenProd_Cone_Morph_ex
       :
         LoKan_Cone_Morph Cn Comma_GenProd_Cone
@@ -314,8 +314,8 @@ Section Commas_GenProd.
           (cone_morph_com h)
       ).
     auto.
-  Qed.      
-  
+  Qed.
+
   Program Definition Comma_GenProd : (Π f)%object
     :=
       {|
@@ -327,7 +327,7 @@ Section Commas_GenProd.
   Proof.
     apply NatTrans_eq_simplify.
     extensionality z.
-    destruct z.      
+    destruct z.
     apply Comma_Hom_eq_simplify.
     match goal with [|- ?A = ?B] => destruct A; destruct B; trivial end.
     change (CMH_right (Trans h tt)) with
@@ -336,7 +336,7 @@ Section Commas_GenProd.
     (Trans (Cone_Morph_to_Comma_GenProd_Cone_TO_Cone_Morph_to_GenProd_fun_conv Cn h') tt).
     match goal with
       [|- Trans ?A tt = Trans ?B tt] =>
-      cutrewrite (A = B); trivial
+      assert (A = B) as Heq; [|rewrite Heq]; trivial
     end.
     apply (LRKE_morph_unique GenProd_fun_conv).
   Qed.

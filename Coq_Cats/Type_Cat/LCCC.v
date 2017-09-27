@@ -55,7 +55,7 @@ morphism h : X → Y that makes the following diagram commute.
 Therefore, for any element z : A, arrows from (f⁻¹ z) to (g⁻¹ z) are precisely
 those that make the diagram commute.
 *)
-  
+
   Context (f g : Slice Type_Cat A).
 
   Definition Pre_Image {X : Type} (f : X → A) (z : A) := {y : X| f y = z}.
@@ -68,7 +68,7 @@ those that make the diagram commute.
           => projT1 m
         )
     ) (only parsing).
-  
+
   Local Obligation Tactic := idtac.
 
   Program Definition Type_Cat_LExp :
@@ -109,13 +109,13 @@ those that make the diagram commute.
             tt
             _
     |}.
-            
+
   Next Obligation.
   Proof.
     intros w.
     exact (eq_sym (proj2_sig w)).
   Qed.
-    
+
   Next Obligation.
   Proof.
     extensionality w.
@@ -146,10 +146,10 @@ those that make the diagram commute.
   Proof.
     trivial.
   Qed.
-  
+
   Next Obligation.
   Proof.
-    intros z h.
+    intros z h; simpl.
     apply Comma_Hom_eq_simplify;
       [
         extensionality x |
@@ -166,7 +166,7 @@ those that make the diagram commute.
 
   Next Obligation.
   Proof.
-    intros z h u u' H1 H2.
+    intros z h u u' H1 H2; simpl.
     rewrite H1 in H2; clear H1.
     apply Comma_Hom_eq_simplify;
       [extensionality x|
