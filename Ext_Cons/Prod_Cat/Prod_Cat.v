@@ -19,7 +19,7 @@ Local Obligation Tactic := idtac.
 Program Definition Prod_Cat (C C' : Category) : Category :=
 {|
   Obj := C * C';
-              
+
   Hom :=
     fun a b =>
       (((fst a) –≻ (fst b)) * ((snd a) –≻ (snd b)))%type;

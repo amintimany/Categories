@@ -12,7 +12,7 @@ Furthermore, we require functors to map identitiies to identities. Additionally,
 the immage of the coposition of two arrows must be the same as composition of
 their images.
 *)
-Record Functor (C C' : Category) : Type :=
+Cumulative Record Functor (C C' : Category) : Type :=
 {
   (** Object map *)
   FO : C → C';

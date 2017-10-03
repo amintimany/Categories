@@ -2,6 +2,7 @@ From Categories Require Import Essentials.Notations.
 From Categories Require Import Essentials.Types.
 From Categories Require Import Essentials.Facts_Tactics.
 From Categories Require Import Category.Main.
+From Categories Require Import Basic_Cons.CCC.
 From Categories Require Import Cat.Facts.
 From Categories Require Import Functor.Main.
 From Categories Require Import Coq_Cats.Type_Cat.Type_Cat.
@@ -12,7 +13,54 @@ From Categories Require Import NatTrans.NatTrans NatTrans.Func_Cat NatTrans.NatI
 Local Open Scope nattrans_scope.
 
 Section Y_emb.
-  Context (C : Category).
+  Universes i j k l i' j'.
+  Constraint j < l, i < l.
+  Constraint j' < l, i' < l.
+
+  Context (C : Category@{i j}).
+  Set Printing Universes.
+
+Set Printing All.
+
+Obligation Tactic := idtac.
+
+Definition cat_exp_trans := @curry Cat@{k l l l}
+                       Cat_Has_Products Cat_Has_Exponentials (C^op)%category C
+                       Type_Cat@{i' j'}.
+
+Goal True.
+set (W := cat_exp_trans). simpl in *.
+set (V := Hom_Func@{i j i' j'} C).
+
+(* The idea is that we want to apply W to V to get the Yoneda embedding as the
+   exponential transpose of the hom functor. *)
+(* But the problem is that the following equality does not hold
+judgementally, although I expect it should. *)
+assert ((Prod_Cat@{l l l l l l} (Opposite@{i j} C) C) = (Prod_Cat@{i j i j i j} (Opposite@{i j} C) C)).
+cbv.
+match goal with
+  |- @eq _ (Build_Category ?A ?B ?C ?D ?E ?F ?G ?H)
+        (Build_Category ?A' ?B' ?C' ?D' ?E' ?F' ?G' ?H')=>
+  assert (A = A') as Heq1; trivial;
+    assert (B = B') as Heq2; trivial;
+      assert (C = C') as Heq3; trivial;
+        assert (D = D') as Heq4; trivial;
+          assert (E = E') as Heq5; trivial;
+            assert (F = F') as Heq6; trivial;
+              assert (G = G') as Heq7; trivial;
+                assert (H = H') as Heq8; trivial
+end.
+(* Notice that if we were to admit this equality we could apply W to V. *)
+admit.
+rewrite H in W.
+apply W in V.
+
+
+
+
+
+
+
 
   (** The dual of the Yoneda embedding for category C – the curry of hom
       functor of C. *)
@@ -35,7 +83,7 @@ Section Y_Left_Right.
       ((Hom_Func _)
          ∘ (Prod_Functor
               ((Yoneda C)^op) (Functor_id (Func_Cat (C^op) Type_Cat))))%functor.
-  
+
   (** The right hand side of the Yoneda lemma's isomorphism *)
   Definition Y_right
     : ((C^op × (Func_Cat (C^op) Type_Cat)) –≻ Type_Cat)%functor :=

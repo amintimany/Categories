@@ -16,7 +16,7 @@ end
 .
 
 (** The product type, defined as a record to enjoy eta rule for records. *)
-Record prod (A B : Type) := {fst : A; snd : B}.
+Cumulative Record prod (A B : Type) := {fst : A; snd : B}.
 
 Arguments fst {_ _ } _.
 Arguments snd {_ _ } _.
