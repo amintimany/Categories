@@ -18,31 +18,31 @@ From Categories Require Import Coq_Cats.Coq_Cat.
 
 Program Definition Prop_Cat : Category := Coq_Cat Prop.
 
-Local Hint Extern 1 => contradiction.
+Local Hint Extern 1 => contradiction : core.
 
 Program Instance False_init : (𝟘_ Prop_Cat)%object := {|terminal := False|}.
 
 Local Hint Extern 1 => match goal with
                         |- ?A = ?B :> True => destruct A; destruct B
-                      end.
+                      end : core.
 
 Program Instance True_term : (𝟙_ Prop_Cat)%object := {terminal := True}.
 
 Local Hint Extern 1 => match goal with
                         |- ?A = ?B :> _ ∧ _ => destruct A; destruct B
-                      end.
+                      end : core.
 
-Local Hint Extern 1 => tauto.
+Local Hint Extern 1 => tauto : core.
 
 Section Prod.
   Context (P Q : Prop).
 
   Local Notation "P × Q" := (Product Prop_Cat P Q) : object_scope.
-  
+
   Program Definition Conj_Product : (P × Q)%object := {|product := (P ∧ Q)|}.
-  
+
   Local Obligation Tactic := idtac.
-  
+
   Next Obligation. (* Prod_morph_unique *)
   Proof.
     intros p' r1 r2 f g H1 H2 H3 H4.
@@ -56,14 +56,14 @@ Section Prod.
   Qed.
 
 End Prod.
-  
+
 Program Instance Prop_Cat_Has_Products : Has_Products Prop_Cat := Conj_Product.
 
-Local Hint Extern 1 => match goal with H : _ ∧ _ |- _ => destruct H end.
+Local Hint Extern 1 => match goal with H : _ ∧ _ |- _ => destruct H end : core.
 
 Section Exp.
   Context (P Q : Prop_Cat).
-  
+
   Program Definition implication_exp : (P ⇑ Q)%object
     :=
       {|
@@ -71,7 +71,7 @@ Section Exp.
       |}.
 
   Local Obligation Tactic := idtac.
-  
+
   Next Obligation. (* Exp_morph_unique *)
   Proof.
     intros z f u u' H1 H2.
@@ -88,13 +88,13 @@ Program Instance Prop_Cat_Has_Exponentials : Has_Exponentials Prop_Cat :=
 
 Program Instance Prop_Cat_CCC : CCC Prop_Cat.
 
-Local Hint Extern 1 => match goal with H : _ ∨ _ |- _ => destruct H end.
+Local Hint Extern 1 => match goal with H : _ ∨ _ |- _ => destruct H end : core.
 
 Section Sum.
   Context (P Q : Prop).
 
   Local Notation "P + Q" := (Sum Prop_Cat P Q) : object_scope.
-  
+
   Program Definition Disj_Sum  : (P + Q)%object := {|product := (P ∨ Q)|}.
 
   Local Obligation Tactic := idtac.
@@ -110,7 +110,7 @@ Section Sum.
     + apply (fun p => equal_f p x1) in H1; auto.
     + apply (fun p => equal_f p x2) in H2; auto.
   Qed.
-  
+
 End Sum.
 
 Program Instance Prop_Cat_Has_Sums : Has_Sums Prop_Cat := Disj_Sum.

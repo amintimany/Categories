@@ -50,7 +50,6 @@ Definition SingletonCat : Category :=
         end
   |}.
 
-  
 Notation "0" := (EmptyCat) : category_scope.
 Notation "1" := (SingletonCat) : category_scope.
 
@@ -58,7 +57,7 @@ Notation "1" := (SingletonCat) : category_scope.
 Section Discr.
   Context (obj : Type).
 
-  (** Discrete category – one in which has no arrow but identitities. 
+  (** Discrete category – one in which has no arrow but identitities.
 Note that this definition is not necessarily a discrete cat in Coq as UIP is not
 generally provable. We simply assume so by implicitly assuming object type to
 have UIP. In HoTT terms, we assume obj to be a hSet. *)
@@ -69,7 +68,7 @@ have UIP. In HoTT terms, we assume obj to be a hSet. *)
       compose := @eq_trans _;
       id := fun a => eq_refl
     |}.
-    
+
 End Discr.
 
 Definition Type_n (n : nat) : Type := {x : nat| x < n}.
@@ -81,8 +80,8 @@ Notation "'Discr_n' n" :=
 Section Discr_Cat_Dual_Iso.
   Context (obj : Type).
 
-  Local Hint Extern 1 => progress cbn.
-  
+  Local Hint Extern 1 => progress cbn : core.
+
   Program Definition Discr_Cat_Dual_Iso :
     (Discr_Cat obj ≃≃ (Discr_Cat obj)^op ::> Cat)%isomorphism%category
     :=
@@ -133,7 +132,7 @@ Section Discr_Cat_Iso.
       match goal with
         [|- ?A = ?B] => destruct A
       end.
-      apply JMeq_eq; auto.      
+      apply JMeq_eq; auto.
     }
     {
       FunExt; cbn.
@@ -149,28 +148,15 @@ Section Discr_Cat_Iso.
       match goal with
         [|- ?A = ?B] => destruct A
       end.
-      apply JMeq_eq; auto.      
+      apply JMeq_eq; auto.
     }
     {
       FunExt; cbn.
       cbn_rewrite (equal_f (right_inverse I)); trivial.
     }
   Qed.
-  
+
 End Discr_Cat_Iso.
-
-(* Functor from SingletonCat to another category. *)
-Section Func_From_SingletonCat.
-  Context {C : Category} (Cobj : C).
-
-  (** The functor from SingletonCat to C induced bo Cobj. *)
-  Program Definition Func_From_SingletonCat : (SingletonCat –≻ C)%functor :=
-    {|
-      FO := fun _ => Cobj;
-      FA := fun _ _ _ => id
-    |}.
-
-End Func_From_SingletonCat.
 
 (* Discrete Functor *)
 Section Discr_Func.
@@ -178,12 +164,12 @@ Section Discr_Func.
 
   (** The discrete functor – a functor from a discrete category of type A
  to a category C based on a function from A to objects of C. *)
-  Program Definition Discr_Func : ((Discr_Cat A) –≻ C)%functor :=
+  Program Definition Discr_Func : ((Discr_Cat A) --> C)%functor :=
     {|
       FO := Omap;
-      
+
       FA := fun (a b : A) (h : a = b) =>
-              match h in _ = y return ((Omap a) –≻ (Omap y))%morphism with
+              match h in _ = y return ((Omap a) --> (Omap y))%morphism with
               | eq_refl => id
               end
     |}.
@@ -191,16 +177,16 @@ Section Discr_Func.
   (** The discrete-opposite functor – a functor from the opposite of a
       discrete category of type A to a category C based on a function
       from A to objects of C. *)
-  Program Definition Discr_Func_op : ((Discr_Cat A)^op –≻ C)%functor :=
+  Program Definition Discr_Func_op : ((Discr_Cat A)^op --> C)%functor :=
     {|
       FO := Omap;
       FA := fun (a b : A) (h : b = a) =>
-              match h in _ = y return ((Omap y) –≻ (Omap b))%morphism with
+              match h in _ = y return ((Omap y) --> (Omap b))%morphism with
               | eq_refl => id
               end
     |}.
-    
+
 End Discr_Func.
-  
+
 Arguments Discr_Func {_ _} _, _ {_} _.
 Arguments Discr_Func_op {_ _} _, _ {_} _.

@@ -6,7 +6,7 @@ From Categories Require Import Category.Main.
 Local Open Scope morphism_scope.
 
 Section Equalizer.
-  Context {C : Category} {a b : Obj} (f g : a –≻ b).
+  Context {C : Category} {a b : Obj} (f g : a --> b).
 
   (** given two parallel arrows f,g : a -> b, their equalizer is an object e
       together with an arrow eq : e -> a such that f ∘ eq = g ∘ eq such that
@@ -28,29 +28,29 @@ z ———–> e ——————> a          b
  *)
 
   Local Open Scope morphism_scope.
-  
+
   Record Equalizer : Type :=
     {
       equalizer : C;
 
-      equalizer_morph : equalizer –≻ a;
+      equalizer_morph : equalizer --> a;
 
       equalizer_morph_com : f ∘ equalizer_morph = g ∘ equalizer_morph;
 
-      equalizer_morph_ex (e' : Obj) (eqm : e' –≻ a) :
-        f ∘ eqm = g ∘ eqm → e' –≻ equalizer;
+      equalizer_morph_ex (e' : Obj) (eqm : e' --> a) :
+        f ∘ eqm = g ∘ eqm → e' --> equalizer;
 
-      equalizer_morph_ex_com (e' : Obj) (eqm : e' –≻ a)
+      equalizer_morph_ex_com (e' : Obj) (eqm : e' --> a)
                              (eqmc : f ∘ eqm = g ∘ eqm)
       : equalizer_morph ∘ (equalizer_morph_ex e' eqm eqmc) = eqm;
 
-      equalizer_morph_unique (e' : Obj) (eqm : e' –≻ a)
-                             (com : f ∘ eqm = g ∘ eqm) (u u' : e' –≻ equalizer)
+      equalizer_morph_unique (e' : Obj) (eqm : e' --> a)
+                             (com : f ∘ eqm = g ∘ eqm) (u u' : e' --> equalizer)
       : equalizer_morph ∘ u = eqm → equalizer_morph ∘ u' = eqm → u = u'
     }.
 
   Coercion equalizer : Equalizer >-> Obj.
-  
+
   (** Equalizers are unique up to isomorphism. *)
   Theorem Equalizer_iso (e1 e2 : Equalizer) : (e1 ≃ e2)%isomorphism.
   Proof.
@@ -74,7 +74,7 @@ Arguments equalizer_morph_unique {_ _ _ _ _} _ {_ _ _} _ _ _ _.
 Arguments Equalizer _ {_ _} _ _, {_ _ _} _ _.
 
 Definition Has_Equalizers (C : Category) : Type :=
-  ∀ (a b : C) (f g : a –≻ b), Equalizer f g.
+  ∀ (a b : C) (f g : a --> b), Equalizer f g.
 
 Existing Class Has_Equalizers.
 

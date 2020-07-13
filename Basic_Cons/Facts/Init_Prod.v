@@ -14,14 +14,14 @@ Section Init_Prod.
   Context {C : Category} {C_CCC : CCC C} {init : (𝟘_ C)%object}.
 
   Local Notation "0" := (terminal init) : object_scope.
-  
+
 (*  Local Notation "a × b" := (CHP a b) : object_scope. *)
 
   (** Natural transformations to be used with Yoneda. *)
-  
+
   Program Definition Init_Prod_lr a :
     (((((CoYoneda C) _o) ((×ᶠⁿᶜ C) _o (0, a)))%object)
-      –≻ (((CoYoneda C) _o) 0)%object)%nattrans
+      --> (((CoYoneda C) _o) 0)%object)%nattrans
     :=
       {|
         Trans := fun b f => @t_morph _ init b
@@ -41,12 +41,12 @@ Section Init_Prod.
 
   Program Definition Init_Prod_rl a :
     (((((CoYoneda C) _o) 0)%object)
-       –≻ (((CoYoneda C) _o) ((×ᶠⁿᶜ C) _o (0, a)))%object)%nattrans
+       --> (((CoYoneda C) _o) ((×ᶠⁿᶜ C) _o (0, a)))%object)%nattrans
     :=
       {|
         Trans := fun c g => compose C (Pi_1 (CCC_HP C init a)) (t_morph init c)
       |}.
-  
+
   Next Obligation.
   Proof.
     extensionality g.

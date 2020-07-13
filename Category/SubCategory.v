@@ -4,12 +4,12 @@ From Categories Require Import Essentials.Facts_Tactics.
 From Categories Require Import Category.Category.
 
 (**
-A sub category of C is a category whose objects are a subset (here we ues 
+A sub category of C is a category whose objects are a subset (here we ues
 subset types, i.e., sig) of objects of C and whose arrows are a subset of
 arrows of C.
 
 Here, we define a subcategory using two functions Obj_Cri : Obj C -> Prop
-which defines the objects of subcategory and 
+which defines the objects of subcategory and
 Hom_Cri : ∀ (a b : Obj) -> Hom a b -> Prop
 which defines the arrows of subcategory.
 In other words, Obj_Cri and Hom_Cri are respectively cirteria for objects and
@@ -21,14 +21,14 @@ are in the subcategory, their composition must also be in the subcategory.
 Section SubCategory.
   Context (C : Category)
           (Obj_Cri : Obj → Type)
-          (Hom_Cri : ∀ a b, (a –≻ b)%morphism → Prop).
+          (Hom_Cri : ∀ a b, (a --> b)%morphism → Prop).
 
   Arguments Hom_Cri {_ _} _.
-  
+
   Context (Hom_Cri_id : ∀ a, Obj_Cri a → Hom_Cri (id a))
           (Hom_Cri_compose :
-             ∀ a b c (f : (a –≻ b)%morphism)
-               (g : (b –≻ c)%morphism),
+             ∀ a b c (f : (a --> b)%morphism)
+               (g : (b --> c)%morphism),
                Hom_Cri f → Hom_Cri g → Hom_Cri (g ∘ f)).
 
   Arguments Hom_Cri_id {_} _.
@@ -64,8 +64,8 @@ Section SubCategory.
     apply SubCategory_obligation_1.
   Qed.
 
-  Local Hint Extern 3 => simpl.
-  
+  Local Hint Extern 3 => simpl : core.
+
   Local Obligation Tactic := basic_simpl; auto.
 
   Solve Obligations.

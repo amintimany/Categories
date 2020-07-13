@@ -7,7 +7,7 @@ From Categories Require Import Functor.Functor Functor.Functor_Ops
 From Categories Require Import Functor.Functor_Extender.
 From Categories Require Import NatTrans.Main.
 From Categories Require Import Ext_Cons.Prod_Cat.Main.
-From Categories Require Import Adjunction.Adjunction Adjunction.Duality Adjunction.Adj_Facts.
+From Categories.Adjunction Require Import Adjunction Duality Adj_Facts.
 From Categories Require Import KanExt.Local KanExt.LocalFacts.Main.
 
 Local Notation NID := NatTrans_id (only parsing).
@@ -20,16 +20,15 @@ Local Open Scope functor_scope.
 Section Right_Adjoint_Preserves_Hom_Local_Right_KanExt.
   Context
     {C C' : Category}
-    (p : C –≻ C')
+    (p : C --> C')
     {D : Category}
-    (F : C –≻ D)
+    (F : C --> D)
     (hlrke : Hom_Local_Right_KanExt p F)
     {E : Category}
-    {L : E –≻ D}
-    {R : D –≻ E}
-    (adj : UCU_Adjunct L R)
-  .
-  
+    {L : E --> D}
+    {R : D --> E}
+    (adj : UCU_Adjunct L R).
+
   (** Hom_Func_{Func_Cat C E}(- ∘ p, R ∘ F)
         ≃ Hom_Func_{Func_Cat C D}(L ∘ - ∘ p, F) *)
   Local Definition Ext_p_F_Hom_Adjunct_Lifted :=
@@ -41,8 +40,7 @@ Section Right_Adjoint_Preserves_Hom_Local_Right_KanExt.
           (NatTrans_id_Iso (Left_Functor_Extender p E)^op)
        )⁻¹
     )%isomorphism%natiso.
-  
-  
+
   Local Definition Conv_1 :=
     (
       NatIso_Functor_assoc
@@ -91,8 +89,7 @@ Section Right_Adjoint_Preserves_Hom_Local_Right_KanExt.
           ∘Conv
       )
         ∘ Ext_p_F_Hom_Adjunct_Lifted
-    )%isomorphism
-  .
+    )%isomorphism.
 
   Local Definition Left_simplifier :=
     (
@@ -109,8 +106,7 @@ Section Right_Adjoint_Preserves_Hom_Local_Right_KanExt.
         )⁻¹
       )
         ∘_h (NatTrans_id_Iso (Left_Functor_Extender p E)^op)
-    )%isomorphism%natiso
-  .
+    )%isomorphism%natiso.
 
   Local Definition Right_simplifier :=
     (
@@ -127,13 +123,11 @@ Section Right_Adjoint_Preserves_Hom_Local_Right_KanExt.
             (Hom_Func (Func_Cat C' E))
             (hlrke)
         )
-      )%isomorphism
-  .
-  
+      )%isomorphism.
+
   Definition Local_Preservation_Iso :=
     (Right_simplifier ∘ (Local_Preservation_Iso_underlying
-                           ∘ Left_simplifier))%isomorphism
-  .
+                           ∘ Left_simplifier))%isomorphism.
 
   Definition Right_Adjoint_Preserves_Hom_Local_Right_KanExt :
     Hom_Local_Right_KanExt p (R ∘ F) :=
@@ -141,21 +135,20 @@ Section Right_Adjoint_Preserves_Hom_Local_Right_KanExt.
       HLRKE := (R ∘ (HLRKE hlrke));
       HLRKE_Iso := Local_Preservation_Iso
     |}.
-  
+
 End Right_Adjoint_Preserves_Hom_Local_Right_KanExt.
 
 Section Right_Adjoint_Preserves_Local_Right_KanExt.
   Context {C C' : Category}
-          (p : C –≻ C')
+          (p : C --> C')
           {D : Category}
-          (F : C –≻ D)
+          (F : C --> D)
           (lrke : Local_Right_KanExt p F)
           {E : Category}
-          {L : E –≻ D}
-          {R : D –≻ E}
-          (adj : UCU_Adjunct L R)
-  .
-  
+          {L : E --> D}
+          {R : D --> E}
+          (adj : UCU_Adjunct L R).
+
   Definition Right_Adjoint_Preserves_Local_Right_KanExt :
     Local_Right_KanExt p (R ∘ F) :=
     Hom_Local_Right_KanExt_to_Local_Right_KanExt
@@ -165,53 +158,48 @@ Section Right_Adjoint_Preserves_Local_Right_KanExt.
           _
           (Local_Right_KanExt_to_Hom_Local_Right_KanExt lrke)
           adj
-      )
-  .
-  
+      ).
+
 End Right_Adjoint_Preserves_Local_Right_KanExt.
 
 Section Left_Adjoint_Preserves_Hom_Local_Left_KanExt.
   Context {C C' : Category}
-          (p : C –≻ C')
+          (p : C --> C')
           {D : Category}
-          (F : C –≻ D)
+          (F : C --> D)
           (hllke : Hom_Local_Left_KanExt p F)
           {E : Category}
-          {L : D –≻ E}
-          {R : E –≻ D}
-          (adj : UCU_Adjunct L R)
-  .
-  
+          {L : D --> E}
+          {R : E --> D}
+          (adj : UCU_Adjunct L R).
+
   Definition Left_Adjoint_Preserves_Hom_Local_Left_KanExt :
     Hom_Local_Left_KanExt p (L ∘ F) :=
     Right_Adjoint_Preserves_Hom_Local_Right_KanExt
       _
       _
       hllke
-      (Adj_to_UCU_Adj _ _ (Adjunct_Duality (UCU_Adj_to_Adj _ _ adj)))
-  .
-  
+      (Adj_to_UCU_Adj _ _ (Adjunct_Duality (UCU_Adj_to_Adj _ _ adj))).
+
 End Left_Adjoint_Preserves_Hom_Local_Left_KanExt.
 
 Section Left_Adjoint_Preserves_Local_Left_KanExt.
   Context {C C' : Category}
-          (p : C –≻ C')
+          (p : C --> C')
           {D : Category}
-          (F : C –≻ D)
+          (F : C --> D)
           (hllke : Local_Left_KanExt p F)
           {E : Category}
-          {L : D –≻ E}
-          {R : E –≻ D}
-          (adj : UCU_Adjunct L R)
-  .
-  
+          {L : D --> E}
+          {R : E --> D}
+          (adj : UCU_Adjunct L R).
+
   Definition Left_Adjoint_Preserves_Local_Left_KanExt :
     Local_Left_KanExt p (L ∘ F) :=
     Right_Adjoint_Preserves_Local_Right_KanExt
       _
       _
       hllke
-      (Adj_to_UCU_Adj _ _ (Adjunct_Duality (UCU_Adj_to_Adj _ _ adj)))
-  .
-  
+      (Adj_to_UCU_Adj _ _ (Adjunct_Duality (UCU_Adj_to_Adj _ _ adj))).
+
 End Left_Adjoint_Preserves_Local_Left_KanExt.

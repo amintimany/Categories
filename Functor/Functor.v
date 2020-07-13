@@ -18,13 +18,13 @@ Record Functor (C C' : Category) : Type :=
   FO : C → C';
 
   (** Arrow map *)
-  FA : ∀ {a b}, (a –≻ b)%morphism → ((FO a) –≻ (FO b))%morphism;
+  FA : ∀ {a b}, (a --> b)%morphism → ((FO a) --> (FO b))%morphism;
 
   (** Mapping of identities *)
   F_id : ∀ c, FA (id c) = id (FO c);
 
   (** Functor commuting with composition *)
-  F_compose : ∀ {a b c} (f : (a –≻ b)%morphism) (g : (b –≻ c)%morphism),
+  F_compose : ∀ {a b c} (f : (a --> b)%morphism) (g : (b --> c)%morphism),
       (FA (g ∘ f) = (FA g) ∘ (FA f))%morphism
 
   (* F_id and F_compose together state the fact that functors are morphisms of
@@ -36,7 +36,7 @@ Arguments FA {_ _} _ {_ _} _, {_ _} _ _ _ _.
 Arguments F_id {_ _} _ _.
 Arguments F_compose {_ _} _ {_ _ _} _ _.
 
-Notation "C –≻ D" := (Functor C D) : functor_scope.
+Notation "C --> D" := (Functor C D) : functor_scope.
 
 Bind Scope functor_scope with Functor.
 
@@ -46,7 +46,7 @@ Notation "F '@_a'" := (@FA _ _ F) : morphism_scope.
 
 Notation "F '_a'" := (FA F) : morphism_scope.
 
-Hint Extern 2 => (apply F_id).
+Hint Extern 2 => (apply F_id) : core.
 
 Local Open Scope morphism_scope.
 Local Open Scope object_scope.
@@ -75,16 +75,16 @@ Ltac Functor_Simplify :=
     )
 .
 
-Hint Extern 2 => Functor_Simplify.
+Hint Extern 2 => Functor_Simplify : core.
 
 Section Functor_eq_simplification.
 
-  Context {C C' : Category} (F G : (C –≻ C')%functor).
+  Context {C C' : Category} (F G : (C --> C')%functor).
 
   (** Two functors are equal if their object maps and arrow maps are. *)
   Lemma Functor_eq_simplify (Oeq : F _o = G _o) :
     ((fun x y =>
-        match Oeq in _ = V return ((x –≻ y) → ((V x) –≻ (V y)))%morphism with
+        match Oeq in _ = V return ((x --> y) → ((V x) --> (V y)))%morphism with
           eq_refl => F  @_a x y
         end) = G @_a) -> F = G.
   Proof.
@@ -99,11 +99,11 @@ Section Functor_eq_simplification.
   Theorem FA_extensionality (Oeq : F _o = G _o) :
     (
       ∀ (a b : Obj)
-        (h : (a –≻ b)%morphism),
+        (h : (a --> b)%morphism),
         (
           fun x y =>
             match Oeq in _ = V return
-                  ((x –≻ y) → ((V x) –≻ (V y)))%morphism
+                  ((x --> y) → ((V x) --> (V y)))%morphism
             with
               eq_refl => F  @_a x y
             end
@@ -113,7 +113,7 @@ Section Functor_eq_simplification.
     (
       fun x y =>
         match Oeq in _ = V return
-              ((x –≻ y) → ((V x) –≻ (V y)))%morphism
+              ((x --> y) → ((V x) --> (V y)))%morphism
         with
           eq_refl => F  @_a x y
         end
@@ -126,11 +126,11 @@ Section Functor_eq_simplification.
       equal and their arrow maps are extensionally equal. *)
   Lemma Functor_extensionality (Oeq : F _o = G _o) :
     (
-      ∀ (a b : Obj) (h : (a –≻ b)%morphism),
+      ∀ (a b : Obj) (h : (a --> b)%morphism),
         (
           fun x y =>
             match Oeq in _ = V return
-                  ((x –≻ y) → ((V x) –≻ (V y)))%morphism
+                  ((x --> y) → ((V x) --> (V y)))%morphism
             with
               eq_refl => F  @_a x y
             end
@@ -144,7 +144,7 @@ Section Functor_eq_simplification.
 
 End Functor_eq_simplification.
 
-Hint Extern 2 => Functor_Simplify.
+Hint Extern 2 => Functor_Simplify : core.
 
 Ltac Func_eq_simpl :=
   match goal with
@@ -158,17 +158,17 @@ Ltac Func_eq_simpl :=
     ])
   end.
 
-Hint Extern 3 => Func_eq_simpl.
+Hint Extern 3 => Func_eq_simpl : core.
 
 Section Functor_eq.
-  Context {C C' : Category} (F G : (C –≻ C')%functor).
+  Context {C C' : Category} (F G : (C --> C')%functor).
 
   Lemma Functor_eq_morph (H : F = G) :
     ∃ (H : ∀ x, F _o x = G _o x),
-    ∀ x y (h : (x –≻ y)%morphism),
-      match H x in _ = V return (V –≻ _)%morphism with
+    ∀ x y (h : (x --> y)%morphism),
+      match H x in _ = V return (V --> _)%morphism with
          eq_refl =>
-         match H y in _ = V return (_ –≻ V)%morphism with
+         match H y in _ = V return (_ --> V)%morphism with
            eq_refl => F _a h
          end
        end = G _a h.

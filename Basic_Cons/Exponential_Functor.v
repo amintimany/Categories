@@ -15,10 +15,10 @@ category Cᵒᵖ × C -> C) to the exponential bᵃ.
 Program Definition Exp_Func {C : Category}
         {hp : Has_Products C}
         (exps : ∀ a b, (a ⇑ b)%object)
-: ((C^op × C) –≻ C)%functor :=
+: ((C^op × C) --> C)%functor :=
 {|
   FO := fun x => exps (fst x) (snd x);
-  FA := fun a b f => 
+  FA := fun a b f =>
           Exp_morph_ex
             _ _
             ((snd f) ∘ (eval _)
@@ -54,7 +54,7 @@ Proof.
       rewrite (assoc_sym _ _ X);
         rewrite (assoc_sym _ _ (X ∘ A));
         rewrite (assoc _ _ X)
-  end. 
+  end.
   rewrite <- Exp_morph_com.
   repeat rewrite assoc.
   rewrite <- F_compose.

@@ -25,11 +25,10 @@ Section GenProd_Eq_Complete.
 
     Context {OProd : ∀ (map : J → C), (Π map)%object}
             {HProd : ∀ (map : (Arrow J) → C), (Π map)%object}
-            {Eqs : Has_Equalizers C}
-    .
+            {Eqs : Has_Equalizers C}.
 
     Section Limits_Exist.
-      Context (D : J –≻ C).
+      Context (D : J --> C).
 
       Local Notation DTarg := (fun f => (D _o (Targ f))%object) (only parsing).
       Local Notation DF := Discr_Func (only parsing).
@@ -42,7 +41,7 @@ Section GenProd_Eq_Complete.
           cone_edge := {|Trans := fun f => Trans (cone_edge OPR) (Targ f)|}
         |}.
 
-      Definition Projs : (OPR –≻ HPR)%morphism :=
+      Definition Projs : (OPR --> HPR)%morphism :=
         Trans (LRKE_morph_ex HPR Projs_Cone) tt.
 
       Program Definition D_imgs_Cone : Cone (DF DTarg) :=
@@ -56,7 +55,7 @@ Section GenProd_Eq_Complete.
             |}
         |}.
 
-      Definition D_imgs : (OPR –≻ HPR)%morphism :=
+      Definition D_imgs : (OPR --> HPR)%morphism :=
         Trans (LRKE_morph_ex HPR D_imgs_Cone) tt.
 
       Program Definition Lim_Cone : Cone D :=
@@ -77,7 +76,7 @@ Section GenProd_Eq_Complete.
                  (fun t :
                         (((Const_Func 1 (((OProd (D _o)) _o) tt)%object)
                              ∘ (Functor_To_1_Cat (Discr_Cat (Arrow J))))
-                          –≻ (DF DTarg))%nattrans
+                          --> (DF DTarg))%nattrans
                   =>
                     ((Trans t {|Arr := h|})
                        ∘ (equalizer_morph (Eqs _ _ Projs D_imgs)))%morphism
@@ -89,7 +88,7 @@ Section GenProd_Eq_Complete.
                  (fun t :
                         (((Const_Func 1 (((OProd (D _o)) _o) tt)%object)
                              ∘ (Functor_To_1_Cat (Discr_Cat (Arrow J))))
-                          –≻ (DF DTarg))%nattrans
+                          --> (DF DTarg))%nattrans
                   =>
                     (Trans t {|Arr := h|}
                            ∘ (equalizer_morph (Eqs _ _ Projs D_imgs)))%morphism
@@ -124,7 +123,7 @@ Section GenProd_Eq_Complete.
               )
           ).
         apply equalizer_morph_com.
-      Qed.        
+      Qed.
 
       Next Obligation.
       Proof.
@@ -135,7 +134,7 @@ Section GenProd_Eq_Complete.
       Section Every_Cone_Equalizes.
         Context (Cn : Cone D).
 
-        Local Hint Extern 1 => progress cbn.
+        Local Hint Extern 1 => progress cbn : core.
 
         Program Definition Cone_to_DF_DCone : Cone (DF (D _o)%object) :=
           {|
@@ -148,7 +147,7 @@ Section GenProd_Eq_Complete.
                 {|Trans := fun _ => id |} (Discretize (cone_edge Cn))
           |}.
 
-        Definition From_Cone_to_OPR : (Cn –≻ OPR)%morphism :=
+        Definition From_Cone_to_OPR : (Cn --> OPR)%morphism :=
           Trans (LRKE_morph_ex OPR Cone_to_DF_DCone) tt.
 
         Program Definition Cone_to_DF_DTrag_Cone : Cone (DF DTarg) :=
@@ -164,7 +163,7 @@ Section GenProd_Eq_Complete.
             cone_morph :=
               {|Trans :=
                   fun f =>
-                    match f as u return (((Cn _o) u)%object –≻ (_ u))%morphism
+                    match f as u return (((Cn _o) u)%object --> (_ u))%morphism
                     with
                     | tt => (Projs ∘ From_Cone_to_OPR)%morphism
                     end
@@ -194,7 +193,7 @@ Section GenProd_Eq_Complete.
                    (fun w :
                         ((Projs_Cone
                             ∘ (Functor_To_1_Cat (Discr_Cat (Arrow J)))
-                         ) –≻ (DF DTarg))%nattrans
+                         ) --> (DF DTarg))%nattrans
                     =>
                       (
                         (Trans w x)
@@ -222,7 +221,7 @@ Section GenProd_Eq_Complete.
                      fun w :
                          ((Cone_to_DF_DCone
                              ∘ (Functor_To_1_Cat (Discr_Cat J))
-                          ) –≻ (DF (D _o)%object))%nattrans
+                          ) --> (DF (D _o)%object))%nattrans
                      =>
                        Trans w (Targ x)
                    )
@@ -240,7 +239,7 @@ Section GenProd_Eq_Complete.
             cone_morph :=
               {|Trans :=
                   fun f =>
-                    match f as u return (((Cn _o)%object u) –≻ (_ u))%morphism
+                    match f as u return (((Cn _o)%object u) --> (_ u))%morphism
                     with
                     | tt => (D_imgs ∘ From_Cone_to_OPR)%morphism
                     end
@@ -271,7 +270,7 @@ Section GenProd_Eq_Complete.
                      fun w :
                          ((D_imgs_Cone
                              ∘ (Functor_To_1_Cat (Discr_Cat (Arrow J)))
-                          ) –≻ (DF DTarg))%nattrans
+                          ) --> (DF DTarg))%nattrans
                      =>
                        (
                          (Trans w x)
@@ -297,7 +296,7 @@ Section GenProd_Eq_Complete.
                      fun w :
                          ((Cone_to_DF_DCone
                              ∘ (Functor_To_1_Cat (Discr_Cat J))
-                          ) –≻ (DF (D _o)%object))%nattrans
+                          ) --> (DF (D _o)%object))%nattrans
                      =>
                        (((D _a) (Arr x)) ∘ (Trans w (Orig x)))%morphism
                    )
@@ -330,7 +329,7 @@ Section GenProd_Eq_Complete.
           apply (LRKE_morph_unique HPR).
         Qed.
 
-        Definition From_Cone_to_Lim_Cone : (Cn –≻ Lim_Cone)%morphism :=
+        Definition From_Cone_to_Lim_Cone : (Cn --> Lim_Cone)%morphism :=
           equalizer_morph_ex _  From_Cone_to_Obj_Prod_Equalizes.
 
         Program Definition Cone_Morph_to_Lim_Cone : Cone_Morph D Cn Lim_Cone :=
@@ -339,7 +338,7 @@ Section GenProd_Eq_Complete.
               {|
                 Trans :=
                   fun c =>
-                    match c as u return ((Cn _o u)%object –≻ _)%morphism with
+                    match c as u return ((Cn _o u)%object --> _)%morphism with
                       tt => From_Cone_to_Lim_Cone
                     end
               |}
@@ -381,7 +380,7 @@ Section GenProd_Eq_Complete.
                    (
                      fun w :
                          ((Cone_to_DF_DCone ∘ (Functor_To_1_Cat (Discr_Cat J))
-                          ) –≻ (DF (D _o)%object))%nattrans
+                          ) --> (DF (D _o)%object))%nattrans
                      =>
                        Trans w x
                    )
@@ -407,7 +406,7 @@ Section GenProd_Eq_Complete.
                   fun c =>
                     match c as u return
                           (((Cn _o) u)
-                             –≻ (((OProd (D _o)) _o) u))%object%morphism
+                             --> (((OProd (D _o)) _o) u))%object%morphism
                     with
                     | tt => (equalizer_morph (Eqs _ _ Projs D_imgs)
                                             ∘ Trans h tt)%morphism
@@ -434,7 +433,7 @@ Section GenProd_Eq_Complete.
           cbn.
           set (H :=
                  f_equal
-                   (fun w : ((Cn ∘ (Functor_To_1_Cat J)) –≻ D)%nattrans =>
+                   (fun w : ((Cn ∘ (Functor_To_1_Cat J)) --> D)%nattrans =>
                       Trans w x)
                    (cone_morph_com h)
               ).
@@ -462,7 +461,7 @@ Section GenProd_Eq_Complete.
                     (OProd (D _o)%object) _ (CMCOPR h) (CMCOPR h')).
         apply (
             f_equal
-              (fun w : ((Cone_to_DF_DCone Cn) –≻ (OProd (D _o)%object))%nattrans =>
+              (fun w : ((Cone_to_DF_DCone Cn) --> (OProd (D _o)%object))%nattrans =>
                  Trans w tt)
           ) in H.
         cbn in H.
@@ -479,8 +478,7 @@ Section GenProd_Eq_Complete.
   Section Restricted_Limits.
     Context (P : Card_Restriction)
             {CHRP : ∀ (A : Type) (map : A → C), (P A) → (Π map)%object}
-            {HE : Has_Equalizers C}
-    .
+            {HE : Has_Equalizers C}.
 
     Definition Restr_GenProd_Eq_Restr_Limits : Has_Restr_Limits C P :=
       fun J D PJ PA =>
@@ -489,8 +487,7 @@ Section GenProd_Eq_Complete.
           (fun map => CHRP J map PJ)
           (fun map => CHRP (Arrow J) map PA)
           HE
-          D
-    .
+          D.
 
   End Restricted_Limits.
 
@@ -503,8 +500,7 @@ Section GenProd_Eq_Complete.
         Local_to_Global_Right
           _
           _
-          (fun D => @Lim_Cone_is_Limit J (CHAP J) (CHAP (Arrow J)) HE D)
-    .
+          (fun D => @Lim_Cone_is_Limit J (CHAP J) (CHAP (Arrow J)) HE D).
 
   End Complete.
 
@@ -517,11 +513,10 @@ Section GenSum_CoEq_Complete.
     Context {J : Category}
             {OSum : ∀ (map : J → C), (Σ map)%object}
             {HSum : ∀ (map : (Arrow J) → C), (Σ map)%object}
-            {Eqs : Has_CoEqualizers C}
-    .
+            {Eqs : Has_CoEqualizers C}.
 
     Section Limits_Exist.
-      Context (D : J –≻ C).
+      Context (D : J --> C).
 
       Program Definition CoLim_CoCone_is_CoLimit : CoLimit D :=
         @Lim_Cone_is_Limit
@@ -530,8 +525,7 @@ Section GenSum_CoEq_Complete.
           (fun map => GenSum_to_GenProd (OSum map))
           (fun map => GenSum_to_GenProd (GenSum_IsoType (Arrow_OP_Iso J) HSum map))
           Eqs
-          (Opposite_Functor D)
-      .
+          (Opposite_Functor D).
 
     End Limits_Exist.
   End GenSum_CoEq_CoLimits.
@@ -539,8 +533,7 @@ Section GenSum_CoEq_Complete.
   Section Restricted_CoLimits.
     Context (P : Card_Restriction)
             {CHRP : ∀ (A : Type) (map : A → C), (P A) → (Σ map)%object}
-            {HE : Has_CoEqualizers C}
-    .
+            {HE : Has_CoEqualizers C}.
 
     Definition Restr_GenSum_CoEq_Restr_CoLimits : Has_Restr_CoLimits C P :=
       fun J D PJ PA =>
@@ -549,23 +542,20 @@ Section GenSum_CoEq_Complete.
           (fun map => CHRP J map PJ)
           (fun map => CHRP (Arrow J) map PA)
           HE
-          D
-    .
+          D.
 
   End Restricted_CoLimits.
 
   Section CoComplete.
     Context {CHAP : ∀ (A : Type) (map : A → C), (Σ map)%object}
-            {HE : Has_CoEqualizers C}
-    .
+            {HE : Has_CoEqualizers C}.
 
     Definition GenSum_CoEq_CoComplete : CoComplete C :=
       fun J =>
         Local_to_Global_Left
           _
           _
-          (fun D => @CoLim_CoCone_is_CoLimit J (CHAP J) (CHAP (Arrow J)) HE D)
-    .
+          (fun D => @CoLim_CoCone_is_CoLimit J (CHAP J) (CHAP (Arrow J)) HE D).
 
   End CoComplete.
 

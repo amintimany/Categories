@@ -34,22 +34,22 @@ F' _o c ————————————————–> F' _o c'
 #
 Trans_com_sym is the symmetric form of Trans_com.
 *)
-  Record NatTrans (F F' : (C –≻ C')%functor) :=
+  Record NatTrans (F F' : (C --> C')%functor) :=
     {
-      Trans (c : C) : ((F _o c) –≻ (F' _o c))%object%morphism;
-      Trans_com {c c' : C} (h : (c –≻ c')%morphism) :
+      Trans (c : C) : ((F _o c) --> (F' _o c))%object%morphism;
+      Trans_com {c c' : C} (h : (c --> c')%morphism) :
         ((Trans c') ∘ F _a h = F' _a h ∘ (Trans c))%morphism;
-      Trans_com_sym {c c' : C} (h : (c –≻ c')%morphism) :
+      Trans_com_sym {c c' : C} (h : (c --> c')%morphism) :
         (F' _a h ∘ (Trans c) = (Trans c') ∘ F _a h)%morphism
     }.
 
-  Notation "F –≻ F'" := (NatTrans F F') : nattrans_scope.
+  Notation "F --> F'" := (NatTrans F F') : nattrans_scope.
 
   (** Two natural transformations are equal if their arrow families are.
       That is, commutative diagrams are assumed to be equal by
       proof irrelevance. *)
-  Lemma NatTrans_eq_simplify {F F' : (C –≻ C')%functor}
-        (N N' : (F –≻ F')%nattrans) : (@Trans _ _ N) = (@Trans _ _ N') -> N = N'.
+  Lemma NatTrans_eq_simplify {F F' : (C --> C')%functor}
+        (N N' : (F --> F')%nattrans) : (@Trans _ _ N) = (@Trans _ _ N') -> N = N'.
   Proof.
     destruct N; destruct N'.
     basic_simpl.
@@ -65,7 +65,7 @@ Arguments Trans_com_sym {_ _ _ _} _ {_ _} _.
 
 Bind Scope nattrans_scope with NatTrans.
 
-Notation "F –≻ F'" := (NatTrans F F') : nattrans_scope.
+Notation "F --> F'" := (NatTrans F F') : nattrans_scope.
 
 Local Open Scope nattrans_scope.
 
@@ -97,8 +97,8 @@ Section NatTrans_Compose.
 This kind of composition is sometimes also called vertical composition of
 natural transformations.
 *)
-  Program Definition NatTrans_compose {F F' F'' : (C –≻ C')%functor}
-          (tr : F –≻ F') (tr' : F' –≻ F'') : (F –≻ F'')%nattrans :=
+  Program Definition NatTrans_compose {F F' F'' : (C --> C')%functor}
+          (tr : F --> F') (tr' : F' --> F'') : (F --> F'')%nattrans :=
     {|
       Trans := fun c : Obj => ((Trans tr' c) ∘ (Trans tr c)) % morphism
     |}.
@@ -123,10 +123,10 @@ Notation "N ∘ N'" := (NatTrans_compose N' N) : nattrans_scope.
 
 Section NatTrans_Props.
   Context {C C' : Category}.
-  
+
   (** The composition of natural transformations is associative. *)
-  Theorem NatTrans_compose_assoc {F G H I : (C –≻ C')%functor} (N : F –≻ G)
-          (N' : G –≻ H) (N'' : H –≻ I)
+  Theorem NatTrans_compose_assoc {F G H I : (C --> C')%functor} (N : F --> G)
+          (N' : G --> H) (N'' : H --> I)
     : ((N'' ∘ N') ∘ N = N'' ∘ (N' ∘ N))%nattrans
   .
   Proof.
@@ -135,23 +135,23 @@ Section NatTrans_Props.
 
   (** The identity natural transformation. The arrow family are just
       all identity arrows: *)
-  Program Definition NatTrans_id (F : (C –≻ C')%functor) : F –≻ F :=
+  Program Definition NatTrans_id (F : (C --> C')%functor) : F --> F :=
     {|
       Trans := fun x : Obj => id
     |}.
 
-  Theorem NatTrans_id_unit_left {F G : (C –≻ C')%functor} (N : F –≻ G)
+  Theorem NatTrans_id_unit_left {F G : (C --> C')%functor} (N : F --> G)
     : (NatTrans_id G) ∘ N = N.
   Proof.
     apply NatTrans_eq_simplify; cbn; auto.
   Qed.
 
-  Theorem NatTrans_id_unit_right {F G : (C –≻ C')%functor} (N : F –≻ G)
+  Theorem NatTrans_id_unit_right {F G : (C --> C')%functor} (N : F --> G)
     : N ∘ (NatTrans_id F) = N.
   Proof.
     apply NatTrans_eq_simplify; cbn; auto.
   Qed.
-  
+
 End NatTrans_Props.
 
-Hint Resolve NatTrans_eq_simplify.
+Hint Resolve NatTrans_eq_simplify : core.

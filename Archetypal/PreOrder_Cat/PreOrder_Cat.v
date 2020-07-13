@@ -7,11 +7,11 @@ From Categories Require Import Category.Main.
 Record PreOrder : Type :=
 {
   PreOrder_car :> Type;
-  
+
   PreOrder_rel :> PreOrder_car → PreOrder_car → Type
   where "a ≤ b" := (PreOrder_rel a b);
 
-  PreOrder_rel_isProp : ∀ x y (h h' : PreOrder_rel x y), h = h'; 
+  PreOrder_rel_isProp : ∀ x y (h h' : PreOrder_rel x y), h = h';
 
   PreOrder_refl : ∀ a, a ≤ a;
 
@@ -27,7 +27,7 @@ Notation "a ≤ b" := (PreOrder_rel a b) : preorder_scope.
 Section PreOrder_Cat.
   Context (P : PreOrder).
 
-  Local Hint Resolve PreOrder_rel_isProp.
+  Local Hint Resolve PreOrder_rel_isProp : core.
 
   Program Definition PreOrder_Cat : Category :=
     {|
@@ -37,5 +37,5 @@ Section PreOrder_Cat.
       id := @PreOrder_refl P
     |}
   .
-  
+
 End PreOrder_Cat.

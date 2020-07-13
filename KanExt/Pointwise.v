@@ -5,9 +5,11 @@ From Categories Require Import Category.Main.
 From Categories Require Import Functor.Functor Functor.Functor_Ops
         Functor.Representable.Hom_Func
         Functor.Representable.Representable.
-From Categories Require Import Ext_Cons.Prod_Cat.Prod_Cat Ext_Cons.Prod_Cat.Operations.
+From Categories Require Import Ext_Cons.Prod_Cat.Prod_Cat
+     Ext_Cons.Prod_Cat.Operations.
 From Categories Require Import Coq_Cats.Type_Cat.Type_Cat.
-From Categories Require Import NatTrans.NatTrans NatTrans.Operations NatTrans.Func_Cat.
+From Categories Require Import NatTrans.NatTrans NatTrans.Operations
+     NatTrans.Func_Cat.
 From Categories Require Import KanExt.Local.
 
 Local Open Scope functor_scope.
@@ -35,31 +37,27 @@ of (G ∘ F) along p.
 (** Pointwise-ness for local left kan extensions. *)
 Section Pointwise_LRKE.
   Context {C C' : Category}
-          {p : C –≻ C'}
+          {p : C --> C'}
           {D: Category}
-          {F : C –≻ D}
-          (lrke : Local_Right_KanExt p F)
-  .
+          {F : C --> D}
+          (lrke : Local_Right_KanExt p F).
 
   Definition Pointwise_LRKE :=
-    ∀ (G : D –≻ Type_Cat) (GR : Representable G),
-    is_Local_Right_KanExt p (G ∘ F) (G ∘ lrke)
-  .
-  
+    ∀ (G : D --> Type_Cat) (GR : Representable G),
+    is_Local_Right_KanExt p (G ∘ F) (G ∘ lrke).
+
 End Pointwise_LRKE.
 
 (** Pointwiseness for local right kan extensions. *)
 Section Pointwise_LLKE.
   Context {C C' : Category}
-          {p : C –≻ C'}
+          {p : C --> C'}
           {D: Category}
-          {F : C –≻ D}
-          (llke : Local_Left_KanExt p F)
-  .
-  
+          {F : C --> D}
+          (llke : Local_Left_KanExt p F).
+
   Definition Pointwise_LLKE :=
-    ∀ (G : D^op –≻ Type_Cat) (GR : CoRepresentable G),
-    is_Local_Right_KanExt p (G^op ∘ F) ((G ∘ llke)^op)
-  .
-  
+    ∀ (G : D^op --> Type_Cat) (GR : CoRepresentable G),
+    is_Local_Right_KanExt p (G^op ∘ F) ((G ∘ llke)^op).
+
 End Pointwise_LLKE.

@@ -15,7 +15,7 @@ the comma category (Comma (Func_From_SingletonCat x) G) has
 an initial object for any (x : C).
 
 Dually, a functor F : C –≻ D has a right adjoint if and only
-if the comma category (Comma F (Func_From_SingletonCat x)) 
+if the comma category (Comma F (Func_From_SingletonCat x))
 has a terminal object for any (x : D).
  *)
 
@@ -28,15 +28,12 @@ a left adjoint.
 Section Universal_Morphism_Right_Adjonit.
   Context
     {C D : Category}
-    (G : (D –≻ C)%functor)
-    (HU_init : ∀ (x : C), (𝟘_ (Comma (Func_From_SingletonCat x) G))%object )
-  .
+    (G : (D --> C)%functor)
+    (HU_init : ∀ (x : C), (𝟘_ (Comma (Const_Func 1 x) G))%object ).
 
   Local Definition Universal_Morphism_Lem :
-    ∀ c a h,
-      CMH_right (t_morph (HU_init c) a) = CMH_right h
-  .
-  Proof.          
+    ∀ c a h, CMH_right (t_morph (HU_init c) a) = CMH_right h.
+  Proof.
     intros c a h.
     apply f_equal.
     apply (t_morph_unique (HU_init c)).
@@ -77,8 +74,8 @@ Section Universal_Morphism_Right_Adjonit.
         end
       end
     end.
-    
-  Program Definition Universal_Morphism_Right_Adjonit_Func : (C –≻ D)%functor
+
+  Program Definition Universal_Morphism_Right_Adjonit_Func : (C --> D)%functor
     :=
       {|
         FO :=
@@ -100,8 +97,7 @@ Section Universal_Morphism_Right_Adjonit.
                     ((CMO_hom (terminal (HU_init c'))) ∘ h)%morphism
                  )
               )
-      |}
-  .
+      |}.
 
   Next Obligation.
   Proof.
@@ -120,7 +116,7 @@ Section Universal_Morphism_Right_Adjonit.
       rewrite assoc.
       simpl_ids;
       match goal with
-        [|- ((G _a) ((CMH_right ?A)) ∘ ((G _a) (CMH_right ?B)) ∘ _)%morphism = _] =>
+      [|- ((G _a) ((CMH_right ?A)) ∘ ((G _a) (CMH_right ?B)) ∘ _)%morphism = _] =>
         cbn_rewrite (CMH_com B);
           do 2 rewrite assoc_sym;
           cbn_rewrite (CMH_com A); auto
@@ -131,9 +127,8 @@ Section Universal_Morphism_Right_Adjonit.
 
   Local Obligation Tactic := idtac.
 
-  
   Program Definition Universal_Morphism_Right_Adjonit_unit :
-    (Functor_id C –≻ G ∘ Universal_Morphism_Right_Adjonit_Func)%nattrans
+    (Functor_id C --> G ∘ Universal_Morphism_Right_Adjonit_Func)%nattrans
     :=
       {|
         Trans := fun c => CMO_hom (terminal (HU_init c))
@@ -249,24 +244,22 @@ an initial object for any (x : C).
 Section Right_Adjoint_Universal_Morphism.
   Context
     {C D : Category}
-    {F : (C –≻ D)%functor}
-    {G : (D –≻ C)%functor}
+    {F : (C --> D)%functor}
+    {G : (D --> C)%functor}
     (Adj : (F ⊣ G)%functor)
-    (x : C)
-  .
+    (x : C).
 
   Program Definition Right_Adjoint_Universal_Morphism_terminal :
-    (Comma (Func_From_SingletonCat x) G)
+    (Comma (Const_Func 1 x) G)
     :=
       {|
         CMO_src := tt;
         CMO_trg := (F _o x)%object;
         CMO_hom := Trans (adj_unit Adj) x
-      |}
-  .
+      |}.
 
   Program Definition Right_Adjoint_Universal_Morphism_t_morph
-          (u : (Comma (Func_From_SingletonCat x) G))
+          (u : (Comma (Const_Func 1 x) G))
     :
       Comma_Hom _ _ Right_Adjoint_Universal_Morphism_terminal u
     :=
@@ -282,25 +275,22 @@ Section Right_Adjoint_Universal_Morphism.
             x
             (CMO_trg u)
             (CMO_hom u)
-      |}
-  .
+      |}.
 
   Next Obligation.
-  Proof.  
+  Proof.
     simpl_ids.
     symmetry.
     apply (@adj_morph_com _ _ _ _ Adj).
   Qed.
-  
-  
+
   Program Definition Right_Adjoint_Universal_Morphism :
-    (𝟘_ (Comma (Func_From_SingletonCat x) G))%object
+    (𝟘_ (Comma (Const_Func 1 x) G))%object
     :=
       {|
         terminal := Right_Adjoint_Universal_Morphism_terminal;
         t_morph := Right_Adjoint_Universal_Morphism_t_morph
-      |}
-  .
+      |}.
 
   Next Obligation.
   Proof.
@@ -327,27 +317,25 @@ a right adjoint.
 Section Universal_Morphism_Left_Adjonit.
   Context
     {C D : Category}
-    (F : (C –≻ D)%functor)
-    (HU_term : ∀ (x : D), (𝟙_ (Comma F (@Func_From_SingletonCat D x)))%object)
-  .
+    (F : (C --> D)%functor)
+    (HU_term : ∀ (x : D), (𝟙_ (Comma F (Const_Func 1 x)))%object).
 
   Definition Universal_Morphism_Left_Adjonit_HU_init
              (x : (D^op)%category)
     :
-      (𝟘_ (Comma ((@Func_From_SingletonCat (D ^op) x)) (F^op)))%object
+      (𝟘_ (Comma ((@Const_Func 1 (D ^op) x)) (F^op)))%object
     :=
       Term_IsoCat
         (
           Opposite_Cat_Iso
             (
               Isomorphism_Compose
-                (Comma_Opposite_Iso F (@Func_From_SingletonCat D x))
+                (Comma_Opposite_Iso F (@Const_Func 1 D x))
                 (Comma_Left_Func_Iso
                    (@Func_From_SingletonCat_Opposite D x) (F ^op))
             )
         )
-        (HU_term x)
-  .
+        (HU_term x).
 
   Definition Universal_Morphism_Left_Adjonit
     :
@@ -378,11 +366,10 @@ an terminal object for any (x : D).
 Section Left_Adjoint_Universal_Morphism.
   Context
     {C D : Category}
-    {F : (C –≻ D)%functor}
-    {G : (D –≻ C)%functor}
+    {F : (C --> D)%functor}
+    {G : (D --> C)%functor}
     (Adj : (F ⊣ G)%functor)
-    (x : D)
-  .
+    (x : D).
 
   Definition Left_Adjoint_Universal_Morphism
     : (𝟙_ (Comma F (Const_Func 1 x)))%object
@@ -398,7 +385,7 @@ Section Left_Adjoint_Universal_Morphism.
                     (F ^op)
                 )
                 (Inverse_Isomorphism
-                   (Comma_Opposite_Iso F (@Func_From_SingletonCat D x)))
+                   (Comma_Opposite_Iso F (@Const_Func 1 D x)))
             )
         )
         (Right_Adjoint_Universal_Morphism (Adjunct_Duality Adj) x)

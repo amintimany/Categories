@@ -2,8 +2,8 @@ From Categories Require Import Essentials.Notations.
 From Categories Require Import Essentials.Types.
 From Categories Require Import Essentials.Facts_Tactics.
 From Categories Require Import Category.Main.
-From Categories Require Import Ext_Cons.Prod_Cat.Prod_Cat Ext_Cons.Prod_Cat.Nat_Facts
-        Ext_Cons.Prod_Cat.Operations.
+From Categories Require Import Ext_Cons.Prod_Cat.Prod_Cat
+     Ext_Cons.Prod_Cat.Nat_Facts Ext_Cons.Prod_Cat.Operations.
 From Categories Require Import Functor.Main.
 From Categories Require Import Functor.Representable.Hom_Func
         Functor.Representable.Hom_Func_Prop.
@@ -17,11 +17,10 @@ Local Open Scope functor_scope.
 
 Section Hom_Adjunct_left_iso.
   Context {C D : Category}
-          {F F' : C –≻ D}
+          {F F' : C --> D}
           (N : (F' ≃ F)%natiso)
-          {G : D –≻ C}
-          (adj : F ⊣_hom G)
-  .
+          {G : D --> C}
+          (adj : F ⊣_hom G).
 
 
   (** If F ≃ F' and (F ⊣_hom G) then (F' ⊣_hom G) *)
@@ -35,11 +34,10 @@ End Hom_Adjunct_left_iso.
 
 Section Hom_Adjunct_right_iso.
   Context {C D : Category}
-          {F : C –≻ D}
-          {G G' : D –≻ C}
+          {F : C --> D}
+          {G G' : D --> C}
           (N : (G ≃ G')%natiso)
-          (adj : F ⊣_hom G)
-  .
+          (adj : F ⊣_hom G).
 
   (** If G ≃ G' and (F ⊣_hom G) then (F ⊣_hom G') *)
   Definition Hom_Adjunct_right_iso : F ⊣_hom G' :=
@@ -51,11 +49,10 @@ End Hom_Adjunct_right_iso.
 
 Section Adjunct_left_iso.
   Context {C D : Category}
-          (F F' : C –≻ D)
+          (F F' : C --> D)
           (N : (F' ≃ F)%natiso)
-          (G : D –≻ C)
-          (adj : F ⊣ G)
-  .
+          (G : D --> C)
+          (adj : F ⊣ G).
 
   (** If F ≃ F' and (F ⊣ G) then (F' ⊣ G) *)
   Definition Adjunct_left_iso : F' ⊣ G :=
@@ -65,11 +62,10 @@ End Adjunct_left_iso.
 
 Section Adjunct_right_iso.
   Context {C D : Category}
-          (F : C –≻ D)
-          (G G' : D –≻ C)
+          (F : C --> D)
+          (G G' : D --> C)
           (N : (G ≃ G')%natiso)
-          (adj : F ⊣ G)
-  .
+          (adj : F ⊣ G).
 
   (** If G ≃ G' and (F ⊣ G) then (F ⊣ G') *)
   Definition Adjunct_right_iso : F ⊣ G' :=
@@ -79,11 +75,10 @@ End Adjunct_right_iso.
 
 Section Hom_Adjunct_left_unique.
   Context {C D : Category}
-          {F F' : C –≻ D}
-          {G : D –≻ C}
+          {F F' : C --> D}
+          {G : D --> C}
           (adj : F ⊣_hom G)
-          (adj' : F' ⊣_hom G)
-  .
+          (adj' : F' ⊣_hom G).
 
 
   (** If F ⊣_hom G and F' ⊣_hom G then F ≃ F' *)
@@ -106,11 +101,10 @@ End Hom_Adjunct_left_unique.
 
 Section Hom_Adjunct_right_unique.
   Context {C D : Category}
-          {F : C –≻ D}
-          {G G' : D –≻ C}
+          {F : C --> D}
+          {G G' : D --> C}
           (adj : F ⊣_hom G)
-          (adj' : F ⊣_hom G')
-  .
+          (adj' : F ⊣_hom G').
 
   (** If F ⊣_hom G and F ⊣_hom G' then G ≃ G' *)
   Theorem Hom_Adjunct_right_unique : (G ≃ G')%natiso.
@@ -125,11 +119,10 @@ End Hom_Adjunct_right_unique.
 
 Section Adjunct_left_unique.
   Context {C D : Category}
-          {F F' : C –≻ D}
-          {G : D –≻ C}
+          {F F' : C --> D}
+          {G : D --> C}
           (adj : F ⊣ G)
-          (adj' : F' ⊣ G)
-  .
+          (adj' : F' ⊣ G).
 
   (** If F ⊣ G and F' ⊣ G then F ≃ F' *)
   Theorem Adjunct_left_unique : (F ≃ F' )%natiso.
@@ -143,11 +136,10 @@ End Adjunct_left_unique.
 
 Section Adjunct_right_unique.
   Context {C D : Category}
-          {F : C –≻ D}
-          {G G' : D –≻ C}
+          {F : C --> D}
+          {G G' : D --> C}
           (adj : F ⊣ G)
-          (adj' : F ⊣ G')
-  .
+          (adj' : F ⊣ G').
 
   (** If F ⊣ G and F ⊣ G' then G ≃ G' *)
   Theorem Adjunct_right_unique : (G ≃ G')%natiso.
@@ -163,11 +155,10 @@ End Adjunct_right_unique.
     Hom_{Func_Cat B D}(Fᵒᵖ ∘ –, –) ≃ Hom_{Func_Cat B C}(–, G ∘ —) *)
 Section Hom_Adjunct_Lifted.
   Context {C D : Category}
-          {F : C –≻ D}
-          {G : D –≻ C}
+          {F : C --> D}
+          {G : D --> C}
           (adj : F ⊣_ucu G)
-          (B : Category)
-  .
+          (B : Category).
 
   Local Notation NID := NatTrans_id (only parsing).
   Local Notation FCAT := Func_Cat (only parsing).
@@ -193,8 +184,8 @@ Section Hom_Adjunct_Lifted.
       (only parsing).
 
   Local Obligation Tactic := idtac.
-  
-  Program Definition Hom_Adjunct_Lifted_LR : (LEFT –≻ RIGHT)%nattrans :=
+
+  Program Definition Hom_Adjunct_Lifted_LR : (LEFT --> RIGHT)%nattrans :=
     {|
       Trans := fun c h =>
                  ((((NatTrans_id G) ∘_h h)
@@ -214,14 +205,14 @@ Section Hom_Adjunct_Lifted.
     repeat rewrite assoc.
     cbn_rewrite (@Trans_com _ _ _ _ (ucu_adj_unit adj) _ _ (Trans h1 x)).
     trivial.
-  Qed.    
+  Qed.
 
   Next Obligation.
     symmetry.
     apply Hom_Adjunct_Lifted_LR_obligation_1.
   Qed.
 
-  Program Definition Hom_Adjunct_Lifted_RL : (RIGHT –≻ LEFT)%nattrans :=
+  Program Definition Hom_Adjunct_Lifted_RL : (RIGHT --> LEFT)%nattrans :=
     {|
       Trans := fun c h =>
                  ((NatTrans_from_compose_id _)
@@ -230,7 +221,7 @@ Section Hom_Adjunct_Lifted.
                           ∘ (NatTrans_Functor_assoc_sym (snd c) G F))
                          ∘ ((NatTrans_id F) ∘_h h)))%nattrans
     |}.
-    
+
   Next Obligation.
     intros [c1 c2] [c1' c2'] [h1 h2].
     extensionality w.
@@ -242,7 +233,7 @@ Section Hom_Adjunct_Lifted.
     repeat rewrite assoc_sym.
     cbn_rewrite (@Trans_com _ _ _ _ (ucu_adj_counit adj) _ _ (Trans h2 x)).
     trivial.
-  Qed.    
+  Qed.
 
   Next Obligation.
     symmetry.
@@ -266,7 +257,7 @@ Section Hom_Adjunct_Lifted.
     simpl_ids.
     rewrite F_compose.
     rewrite assoc_sym.
-    cbn_rewrite (Trans_com (ucu_adj_counit adj) (Trans h y)). 
+    cbn_rewrite (Trans_com (ucu_adj_counit adj) (Trans h y)).
     rewrite assoc.
     simpl_ids; trivial.
     set (W := f_equal (fun w => Trans w (c1 _o y)) (ucu_adj_left_id adj));

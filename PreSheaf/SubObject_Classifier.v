@@ -7,12 +7,7 @@ From Categories Require Import Topos.SubObject_Classifier.
 From Categories Require Import Basic_Cons.Terminal Basic_Cons.PullBack.
 From Categories Require Import NatTrans.NatTrans NatTrans.Func_Cat.
 From Categories Require Import Coq_Cats.Type_Cat.CCC Coq_Cats.Type_Cat.Morphisms.
-From Categories Require Import
-        PreSheaf.PreSheaf
-        PreSheaf.Terminal
-        PreSheaf.PullBack
-        PreSheaf.Morphisms
-.
+From Categories.PreSheaf Require Import PreSheaf Terminal PullBack Morphisms.
 
 Require Import Coq.Logic.ChoiceFacts.
 
@@ -22,7 +17,6 @@ Local Axiom ConstructiveIndefiniteDescription_Type :
 Require Coq.Logic.ClassicalFacts.
 
 Local Axiom PropExt : ClassicalFacts.prop_extensionality.
-
 
 Section Sieve.
   Context {C : Category} (c : C).
@@ -34,15 +28,15 @@ Section Sieve.
      is in the sieve and h' : y –≻ x is another morphism, we have (h ∘ h')
      is also in the sieve. *)
   Definition Sieve :=
-    {S : ∀ (x : C) (h : x –≻ c), Prop |
-     ∀ (x : C) (h : x –≻ c), S x h → ∀ (y : C) (h' : y –≻ x), S y (h ∘ h')
+    {S : ∀ (x : C) (h : x --> c), Prop |
+     ∀ (x : C) (h : x --> c), S x h → ∀ (y : C) (h' : y --> x), S y (h ∘ h')
     }.
 
   (** The total sieve is the sieve that contains all morphism ending in c. *)
   Definition TotalSieve : Sieve :=
     exist
-      (fun S : ∀ x : C, (x –≻ c) → Prop =>
-         ∀ (x : C) (h : x –≻ c), S x h → ∀ (y : C) (h' : y –≻ x), S y (h ∘ h'))
+      (fun S : ∀ x : C, (x --> c) → Prop =>
+         ∀ (x : C) (h : x --> c), S x h → ∀ (y : C) (h' : y --> x), S y (h ∘ h'))
       (fun _ _ => True)
       (fun _ _ _ _ _ => I)
   .
@@ -60,7 +54,7 @@ Section Sieve_PreSheaf.
       FO := fun c => @Sieve C c;
       FA :=
         fun c c' h S =>
-          exist _ (fun y (h' : y –≻ c') => (proj1_sig S) _ (h ∘ h')) _
+          exist _ (fun y (h' : y --> c') => (proj1_sig S) _ (h ∘ h')) _
     |}
   .
 
@@ -97,13 +91,13 @@ Section Sieve_PreSheaf.
   (** The true presheaf morphism. The presheaf morphism that maps
       each object to its total sieve. *)
   Program Definition True_PreSheaf_morphism :
-    ((PSh_Term_PreSheaf C) –≻ Sieve_PreSheaf)%nattrans
+    ((PSh_Term_PreSheaf C) --> Sieve_PreSheaf)%nattrans
     :=
       {|
         Trans := fun c _ => @TotalSieve C c
       |}.
 
-  Local Hint Extern 1 => progress cbn.
+  Local Hint Extern 1 => progress cbn : core.
 
   Next Obligation.
   Proof.
@@ -131,7 +125,7 @@ Section PShCat_char_morph.
   Local Obligation Tactic := idtac.
 
   (** The characteristic morphism of a presheaf morphism. *)
-  Program Definition PShCat_char_morph : (G –≻ (Sieve_PreSheaf C))%nattrans :=
+  Program Definition PShCat_char_morph : (G --> (Sieve_PreSheaf C))%nattrans :=
     {|
       Trans :=
         fun c x =>
@@ -174,8 +168,8 @@ Section PShCat_char_morph.
   Section PShCat_char_morph_forms_pullback_morph_ex.
     Context
       (p : PreSheaf C)
-      (pm1 : (p –≻ G)%nattrans)
-      (pm2 : (p –≻ PSh_Term_PreSheaf C)%nattrans)
+      (pm1 : (p --> G)%nattrans)
+      (pm2 : (p --> PSh_Term_PreSheaf C)%nattrans)
       (H : (PShCat_char_morph ∘ pm1)%nattrans =
            (True_PreSheaf_morphism C ∘ pm2)%nattrans)
     .
@@ -198,7 +192,7 @@ Section PShCat_char_morph.
                     (
                       f_equal
                         (
-                          fun w : (p –≻ Sieve_PreSheaf C)%nattrans =>
+                          fun w : (p --> Sieve_PreSheaf C)%nattrans =>
                             proj1_sig (Trans w c x) c id
                         ) H
                     )
@@ -215,7 +209,7 @@ pullback of the characteristic presheaf morphism of N and the true
 presheaf morphism to F (the domain of the monomorphism N).
 *)
     Program Definition PShCat_char_morph_forms_pullback_morph_ex :
-      (p –≻ F)%nattrans
+      (p --> F)%nattrans
       :=
         {|
           Trans := PShCat_char_morph_forms_pullback_morph_ex_Trans
@@ -255,26 +249,26 @@ presheaf morphism to F (the domain of the monomorphism N).
 
   Local Hint Extern 1 => match goal with
                           [|- context [(?F _a id)%morphism]] => rewrite (F_id F)
-                        end.
+                        end : core.
 
-  Local Hint Extern 1 => apply PropExt; intuition.
+  Local Hint Extern 1 => apply PropExt; intuition : core.
 
   Local Hint Extern 1 =>
   match goal with
-    [ f : (?d –≻ ?c)%morphism,
+    [ f : (?d --> ?c)%morphism,
           x : (?F _o)%object ?c |- ∃ _ : (?F _o)%object ?d, _] =>
     exists (F _a f x)%morphism
-  end.
+  end : core.
 
   Local Hint Extern 1 =>
   match goal with
     [|- context [Trans ?f _ ((?F _a)%morphism ?h _)]] =>
     cbn_rewrite (equal_f (Trans_com f h))
-  end.
+  end : core.
 
-  Local Hint Extern 1 => apply sig_proof_irrelevance.
+  Local Hint Extern 1 => apply sig_proof_irrelevance : core.
 
-  Local Hint Extern 1 => progress cbn in *.
+  Local Hint Extern 1 => progress cbn in * : core.
 
   Local Hint Extern 1 =>
   match goal with
@@ -283,15 +277,15 @@ presheaf morphism to F (the domain of the monomorphism N).
     let H := fresh "H" in
     destruct A as [x H]; cbn;
     try rewrite H
-  end
-  .
+  end : core.
 
-  Local Hint Extern 1 => unfold PShCat_char_morph_forms_pullback_morph_ex_Trans.
+  Local Hint Extern 1 =>
+  unfold PShCat_char_morph_forms_pullback_morph_ex_Trans : core.
 
   Local Hint Extern 1 => match goal with
                           [|- ?A = ?B :> unit] => try destruct A;
                             try destruct B; trivial; fail
-                        end.
+                        end : core.
 
   Local Obligation Tactic := basic_simpl; auto 7.
 
@@ -314,7 +308,7 @@ presheaf morphism to F (the domain of the monomorphism N).
     apply NatTrans_eq_simplify.
     extensionality x.
     extensionality y.
-    assert (H2' := f_equal (fun w : (p' –≻ G)%nattrans => Trans w x y) H2);
+    assert (H2' := f_equal (fun w : (p' --> G)%nattrans => Trans w x y) H2);
       clear H2.
     cbn in*.
     match goal with
@@ -344,7 +338,7 @@ Section PShCat_char_morph_unique.
     {C : Category}
     {F G : PreSheaf C}
     (N : @Monic (PShCat C) F G)
-    (M : (G –≻ (Sieve_PreSheaf C))%nattrans)
+    (M : (G --> (Sieve_PreSheaf C))%nattrans)
     (hpb : is_PullBack
       (mono_morphism N) (t_morph (PSh_Terminal C) F)
       M (True_PreSheaf_morphism C)
@@ -387,7 +381,7 @@ Section PShCat_char_morph_unique.
             assert (H3 :=
                       f_equal
                         (fun w : (PMCM_PreSheaf_representing_d
-                                  z unit –≻ G)%nattrans =>
+                                  z unit --> G)%nattrans =>
                            Trans w z (id, tt))
                         (H1 H2)
                    )
@@ -428,7 +422,7 @@ Section PShCat_char_morph_unique.
               eq_sym
                 (
                   f_equal
-                    (fun w : (F –≻ Sieve_PreSheaf C)%nattrans =>
+                    (fun w : (F --> Sieve_PreSheaf C)%nattrans =>
                        proj1_sig (Trans w z v) z id)
                     (is_pullback_morph_com hpb)
                 )
@@ -454,7 +448,7 @@ Program Definition PSh_SubObject_Classifier (C : Category) :
   {|
     SOC := (Sieve_PreSheaf C);
     SOC_morph := (True_PreSheaf_morphism C :
-                    ((terminal (PSh_Terminal C)) –≻ _)%nattrans);
+                    ((terminal (PSh_Terminal C)) --> _)%nattrans);
     SOC_char := @PShCat_char_morph C;
     SO_pulback := @PShCat_char_morph_forms_pullback C
   |}.

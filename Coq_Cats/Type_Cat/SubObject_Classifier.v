@@ -52,7 +52,7 @@ Local Hint Extern 1 =>
 match goal with
   [|- ?A = ?B :> unit] =>
   try destruct A; try destruct B; trivial; fail
-end.
+end : core.
 
 Program Definition Type_Cat_SubObject_Classifier : SubObject_Classifier Type_Cat :=
   {|
@@ -86,7 +86,7 @@ Proof.
     [|- mono_morphism ?f (proj1_sig ?A) = _ ] => destruct A as [y Hy]
   end.
   trivial.
-Qed.    
+Qed.
 
 Next Obligation.
 Proof.

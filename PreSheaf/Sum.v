@@ -13,16 +13,16 @@ Section Sum.
 
   Local Hint Extern 1 => match goal with
                           [H : (_ + _)%type |- _] => destruct H
-                        end.
+                        end : core.
   Local Hint Extern 1 => match goal with
                           [|- context [(?F _a id)%morphism]] => rewrite (F_id F)
-                        end.
+                        end : core.
   Local Hint Extern 1 =>
   match goal with
     [|- context [(?F _a (?f ∘ ?g))%morphism]] =>
     cbn_rewrite (F_compose F f g)
-  end.
-  
+  end : core.
+
   (** The pointwise sum of presheaves F and G. *)
   Program Definition PSh_Sum_Func : PShCat C :=
     {|
@@ -51,7 +51,7 @@ Section Sum.
   match goal with
     [|- context [Trans ?f _ ((?F _a)%morphism ?h _)]] =>
     cbn_rewrite (equal_f (Trans_com f h))
-  end.
+  end : core.
 
   (** Pointwise morphism into sum constructed out of two morphisms
 from summands. *)
@@ -68,9 +68,9 @@ from summands. *)
           | inr xr => Trans g c xr
           end
     |}.
-  
+
   Local Notation "F + G" := (Sum (PShCat C) F G) : object_scope.
-  
+
   (** The pointwise sum presheaf is the sum of presheaves. *)
   Program Definition PSh_Sum : (F + G)%object :=
     {|
@@ -81,7 +81,7 @@ from summands. *)
     |}.
 
   Local Obligation Tactic := idtac.
-  
+
   Next Obligation.
   Proof.
     intros p' r1 r2 f g H1 H2 H3 H4.
@@ -90,10 +90,10 @@ from summands. *)
     apply NatTrans_eq_simplify.
     extensionality c; extensionality x.
     destruct x as [x1|x2].
-    + apply (f_equal (fun w : (F –≻ p')%nattrans => Trans w c x1) H1).
-    + apply (f_equal (fun w : (G –≻ p')%nattrans => Trans w c x2) H2).
+    + apply (f_equal (fun w : (F --> p')%nattrans => Trans w c x1) H1).
+    + apply (f_equal (fun w : (G --> p')%nattrans => Trans w c x2) H2).
   Qed.
-  
+
 End Sum.
 
 Instance PSh_Has_Sums (C : Category) : Has_Sums (PShCat C) := PSh_Sum C.

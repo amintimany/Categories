@@ -5,10 +5,12 @@ From Categories Require Import Category.Main.
 From Categories Require Import Functor.Functor Functor.Functor_Ops
         Functor.Representable.Hom_Func_Prop.
 From Categories Require Import Functor.Functor_Extender.
-From Categories Require Import Ext_Cons.Prod_Cat.Prod_Cat Ext_Cons.Prod_Cat.Operations.
+From Categories Require Import Ext_Cons.Prod_Cat.Prod_Cat
+     Ext_Cons.Prod_Cat.Operations.
 From Categories Require Import NatTrans.NatTrans NatTrans.Operations
         NatTrans.Func_Cat NatTrans.NatIso.
-From Categories Require Import Adjunction.Adjunction Adjunction.Duality Adjunction.Adj_Facts.
+From Categories Require Import Adjunction.Adjunction Adjunction.Duality
+     Adjunction.Adj_Facts.
 From Categories Require Import KanExt.Global.
 
 (** In this module we establish the dualit of kan extensions.
@@ -16,7 +18,7 @@ That is, the left kan extension along p is just the right kan extension along
 pᵒᵖ and vice versa.
  *)
 Section GlobalDuality.
-  Context {C C' : Category} (p : (C –≻ C')%functor) (D : Category).
+  Context {C C' : Category} (p : (C --> C')%functor) (D : Category).
 
   (** We establish this duality though hom functor definition of adjunction. *)
 
@@ -52,8 +54,7 @@ Section GlobalDuality.
                     (inverse_morphism (Func_Cat_Op_Iso C D))
                  )
               )
-      )%natiso
-    .
+      )%natiso.
 
     (** If we give the trans formations (e.g., function given in the first
         obligation) explicitly "Program" generates obligations for
@@ -193,8 +194,7 @@ Section GlobalDuality.
                 (inverse_morphism (Func_Cat_Op_Iso C' D))
              )
           )
-      )%natiso
-    .
+      )%natiso.
 
     Program Definition KanExt_Right_to_Left :
       Left_KanExt  (p^op) (D^op) :=

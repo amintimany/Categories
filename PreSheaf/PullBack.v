@@ -10,31 +10,31 @@ From Categories Require Import PreSheaf.PreSheaf.
 
 Section PSh_PullBack.
   Context (C : Category) {F G I : PreSheaf C}
-          (f : (F –≻ I)%nattrans) (g : (G –≻ I)%nattrans).
+          (f : (F --> I)%nattrans) (g : (G --> I)%nattrans).
 
   Local Hint Extern 1 =>
   match goal with
     [x : sig _ |- _ ] =>
     let H := fresh "H" in
     destruct x as [x H]
-  end.
+  end : core.
 
   Local Hint Extern 1 => match goal with
                           [|- context [(?F _a id)%morphism]] => rewrite (F_id F)
-                        end.
+                        end : core.
   Local Hint Extern 1 =>
   match goal with
     [|- context [(?F _a (?f ∘ ?g))%morphism]] =>
     cbn_rewrite (F_compose F f g)
-  end.
+  end : core.
 
   Local Hint Extern 1 =>
   match goal with
     [|- context [Trans ?f _ ((?F _a)%morphism ?h _)]] =>
     cbn_rewrite (equal_f (Trans_com f h))
-  end.
+  end : core.
 
-  Local Hint Extern 1 => progress cbn in *.
+  Local Hint Extern 1 => progress cbn in * : core.
 
   Local Obligation Tactic := basic_simpl; auto 10.
 
@@ -57,26 +57,26 @@ Section PSh_PullBack.
 
   (** The morphism from the pullback to the domain object of the first
       morphism. *)
-  Program Definition PSh_PullBack_morph_1 : (PSh_PullBack_Func –≻ F)%nattrans :=
+  Program Definition PSh_PullBack_morph_1 : (PSh_PullBack_Func --> F)%nattrans :=
     {|
       Trans := fun c x => fst (proj1_sig x)
     |}.
 
   (** The morphism from the pullback to the domain object of the second
       morphism. *)
-  Program Definition PSh_PullBack_morph_2 : (PSh_PullBack_Func –≻ G)%nattrans :=
+  Program Definition PSh_PullBack_morph_2 : (PSh_PullBack_Func --> G)%nattrans :=
     {|
       Trans := fun c x => snd (proj1_sig x)
     |}.
 
   (** The morphism from the candidate pullback to the pullback. *)
   Program Definition PSh_PullBack_morph_ex
-          (p' : (C ^op –≻ Type_Cat)%functor)
-          (pm1 : (p' –≻ F)%nattrans)
-          (pm2 : (p' –≻ G)%nattrans)
+          (p' : (C ^op --> Type_Cat)%functor)
+          (pm1 : (p' --> F)%nattrans)
+          (pm2 : (p' --> G)%nattrans)
           (H : (f ∘ pm1)%nattrans = (g ∘ pm2)%nattrans)
     :
-      (p' –≻ PSh_PullBack_Func)%nattrans
+      (p' --> PSh_PullBack_Func)%nattrans
     :=
       {|
         Trans :=
@@ -84,7 +84,7 @@ Section PSh_PullBack.
             exist
               _
               (Trans pm1 c x, Trans pm2 c x)
-              (f_equal (fun w : (p' –≻ I)%nattrans => Trans w c x) H)
+              (f_equal (fun w : (p' --> I)%nattrans => Trans w c x) H)
       |}.
 
   (** The pointwise pullback presheaf is the pullback of presheaves. *)
@@ -97,7 +97,7 @@ Section PSh_PullBack.
     |}.
 
   Local Obligation Tactic := idtac.
-  
+
   Next Obligation.
   Proof.
     intros p' pm1 pm2 H u u' H1 H2 H3 H4.
@@ -106,9 +106,9 @@ Section PSh_PullBack.
     apply NatTrans_eq_simplify.
     extensionality c.
     extensionality x.
-    assert (H1' := f_equal (fun w : (p' –≻ F)%nattrans => Trans w c x) H1);
+    assert (H1' := f_equal (fun w : (p' --> F)%nattrans => Trans w c x) H1);
       clear H1.
-    assert (H2' := f_equal (fun w : (p' –≻ G)%nattrans => Trans w c x) H2);
+    assert (H2' := f_equal (fun w : (p' --> G)%nattrans => Trans w c x) H2);
       clear H2.
     cbn in *.
     match goal with
@@ -116,7 +116,7 @@ Section PSh_PullBack.
     end.
     apply sig_proof_irrelevance.
     cbn in *; subst; trivial.
-  Qed.    
+  Qed.
 
 End PSh_PullBack.
 

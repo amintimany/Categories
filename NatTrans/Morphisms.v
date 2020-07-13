@@ -13,10 +13,9 @@ so is that natural transformation. *)
 Section is_Monic_components_is_Monic.
   Context
     {C D : Category}
-    {F G : (C –≻ D)%functor}
-    (N : F –≻ G)
-    (H : ∀ c, is_Monic (Trans N c))
-  .
+    {F G : (C --> D)%functor}
+    (N : F --> G)
+    (H : ∀ c, is_Monic (Trans N c)).
 
   Definition is_Monic_components_is_Monic :
     @is_Monic (Func_Cat _ _) _ _ N.
@@ -35,10 +34,9 @@ so is that natural transformation. *)
 Section is_Epic_components_is_Epic.
   Context
     {C D : Category}
-    {F G : (C –≻ D)%functor}
-    (N : F –≻ G)
-    (H : ∀ c, is_Epic (Trans N c))
-  .
+    {F G : (C --> D)%functor}
+    (N : F --> G)
+    (H : ∀ c, is_Epic (Trans N c)).
 
   Definition is_Epic_components_is_Epic :
     @is_Epic (Func_Cat _ _) _ _ N.

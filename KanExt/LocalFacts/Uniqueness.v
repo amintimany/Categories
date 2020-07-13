@@ -6,8 +6,8 @@ From Categories Require Import Functor.Functor Functor.Functor_Ops
         Functor.Representable.Hom_Func.
 From Categories Require Import NatTrans.NatTrans NatTrans.Operations
         NatTrans.Func_Cat NatTrans.NatIso.
-From Categories Require Import Ext_Cons.Prod_Cat.Prod_Cat Ext_Cons.Prod_Cat.Operations
-        Ext_Cons.Prod_Cat.Nat_Facts.
+From Categories Require Import Ext_Cons.Prod_Cat.Prod_Cat
+     Ext_Cons.Prod_Cat.Operations Ext_Cons.Prod_Cat.Nat_Facts.
 From Categories Require Import Adjunction.Adjunction.
 From Categories Require Import KanExt.Local.
 From Categories Require Import Basic_Cons.Terminal.
@@ -19,29 +19,29 @@ forming category of cones and showing that the local right kan
 extensions are terminal objects of those categories.
  *)
 Section Facts.
-  Context {C C' : Category} (p : C –≻ C')
-          {D : Category} (F : C –≻ D).
+  Context {C C' : Category} (p : C --> C')
+          {D : Category} (F : C --> D).
 
   Section LoKan_Cone_Morph_eq_simplify.
     Context {Cn Cn' : LoKan_Cone p F} (M M' : LoKan_Cone_Morph Cn Cn').
 
     (** Two local kan extension cone morphisms are equal if their underlying
 natural transformations are. *)
-    Theorem LoKan_Cone_Morph_eq_simplify : M = M' :> (_ –≻ _)%nattrans → M = M'.
+    Theorem LoKan_Cone_Morph_eq_simplify : M = M' :> (_ --> _)%nattrans → M = M'.
     Proof.
       intros H.
       destruct M; destruct M'; cbn in *.
       ElimEq.
       PIR.
       trivial.
-    Qed.      
+    Qed.
 
   End LoKan_Cone_Morph_eq_simplify.
 
   Section LoKan_id_Cone_Morph.
     Context (Cn : LoKan_Cone p F).
 
-    Local Hint Extern 1 => apply NatTrans_eq_simplify; cbn.
+    Local Hint Extern 1 => apply NatTrans_eq_simplify; cbn : core.
 
     (** The identity cone morph. *)
     Program Definition LoKan_id_Cone_Morph : LoKan_Cone_Morph Cn Cn :=
@@ -87,7 +87,7 @@ natural transformations are. *)
     Proof.
       apply LoKan_Cone_Morph_eq_simplify.
       apply NatTrans_compose_assoc.
-    Qed.      
+    Qed.
 
   End LoKan_Cone_Morph_compose_assoc.
 
@@ -97,14 +97,14 @@ natural transformations are. *)
 
     Theorem LoKan_id_Cone_Morph_unit_right :
       LoKan_Cone_Morph_compose (LoKan_id_Cone_Morph _) h = h.
-    Proof.    
+    Proof.
       apply LoKan_Cone_Morph_eq_simplify.
       apply NatTrans_id_unit_right.
     Qed.
 
     Theorem LoKan_id_Cone_Morph_unit_left :
       LoKan_Cone_Morph_compose h (LoKan_id_Cone_Morph _) = h.
-    Proof.    
+    Proof.
       apply LoKan_Cone_Morph_eq_simplify.
       apply NatTrans_id_unit_left.
     Qed.
@@ -143,7 +143,7 @@ the category of cones. *)
       |}.
 
     Next Obligation.
-    Proof.    
+    Proof.
       apply LoKan_Cone_Morph_eq_simplify.
       apply (LRKE_morph_unique rke).
     Qed.
@@ -157,12 +157,14 @@ terminal objects in the category of cones. *)
 
     Theorem Local_Right_KanExt_unique :
       ((LRKE rke) ≃≃ (LRKE rke') ::> LoKan_Cone_Cat)%isomorphism.
-    Proof (
+    Proof.
+      exact (
         Terminal_iso
           (Local_Right_KanExt_terminal rke)
           (Local_Right_KanExt_terminal rke')
       ).
-      
+    Qed.
+
   End Local_Right_KanExt_unique.
 
   (** If cones are isomorphic, then also are objects of their their images. *)

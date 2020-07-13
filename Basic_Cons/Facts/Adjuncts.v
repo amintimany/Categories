@@ -4,7 +4,8 @@ From Categories Require Import Essentials.Facts_Tactics.
 From Categories Require Import Category.Main.
 From Categories Require Import Functor.Main.
 From Categories Require Import Basic_Cons.Product.
-From Categories Require Import Basic_Cons.Exponential Basic_Cons.Exponential_Functor.
+From Categories Require Import Basic_Cons.Exponential
+     Basic_Cons.Exponential_Functor.
 From Categories Require Import Adjunction.Adjunction.
 From Categories Require Import Ext_Cons.Prod_Cat.Operations.
 From Categories Require Import NatTrans.NatTrans.
@@ -21,9 +22,8 @@ Section Prod_Adj.
     repeat rewrite Prod_morph_com_2;
     repeat rewrite assoc;
     repeat rewrite Prod_morph_com_1;
-    repeat rewrite Prod_morph_com_2
-  .
-  
+    repeat rewrite Prod_morph_com_2 : core.
+
   Program Definition Prod_Adj : ((Diag_Func C) ⊣ (×ᶠⁿᶜ C HP))%functor :=
     {|
       adj_unit := {|Trans := fun c => @Prod_morph_ex _ _ _ (HP c c) c id id |};
@@ -31,7 +31,7 @@ Section Prod_Adj.
     |}.
 
   Local Obligation Tactic := idtac.
-  
+
   Next Obligation.
   Proof.
     intros c d f [g1 g2] [h1 h2] H1 H2.
@@ -60,8 +60,8 @@ Section Sum_Adj.
   eapply Prod_morph_unique; eauto; repeat rewrite assoc_sym;
   repeat rewrite Prod_morph_com_1; repeat rewrite Prod_morph_com_2;
   repeat rewrite assoc; repeat rewrite Prod_morph_com_1;
-  repeat rewrite Prod_morph_com_2.
-  
+  repeat rewrite Prod_morph_com_2 : core.
+
   Program Definition Sum_Adj : ((+ᶠⁿᶜ C HS) ⊣ (Diag_Func C))%functor :=
     {|
       adj_unit :=
@@ -78,32 +78,35 @@ Section Sum_Adj.
   Next Obligation.
   Proof.
     match goal with
-      [|- (?A, ?B) = (?C, ?D)] => cutrewrite(C = A); [cutrewrite (D = B)|]; trivial
+      [|- (?A, ?B) = (?C, ?D)] =>
+      assert(C = A) as ->; [|assert (D = B) as -> ]; trivial
     end.
-    apply (@Prod_morph_com_2 (C^op)).
     apply (@Prod_morph_com_1 (C^op)).
+    apply (@Prod_morph_com_2 (C^op)).
   Qed.
 
   Next Obligation.
   Proof.
     match goal with
-      [|- (?A, ?B) = (?C, ?D)] => cutrewrite(A = C); [cutrewrite (B = D)|]; trivial
+      [|- (?A, ?B) = (?C, ?D)] =>
+      assert (A = C) as ->; [|assert (B = D) as ->]; trivial
     end.
-    apply (@Prod_morph_com_2 (C^op)).
     apply (@Prod_morph_com_1 (C^op)).
+    apply (@Prod_morph_com_2 (C^op)).
   Qed.
 
   Next Obligation.
   Proof.
     match goal with
-      [|- (?A, ?B) = (?C, ?D)] => cutrewrite(C = A); [cutrewrite (D = B)|]; trivial
+      [|- (?A, ?B) = (?C, ?D)] =>
+      assert (C = A) as ->; [|assert (D = B) as ->]; trivial
     end.
-    apply (@Prod_morph_com_2 (C^op)).
     apply (@Prod_morph_com_1 (C^op)).
-  Qed.    
-  
+    apply (@Prod_morph_com_2 (C^op)).
+  Qed.
+
   Local Obligation Tactic := idtac.
-  
+
   Next Obligation.
   Proof.
     intros [c1 c2] d [f1 f2] g h H1 H2.
@@ -162,7 +165,7 @@ Section Prod_Exp_Adj.
   Qed.
 
   Next Obligation.
-  Proof.  
+  Proof.
     symmetry.
     apply Prod_Exp_Adj_obligation_1.
   Qed.
@@ -195,10 +198,10 @@ Section Prod_Exp_Adj.
       try rewrite Prod_morph_com_2;
       auto.
     }
-  Qed.    
+  Qed.
 
   Local Obligation Tactic := idtac.
-  
+
   Next Obligation.
   Proof.
     intros c c' f g h H1 H2.
@@ -220,7 +223,7 @@ Section Prod_Exp_Adj.
       simpl_ids in H2.
       eapply curry_injective.
       trivial.
-    }    
+    }
     {
       eapply Prod_morph_unique;
       eauto;

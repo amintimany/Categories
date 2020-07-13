@@ -17,11 +17,11 @@ Section Terminal.
       FO := fun _ => unit
     |}.
 
-  Local Hint Resolve NatTrans_eq_simplify.
+  Local Hint Resolve NatTrans_eq_simplify : core.
   Local Hint Extern 1 =>
   match goal with
     [|- ?A = ?B] => try destruct A; try destruct B; trivial; fail
-  end.  
+  end : core.
 
   (** The functor that maps to the unit type in coq is the terminal object
       of presheaves. *)

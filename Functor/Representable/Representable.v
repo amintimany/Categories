@@ -4,13 +4,14 @@ From Categories Require Import Essentials.Facts_Tactics.
 From Categories Require Import Category.Main.
 From Categories Require Import Functor.Functor Functor.Representable.Hom_Func.
 From Categories Require Import Coq_Cats.Type_Cat.Type_Cat.
-From Categories Require Import Ext_Cons.Prod_Cat.Prod_Cat Ext_Cons.Prod_Cat.Operations.
+From Categories Require Import Ext_Cons.Prod_Cat.Prod_Cat
+     Ext_Cons.Prod_Cat.Operations.
 From Categories Require Import NatTrans.NatIso.
 
 (** A functor F : C → Type_Cat is representable if F is naturaly isomorphic to
 Hom_C(x, -) for some x : C. In this case, we say F is represented by x. *)
 Section Representable.
-  Context {C : Category} (F : (C –≻ Type_Cat)%functor).
+  Context {C : Category} (F : (C --> Type_Cat)%functor).
 
   Record Representable : Type :=
     {
@@ -24,5 +25,5 @@ End Representable.
 Arguments representer {_ _} _.
 Arguments representation_Iso {_ _} _.
 
-Definition CoRepresentable {C : Category} (F : (C^op –≻ Type_Cat)%functor) :=
+Definition CoRepresentable {C : Category} (F : (C^op --> Type_Cat)%functor) :=
   @Representable (C^op) F.

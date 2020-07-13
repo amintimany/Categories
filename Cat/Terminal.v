@@ -9,7 +9,7 @@ From Categories Require Import Archetypal.Discr.Discr.
 From Categories Require Import NatTrans.NatTrans NatTrans.NatIso.
 
 (** The unique functor to the terminal category. *)
-Program Definition Functor_To_1_Cat (C' : Category) : (C' –≻ 1)%functor :=
+Program Definition Functor_To_1_Cat (C' : Category) : (C' --> 1)%functor :=
 {|
   FO := fun x => tt;
   FA := fun a b f => tt;
@@ -34,12 +34,12 @@ Proof.
     destruct A;
       destruct B end;
   trivial.
-Qed.  
+Qed.
 
 (** A functor from terminal category maps all arrows (any arrow is just the
     identity) to the identity arrow. *)
 Section From_Term_Cat.
-  Context {C : Category} (F : (1 –≻ C)%functor).
+  Context {C : Category} (F : (1 --> C)%functor).
 
   Theorem From_Term_Cat : ∀ h, (F @_a tt tt h)%morphism = id.
   Proof.
@@ -54,7 +54,7 @@ End From_Term_Cat.
     isomorphic. *)
 Program Definition Functor_To_1_Cat_Iso
         {C : Category}
-        (F F' : (C –≻ 1)%functor)
+        (F F' : (C --> 1)%functor)
   : (F ≃ F')%natiso :=
 {|
   iso_morphism :=

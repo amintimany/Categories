@@ -21,7 +21,7 @@ Section Type_Cat_GenSum.
                      FA := fun _ _ _ h => h|};
       cone_edge := {|Trans := fun x => existT _ x |}
     |}.
-    
+
    Program Definition Type_Cat_GenSum : (Σ map)%object :=
     {|
       LRKE := Type_Cat_GenSum_CoCone;
@@ -37,20 +37,17 @@ Section Type_Cat_GenSum.
               |}
           |}
     |}.
-   
   Next Obligation.
   Proof.
     extensionality x.
     destruct c; destruct c'; destruct h.
     apply (equal_f (@Trans_com _ _ _ _ Cn (projT1 x) (projT1 x) eq_refl)).
   Qed.
-
   Next Obligation.
   Proof.
     symmetry.
     apply Type_Cat_GenSum_obligation_1.
-  Qed.    
-
+  Qed.
   Next Obligation.
   Proof.
     apply NatTrans_eq_simplify.
@@ -64,7 +61,7 @@ Section Type_Cat_GenSum.
                  f_equal
                    (fun w :
                         ((Cn ∘ (Functor_To_1_Cat (Discr_Cat A)^op) ^op)
-                           –≻ Fm^op)%nattrans
+                           --> Fm^op)%nattrans
                     =>
                       Trans w y1 y2) hc
                )

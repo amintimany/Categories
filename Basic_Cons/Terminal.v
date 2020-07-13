@@ -9,8 +9,8 @@ From Categories Require Import Functor.Main.
 Class Terminal (C : Category) : Type :=
 {
   terminal : C;
-  t_morph : ∀ (d : Obj), (d –≻ terminal)%morphism;
-  t_morph_unique : ∀ (d : Obj) (f g : (d –≻ terminal)%morphism), f = g
+  t_morph : ∀ (d : Obj), (d --> terminal)%morphism;
+  t_morph_unique : ∀ (d : Obj) (f g : (d --> terminal)%morphism), f = g
 }.
 
 Arguments terminal {_} _.

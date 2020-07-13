@@ -18,8 +18,8 @@ From Categories Require Import Archetypal.Discr.Discr.
 Section Discr_Func_Iso.
   Context {C : Category} {A : Type} (Omap : A → C).
 
-  Local Hint Extern 1 => apply NatTrans_eq_simplify; cbn.
-  
+  Local Hint Extern 1 => apply NatTrans_eq_simplify; cbn : core.
+
   Program Definition Discr_Func_Iso :
     (
       (@Discr_Func (C^op) A Omap) ≃ ((@Discr_Func_op C A Omap)^op)%functor
@@ -34,9 +34,8 @@ Section Discr_Func_Iso.
           {|
             Trans := fun _ => id
           |}
-      |}
-  .
-    
+      |}.
+
 End Discr_Func_Iso.
 
 (** We show that the opposite of the functor from the singleton category that
@@ -45,12 +44,12 @@ singleton category that maps to object x in Cᵒᵖ. *)
 Section Func_From_SingletonCat_Opposite.
   Context {C : Category} (x : C).
 
-  Local Hint Extern 1 => apply NatTrans_eq_simplify; cbn.
-  
+  Local Hint Extern 1 => apply NatTrans_eq_simplify; cbn : core.
+
   Program Definition Func_From_SingletonCat_Opposite :
     (
-      (((@Func_From_SingletonCat C x)^op)
-         ≃ (@Func_From_SingletonCat (C ^op) x))%functor
+      (((Const_Func 1 x)^op)
+         ≃ (@Const_Func (1 ^op) (C^op) x))%functor
     )%natiso
     :=
       {|
@@ -62,9 +61,8 @@ Section Func_From_SingletonCat_Opposite.
           {|
             Trans := fun _ => id
           |}
-      |}
-  .
-    
+      |}.
+
 End Func_From_SingletonCat_Opposite.
 
 Section Discr_Func_Arrow_Iso.
@@ -79,7 +77,7 @@ of morphisms of C. We show that Aᵒᵖ ≃ Bᵒᵖ. *)
       Opposite_Cat_Iso (Discr_Cat_Iso ((Arrow_OP_Iso C)⁻¹))
   .
 
-  Local Hint Extern 1 => apply NatTrans_eq_simplify; cbn.
+  Local Hint Extern 1 => apply NatTrans_eq_simplify; cbn : core.
 
   (** Let A be the discrete categoty of morphisms of Cᵒᵖ and B be the category
 of morphisms of C. Let, furthermore, U : B → D be a function we show that
@@ -105,13 +103,13 @@ Discr_Cat_ArrowOp_Discr_Cat_Arrow_Op defined above.
           {|
             Trans := fun c => id
           |}
-      |}
-  .
-    
+      |}.
+
 End Discr_Func_Arrow_Iso.
 
 Local Hint Extern 1 =>
-match goal with [z : Arrow (Discr_Cat _) |- _] => destruct z as [? ? []] end.
+  match goal with [z : Arrow (Discr_Cat _) |- _] => destruct z as [? ? []] end
+  : core.
 
 (** The fact that in discrete categories object type and arrow
     type are isomorphic. *)
@@ -128,16 +126,16 @@ Program Definition Discr_Hom_Iso (A : Type) :
   ).
 
 Section Discretize.
-  Context {C D : Category} {F G : (C –≻ D)%functor} (N : (F –≻ G)%nattrans).
+  Context {C D : Category} {F G : (C --> D)%functor} (N : (F --> G)%nattrans).
 
   (** Discretizes a natural transformation. That is, it forgets about the
       arrow maps of the functors and assumes the functors are just discrete
       functors, retaining the object maps of the functors. *)
   Program Definition Discretize :
-    ((Discr_Func (F _o)%object) –≻ (Discr_Func (G _o)%object))%nattrans
+    ((Discr_Func (F _o)%object) --> (Discr_Func (G _o)%object))%nattrans
     :=
     {|
       Trans := Trans N
     |}.
-  
+
 End Discretize.

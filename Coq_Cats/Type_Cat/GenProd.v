@@ -16,7 +16,8 @@ Section Type_Cat_GenProd.
 
   Program Definition Type_Cat_GenProd_Cone : Cone Fm :=
     {|
-      cone_apex := {|FO := fun _ => ∀ x : A, (Fm _o x)%object; FA := fun _ _ _ h => h|};
+      cone_apex :=
+        {|FO := fun _ => ∀ x : A, (Fm _o x)%object; FA := fun _ _ _ h => h|};
       cone_edge := {|Trans := fun x y => y x |}
     |}.
 
@@ -57,9 +58,9 @@ Section Type_Cat_GenProd.
     set (hc := (cone_morph_com h')).
     rewrite (cone_morph_com h) in hc.
     set (hc' := (f_equal (fun w :
-                  ((Cn ∘ (Functor_To_1_Cat (Discr_Cat A))) –≻ Fm)%nattrans =>
+                  ((Cn ∘ (Functor_To_1_Cat (Discr_Cat A))) --> Fm)%nattrans =>
            Trans w z y) hc)); clearbody hc'; clear hc.
     trivial.
-  Qed.    
+  Qed.
 
 End Type_Cat_GenProd.

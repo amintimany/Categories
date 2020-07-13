@@ -7,8 +7,8 @@ From Categories Require Import Functor.Functor Functor.Functor_Ops
 From Categories Require Import Functor.Functor_Extender.
 From Categories Require Import NatTrans.NatTrans NatTrans.Operations
         NatTrans.Func_Cat NatTrans.NatIso.
-From Categories Require Import Ext_Cons.Prod_Cat.Prod_Cat Ext_Cons.Prod_Cat.Operations
-        Ext_Cons.Prod_Cat.Nat_Facts.
+From Categories Require Import Ext_Cons.Prod_Cat.Prod_Cat
+     Ext_Cons.Prod_Cat.Operations Ext_Cons.Prod_Cat.Nat_Facts.
 From Categories Require Import Adjunction.Adjunction.
 From Categories Require Import KanExt.Local.
 From Categories Require Import Basic_Cons.Terminal.
@@ -18,8 +18,8 @@ Local Open Scope functor_scope.
 (** This module contains conversion from local kan extensions defined through
     hom functor to local kan extensions defined through cones. *)
 Section Hom_Local_Right_KanExt_to_Local_Right_KanExt.
-  Context {C C' : Category} {p : C –≻ C'}
-          {D : Category} {F : C –≻ D}
+  Context {C C' : Category} {p : C --> C'}
+          {D : Category} {F : C --> D}
           (hlrke : Hom_Local_Right_KanExt p F).
 
   (** The cone that is the kan extension. *)
@@ -55,7 +55,7 @@ local kan extension. *)
                  fun w :
                        (((@Fix_Bi_Func_2 _ (Func_Cat _ _) _ F (Hom_Func _))
                              ∘ (Left_Functor_Extender p D)^op)
-                         –≻ ((@Fix_Bi_Func_2 _ (Func_Cat _ _) _ F (Hom_Func _))
+                         --> ((@Fix_Bi_Func_2 _ (Func_Cat _ _) _ F (Hom_Func _))
                             ∘ (Left_Functor_Extender p D)^op
                          ))%nattrans =>
                    Trans w Cn
@@ -88,7 +88,7 @@ local kan extension. *)
           f_equal
             (fun w :
                    ((@Fix_Bi_Func_2 _ (Func_Cat _ _) _ hlrke (Hom_Func _))
-                      –≻ (@Fix_Bi_Func_2 _ (Func_Cat _ _) _ hlrke (Hom_Func _))
+                      --> (@Fix_Bi_Func_2 _ (Func_Cat _ _) _ hlrke (Hom_Func _))
                    )%nattrans
              => Trans w hlrke (NatTrans_id _)
             )
@@ -106,7 +106,7 @@ local kan extension. *)
 
     Theorem
       Hom_Local_Right_KanExt_to_Local_Right_KanExt_Morph_to_Terminal_Cone_unique
-      : h = h' :> (_ –≻ _)%nattrans.
+      : h = h' :> (_ --> _)%nattrans.
     Proof.
       set (Mh :=
              equal_f
@@ -125,7 +125,7 @@ local kan extension. *)
                       (fun w :
                            ((@Fix_Bi_Func_2
                                _ (Func_Cat _ _) _ hlrke (Hom_Func _))
-                              –≻ (@Fix_Bi_Func_2
+                              --> (@Fix_Bi_Func_2
                                     _ (Func_Cat _ _) _ hlrke (Hom_Func _))
                            )%nattrans
                        => Trans w hlrke (NatTrans_id _))
@@ -137,8 +137,7 @@ local kan extension. *)
         [symmetry; apply (cone_morph_com h) | apply (cone_morph_com h')].
     Qed.
 
-  End
-    Hom_Local_Right_KanExt_to_Local_Right_KanExt_Morph_to_Terminal_Cone_unique.
+  End Hom_Local_Right_KanExt_to_Local_Right_KanExt_Morph_to_Terminal_Cone_unique.
 
   (** Conversion from Hom_Local_Right_KanExt to Local_Right_KanExt. *)
   Definition Hom_Local_Right_KanExt_to_Local_Right_KanExt :

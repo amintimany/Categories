@@ -8,18 +8,19 @@ From Categories Require Import Ext_Cons.Prod_Cat.Prod_Cat.
 From Categories Require Import NatTrans.NatTrans NatTrans.Operations.
 From Categories Require Import Adjunction.Adjunction Adjunction.Duality
         Adjunction.Adj_Facts.
-From Categories Require Import KanExt.Global KanExt.Local KanExt.LocalFacts.ConesToHom
-        KanExt.LocalFacts.HomToCones KanExt.GlobalDuality.
+From Categories Require Import KanExt.Global KanExt.Local
+     KanExt.LocalFacts.ConesToHom KanExt.LocalFacts.HomToCones
+     KanExt.GlobalDuality.
 
 Local Open Scope functor_scope.
 
 (** This module contains conversion from global to local kan extensions. *)
 Section Global_to_Local_Right.
   Context {C C' : Category}
-          (p : C –≻ C')
+          (p : C --> C')
           (D : Category)
           (rke : Right_KanExt p D)
-          (F : C –≻ D).
+          (F : C --> D).
 
   (** The cone which (we will prove) is the local kan extension. *)
   Definition Cone_for_LoKan : LoKan_Cone p F :=
@@ -41,25 +42,25 @@ Section Global_to_Local_Right.
 
         morph ∘_h (NatTrans_id p) : (Cn ∘ p) ————> ((rke _o F) ∘ p)
 
-        η_{NatTrans_id (rke _o F)} ∘ (morph ∘_h (NatTrans_id p)) 
+        η_{NatTrans_id (rke _o F)} ∘ (morph ∘_h (NatTrans_id p))
            : (Cn ∘ p) ————> F
 
-        rke @_a (Cn ∘ p) F (η_{NatTrans_id (rke _o F)} 
-                             ∘ (morph ∘_h (NatTrans_id p))) : 
+        rke @_a (Cn ∘ p) F (η_{NatTrans_id (rke _o F)}
+                             ∘ (morph ∘_h (NatTrans_id p))) :
           (rke _o (Cn ∘ p)) ————> (rke _o F)
 
         (rke @_a (Cn ∘ p) F (η_{NatTrans_id (rke _o F)}
                                ∘ (morph ∘_h (NatTrans_id p))))
-          ∘ (Trans (adj_unit (right_kan_ext_adj rke)) Cn) : 
+          ∘ (Trans (adj_unit (right_kan_ext_adj rke)) Cn) :
           Cn ————> (rke _o F)
 
 
         This result is used to show existence and unique ness of cones from Cn
         to the cone constructed above.
      *)
-    
+
     Lemma Cone_Morph_to_Cone_for_LoKan_adj_unit_rke_id
-          (morph : (Cn –≻ ((rke _o)%object F))%nattrans) :
+          (morph : (Cn --> ((rke _o)%object F))%nattrans) :
       morph =
       (
         (
@@ -114,14 +115,14 @@ Section Global_to_Local_Right.
     Context {Cn : LoKan_Cone p F} (M M' : LoKan_Cone_Morph Cn Cone_for_LoKan).
 
     (** Cone morph to the cone constructed is unique. *)
-    Theorem Cone_Morph_to_Cone_for_LoKan_Unique : (M = M' :> (_ –≻ _)%nattrans).
+    Theorem Cone_Morph_to_Cone_for_LoKan_Unique : (M = M' :> (_ --> _)%nattrans).
     Proof.
       rewrite (Cone_Morph_to_Cone_for_LoKan_adj_unit_rke_id Cn M).
       rewrite (Cone_Morph_to_Cone_for_LoKan_adj_unit_rke_id Cn M').
       do 2 apply f_equal.
       set (H := cone_morph_com M'); rewrite (cone_morph_com M) in H; exact H.
     Qed.
-      
+
   End Cone_Morph_to_Cone_for_LoKan_Unique.
 
   (** The conversion from global kan extensions to local kan extensions *)
@@ -138,10 +139,10 @@ End Global_to_Local_Right.
     is jsut the dual what we just proved. *)
 Section Global_to_Local_Left.
   Context {C C' : Category}
-          (p : C –≻ C')
+          (p : C --> C')
           (D : Category)
           (lke : Left_KanExt p D)
-          (F : C –≻ D).
+          (F : C --> D).
 
   Definition Global_to_Local_Left : Local_Left_KanExt p F :=
     Global_to_Local_Right _ _ (KanExt_Left_to_Right _ _ lke) (F^op).

@@ -4,10 +4,12 @@ From Categories Require Import Essentials.Facts_Tactics.
 From Categories Require Import Category.Main.
 From Categories Require Import Functor.Main.
 From Categories Require Import Cat.Cat.
-From Categories Require Import Ext_Cons.Prod_Cat.Prod_Cat Ext_Cons.Prod_Cat.Operations.
+From Categories Require Import Ext_Cons.Prod_Cat.Prod_Cat
+     Ext_Cons.Prod_Cat.Operations.
 From Categories Require Import Basic_Cons.Product.
 From Categories Require Import Basic_Cons.Exponential.
-From Categories Require Import NatTrans.NatTrans NatTrans.Func_Cat NatTrans.NatIso.
+From Categories Require Import NatTrans.NatTrans NatTrans.Func_Cat
+     NatTrans.NatIso.
 From Categories Require Import Cat.Product Cat.Exponential.
 
 (** Facts about exponentials in Cat. *)
@@ -16,10 +18,9 @@ Local Open Scope functor_scope.
 
 Section Exp_Cat_morph_ex_compose.
   Context {C C' C'' : Category}
-          (F : (C'' × C) –≻  C')
+          (F : (C'' × C) -->  C')
           {B : Category}
-          (G : B –≻ C'')
-  .
+          (G : B --> C'').
 
   (** This is the more specific case of curry_compose. Proven separately for cat
       because of universe polymorphism issues that prevent cat to both have
@@ -47,15 +48,15 @@ End Exp_Cat_morph_ex_compose.
 
 Section Exp_Cat_morph_ex_compose_Iso.
   Context {C C' C'' : Category}
-          (F : (C'' × C) –≻  C')
+          (F : (C'' × C) -->  C')
           {B : Category}
-          (G : B –≻ C'').
+          (G : B --> C'').
 
-  Local Hint Extern 1 => apply NatTrans_eq_simplify; cbn.
-  
+  Local Hint Extern 1 => apply NatTrans_eq_simplify; cbn : core.
+
   Program Definition Exp_Cat_morph_ex_compose_Iso_RL :
     ((Exp_Cat_morph_ex (F ∘ (Prod_Functor G (Functor_id C))))
-       –≻ ((Exp_Cat_morph_ex F) ∘ G))%nattrans :=
+       --> ((Exp_Cat_morph_ex F) ∘ G))%nattrans :=
     {|
       Trans :=
         fun c =>
@@ -66,7 +67,7 @@ Section Exp_Cat_morph_ex_compose_Iso.
 
   Program Definition Exp_Cat_morph_ex_compose_Iso_LR :
     (((Exp_Cat_morph_ex F) ∘ G)
-       –≻ (Exp_Cat_morph_ex (F ∘ (Prod_Functor G (Functor_id C)))))%nattrans
+       --> (Exp_Cat_morph_ex (F ∘ (Prod_Functor G (Functor_id C)))))%nattrans
     :=
     {|
       Trans :=
@@ -75,7 +76,7 @@ Section Exp_Cat_morph_ex_compose_Iso.
             Trans := fun d => id
           |}
     |}.
-    
+
   (** This is the isomorphic form of the theorem above. *)
   Program Definition Exp_Cat_morph_ex_compose_Iso :
     (((Exp_Cat_morph_ex (F ∘ (Prod_Functor G (Functor_id C))))%functor)
@@ -89,12 +90,12 @@ End Exp_Cat_morph_ex_compose_Iso.
 
 Section Exp_Cat_morph_ex_NT.
   Context {C C' C'' : Category}
-          {F F' : (C'' × C) –≻  C'}
-          (N : (F –≻ F')%nattrans).
+          {F F' : (C'' × C) -->  C'}
+          (N : (F --> F')%nattrans).
   (** If we have a natural transformation from F to F' then we have a natural
       transformation from (curry F) to (curry F'). *)
   Program Definition Exp_Cat_morph_ex_NT :
-    ((Exp_Cat_morph_ex F) –≻ (Exp_Cat_morph_ex F'))%nattrans :=
+    ((Exp_Cat_morph_ex F) --> (Exp_Cat_morph_ex F'))%nattrans :=
     {|
       Trans := fun d =>
                  {|
@@ -107,10 +108,10 @@ Section Exp_Cat_morph_ex_NT.
     |}.
 
   Next Obligation.
-  Proof.  
+  Proof.
     apply NatTrans_eq_simplify; FunExt; cbn.
     apply Trans_com.
-  Qed.    
+  Qed.
 
   Next Obligation.
   Proof.
@@ -122,7 +123,7 @@ End Exp_Cat_morph_ex_NT.
 
 Section Exp_Cat_morph_ex_Iso.
   Context {C C' C'' : Category}
-          {F F' : (C'' × C) –≻ C'}
+          {F F' : (C'' × C) --> C'}
           (N : (F ≃ F')%natiso)
   .
 
@@ -157,33 +158,33 @@ End Exp_Cat_morph_ex_Iso.
 
 Section Exp_Cat_morph_ex_inverse_NT.
   Context {C C' C'' : Category}
-          {F F' : (C'' × C) –≻  C'}
-          (N : ((Exp_Cat_morph_ex F) –≻ (Exp_Cat_morph_ex F'))%nattrans).
+          {F F' : (C'' × C) -->  C'}
+          (N : ((Exp_Cat_morph_ex F) --> (Exp_Cat_morph_ex F'))%nattrans).
 
 
   (** If we have a natural transformation from (curry F) to (curry F') then
       we have a natural transformation from F to F'. *)
-  Program Definition Exp_Cat_morph_ex_inverse_NT : (F –≻ F')%nattrans :=
+  Program Definition Exp_Cat_morph_ex_inverse_NT : (F --> F')%nattrans :=
     {|
       Trans := fun d => Trans (Trans N (fst d)) (snd d)
     |}.
 
   Local Obligation Tactic := idtac.
-  
+
   Next Obligation.
-  Proof.  
+  Proof.
     intros [d1 d2] [d1' d2'] [h1 h2]; cbn in *.
     replace (F @_a (_, _) (_, _) (h1, h2))%morphism
     with ((F @_a (_, _) (_, _) (id d1', h2))
             ∘ (F @_a (_, _) (_, _) (h1, id d2)))%morphism by auto.
-    rewrite assoc_sym.   
+    rewrite assoc_sym.
     cbn_rewrite (Trans_com (Trans N d1') h2).
     rewrite assoc.
     cbn_rewrite (f_equal (fun w => Trans w d2) (Trans_com N h1)).
     rewrite assoc_sym.
     rewrite <- F_compose.
     cbn; auto.
-  Qed.    
+  Qed.
 
   Next Obligation.
   Proof.
@@ -195,9 +196,8 @@ End Exp_Cat_morph_ex_inverse_NT.
 
 Section Exp_Cat_morph_ex_inverse_Iso.
   Context {C C' C'' : Category}
-          {F F' : (C'' × C) –≻  C'}
-          (N : (Exp_Cat_morph_ex F ≃ Exp_Cat_morph_ex F')%natiso)
-  .
+          {F F' : (C'' × C) -->  C'}
+          (N : (Exp_Cat_morph_ex F ≃ Exp_Cat_morph_ex F')%natiso).
 
   (** If (curry F) is naturally isomorphic  to (curry F') then we have that F is
       naturally isomorphic to F'. *)
@@ -206,7 +206,6 @@ Section Exp_Cat_morph_ex_inverse_Iso.
       iso_morphism := Exp_Cat_morph_ex_inverse_NT (iso_morphism N);
       inverse_morphism := Exp_Cat_morph_ex_inverse_NT (inverse_morphism N)
     |}.
-
   Next Obligation.
   Proof.
     apply NatTrans_eq_simplify; extensionality x; cbn.
@@ -217,9 +216,8 @@ Section Exp_Cat_morph_ex_inverse_Iso.
          change U with (Trans (Trans (A ∘ B) X) Y)
       end
     end.
-    cbn_rewrite (left_inverse N); trivial. 
+    cbn_rewrite (left_inverse N); trivial.
   Qed.
-  
   Next Obligation.
   Proof.
     apply NatTrans_eq_simplify; extensionality x; cbn.

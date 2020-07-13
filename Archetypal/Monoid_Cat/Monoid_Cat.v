@@ -7,7 +7,7 @@ From Categories Require Import Category.Main.
 Record Monoid : Type :=
 {
   Mon_car : Type;
-  
+
   Mon_op : Mon_car → Mon_car → Mon_car;
 
   Mon_assoc : ∀ a b c, Mon_op a (Mon_op b c) = Mon_op (Mon_op a b) c;
@@ -22,7 +22,7 @@ Record Monoid : Type :=
 Section Monoid_Cat.
   Context (M : Monoid).
 
-  Hint Resolve Mon_unit_left Mon_unit_right Mon_assoc.
+  Hint Resolve Mon_unit_left Mon_unit_right Mon_assoc : core.
 
   Program Definition Monoid_Cat : Category :=
     {|

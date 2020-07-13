@@ -19,10 +19,10 @@ Local Obligation Tactic := idtac.
 Program Definition Prod_Cat (C C' : Category) : Category :=
 {|
   Obj := C * C';
-              
+
   Hom :=
     fun a b =>
-      (((fst a) –≻ (fst b)) * ((snd a) –≻ (snd b)))%type;
+      (((fst a) --> (fst b)) * ((snd a) --> (snd b)))%type;
 
   compose :=
     fun a b c f g =>
@@ -70,7 +70,7 @@ Local Obligation Tactic := basic_simpl; auto.
 Theorem Prod_compose_id
         (C D : Category)
         (a b c : C) (d : D)
-        (f : a –≻ b) (g : b –≻ c)
+        (f : a --> b) (g : b --> c)
   : (g ∘ f, id d)%morphism =
     @compose (_ × _) (_, _) (_, _) (_, _) (f, id d) (g, id d).
 Proof.
@@ -80,7 +80,7 @@ Qed.
 Theorem Prod_id_compose
         (C D : Category)
         (a : C) (b c d : D)
-        (f : b –≻ c) (g : c –≻ d)
+        (f : b --> c) (g : c --> d)
   : (id a, g ∘ f)%morphism =
     @compose (_ × _) (_, _) (_, _) (_, _) (id a, f) (id a, g).
 Proof.
@@ -90,28 +90,15 @@ Qed.
 Theorem Prod_cross_compose
         (C D : Category)
         (a b : C) (c d : D)
-        (f : a –≻ b) (g : c –≻ d)
-  : @compose
-      (_ × _) (_, _) (_, _) (_, _)
-      (@id _ a, g) (f, @id _ d)
-    = @compose
-        (_ × _) (_, _) (_, _) (_, _)
-        (f, @id _ c) (@id _ b, g)
-.
+        (f : a --> b) (g : c --> d)
+  : @compose (_ × _) (_, _) (_, _) (_, _) (id a, g) (f, id d) =
+    @compose (_ × _) (_, _) (_, _) (_, _) (f, id c) (id b, g).
 Proof.
   cbn; auto.
 Qed.
 
-Program Definition Cat_Proj1
-        (C C' : Category) :
-  ((C × C') –≻ C)%functor
-  :=
-    {|FO := fst; FA := fun _ _ f => fst f|}
-.
+Program Definition Cat_Proj1 (C C' : Category) : ((C × C') --> C)%functor :=
+  {|FO := fst; FA := fun _ _ f => fst f|}.
 
-Program Definition Cat_Proj2
-        (C C' : Category) :
-  ((C × C') –≻ C')%functor
-  :=
-    {|FO := snd; FA := fun _ _ f => snd f|}
-.
+Program Definition Cat_Proj2 (C C' : Category) : ((C × C') --> C')%functor :=
+  {|FO := snd; FA := fun _ _ f => snd f|}.

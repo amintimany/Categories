@@ -7,15 +7,14 @@ From Categories Require Import Functor.Main.
 Local Open Scope morphism_scope.
 
 Section Algebras.
-  Context {C : Category} (T : (C –≻ C)%functor).
+  Context {C : Category} (T : (C --> C)%functor).
 
-
-  (** A T-Algebra in category C for an endo-functor T : C → C is a pair (U, h) 
+  (** A T-Algebra in category C for an endo-functor T : C → C is a pair (U, h)
       where U is an object of C and h : T _o U → U is an arrow in C. *)
   Record Algebra : Type :=
     {
       Alg_Carrier : C;
-      Constructors : (T _o Alg_Carrier)%object –≻ Alg_Carrier
+      Constructors : (T _o Alg_Carrier)%object --> Alg_Carrier
     }.
 
   (** A T-Algebra homomorphism from (U, h) to (U', h') is an arrow g : U → U'
@@ -40,7 +39,7 @@ such that the following diagram commutes:
  *)
   Record Algebra_Hom (alg alg' : Algebra) : Type :=
     {
-      Alg_map : (Alg_Carrier alg) –≻ (Alg_Carrier alg');
+      Alg_map : (Alg_Carrier alg) --> (Alg_Carrier alg');
 
       Alg_map_com : ((Constructors alg') ∘ (T _a Alg_map)
                      = Alg_map ∘ (Constructors alg))%morphism
@@ -110,7 +109,7 @@ such that the following diagram commutes:
   Proof.
     apply Algebra_Hom_eq_simplify; cbn; auto.
   Qed.
-  
+
   (** Identity algebra homomorphism is the right unit of compositon. *)
   Theorem Algebra_Hom_id_unit_right
           {alg alg' : Algebra}
@@ -147,16 +146,16 @@ Arguments Algebra_Hom_id {_ _} _.
 Section CoAlgebras.
   Context {C : Category}.
 
-  Definition CoAlgebra (T : (C –≻ C)%functor) :=
+  Definition CoAlgebra (T : (C --> C)%functor) :=
     @Algebra (C^op) (T^op).
-  
-  Definition CoAlgebra_Hom {T : (C –≻ C)%functor} := 
+
+  Definition CoAlgebra_Hom {T : (C --> C)%functor} :=
       @Algebra_Hom (C^op) (T^op).
 
-  Definition CoAlgebra_Hom_id {T : (C –≻ C)%functor} :=
+  Definition CoAlgebra_Hom_id {T : (C --> C)%functor} :=
     @Algebra_Hom_id  (C^op) (T^op).
 
-  Definition CoAlgebra_Cat (T : (C –≻ C)%functor) :=
+  Definition CoAlgebra_Cat (T : (C --> C)%functor) :=
     @Algebra_Cat (C^op) (T^op).
 
 End CoAlgebras.

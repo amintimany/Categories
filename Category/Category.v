@@ -9,27 +9,28 @@ Cumulative Class Category : Type :=
   Obj : Type;
 
   (** Type of morphism beween two objects *)
-  Hom : Obj → Obj → Type where "a –≻ b" := (Hom a b);
+  Hom : Obj → Obj → Type where "a --> b" := (Hom a b);
 
   (** composition of morphisms: *)
-  compose : ∀ {a b c : Obj}, (a –≻ b) → (b –≻ c) → (a –≻ c) where "f ∘ g" := (compose g f);
+  compose : ∀ {a b c : Obj}, (a --> b) → (b --> c) → (a --> c)
+    where "f ∘ g" := (compose g f);
 
   (** associativity of composition: *)
-  assoc : ∀ {a b c d : Obj} (f : a –≻ b) (g : b –≻ c) (h : c –≻ d),
+  assoc : ∀ {a b c d : Obj} (f : a --> b) (g : b --> c) (h : c --> d),
             ((h ∘ g) ∘ f) = (h ∘ (g ∘ f));
 
   (** symmetric form of associativity: *)
-  assoc_sym : ∀ {a b c d : Obj} (f : a –≻ b) (g : b –≻ c) (h : c –≻ d),
+  assoc_sym : ∀ {a b c d : Obj} (f : a --> b) (g : b --> c) (h : c --> d),
                 ((h ∘ (g ∘ f) = (h ∘ g) ∘ f));
 
   (** identity morphisms: *)
-  id : ∀ {a : Obj}, a –≻ a;
+  id : ∀ {a : Obj}, a --> a;
 
   (** id left unit: *)
-  id_unit_left : ∀ (a b : Obj) (h : a –≻ b), id ∘ h = h;
+  id_unit_left : ∀ (a b : Obj) (h : a --> b), id ∘ h = h;
 
   (** id right unit: *)
-  id_unit_right : ∀ (a b : Obj) (h : a –≻ b), h ∘ id = h
+  id_unit_right : ∀ (a b : Obj) (h : a --> b), h ∘ id = h
 }.
 
 Arguments Obj {_}, _.
@@ -40,7 +41,7 @@ Arguments assoc {_ _ _ _ _} _ _ _.
 Arguments assoc_sym {_ _ _ _ _} _ _ _.
 
 Notation "f ∘ g" := (compose g f) : morphism_scope.
-Notation "a –≻ b" := (Hom a b) : morphism_scope.
+Notation "a --> b" := (Hom a b) : morphism_scope.
 
 Bind Scope category_scope with Category.
 
@@ -50,7 +51,7 @@ Bind Scope object_scope with Obj.
 
 Coercion Obj : Category >-> Sortclass.
 
-Hint Resolve id_unit_left id_unit_right.
+Hint Resolve id_unit_left id_unit_right : core.
 
 (* basic tactics for categories *)
 
@@ -226,8 +227,7 @@ Ltac simpl_ids :=
         | [|- (?B ∘ ?A = ?A)%morphism] => id_detected B
         | [|- (?A = ?B ∘ ?A)%morphism] => id_detected B
       end
-    )
-.
+    ).
 
 Ltac simpl_ids_in_I I :=
   repeat(
@@ -235,22 +235,21 @@ Ltac simpl_ids_in_I I :=
         | context[(?A ∘ id)%morphism] => rewrite id_unit_right in I
         | context[(id ∘ ?A)%morphism] => rewrite id_unit_left in I
       end
-    )
-.
+    ).
 
 Tactic Notation "simpl_ids" := simpl_ids.
 
 Tactic Notation "simpl_ids" "in" hyp(I) := simpl_ids_in_I I.
 
-Hint Extern 1 => progress simpl_ids.
+Hint Extern 1 => progress simpl_ids : core.
 
-Hint Extern 3 => progress (dohyps (fun H => simpl_ids in H)).
+Hint Extern 3 => progress (dohyps (fun H => simpl_ids in H)) : core.
 
 Hint Extern 2 =>
 match goal with
     [|- ?A = ?B :> Hom _ _ _] =>
     repeat rewrite assoc; trivial; fail
-end.
+end : core.
 
 Hint Extern 2 =>
 match goal with
@@ -258,4 +257,4 @@ match goal with
   repeat rewrite assoc in H;
     repeat rewrite assoc;
     (idtac + symmetry); apply H
-end.
+end : core.

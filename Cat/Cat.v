@@ -16,16 +16,16 @@ Definition Cat : Category :=
   Hom := Functor;
 
   compose := fun C D E => Functor_compose;
-  
-  assoc := fun C D E F (G : C –≻ D) (H : D –≻ E) (I : E –≻ F) =>
+
+  assoc := fun C D E F (G : C --> D) (H : D --> E) (I : E --> F) =>
             @Functor_assoc _ _ _ _ G H I;
 
-  assoc_sym := fun C D E F (G : C –≻ D) (H : D –≻ E) (I : E –≻ F) =>
+  assoc_sym := fun C D E F (G : C --> D) (H : D --> E) (I : E --> F) =>
             eq_sym (@Functor_assoc _ _ _ _ G H I);
 
   id := fun C => Functor_id C;
 
   id_unit_left := fun C D => @Functor_id_unit_left C D;
 
-  id_unit_right := fun C D => @Functor_id_unit_right C D          
+  id_unit_right := fun C D => @Functor_id_unit_right C D
 |}.

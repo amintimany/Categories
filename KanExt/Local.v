@@ -2,9 +2,12 @@ From Categories Require Import Essentials.Notations.
 From Categories Require Import Essentials.Types.
 From Categories Require Import Essentials.Facts_Tactics.
 From Categories Require Import Category.Main.
-From Categories Require Import Functor.Functor Functor.Functor_Ops Functor.Representable.Hom_Func.
-From Categories Require Import Ext_Cons.Prod_Cat.Prod_Cat Ext_Cons.Prod_Cat.Operations.
-From Categories Require Import NatTrans.NatTrans NatTrans.Operations NatTrans.Func_Cat NatTrans.NatIso.
+From Categories Require Import Functor.Functor Functor.Functor_Ops
+     Functor.Representable.Hom_Func.
+From Categories Require Import Ext_Cons.Prod_Cat.Prod_Cat
+     Ext_Cons.Prod_Cat.Operations.
+From Categories Require Import NatTrans.NatTrans NatTrans.Operations
+     NatTrans.Func_Cat NatTrans.NatIso.
 From Categories Require Import Functor.Functor_Extender.
 
 (**
@@ -18,9 +21,9 @@ transformation η : G ∘ p -> F:
       | \          ↗
     p |  \ η     /
       |    ↘   / G
-      |      / 
+      |      /
       |    /
-      ↓  / 
+      ↓  /
       C'
 </pre>
 #
@@ -34,14 +37,14 @@ transformation ε : G' → G such that the following diagram
       C —————–——————–——–——————————–> D
       | \ \       _______________↗  ↗
     p |  \  \η' /      G'         /
-      | η \   ↘/               / 
-      |    \  /   ε          / 
+      | η \   ↘/               /
+      |    \  /   ε          /
       |     \/ —————–—>  / G
       |     /\        /
       |    /  ↘    /
       |   /     /
       |  /   /
-      ↓ / / 
+      ↓ / /
       C'
 </pre>
 #
@@ -67,15 +70,15 @@ ______________________
 
 *)
 Section KanExtension.
-  Context {C C' : Category} (p : (C –≻ C')%functor).
+  Context {C C' : Category} (p : (C --> C')%functor).
 
   Section Right.
-    Context {D : Category} (F : (C –≻ D)%functor).
+    Context {D : Category} (F : (C --> D)%functor).
 
     Record LoKan_Cone : Type :=
       {
-        cone_apex : (C' –≻ D)%functor;
-        cone_edge : ((cone_apex ∘ p) –≻ F)%nattrans
+        cone_apex : (C' --> D)%functor;
+        cone_edge : ((cone_apex ∘ p) --> F)%nattrans
       }.
 
     Coercion cone_apex : LoKan_Cone >-> Functor.
@@ -86,10 +89,10 @@ Section KanExtension.
 
       Record LoKan_Cone_Morph : Type :=
         {
-          cone_morph : (Cn –≻ Cn')%nattrans;
+          cone_morph : (Cn --> Cn')%nattrans;
           cone_morph_com :
             Cn = (Cn' ∘ (cone_morph
-                           ∘_h (NatTrans_id p)))%nattrans :> (_ –≻ _)%nattrans
+                           ∘_h (NatTrans_id p)))%nattrans :> (_ --> _)%nattrans
         }.
 
       Coercion cone_morph : LoKan_Cone_Morph >-> NatTrans.
@@ -102,15 +105,15 @@ Section KanExtension.
         LRKE_morph_ex : ∀ (Cn : LoKan_Cone), LoKan_Cone_Morph Cn LRKE;
         LRKE_morph_unique :
           ∀ (Cn : LoKan_Cone)
-            (h h' : LoKan_Cone_Morph Cn LRKE), h = h' :> (_ –≻ _)%nattrans
+            (h h' : LoKan_Cone_Morph Cn LRKE), h = h' :> (_ --> _)%nattrans
       }.
 
     Coercion LRKE : Local_Right_KanExt >-> LoKan_Cone.
 
     (** The predicate form of local right kan extensions. *)
-    Record is_Local_Right_KanExt (Cn_apex : (C' –≻ D)%functor) :=
+    Record is_Local_Right_KanExt (Cn_apex : (C' --> D)%functor) :=
       {
-        isLRKE_Cn_edge : ((Cn_apex ∘ p) –≻ F)%nattrans;
+        isLRKE_Cn_edge : ((Cn_apex ∘ p) --> F)%nattrans;
         isLRKE_morph_ex : ∀ (Cn : LoKan_Cone), LoKan_Cone_Morph
                                                  Cn
                                                  {|cone_apex :=
@@ -123,12 +126,12 @@ Section KanExtension.
                                           {|cone_apex := Cn_apex;
                                             cone_edge := isLRKE_Cn_edge
                                           |}),
-            h = h' :> (_ –≻ _)%nattrans
+            h = h' :> (_ --> _)%nattrans
       }.
 
     (** The predicate from implies the compact form. *)
     Definition is_Local_Right_KanExt_Local_Right_KanExt
-               {Cn_apex : (C' –≻ D)%functor}
+               {Cn_apex : (C' --> D)%functor}
                (ilrke : is_Local_Right_KanExt Cn_apex) : Local_Right_KanExt :=
       {|
         LRKE := {|cone_apex := Cn_apex; cone_edge := @isLRKE_Cn_edge _ ilrke|};
@@ -152,7 +155,7 @@ Section KanExtension.
         isCLRKE_morph_ex : ∀ (Cn' : LoKan_Cone), LoKan_Cone_Morph Cn' Cn;
         isCLRKE_morph_unique :
           ∀ (Cn' : LoKan_Cone) (h h' : LoKan_Cone_Morph Cn' Cn),
-            h = h' :> (_ –≻ _)%nattrans
+            h = h' :> (_ --> _)%nattrans
       }.
 
     (** The predicate from implies the compact form. *)
@@ -172,25 +175,24 @@ Section KanExtension.
         isCLRKE_morph_ex := @LRKE_morph_ex lrke;
         isCLRKE_morph_unique := @LRKE_morph_unique lrke
       |}.
-    
+
   End Right.
-  
+
 End KanExtension.
 
 (** The local left kan extension is simply defined as the dual of local
     right kan extension. *)
 Section Left.
-  Context {C C' : Category} (p : (C –≻ C')%functor)
-          {D : Category} (F : (C –≻ D)%functor).
+  Context {C C' : Category} (p : (C --> C')%functor)
+          {D : Category} (F : (C --> D)%functor).
 
   Definition Local_Left_KanExt := Local_Right_KanExt (p^op) (F^op).
 
-  Definition is_Local_Left_KanExt (Cn_apex : (C' –≻ D)%functor) :=
-    is_Local_Right_KanExt (p^op) (F^op) (Cn_apex^op)
-  .
-  
+  Definition is_Local_Left_KanExt (Cn_apex : (C' --> D)%functor) :=
+    is_Local_Right_KanExt (p^op) (F^op) (Cn_apex^op).
+
 End Left.
-  
+
 Arguments cone_apex {_ _ _ _ _} _.
 Arguments cone_edge {_ _ _ _ _} _.
 Arguments LoKan_Cone_Morph {_ _ _ _ _} _ _.
@@ -210,39 +212,32 @@ Arguments LRKE_morph_unique {_ _ _ _ _} _ _ _ _.
     Note that: (Left_Functor_Extender p D) : (D^C') -> (D^C).
  *)
 Section Hom_Local_Right_KanExt.
-  Context {C C' : Category} (p : (C –≻ C')%functor)
-          {D : Category} (F : (C –≻ D)%functor).
+  Context {C C' : Category} (p : (C --> C')%functor)
+          {D : Category} (F : (C --> D)%functor).
 
-  Definition Hom_Local_Right_KanExt_Isomorphism (HLRKE : (C' –≻ D)%functor) :=
-    (
-      (
-        (@Fix_Bi_Func_2 _ (Func_Cat _ _) _ F (Hom_Func (Func_Cat C D)))
-          ∘ (Left_Functor_Extender p D)^op
-      )%functor
-       ≃
-       (
-         @Fix_Bi_Func_2 _ (Func_Cat _ _) _ HLRKE (Hom_Func (Func_Cat C' D))
-       )
-    )%natiso
-  .
-  
-  Record Hom_Local_Right_KanExt := 
+  Definition Hom_Local_Right_KanExt_Isomorphism (HLRKE : (C' --> D)%functor) :=
+    (((@Fix_Bi_Func_2 _ (Func_Cat _ _) _ F (Hom_Func (Func_Cat C D)))
+          ∘ (Left_Functor_Extender p D)^op)%functor ≃
+      (@Fix_Bi_Func_2 _ (Func_Cat _ _) _ HLRKE (Hom_Func (Func_Cat C' D))))
+      %natiso.
+
+  Record Hom_Local_Right_KanExt :=
     {
-      HLRKE : (C' –≻ D)%functor;
+      HLRKE : (C' --> D)%functor;
       HLRKE_Iso : Hom_Local_Right_KanExt_Isomorphism HLRKE
     }.
-  
+
   Coercion HLRKE : Hom_Local_Right_KanExt >-> Functor.
-  
+
 End Hom_Local_Right_KanExt.
 
 Section Hom_Local_Left_KanExt.
-  Context {C C' : Category} (p : (C –≻ C')%functor)
-          {D : Category} (F : (C –≻ D)%functor).
+  Context {C C' : Category} (p : (C --> C')%functor)
+          {D : Category} (F : (C --> D)%functor).
 
   Definition Hom_Local_Left_KanExt :=
     Hom_Local_Right_KanExt (p^op) (F^op).
-  
+
 End Hom_Local_Left_KanExt.
 
 Arguments HLRKE {_ _ _ _ _} _.

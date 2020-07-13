@@ -2,9 +2,11 @@ From Categories Require Import Essentials.Notations.
 From Categories Require Import Essentials.Types.
 From Categories Require Import Essentials.Facts_Tactics.
 From Categories Require Import Category.Main.
-From Categories Require Import Basic_Cons.CCC Basic_Cons.LCCC Basic_Cons.PullBack.
+From Categories Require Import
+     Basic_Cons.CCC Basic_Cons.LCCC Basic_Cons.PullBack.
 From Categories Require Import Ext_Cons.Comma.
-From Categories Require Import Coq_Cats.Type_Cat.Type_Cat Coq_Cats.Type_Cat.PullBack.
+From Categories Require Import
+     Coq_Cats.Type_Cat.Type_Cat Coq_Cats.Type_Cat.PullBack.
 From Categories Require Import Archetypal.Discr.Discr.
 From Categories Require Import Functor.Functor_Ops Functor.Const_Func.
 
@@ -29,16 +31,15 @@ Section CCC_Slice_A.
   (** The slice has products because Type_Cat has pullbacks. *)
   Definition Type_Cat_Slice_Prod :
     Has_Products (Slice Type_Cat A) :=
-    @Has_PullBack_Slice_Has_Prod Type_Cat Type_Cat_Has_PullBacks A
-  .
+    @Has_PullBack_Slice_Has_Prod Type_Cat Type_Cat_Has_PullBacks A.
 
   (** Here we show that slices have exponentials. *)
 
-  (** 
+  (**
 Given two arrows f : Y → A and g : Y → A, the exponential gᶠ is an arrow
 from {(z, u)| z : A, u : (f⁻¹ z) → (g⁻¹ z)} to A that maps a pair
 (z, u) to z.
-      
+
 Intuitively, exponentials are representatives of the set of morphisms between
 objects. Recall that in a slice, a morphism from f : X → A to g : Y → A is a
 morphism h : X → Y that makes the following diagram commute.
@@ -227,7 +228,9 @@ those that make the diagram commute.
       match type of H2' with
         proj1_sig (projT2 (CMH_left u x) ?w) =
         proj1_sig (projT2 (CMH_left u' x) ?w') =>
-        cutrewrite
+        let H := fresh "H" in
+        let H' := fresh "H'" in
+        assert
           (w =
            (
              match eq_sym Hp1 in _ = y return
@@ -236,8 +239,18 @@ those that make the diagram commute.
                eq_refl => v
              end
            )
-          ) in H2'; [cutrewrite (w' = v) in H2' |]
+          ) as H; [|rewrite H in H2';
+                    assert (w' = v) as H'; [| rewrite H' in H2']]
       end.
+      {
+        clear.
+        apply sig_proof_irrelevance; cbn.
+        destruct (eq_sym Hp1); trivial.
+      }
+      {
+        clear.
+        apply sig_proof_irrelevance; trivial.
+      }
       {
         apply sig_proof_irrelevance.
         etransitivity; [|apply H2'].
@@ -254,15 +267,6 @@ those that make the diagram commute.
         clear.
         destruct Hp1.
         trivial.
-      }
-      {
-        clear.
-        apply sig_proof_irrelevance; trivial.
-      }
-      {
-        clear.
-        apply sig_proof_irrelevance; cbn.
-        destruct (eq_sym Hp1); trivial.
       }
     }
   Qed.

@@ -16,19 +16,19 @@ Local Open Scope functor_scope.
 (** Definition of limits and colimits using right and left kan extensions
     along the functor to the terminal category. *)
 Section Limit.
-  Context {J C : Category} (D : J –≻ C).
+  Context {J C : Category} (D : J --> C).
 
   Definition Cone := LoKan_Cone (Functor_To_1_Cat J) D.
 
   Definition Cone_Morph Cn Cn' :=
     @LoKan_Cone_Morph _ _ (Functor_To_1_Cat J) _ D Cn Cn'.
-  
+
   Definition Limit : Type := Local_Right_KanExt (Functor_To_1_Cat J) D.
 
   Definition limit_to_cone (l : Limit) : Cone := (LRKE l).
 
   Coercion limit_to_cone : Limit >-> Cone.
-  
+
   Definition cone_to_obj (cn : Cone) : C := (cone_apex cn) _o tt.
 
   Coercion cone_to_obj : Cone >-> Obj.
@@ -41,11 +41,11 @@ Section Limit.
 
   Definition Limit_is_Limit {L : Limit} : is_Limit L :=
     Local_Right_KanExt_is_Cone_Local_Right_KanExt (Functor_To_1_Cat J) D L.
-  
+
 End Limit.
 
 (** Limits are unique up to isomorphism. *)
-Program Definition Limit_Iso {J C : Category} {D : J –≻ C} (l l' : Limit D) :
+Program Definition Limit_Iso {J C : Category} {D : J --> C} (l l' : Limit D) :
   (l ≃≃ l' ::> C)%isomorphism :=
   {|
     iso_morphism :=
@@ -75,7 +75,7 @@ Proof (
 (** Proposition stating that category C has all limits of cardinality
     specified by P *)
 Definition Has_Restr_Limits (C : Category) (P : Card_Restriction) :=
-  ∀ {J : Category} (D : J –≻ C), P J → P (Arrow J) → Limit D.
+  ∀ (J : Category) (D : J --> C), P J → P (Arrow J) → Limit D.
 
 (** A complete category has all limits – here it has global
     right kan extension *)
@@ -85,10 +85,10 @@ Definition Complete (C : Category) :=
 Existing Class Complete.
 
 (** If a category is complete, we can produce all limits. *)
-Definition LimitOf {C D : Category} {H : Complete D} (F : C –≻ D) : Limit F :=
+Definition LimitOf {C D : Category} {H : Complete D} (F : C --> D) : Limit F :=
   Global_to_Local_Right _ _ (H _) F.
 
-(** A category having restricted limitis where the restriction always holds 
+(** A category having restricted limitis where the restriction always holds
 is just complete. *)
 Section Restricted_Limits_to_Complete.
   Context {C : Category} {P : Card_Restriction} (HRL : Has_Restr_Limits C P).
@@ -102,7 +102,7 @@ End Restricted_Limits_to_Complete.
 (** A complete category has restricted limits for any restriction. *)
 Section Complete_to_Restricted_Limits.
   Context (C : Category) {CC : Complete C} (P : Card_Restriction).
-  
+
   Definition Complete_Has_Restricted_Limits : Has_Restr_Limits C P :=
     fun J D _ _ => Global_to_Local_Right _ _ (CC _) D.
 
@@ -113,16 +113,14 @@ Section Continuous.
   Context
     {C D : Category}
     (CC : Complete C)
-    (G : (C –≻ D)%functor)
-  .
+    (G : (C --> D)%functor).
 
   Section Cone_Conv.
     Context
       {J : Category}
-      {F : (J –≻ C)%functor}
-      (Cn : Cone F)
-    .
-    
+      {F : (J --> C)%functor}
+      (Cn : Cone F).
+
     Program Definition Cone_Conv : Cone (G ∘ F)%functor
       :=
         {|
@@ -131,22 +129,20 @@ Section Continuous.
           cone_edge :=
             (((NatTrans_id G)
                 ∘_h (cone_edge Cn)) ∘ (NatTrans_Functor_assoc _ _ _))%nattrans
-        |}
-    .
+        |}.
 
   End Cone_Conv.
 
   Definition Continuous :=
-    ∀ (J : Category) (F : (J –≻ C)%functor),
-      is_Cone_Local_Right_KanExt _ _ (Cone_Conv (LRKE (LimitOf F)))
-  .
+    ∀ (J : Category) (F : (J --> C)%functor),
+      is_Cone_Local_Right_KanExt _ _ (Cone_Conv (LRKE (LimitOf F))).
 
 End Continuous.
 
 (** CoLimits *)
 
 Section CoLimit.
-  Context {J C : Category} (D : J –≻ C).
+  Context {J C : Category} (D : J --> C).
 
   Definition CoCone :=
     LoKan_Cone (Functor_To_1_Cat J^op) (D^op).
@@ -172,7 +168,7 @@ End CoLimit.
 (** Proposition stating that category C has all colimits of
     cardinality specified by P *)
 Definition Has_Restr_CoLimits (C : Category) (P : Card_Restriction) :=
-  ∀ {J : Category} (D : J –≻ C), P J → P (Arrow J) → CoLimit D.
+  ∀ (J : Category) (D : J --> C), P J → P (Arrow J) → CoLimit D.
 
 (** A cocomplete category has all colimits – here it has global
     left kan extension *)
@@ -182,7 +178,7 @@ Definition CoComplete (C : Category) :=
 Existing Class CoComplete.
 
 (** If a category is cocomplete, we can produce all colimits. *)
-Definition CoLimitOf {C D : Category} {H : CoComplete D} (F : C –≻ D) :
+Definition CoLimitOf {C D : Category} {H : CoComplete D} (F : C --> D) :
   CoLimit F := Global_to_Local_Left _ _ (H _) F.
 
 (** If a category is complete, its dual is cocomplete *)
@@ -195,7 +191,7 @@ Definition CoComplete_to_Complete_Op {C : Category} {CC : CoComplete C}
   : Complete (C ^op) :=
     fun D => KanExt_Left_to_Right (Functor_To_1_Cat D ^op) C (CC (D ^op)%category).
 
-(** A category having restricted colimitis where the restriction always holds 
+(** A category having restricted colimitis where the restriction always holds
 is just cocomplete. *)
 Section Restricted_CoLimits_to_CoComplete.
   Context {C : Category} {P : Card_Restriction} (HRL : Has_Restr_CoLimits C P).
@@ -209,7 +205,7 @@ End Restricted_CoLimits_to_CoComplete.
 (** A cocomplete category has restricted colimits for any restriction. *)
 Section CoComplete_to_Restricted_CoLimits.
   Context (C : Category) {CC : CoComplete C} (P : Card_Restriction).
-  
+
   Definition CoComplete_Has_Restricted_CoLimits : Has_Restr_CoLimits C P :=
     fun J D _ _ => Global_to_Local_Left _ _ (CC _) D.
 
@@ -221,14 +217,13 @@ Definition Has_Restr_Limits_to_Has_Restr_CoLimits_Op
         (HRL : Has_Restr_Limits C P) :
   Has_Restr_CoLimits (C ^op) P :=
   (fun (D : Category)
-       (F : D –≻ C ^op)
+       (F : D --> C ^op)
        (H1 : P D)
        (H2 : P (Arrow D)) =>
      HRL
        (D ^op)%category
        (F ^op)%functor H1
-       (Card_Rest_Respect P (Arrow D) (Arrow (D^op)) (Arrow_OP_Iso D) H2)
-  ).
+       (Card_Rest_Respect P (Arrow D) (Arrow (D^op)) (Arrow_OP_Iso D) H2)).
 
 (** If a category has restricted colimits, its dual has restricted lomits *)
 Definition Has_Restr_CoLimits_to_Has_Restr_Limits_Op
@@ -237,31 +232,28 @@ Definition Has_Restr_CoLimits_to_Has_Restr_Limits_Op
         (HRL : Has_Restr_CoLimits C P) :
   Has_Restr_Limits (C ^op) P :=
   (fun (D : Category)
-       (F : D –≻ C ^op)
+       (F : D --> C ^op)
        (H1 : P D)
        (H2 : P (Arrow D)) =>
      HRL
        (D ^op)%category
        (F ^op)%functor
        H1
-       (Card_Rest_Respect P (Arrow D) (Arrow (D^op)) (Arrow_OP_Iso D) H2)
-  ).
+       (Card_Rest_Respect P (Arrow D) (Arrow (D^op)) (Arrow_OP_Iso D) H2)).
 
 (** A functor is co-continuous if it preserces all co-limits. *)
 Section CoContinuous.
   Context
     {C D : Category}
     (CC : CoComplete C)
-    (G : (C –≻ D)%functor)
-  .
+    (G : (C --> D)%functor).
 
   Section CoCone_Conv.
     Context
       {J : Category}
-      {F : (J –≻ C)%functor}
-      (Cn : CoCone F)
-    .
-    
+      {F : (J --> C)%functor}
+      (Cn : CoCone F).
+
     Program Definition CoCone_Conv : CoCone (G ∘ F)%functor
       :=
         {|
@@ -270,14 +262,12 @@ Section CoContinuous.
           cone_edge := _
                          (((NatTrans_id (G ^op)) ∘_h (cone_edge Cn))
                             ∘ (NatTrans_Functor_assoc _ _ _))%nattrans
-        |}
-    .
+        |}.
 
   End CoCone_Conv.
 
   Definition CoContinuous :=
-    ∀ (J : Category) (F : (J –≻ C)%functor),
-      is_Cone_Local_Right_KanExt _ _ (CoCone_Conv (LRKE (CoLimitOf F)))
-  .
+    ∀ (J : Category) (F : (J --> C)%functor),
+      is_Cone_Local_Right_KanExt _ _ (CoCone_Conv (LRKE (CoLimitOf F))).
 
 End CoContinuous.

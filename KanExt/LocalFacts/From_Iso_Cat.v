@@ -19,14 +19,13 @@ Section KanExt_From_Isomorphic_Cat.
   Context {C D : Category}
           (I : (C ≃≃ D ::> Cat)%isomorphism)
           {D' : Category}
-          (p : D –≻ D')
+          (p : D --> D')
           {E : Category}
-          (F : D –≻ E)
-  .
+          (F : D --> E).
 
   Section LoKan_Cone_Conv.
     Context (Cn : LoKan_Cone p F).
-    
+
     Program Definition LoKan_Cone_Conv :
       LoKan_Cone (p ∘ (iso_morphism I)) (F ∘ (iso_morphism I))
       :=
@@ -46,7 +45,7 @@ Section KanExt_From_Isomorphic_Cat.
 
   Section LoKan_Cone_Conv_back.
     Context (Cn : LoKan_Cone (p ∘ (iso_morphism I)) (F ∘ (iso_morphism I))).
-    
+
     Program Definition LoKan_Cone_Conv_back :
       LoKan_Cone p F
       :=
@@ -66,21 +65,19 @@ Section KanExt_From_Isomorphic_Cat.
                     ∘ (NatTrans_Functor_assoc_sym _ _ _)
                 )
                 ∘ IsoCat_NatTrans_back I (Cn ∘ p))%nattrans
-        |}
-    .
-      
+        |}.
+
   End LoKan_Cone_Conv_back.
 
   Section LoKan_Cone_Moprh_to_Conv_back_and_forth.
     Context (Cn : LoKan_Cone (p ∘ (iso_morphism I)) (F ∘ (iso_morphism I))).
-    
+
     Program Definition LoKan_Cone_Moprh_to_Conv_back_and_forth :
       LoKan_Cone_Morph Cn (LoKan_Cone_Conv (LoKan_Cone_Conv_back Cn))
       :=
         {|
           cone_morph := NatTrans_id Cn
-        |}
-    .
+        |}.
 
     Next Obligation.
     Proof.
@@ -100,33 +97,27 @@ Section KanExt_From_Isomorphic_Cat.
       cut (x = z).
       intros H.
       destruct H.
-      match goal with
-        [|- _ = (?A ∘ _ ∘ ?B)%morphism] =>
-        cutrewrite (A = id);
-          [cutrewrite (B = id)|]; try (apply JMeq_eq; destruct e; trivial)
-      end.
-      {
-        auto.
-      }      
-      {
-        cbn_rewrite <- (f_equal (fun u => (u _o x)%object) (left_inverse I)).
+      - match goal with
+          [|- _ = (?A ∘ _ ∘ ?B)%morphism] =>
+          assert (A = id) as ->;
+            [|assert (B = id) as ->]; try (apply JMeq_eq; destruct e; trivial)
+        end; auto.
+      - cbn_rewrite <- (f_equal (fun u => (u _o x)%object) (left_inverse I)).
         cbn_rewrite <- (f_equal (fun u => (u _o z)%object) (left_inverse I)).
         apply f_equal; trivial.
-      }
     Qed.
-      
+
   End LoKan_Cone_Moprh_to_Conv_back_and_forth.
 
   Section LoKan_Cone_Moprh_from_Conv_forth_and_back.
     Context (Cn : LoKan_Cone p F).
-    
+
     Program Definition LoKan_Cone_Moprh_from_Conv_forth_and_back :
       LoKan_Cone_Morph (LoKan_Cone_Conv_back (LoKan_Cone_Conv Cn)) Cn
       :=
         {|
           cone_morph := NatTrans_id Cn
-        |}
-    .
+        |}.
 
     Next Obligation.
     Proof.
@@ -142,19 +133,18 @@ Section KanExt_From_Isomorphic_Cat.
       end.
       auto.
     Qed.
-      
+
   End LoKan_Cone_Moprh_from_Conv_forth_and_back.
-  
+
   Section LoKan_Cone_Morph_Conv.
     Context {Cn Cn' : LoKan_Cone p F} (h : LoKan_Cone_Morph Cn Cn').
-    
+
     Program Definition LoKan_Cone_Morph_Conv :
       LoKan_Cone_Morph (LoKan_Cone_Conv Cn) (LoKan_Cone_Conv Cn')
       :=
         {|
           cone_morph := h
-        |}
-    .
+        |}.
 
     Next Obligation.
       apply NatTrans_eq_simplify.
@@ -163,22 +153,20 @@ Section KanExt_From_Isomorphic_Cat.
       simpl_ids.
       cbn_rewrite (f_equal (fun x => Trans x) (cone_morph_com h)).
       auto.
-    Qed.      
+    Qed.
 
   End LoKan_Cone_Morph_Conv.
 
   Section LoKan_Cone_Morph_Conv_back.
     Context {Cn Cn' : LoKan_Cone (p ∘ (iso_morphism I)) (F ∘ (iso_morphism I))}
-            (h : LoKan_Cone_Morph Cn Cn')
-    .
-    
+            (h : LoKan_Cone_Morph Cn Cn').
+
     Program Definition LoKan_Cone_Morph_Conv_back :
       LoKan_Cone_Morph (LoKan_Cone_Conv_back Cn) (LoKan_Cone_Conv_back Cn')
       :=
         {|
           cone_morph := h
-        |}
-    .
+        |}.
 
     Next Obligation.
       apply NatTrans_eq_simplify.
@@ -202,7 +190,7 @@ Section KanExt_From_Isomorphic_Cat.
          (?A1 ∘ ?B1 ∘ ?C1 ∘ ?D1)%morphism =
          (?A2 ∘ ?B2 ∘ ?C2 ∘ ?D2)%morphism
         ] =>
-        cutrewrite ((C1 ∘ D1)%morphism = (C2 ∘ D2)%morphism); trivial
+        assert ((C1 ∘ D1)%morphism = (C2 ∘ D2)%morphism) as ->; trivial
       end.
       destruct e; auto.
     Qed.
@@ -222,8 +210,7 @@ Section KanExt_From_Isomorphic_Cat.
             _
             (LoKan_Cone_Moprh_to_Conv_back_and_forth Cn)
             (LoKan_Cone_Morph_Conv (LRKE_morph_ex L (LoKan_Cone_Conv_back Cn)))
-    |}
-  .                   
+    |}.
 
   Next Obligation.
   Proof.

@@ -4,7 +4,8 @@ From Categories Require Import Essentials.Facts_Tactics.
 From Categories Require Import Category.Main.
 From Categories Require Import Functor.Main.
 From Categories Require Import Cat.Cat.
-From Categories Require Import Ext_Cons.Prod_Cat.Prod_Cat Ext_Cons.Prod_Cat.Operations.
+From Categories Require Import Ext_Cons.Prod_Cat.Prod_Cat
+     Ext_Cons.Prod_Cat.Operations.
 From Categories Require Import Basic_Cons.Product.
 From Categories Require Import Basic_Cons.Exponential.
 From Categories Require Import NatTrans.NatTrans NatTrans.Func_Cat.
@@ -16,7 +17,7 @@ Local Open Scope functor_scope.
 
 (** Evaluation functor. *)
 Program Definition Exp_Cat_Eval (C C' : Category) :
-  ((Func_Cat C C') × C) –≻ C' :=
+  ((Func_Cat C C') × C) --> C' :=
 {|
   FO := fun x => ((fst x) _o (snd x))%object;
   FA := fun A B f => (((fst B) _a (snd f)) ∘ (@Trans _ _ _ _ (fst f) _))%morphism
@@ -27,11 +28,11 @@ Proof.
   repeat rewrite F_compose.
   repeat rewrite assoc.
   match goal with
-      [|- (?A ∘ ?B = ?A ∘ ?C)%morphism] => cutrewrite (B = C); trivial
+      [|- (?A ∘ ?B = ?A ∘ ?C)%morphism] => assert (B = C) as ->; trivial
   end.
   repeat rewrite assoc_sym.
   match goal with
-      [|- (?A ∘ ?B = ?C ∘ ?B)%morphism] => cutrewrite (A = C); trivial
+      [|- (?A ∘ ?B = ?C ∘ ?B)%morphism] => assert (A = C) as ->; trivial
   end.
   rewrite Trans_com; trivial.
 Qed.
@@ -40,24 +41,24 @@ Qed.
 
 (** The arrow map of curry functor. *)
 Program Definition Exp_Cat_morph_ex_A
-        {C C' C'' : Category} (F : (C'' × C) –≻  C')
-        (a b : C'') (h : (a –≻ b)%morphism)
+        {C C' C'' : Category} (F : (C'' × C) -->  C')
+        (a b : C'') (h : (a --> b)%morphism)
   :
-    ((Fix_Bi_Func_1 a F) –≻ (Fix_Bi_Func_1 b F))%nattrans :=
+    ((Fix_Bi_Func_1 a F) --> (Fix_Bi_Func_1 b F))%nattrans :=
 {|
   Trans := fun c => (F _a (h, id _ c))%morphism
 |}.
 
 (* Exp_Cat_morph_ex_A defined *)
 
-Local Hint Extern 1 => apply NatTrans_eq_simplify; cbn.
+Local Hint Extern 1 => apply NatTrans_eq_simplify; cbn : core.
 
 (** The curry functor. *)
 Program Definition Exp_Cat_morph_ex
         {C C' C'' : Category}
-        (F : (C'' × C) –≻ C')
+        (F : (C'' × C) --> C')
   :
-    C'' –≻ (Func_Cat C C') :=
+    C'' --> (Func_Cat C C') :=
 {|
   FO := fun a => Fix_Bi_Func_1 a F;
   FA := Exp_Cat_morph_ex_A F
@@ -66,7 +67,7 @@ Program Definition Exp_Cat_morph_ex
 (** Proof that currying after uncurrying gives back the same functor. *)
 Lemma Exp_cat_morph_ex_eval_id
       {C C' C'' : Category}
-      (u : C'' –≻ (Func_Cat C C'))
+      (u : C'' --> (Func_Cat C C'))
   :
     (u =
      Exp_Cat_morph_ex

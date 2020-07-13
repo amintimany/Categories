@@ -65,46 +65,38 @@ Ltac PIR :=
 (** A tactic to eliminate equalities in the context. *)
 Ltac ElimEq := repeat match goal with [H : _ = _|- _] => destruct H end.
 
-Hint Extern 1 => progress ElimEq.
+Hint Extern 1 => progress ElimEq : core.
 
 (** A tactic to simplify terms before rewriting them. *)
 
 Ltac cbn_rewrite W :=
-  let H := fresh "H" in
-  set (H := W); cbn in H; rewrite H; clear H
-.
+  let H := fresh "H" in set (H := W); cbn in H; rewrite H; clear H.
 
 Ltac cbn_rewrite_in W V :=
-  let H := fresh "H" in
-  set (H := W); cbn in H; rewrite H in V; clear H
-.
+  let H := fresh "H" in set (H := W); cbn in H; rewrite H in V; clear H.
 
 Ltac cbn_rewrite_back W :=
-  let H := fresh "H" in
-  set (H := W); cbn in H; rewrite <- H; clear H
-.
+  let H := fresh "H" in set (H := W); cbn in H; rewrite <- H; clear H.
 
 Ltac cbn_rewrite_back_in W V :=
-  let H := fresh "H" in
-  set (H := W); cbn in H; rewrite <- H in V; clear H
-.
+  let H := fresh "H" in set (H := W); cbn in H; rewrite <- H in V; clear H.
 
 Tactic Notation "cbn_rewrite" constr(W) := cbn_rewrite W.
 Tactic Notation "cbn_rewrite" constr(W) "in" hyp_list(V) := cbn_rewrite_in W V.
 Tactic Notation "cbn_rewrite" "<-" constr(W) := cbn_rewrite_back W.
-Tactic Notation "cbn_rewrite" "<-" constr(W) "in" hyp_list(V) := cbn_rewrite_back_in W V.
+Tactic Notation "cbn_rewrite" "<-" constr(W) "in" hyp_list(V) :=
+  cbn_rewrite_back_in W V.
 
 (** Equality on sigma type under proof irrelevance *)
 
-Lemma sig_proof_irrelevance {A : Type} (P : A → Prop) (X Y : sig P) : proj1_sig X = proj1_sig Y → X = Y.
+Lemma sig_proof_irrelevance {A : Type} (P : A → Prop) (X Y : sig P) :
+  proj1_sig X = proj1_sig Y → X = Y.
 Proof.
-  basic_simpl.
-  ElimEq.
-  PIR.
-  trivial.
+  basic_simpl; ElimEq; PIR; trivial.
 Qed.
 
-Hint Extern 2 (exist ?A _ _ = exist ?A _ _) => apply sig_proof_irrelevance.
+Hint Extern 2 (exist ?A _ _ = exist ?A _ _) =>
+  apply sig_proof_irrelevance : core.
 
 (* Automating use of functional_extensionality *)
 Ltac FunExt :=
@@ -119,7 +111,7 @@ progress (
   )
 .
 
-Hint Extern 1 => FunExt.
+Hint Extern 1 => FunExt : core.
 
 Lemma pair_eq (A B : Type) (a b : A * B) : fst a = fst b → snd a = snd b → a = b.
 Proof.
@@ -130,7 +122,7 @@ Proof.
   trivial.
 Qed.
 
-Hint Resolve pair_eq.
+Hint Resolve pair_eq : core.
 
 (** Tactics to apply a tactic to all hypothesis in an efficient way.
 This is due to Jonathan's (jonikelee@gmail.com) message on coq-club *)

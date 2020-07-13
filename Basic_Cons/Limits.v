@@ -6,13 +6,7 @@ From Categories Require Import Functor.Main.
 From Categories Require Import Limits.Limit.
 From Categories Require Import Archetypal.Discr.Discr.
 From Categories Require Import Cat.Terminal.
-From Categories Require Import
-        Basic_Cons.Terminal
-        Basic_Cons.Product
-        Basic_Cons.Equalizer
-        Basic_Cons.PullBack
-.
-        
+From Categories.Basic_Cons Require Import Terminal Product Equalizer PullBack.
 
 (** In this module we show that terminal objects, products, equalizers and
     pullbacks are limits. The corresponding duals are dually colimits. *)
@@ -25,9 +19,8 @@ Section Limits.
     Definition Terminal_Producing_Func_fun (x : Empty) : C
       :=
         match x with
-        end
-    .
-    
+        end.
+
     Context (L : Limit (Discr_Func Terminal_Producing_Func_fun)).
 
     Program Definition Terminal_as_Limit_Cone
@@ -52,16 +45,16 @@ Section Limits.
     .
 
 
-    Local Hint Extern 1 => match goal with [x : unit |- _] => destruct x end.
-    Local Hint Extern 1 => rewrite From_Term_Cat.
-    Local Hint Extern 1 => apply NatTrans_eq_simplify.
-    Local Hint Extern 1 => progress cbn.
-    
+    Local Hint Extern 1 => match goal with [x : unit |- _] => destruct x end : core.
+    Local Hint Extern 1 => rewrite From_Term_Cat : core.
+    Local Hint Extern 1 => apply NatTrans_eq_simplify : core.
+    Local Hint Extern 1 => progress cbn : core.
+
     Local Obligation Tactic := basic_simpl; auto 10.
 
     Program Definition Terminal_as_Limit_Cone_morph
             {c : C}
-            (f : (c –≻ L)%morphism)
+            (f : (c --> L)%morphism)
       :
         Cone_Morph _ (Terminal_as_Limit_Cone c) (LRKE L)
       :=
@@ -70,13 +63,12 @@ Section Limits.
             {|
               Trans :=
                 fun c =>
-                  match c as u return ( _ –≻ L _o u)%object%morphism with
+                  match c as u return ( _ --> L _o u)%object%morphism with
                     tt => f
                   end
             |}
-        |}
-    .      
-      
+        |}.
+
     Program Definition Terminal_as_Limit : (𝟙_ C)%object :=
       {|
         terminal := L;
@@ -87,13 +79,13 @@ Section Limits.
     .
 
     Local Obligation Tactic := idtac.
-    
+
     Next Obligation.
-    Proof.    
+    Proof.
       intros c f g.
       apply (
           f_equal
-            (fun w : (Terminal_as_Limit_Cone c –≻ L)%nattrans => Trans w tt)
+            (fun w : (Terminal_as_Limit_Cone c --> L)%nattrans => Trans w tt)
             (
               LRKE_morph_unique
                 L
@@ -105,24 +97,22 @@ Section Limits.
     Qed.
 
   End Terminal.
-  
+
   Section Product.
     Context (a b : C).
 
-    Definition Product_Producing_Func_fun (x : bool) : C
-      :=
-        match x with
-        | true => a
-        | false => b
-        end
-    .
-    
+    Definition Product_Producing_Func_fun (x : bool) : C :=
+      match x with
+      | true => a
+      | false => b
+      end.
+
     Context (L : Limit (Discr_Func Product_Producing_Func_fun)).
 
     Program Definition Product_as_Limit_Cone
             {p : C}
-            (h : (p –≻ a)%morphism)
-            (h' : (p –≻ b)%morphism)
+            (h : (p --> a)%morphism)
+            (h' : (p --> b)%morphism)
       :
         Cone (Discr_Func Product_Producing_Func_fun)
       :=
@@ -141,23 +131,22 @@ Section Limits.
                   | false => h'
                   end
             |}
-        |}
-    .
+        |}.
 
-    Local Hint Extern 1 => match goal with [x : unit |- _] => destruct x end.
-    Local Hint Extern 1 => match goal with [x : bool |- _] => destruct x end.
-    Local Hint Extern 1 => rewrite From_Term_Cat.
-    Local Hint Extern 1 => apply NatTrans_eq_simplify.
-    Local Hint Extern 1 => progress cbn.
-    
+    Local Hint Extern 1 => match goal with [x : unit |- _] => destruct x end : core.
+    Local Hint Extern 1 => match goal with [x : bool |- _] => destruct x end : core.
+    Local Hint Extern 1 => rewrite From_Term_Cat : core.
+    Local Hint Extern 1 => apply NatTrans_eq_simplify : core.
+    Local Hint Extern 1 => progress cbn : core.
+
 
     Local Obligation Tactic := basic_simpl; auto 10.
-    
+
     Program Definition Product_as_Limit_Cone_morph
             {p : C}
-            (h : (p –≻ a)%morphism)
-            (h' : (p –≻ b)%morphism)
-            (f : (p –≻ L)%morphism)
+            (h : (p --> a)%morphism)
+            (h' : (p --> b)%morphism)
+            (f : (p --> L)%morphism)
             (H1 : (Trans L true ∘ f)%morphism = h)
             (H2 : (Trans L false ∘ f)%morphism = h')
       :
@@ -168,13 +157,12 @@ Section Limits.
             {|
               Trans :=
                 fun c =>
-                  match c as u return ( _ –≻ L _o u)%object%morphism with
+                  match c as u return ( _ --> L _o u)%object%morphism with
                     tt => f
                   end
             |}
-        |}
-    .
-    
+        |}.
+
     Program Definition Product_as_Limit : (a × b)%object :=
       {|
         product := L;
@@ -183,8 +171,7 @@ Section Limits.
         Prod_morph_ex :=
           fun p h h' =>
             Trans (LRKE_morph_ex L (Product_as_Limit_Cone h h')) tt
-      |}
-    .
+      |}.
 
     Local Obligation Tactic := idtac.
 
@@ -198,7 +185,7 @@ Section Limits.
                     :
                       (Product_as_Limit_Cone h h'
                  ∘ Functor_To_1_Cat (Discr_Cat Datatypes.bool)
-                 –≻ Discr_Func Product_Producing_Func_fun)%nattrans
+                 --> Discr_Func Product_Producing_Func_fun)%nattrans
                 => Trans w true)
                (cone_morph_com (LRKE_morph_ex L (Product_as_Limit_Cone h h')))
           ).
@@ -216,7 +203,7 @@ Section Limits.
                     :
                       ((Product_as_Limit_Cone h h')
                          ∘ Functor_To_1_Cat (Discr_Cat Datatypes.bool)
-                         –≻ Discr_Func Product_Producing_Func_fun)%nattrans
+                         --> Discr_Func Product_Producing_Func_fun)%nattrans
                 => Trans w false)
                (cone_morph_com (LRKE_morph_ex L (Product_as_Limit_Cone h h')))
           ).
@@ -224,13 +211,13 @@ Section Limits.
       rewrite From_Term_Cat in H.
       auto.
     Qed.
-    
+
     Next Obligation.
-    Proof.    
+    Proof.
       intros p h h' f g H1 H2 H3 H4.
       apply (
           f_equal
-            (fun w : (Product_as_Limit_Cone h h' –≻ L)%nattrans => Trans w tt)
+            (fun w : (Product_as_Limit_Cone h h' --> L)%nattrans => Trans w tt)
             (
               LRKE_morph_unique
                 L
@@ -244,18 +231,17 @@ Section Limits.
   End Product.
 
   Section Equalizer.
-    Context {a b : C} (f g : (a –≻ b)%morphism).
+    Context {a b : C} (f g : (a --> b)%morphism).
 
-    Local Hint Extern 1 => match goal with [x : unit |- _] => destruct x end.
-    Local Hint Extern 1 => match goal with [x : Empty |- _] => destruct x end.
-    Local Hint Extern 1 => match goal with [x : bool |- _] => destruct x end.
-    Local Hint Extern 1 => rewrite From_Term_Cat.
-    Local Hint Extern 1 => apply NatTrans_eq_simplify.
-    Local Hint Extern 1 => progress cbn.
-    
+    Local Hint Extern 1 => match goal with [x : unit |- _] => destruct x end : core.
+    Local Hint Extern 1 => match goal with [x : Empty |- _] => destruct x end : core.
+    Local Hint Extern 1 => match goal with [x : bool |- _] => destruct x end : core.
+    Local Hint Extern 1 => rewrite From_Term_Cat : core.
+    Local Hint Extern 1 => apply NatTrans_eq_simplify : core.
+    Local Hint Extern 1 => progress cbn : core.
 
     Local Obligation Tactic := basic_simpl; auto 10.
-    
+
     Program Definition Equalizer_Producing_Cat : Category
       :=
         {|
@@ -271,8 +257,7 @@ Section Limits.
           compose :=
             fun x y z h h'=> _;
           id := fun x => _
-        |}
-    .
+        |}.
 
     Next Obligation.
     Proof.
@@ -280,12 +265,12 @@ Section Limits.
     Defined.
 
     Next Obligation.
-    Proof.    
+    Proof.
       destruct x; constructor.
     Defined.
 
     Program Definition Equalizer_Producing_Func :
-      (Equalizer_Producing_Cat –≻ C)%functor
+      (Equalizer_Producing_Cat --> C)%functor
       :=
         {|
           FO :=
@@ -295,9 +280,7 @@ Section Limits.
               | false => b
               end;
           FA := fun x y h => _
-        |}
-    .
-
+        |}.
     Next Obligation.
     Proof.
       destruct x; destruct y.
@@ -312,12 +295,12 @@ Section Limits.
       destruct h.
       exact id.
     Defined.
-    
+
     Context (L : Limit Equalizer_Producing_Func).
-    
+
     Program Definition Equalizer_as_Limit_Cone
             {p : C}
-            {h : (p –≻ a)%morphism}
+            {h : (p --> a)%morphism}
             (H : (f ∘ h)%morphism = (g ∘ h)%morphism)
       :
         Cone Equalizer_Producing_Func
@@ -337,16 +320,15 @@ Section Limits.
                   | false => (f ∘ h)%morphism
                   end
             |}
-        |}
-    .
+        |}.
 
     Local Obligation Tactic := idtac.
 
     Program Definition Equalizer_as_Limit_Cone_morph
             {p : C}
-            {h : (p –≻ a)%morphism}
+            {h : (p --> a)%morphism}
             (H1 : (f ∘ h)%morphism = (g ∘ h)%morphism)
-            (k : (p –≻ L)%morphism)
+            (k : (p --> L)%morphism)
             (H2 : (Trans L true ∘ k)%morphism = h)
       :
         Cone_Morph _ (Equalizer_as_Limit_Cone H1) (LRKE L)
@@ -356,23 +338,19 @@ Section Limits.
             {|
               Trans :=
                 fun c =>
-                  match c as u return ( _ –≻ L _o u)%object%morphism with
+                  match c as u return ( _ --> L _o u)%object%morphism with
                     tt => k
                   end
             |}
-        |}
-    .      
-
+        |}.
     Next Obligation.
     Proof.
       basic_simpl; auto 10.
     Qed.
-
     Next Obligation.
     Proof.
       basic_simpl; auto 10.
     Qed.
-      
     Next Obligation.
     Proof.
       intros p h H1 k H2.
@@ -386,7 +364,7 @@ Section Limits.
       rewrite H1; rewrite <- H2.
       trivial.
     Qed.
-      
+
     Program Definition Equalizer_as_Limit : Equalizer f g :=
       {|
         equalizer := L;
@@ -415,7 +393,7 @@ Section Limits.
             (fun w :
                    ((Equalizer_as_Limit_Cone eqmc)
                       ∘ Functor_To_1_Cat Equalizer_Producing_Cat
-                      –≻ Equalizer_Producing_Func)%nattrans
+                      --> Equalizer_Producing_Func)%nattrans
              => Trans w true)
             (cone_morph_com (LRKE_morph_ex L (Equalizer_as_Limit_Cone eqmc)))
         ).
@@ -427,7 +405,7 @@ Section Limits.
       intros e eqm H1 h h' H2 H3.
       apply (
           f_equal
-            (fun w : (Equalizer_as_Limit_Cone H1 –≻ L)%nattrans => Trans w tt)
+            (fun w : (Equalizer_as_Limit_Cone H1 --> L)%nattrans => Trans w tt)
             (
               LRKE_morph_unique
                 L
@@ -443,27 +421,25 @@ Section Limits.
   Section PullBack.
     Context
       {a b c : C}
-      (f : (a –≻ c)%morphism)
-      (g : (b –≻ c)%morphism)
-    .
-    
+      (f : (a --> c)%morphism)
+      (g : (b --> c)%morphism).
+
     Inductive PBType :=
     | PB_A
     | PB_B
-    | PB_C
-    .
-      
-    Local Hint Extern 1 => match goal with [x : unit |- _] => destruct x end.
-    Local Hint Extern 1 => match goal with [x : PBType |- _] => destruct x end.
-    Local Hint Extern 1 => match goal with [x : Empty |- _] => destruct x end.
-    Local Hint Extern 1 => match goal with [x : bool |- _] => destruct x end.
-    Local Hint Extern 1 => match goal with [|- unit] => constructor end.
-    Local Hint Extern 1 => rewrite From_Term_Cat.
-    Local Hint Extern 1 => apply NatTrans_eq_simplify.
-    Local Hint Extern 1 => progress cbn.
-    
+    | PB_C.
+
+    Local Hint Extern 1 => match goal with [x : unit |- _] => destruct x end : core.
+    Local Hint Extern 1 => match goal with [x : PBType |- _] => destruct x end : core.
+    Local Hint Extern 1 => match goal with [x : Empty |- _] => destruct x end : core.
+    Local Hint Extern 1 => match goal with [x : bool |- _] => destruct x end : core.
+    Local Hint Extern 1 => match goal with [|- unit] => constructor end : core.
+    Local Hint Extern 1 => rewrite From_Term_Cat : core.
+    Local Hint Extern 1 => apply NatTrans_eq_simplify : core.
+    Local Hint Extern 1 => progress cbn : core.
+
     Local Obligation Tactic := basic_simpl; auto 10.
-    
+
     Program Definition PullBack_Producing_Cat : Category
       :=
         {|
@@ -484,11 +460,10 @@ Section Limits.
           compose :=
             fun x y z h h'=> _;
           id := fun x => _
-        |}
-    .
+        |}.
 
     Program Definition PullBack_Producing_Func :
-      (PullBack_Producing_Cat –≻ C)%functor
+      (PullBack_Producing_Cat --> C)%functor
       :=
         {|
           FO :=
@@ -499,20 +474,19 @@ Section Limits.
               | PB_C => c
               end;
           FA := fun x y h => _
-        |}
-    .
+        |}.
 
     Next Obligation.
     Proof.
       destruct x; destruct y; auto; try exact id.
     Defined.
-    
+
     Context (L : Limit PullBack_Producing_Func).
-    
+
     Program Definition PullBack_as_Limit_Cone
             {p : C}
-            {h : (p –≻ a)%morphism}
-            {h' : (p –≻ b)%morphism}
+            {h : (p --> a)%morphism}
+            {h' : (p --> b)%morphism}
             (H : (f ∘ h)%morphism = (g ∘ h')%morphism)
       :
         Cone PullBack_Producing_Func
@@ -541,10 +515,10 @@ Section Limits.
 
     Program Definition PullBack_as_Limit_Cone_morph
             {p : C}
-            {h : (p –≻ a)%morphism}
-            {h' : (p –≻ b)%morphism}
+            {h : (p --> a)%morphism}
+            {h' : (p --> b)%morphism}
             (H1 : (f ∘ h)%morphism = (g ∘ h')%morphism)
-            (k : (p –≻ L)%morphism)
+            (k : (p --> L)%morphism)
             (H2 : (Trans L PB_A ∘ k)%morphism = h)
             (H3 : (Trans L PB_B ∘ k)%morphism = h')
       :
@@ -555,23 +529,20 @@ Section Limits.
             {|
               Trans :=
                 fun c =>
-                  match c as u return ( _ –≻ L _o u)%object%morphism with
+                  match c as u return ( _ --> L _o u)%object%morphism with
                     tt => k
                   end
             |}
-        |}
-    .      
-
+        |}.
+    Next Obligation.
+    Proof.
+      basic_simpl; auto 10.
+    Qed.
     Next Obligation.
     Proof.
       basic_simpl; auto 10.
     Qed.
 
-    Next Obligation.
-    Proof.
-      basic_simpl; auto 10.
-    Qed.
-      
     Next Obligation.
     Proof.
       intros p h h' H1 k H2 H3.
@@ -585,7 +556,9 @@ Section Limits.
       rewrite H1; rewrite <- H3.
       trivial.
     Qed.
-    
+
+    Local Obligation Tactic := idtac.
+
     Program Definition PullBack_as_Limit : PullBack f g :=
       {|
         pullback := L;
@@ -594,11 +567,7 @@ Section Limits.
         pullback_morph_ex :=
           fun e pm1 pm2 pmc =>
             Trans (LRKE_morph_ex L (PullBack_as_Limit_Cone pmc)) tt
-      |}
-    .
-
-    Local Obligation Tactic := idtac.
-
+      |}.
     Next Obligation.
     Proof.
       set (H := @Trans_com _ _ _ _ L PB_B PB_C tt).
@@ -606,7 +575,6 @@ Section Limits.
       cbn_rewrite (@Trans_com _ _ _ _ L PB_A PB_C tt) in H.
       trivial.
     Qed.
-
     Next Obligation.
     Proof.
       intros e pm1 pm2 pmc; cbn.
@@ -615,7 +583,7 @@ Section Limits.
             (fun w :
                    ((PullBack_as_Limit_Cone pmc)
                       ∘ Functor_To_1_Cat PullBack_Producing_Cat
-                      –≻ PullBack_Producing_Func)%nattrans
+                      --> PullBack_Producing_Func)%nattrans
              => Trans w PB_A)
             (cone_morph_com (LRKE_morph_ex L (PullBack_as_Limit_Cone pmc)))
         ).
@@ -630,19 +598,18 @@ Section Limits.
             (fun w :
                    ((PullBack_as_Limit_Cone pmc)
                       ∘ Functor_To_1_Cat PullBack_Producing_Cat
-                      –≻ PullBack_Producing_Func)%nattrans
+                      --> PullBack_Producing_Func)%nattrans
              => Trans w PB_B)
             (cone_morph_com (LRKE_morph_ex L (PullBack_as_Limit_Cone pmc)))
         ).
       auto.
     Qed.
-    
     Next Obligation.
     Proof.
       intros e pm1 pm2 H1 h h' H2 H3 H4 H5.
       apply (
           f_equal
-            (fun w : (PullBack_as_Limit_Cone H1 –≻ L)%nattrans => Trans w tt)
+            (fun w : (PullBack_as_Limit_Cone H1 --> L)%nattrans => Trans w tt)
             (
               LRKE_morph_unique
                 L

@@ -12,7 +12,7 @@ Section Arrow.
     {
       Orig : Obj;
       Targ : Obj;
-      Arr : Orig –≻ Targ
+      Arr : Orig --> Targ
     }.
 
   Arguments Orig {_} _.
@@ -39,8 +39,8 @@ h1 |              | h2
  *)
   Record Arrow_Hom {C : Category} (a b : Arrow C) :=
     {
-      Arr_H : (Orig a) –≻ (Orig b);
-      Arr_H' : (Targ a) –≻ (Targ b);
+      Arr_H : (Orig a) --> (Orig b);
+      Arr_H' : (Targ a) --> (Targ b);
       Arr_Hom_com : Arr_H' ∘ (Arr a) = (Arr b) ∘ Arr_H
     }.
   Arguments Arr_H {_ _ _} _.
@@ -55,7 +55,8 @@ h1 |              | h2
     (** Two arrow homomorphisms are equal if the arrows between theor domains
         and codomain are respectively equal. In other words, we don't care about
         the proof of the diagram commuting. *)
-    Lemma Arrow_Hom_eq_simplify : Arr_H f = Arr_H g → Arr_H' f = Arr_H' g → f = g.
+    Lemma Arrow_Hom_eq_simplify :
+      Arr_H f = Arr_H g → Arr_H' f = Arr_H' g → f = g.
     Proof.
       destruct f; destruct g.
       basic_simpl.
@@ -131,7 +132,8 @@ which is trivial.
 
 End Arrow.
 
-Hint Extern 1 (?A = ?B :> Arrow_Hom _ _) => apply Arrow_Hom_eq_simplify; simpl.
+Hint Extern 1 (?A = ?B :> Arrow_Hom _ _) =>
+  apply Arrow_Hom_eq_simplify; simpl : core.
 
 Arguments Orig {_} _.
 Arguments Targ {_} _.
@@ -141,7 +143,7 @@ Arguments Arr_H {_ _ _} _.
 Arguments Arr_H' {_ _ _} _.
 Arguments Arr_Hom_com {_ _ _} _.
 
-(** an arrow in a category is also an arrow in the opposite category. 
+(** an arrow in a category is also an arrow in the opposite category.
     The domain and codomain are simply swapped. *)
 Program Definition Arrow_to_Arrow_OP (C : Category) (ar : Arrow C) :
   Arrow (C ^op) :=

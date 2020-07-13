@@ -7,7 +7,7 @@ From Categories Require Import Adjunction.Adjunction Adjunction.Duality.
 From Categories Require Import NatTrans.NatTrans.
 
 Local Open Scope functor_scope.
-(** Adjunctions form a category Adj where objects are categories and an arrow 
+(** Adjunctions form a category Adj where objects are categories and an arrow
     from C to D is a pair of adjoint funtors F : C → D : G. *)
 Section Adjunct_Id.
   Context (C : Category).
@@ -18,12 +18,12 @@ Section Adjunct_Id.
     |}.
 
 End Adjunct_Id.
-  
+
 Section Adjunct_Compose.
   Context {C D E : Category}
-          {F : C –≻ D} {G : D –≻ C} (adj : F ⊣ G)
-          {F' : D –≻ E} {G' : E –≻ D} (adj' : F' ⊣ G').
-  
+          {F : C --> D} {G : D --> C} (adj : F ⊣ G)
+          {F' : D --> E} {G' : E --> D} (adj' : F' ⊣ G').
+
   Program Definition Adjunct_Compose : ((F' ∘ F) ⊣ (G ∘ G')) :=
     {|
       adj_unit :=
@@ -42,13 +42,13 @@ Section Adjunct_Compose.
       cbn in W; rewrite F_compose in W; rewrite W.
     repeat rewrite F_compose.
     auto.
-  Qed.    
+  Qed.
 
   Next Obligation.
   Proof.
     symmetry.
     apply Adjunct_Compose_obligation_1.
-  Qed.    
+  Qed.
 
   Next Obligation.
   Proof.
@@ -57,10 +57,10 @@ Section Adjunct_Compose.
                       (adj_morph_com adj' (adj_morph_ex adj f)));
       rewrite F_compose in W; cbn in W; rewrite <- W; clear W.
     apply (adj_morph_com adj f).
-  Qed.    
+  Qed.
 
   Local Obligation Tactic := idtac.
-  
+
   Next Obligation.
   Proof.
     intros c d f g h H1 H2.
@@ -79,10 +79,10 @@ End Adjunct_Compose.
 
 Section Adjunct_Compose_assoc.
   Context {B C D E : Category}
-          {F : B –≻ C} {G : C –≻ B} (adj : F ⊣ G)
-          {F' : C –≻ D} {G' : D –≻ C} (adj' : F' ⊣ G')
-          {F'' : D –≻ E} {G'' : E –≻ D} (adj'' : F'' ⊣ G'').
-  
+          {F : B --> C} {G : C --> B} (adj : F ⊣ G)
+          {F' : C --> D} {G' : D --> C} (adj' : F' ⊣ G')
+          {F'' : D --> E} {G'' : E --> D} (adj'' : F'' ⊣ G'').
+
   Theorem Adjunct_Compose_assoc :
     match (Functor_assoc F F' F'') in _ = Y return Adjunct Y _ with
       eq_refl =>
@@ -119,8 +119,8 @@ End Adjunct_Compose_assoc.
 
 Section Adjunct_Id_unit_left.
   Context {B C: Category}
-          {F : B –≻ C} {G : C –≻ B} (adj : F ⊣ G).
-  
+          {F : B --> C} {G : C --> B} (adj : F ⊣ G).
+
   Theorem Adjunct_Id_unit_left :
     match (Functor_id_unit_left _ _ F) in _ = Y return Adjunct Y _ with
       eq_refl =>
@@ -128,7 +128,7 @@ Section Adjunct_Id_unit_left.
         eq_refl =>
         Adjunct_Compose adj (Adjunct_Id C)
       end
-    end 
+    end
     = adj.
   Proof.
     apply Adjunct_eq_simplify.
@@ -155,8 +155,8 @@ End Adjunct_Id_unit_left.
 
 Section Adjunct_Id_unit_right.
   Context {B C: Category}
-          {F : B –≻ C} {G : C –≻ B} (adj : F ⊣ G).
-  
+          {F : B --> C} {G : C --> B} (adj : F ⊣ G).
+
   Theorem Adjunct_Id_unit_right :
     match (Functor_id_unit_right _ _ F) in _ = Y return Adjunct Y _ with
       eq_refl =>
@@ -164,7 +164,7 @@ Section Adjunct_Id_unit_right.
         eq_refl =>
         Adjunct_Compose (Adjunct_Id B) adj
       end
-    end 
+    end
     = adj.
   Proof.
     apply Adjunct_eq_simplify.
@@ -190,12 +190,11 @@ Section Adjunct_Id_unit_right.
 End Adjunct_Id_unit_right.
 
 Definition Adjunct_Between (C D : Category) : Type :=
-  {F : (C –≻ D) * (D –≻ C) & (fst F) ⊣ (snd F)}
-.
+  {F : (C --> D) * (D --> C) & (fst F) ⊣ (snd F)}.
 
 Definition Adjunct_Between_Id (C : Category) : Adjunct_Between C C :=
   existT _ (Functor_id C, Functor_id C) (Adjunct_Id C).
-  
+
 Section Adjunct_Between_Compose.
   Context {C D E : Category}
           (adj : Adjunct_Between C D)
@@ -225,14 +224,14 @@ Proof.
   clear H'.
   destruct H.
   trivial.
-Qed.  
-                      
+Qed.
+
 Section Adjunct_Between_Compose_assoc.
   Context {B C D E : Category}
            (adj : Adjunct_Between B C)
            (adj' : Adjunct_Between C D)
            (adj'' : Adjunct_Between D E).
-  
+
   Theorem Adjunct_Between_Compose_assoc :
     Adjunct_Between_Compose adj (Adjunct_Between_Compose adj' adj'') =
     Adjunct_Between_Compose (Adjunct_Between_Compose adj adj') adj''.
@@ -272,7 +271,7 @@ End Adjunct_Between_Compose_assoc.
 Section Adjunct_Between_Id_unit_left.
   Context {B C: Category}
           (adj : Adjunct_Between B C).
-  
+
   Theorem Adjunct_Between_Id_unit_left :
     Adjunct_Between_Compose adj (Adjunct_Between_Id C) = adj.
   Proof.
@@ -311,7 +310,7 @@ End Adjunct_Between_Id_unit_left.
 Section Adjunct_Between_Id_unit_right.
   Context {B C: Category}
           (adj : Adjunct_Between B C).
-  
+
   Theorem Adjunct_Between_Id_unit_right :
     Adjunct_Between_Compose (Adjunct_Between_Id B) adj = adj.
   Proof.

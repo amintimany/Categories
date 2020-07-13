@@ -38,7 +38,7 @@ Section Monic_Iso_Monic_Factorization.
     destruct (g x) as [gx Hgx]; destruct (h x) as [hx Hhx].
     cbn in *.
     destruct H'.
-    cutrewrite (Hgx = Hhx); trivial.
+    assert (Hgx = Hhx) as ->; trivial.
     apply sig_proof_irrelevance.
     destruct Hgx as [y Hy]; destruct Hhx as [z Hz].
     cbn in *.

@@ -31,7 +31,7 @@ Section PreSheaf_Monic_components_Monic.
   Section PMCM_PreSheaf_representing_d.
     Context (c : C) (d : Type).
 
-    Local Hint Extern 1 => progress cbn.
+    Local Hint Extern 1 => progress cbn : core.
 
     Program Definition PMCM_PreSheaf_representing_d : PreSheaf C
       :=
@@ -47,16 +47,14 @@ Section PreSheaf_Monic_components_Monic.
   Context
     {G : PreSheaf C}
     (N : @Monic (PShCat C) F G)
-    (c : C)
-  .
-    
+    (c : C).
+
   Section PreSheaf_Monic_components_Monic_is_Monic.
     Context
       (d : Type)
       (g h : d → (F _o)%object c)
       (H : (fun x => Trans (mono_morphism N) c (g x))
-           = (fun x => Trans (mono_morphism N) c (h x)))
-    .
+           = (fun x => Trans (mono_morphism N) c (h x))).
 
 (*    Local Hint Extern 1 => progress cbn.*)
 
@@ -64,16 +62,15 @@ Section PreSheaf_Monic_components_Monic.
     match goal with
       [|- context [(F _a)%morphism (?A ∘ ?B)%morphism] ] =>
       cbn_rewrite (F_compose F A B)
-    end.
-    
+    end : core.
+
     Program Definition PMCM_PreSheaf_morph_of_function
             (f : d → (F _o)%object c)
-      : (PMCM_PreSheaf_representing_d c d –≻ F)%nattrans
+      : (PMCM_PreSheaf_representing_d c d --> F)%nattrans
       :=
         {|
           Trans := fun o x => (F _a (fst x))%morphism (f (snd x))
-        |}
-    .
+        |}.
 
     Theorem PMCM_N_co_equalizes :
       ((mono_morphism N) ∘ (PMCM_PreSheaf_morph_of_function g))%nattrans
@@ -89,14 +86,14 @@ Section PreSheaf_Monic_components_Monic.
       do 2 rewrite W.
       rewrite (equal_f H).
       trivial.
-    Qed.    
+    Qed.
 
     Theorem PreSheaf_Monic_components_is_Monic : g = h.
     Proof.
       extensionality m.
       assert (W :=
                 f_equal
-                  (fun w : (PMCM_PreSheaf_representing_d c d –≻ F)%nattrans =>
+                  (fun w : (PMCM_PreSheaf_representing_d c d --> F)%nattrans =>
                      Trans w c (id, m))
                   (mono_morphism_monomorphic N _ _ _ PMCM_N_co_equalizes)
              ).
@@ -123,7 +120,7 @@ morphism of presheaves are epic.
 
 We do this by showing that given an epic morphism of presheaves
 N : F –≫ G we can convert any function from f : (G c) → A to
-a morphism of presheaves (PSh(f) : G –≻ Psh(A)) such that this
+a morphism of presheaves (PSh(f) : G --> Psh(A)) such that this
 morphism at c gives exactly f.
 *)
 Section PreSheaf_Epic_components_Epic.
@@ -131,20 +128,18 @@ Section PreSheaf_Epic_components_Epic.
     {C : Category}
     {F G : PreSheaf C}
     (N : @Epic (PShCat C) F G)
-    (c : C)
-  .
-  
+    (c : C).
+
   Section PreSheaf_Epic_components_is_Epic.
     Context
       (d : Type)
       (g h : (G _o)%object c → d)
       (H : (fun x => g (Trans (mono_morphism N) c x)) =
-           (fun x => h (Trans (mono_morphism N) c x)))
-    .
+           (fun x => h (Trans (mono_morphism N) c x))).
 
-    Local Hint Extern 1 => progress cbn.
+    Local Hint Extern 1 => progress cbn : core.
 
-    Local Hint Extern 1 => rewrite assoc.
+    Local Hint Extern 1 => rewrite assoc : core.
 
     Program Definition PECE_PreSheaf_representing_d : PreSheaf C
       :=
@@ -158,17 +153,16 @@ Section PreSheaf_Epic_components_Epic.
     match goal with
       [|- context [(G _a)%morphism (?A ∘ ?B)%morphism] ] =>
       cbn_rewrite (F_compose G A B)
-    end.
-    
+    end : core.
+
     Program Definition PECE_PreSheaf_morph_of_function
             (f : (G _o)%object c → d)
-      : (G –≻ PECE_PreSheaf_representing_d)%nattrans
+      : (G --> PECE_PreSheaf_representing_d)%nattrans
       :=
         {|
           Trans := fun o x y => f ((G _a y)%morphism x)
-        |}
-    .
-    
+        |}.
+
     Theorem PECE_N_co_equalizes :
       ((PECE_PreSheaf_morph_of_function g) ∘ (mono_morphism N))%nattrans =
       ((PECE_PreSheaf_morph_of_function h) ∘ (mono_morphism N))%nattrans.
@@ -183,14 +177,14 @@ Section PreSheaf_Epic_components_Epic.
       rewrite <- W.
       rewrite (equal_f H).
       trivial.
-    Qed.    
+    Qed.
 
     Theorem PreSheaf_Epic_components_is_Epic : g = h.
     Proof.
       extensionality m.
       assert (W :=
                 f_equal
-                  (fun w : (G –≻ PECE_PreSheaf_representing_d)%nattrans =>
+                  (fun w : (G --> PECE_PreSheaf_representing_d)%nattrans =>
                      Trans w c m id)
                   (mono_morphism_monomorphic N _ _ _ PECE_N_co_equalizes)
              ).
@@ -209,25 +203,25 @@ End PreSheaf_Epic_components_is_Epic.
         mono_morphism_monomorphic :=
           PreSheaf_Epic_components_is_Epic
       |}.
-  
+
 End PreSheaf_Epic_components_Epic.
 
 Local Hint Extern 1 => match goal with
                         [|- context [(?F _a id)%morphism]] => rewrite (F_id F)
-                      end.
+                      end : core.
 Local Hint Extern 1 =>
 match goal with
   [|- context [(?F _a (?f ∘ ?g))%morphism]] =>
   cbn_rewrite (F_compose F f g)
-end.
+end : core.
 
 Local Hint Extern 1 =>
 match goal with
   [|- context [Trans ?f _ ((?F _a)%morphism ?h _)]] =>
   cbn_rewrite (equal_f (Trans_com f h))
-end.
+end : core.
 
-Local Hint Extern 1 => progress cbn in *.
+Local Hint Extern 1 => progress cbn in * : core.
 
 (** In this section we show that a monic presheaf morphism can be split
 into to presheaf morphisms one iso and one monic.
@@ -238,8 +232,7 @@ Section Monic_PreSheaf_Iso_Monic_Factorization.
   Context
     {C : Category}
     {F G : PreSheaf C}
-    (N : @Monic (PShCat C) F G)
-  .
+    (N : @Monic (PShCat C) F G).
 
   Lemma sigT_sig_proof_irrelevance
         {T : Type}
@@ -260,9 +253,7 @@ Section Monic_PreSheaf_Iso_Monic_Factorization.
            )
            =
            (proj1_sig (projT2 B)))
-    :
-      A = B
-  .
+    : A = B.
   Proof.
     destruct A as [Ax [Ay HA]].
     destruct B as [Bx [By HB]].
@@ -280,11 +271,11 @@ Section Monic_PreSheaf_Iso_Monic_Factorization.
       ).
     {
       destruct H; trivial.
-    }    
+    }
     {
       match goal with
         [|- existT _ ?A ?B = existT _ ?A ?B'] =>
-        cutrewrite (B = B');trivial
+        assert (B = B') as ->;trivial
       end.
       apply sig_proof_irrelevance; trivial.
     }
@@ -303,7 +294,7 @@ Section Monic_PreSheaf_Iso_Monic_Factorization.
         fresh x "2"
     in
     destruct x as [x1 [x2 H]]
-  end.
+  end : core.
 
   Local Hint Extern 1 =>
   match goal with
@@ -318,7 +309,7 @@ Section Monic_PreSheaf_Iso_Monic_Factorization.
         fresh x "2"
     in
     destruct x as [x1 [x2 H]]
-  end.
+  end : core.
 
   Local Hint Extern 1 =>
   match goal with
@@ -328,8 +319,8 @@ Section Monic_PreSheaf_Iso_Monic_Factorization.
        apply (sigT_sig_proof_irrelevance _ _ H);
          destruct H
       ]
-  end.
-  
+  end : core.
+
   Program Definition Monic_PreSheaf_Image_of : PreSheaf C
     :=
       {|
@@ -337,25 +328,24 @@ Section Monic_PreSheaf_Iso_Monic_Factorization.
         FA := fun c c' h x =>
                 existT _ (G _a h (projT1 x))%morphism
                        (exist _ (F _a h (proj1_sig (projT2 x)))%morphism _)
-      |}
-  .
-  
+      |}.
+
   Program Definition Monic_PreSheaf_Morph_From_Monic_PreSheaf_Image_of_forward :
-    (Monic_PreSheaf_Image_of –≻ G)%nattrans
+    (Monic_PreSheaf_Image_of --> G)%nattrans
     :=
       {|
         Trans := fun x => @Monic_From_Image_forward _ _ (Trans (mono_morphism N) x)
       |}.
-  
+
   Program Definition Monic_PreSheaf_From_Monic_PreSheaf_Image_of_back :
-    (Monic_PreSheaf_Image_of –≻ F)%nattrans
+    (Monic_PreSheaf_Image_of --> F)%nattrans
     :=
       {|
         Trans := fun x => @Monic_From_Image_back _ _ (Trans (mono_morphism N) x)
       |}.
 
   Program Definition Monic_PreSheaf_To_Monic_PreSheaf_Image_of :
-    (F –≻ Monic_PreSheaf_Image_of)%nattrans
+    (F --> Monic_PreSheaf_Image_of)%nattrans
     :=
       {|
         Trans := fun x => @Monic_To_Image _ _ (Trans (mono_morphism N) x)
@@ -369,8 +359,7 @@ Section Monic_PreSheaf_Iso_Monic_Factorization.
               _
               _
               Monic_PreSheaf_Morph_From_Monic_PreSheaf_Image_of_forward
-           )
-    .
+           ).
     apply is_Monic_components_is_Monic.
     intros c.
     set (W := fun A B f H => mono_morphism_monomorphic
@@ -387,8 +376,7 @@ Section Monic_PreSheaf_Iso_Monic_Factorization.
       {|
         iso_morphism := Monic_PreSheaf_To_Monic_PreSheaf_Image_of;
         inverse_morphism := Monic_PreSheaf_From_Monic_PreSheaf_Image_of_back
-      |}
-  .
+      |}.
 
   Next Obligation.
   Proof.
@@ -409,7 +397,7 @@ Section Monic_PreSheaf_Iso_Monic_Factorization.
   Proof.
     apply NatTrans_eq_simplify; trivial.
   Qed.
-  
+
 End Monic_PreSheaf_Iso_Monic_Factorization.
 
 (** In this section we show that a presheaf morphism can be split
@@ -424,8 +412,7 @@ Section PreSheaf_Epic_Monic_Factorization.
   Context
     {C : Category}
     {F G : PreSheaf C}
-    (N : (F –≻ G)%nattrans)
-  .
+    (N : (F --> G)%nattrans).
 
   Local Hint Extern 1 =>
   match goal with
@@ -440,7 +427,7 @@ Section PreSheaf_Epic_Monic_Factorization.
         fresh x "2"
     in
     destruct x as [x1 [x2 H]]
-  end.
+  end : core.
 
   Local Hint Extern 1 =>
   match goal with
@@ -455,17 +442,16 @@ Section PreSheaf_Epic_Monic_Factorization.
         fresh x "2"
     in
     destruct x as [x1 [x2 H]]
-  end.
+  end : core.
 
   Local Obligation Tactic := basic_simpl; auto 10.
-  
+
   Program Definition PreSheaf_Image_of : PreSheaf C
     :=
       {|
         FO := fun x => @Image_of _ _ (Trans N x);
         FA := fun c c' h x => exist _ (G _a h (proj1_sig x))%morphism _
-      |}
-  .
+      |}.
 
   Next Obligation.
   Proof.
@@ -474,12 +460,12 @@ Section PreSheaf_Epic_Monic_Factorization.
   Qed.
 
   Program Definition PreSheaf_From_Image_Forward :
-    (PreSheaf_Image_of –≻ G)%nattrans
+    (PreSheaf_Image_of --> G)%nattrans
     :=
       {|
         Trans := fun x => @From_Image_forward _ _ (Trans N x)
       |}.
-  
+
   Definition PreSheaf_Epic_Monic_Factor_Monic :
     @Monic (PShCat C) PreSheaf_Image_of G.
   Proof.
@@ -488,8 +474,7 @@ Section PreSheaf_Epic_Monic_Factorization.
               _
               _
               PreSheaf_From_Image_Forward
-           )
-    .
+           ).
     apply is_Monic_components_is_Monic.
     intros c.
     set (W := fun A B f => mono_morphism_monomorphic
@@ -498,10 +483,10 @@ Section PreSheaf_Epic_Monic_Factorization.
     apply W.
   Defined.
 
-  Local Hint Extern 1 => apply sig_proof_irrelevance.
-  
+  Local Hint Extern 1 => apply sig_proof_irrelevance : core.
+
   Program Definition PreSheaf_To_Image :
-    (F –≻ PreSheaf_Image_of)%nattrans
+    (F --> PreSheaf_Image_of)%nattrans
     :=
       {|
         Trans := fun x => To_Image (Trans N x)

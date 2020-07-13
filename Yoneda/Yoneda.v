@@ -6,8 +6,10 @@ From Categories Require Import Cat.Facts.
 From Categories Require Import Functor.Main.
 From Categories Require Import Coq_Cats.Type_Cat.Type_Cat.
 From Categories Require Import Functor.Representable.Hom_Func.
-From Categories Require Import Ext_Cons.Prod_Cat.Prod_Cat Ext_Cons.Prod_Cat.Operations.
-From Categories Require Import NatTrans.NatTrans NatTrans.Func_Cat NatTrans.NatIso.
+From Categories Require Import Ext_Cons.Prod_Cat.Prod_Cat
+     Ext_Cons.Prod_Cat.Operations.
+From Categories Require Import NatTrans.NatTrans NatTrans.Func_Cat
+     NatTrans.NatIso.
 
 Local Open Scope nattrans_scope.
 
@@ -16,11 +18,11 @@ Section Y_emb.
 
   (** The dual of the Yoneda embedding for category C – the curry of hom
       functor of C. *)
-  Definition CoYoneda : (C^op –≻ (Func_Cat C Type_Cat))%functor :=
+  Definition CoYoneda : (C^op --> (Func_Cat C Type_Cat))%functor :=
     Exp_Cat_morph_ex (Hom_Func C).
 
   (** The Yoneda embedding for category C – the curry of hom functor of Cᵒᵖ. *)
-  Definition Yoneda : (C –≻ (Func_Cat (C^op) Type_Cat))%functor :=
+  Definition Yoneda : (C --> (Func_Cat (C^op) Type_Cat))%functor :=
     Exp_Cat_morph_ex (Hom_Func (C^op)).
 
 End Y_emb.
@@ -30,15 +32,15 @@ Section Y_Left_Right.
 
   (** The left hand side of the Yoneda lemma's isomorphism *)
   Definition Y_left :
-    ((C^op × (Func_Cat (C^op) Type_Cat)) –≻ Type_Cat)%functor
+    ((C^op × (Func_Cat (C^op) Type_Cat)) --> Type_Cat)%functor
     :=
       ((Hom_Func _)
          ∘ (Prod_Functor
               ((Yoneda C)^op) (Functor_id (Func_Cat (C^op) Type_Cat))))%functor.
-  
+
   (** The right hand side of the Yoneda lemma's isomorphism *)
   Definition Y_right
-    : ((C^op × (Func_Cat (C^op) Type_Cat)) –≻ Type_Cat)%functor :=
+    : ((C^op × (Func_Cat (C^op) Type_Cat)) --> Type_Cat)%functor :=
     ((Exp_Cat_Eval (C^op) Type_Cat) ∘ (Twist_Func _ _))%functor.
 
 End Y_Left_Right.
@@ -46,7 +48,7 @@ End Y_Left_Right.
 Local Obligation Tactic := idtac.
 
 (** The left to right natural transformation of Yoneda lemma. *)
-Program Definition Y_left_to_right (C : Category) : (Y_left C) –≻ (Y_right C) :=
+Program Definition Y_left_to_right (C : Category) : (Y_left C) --> (Y_right C) :=
 {|
   Trans := fun c_F => fun N => ((Trans N (fst c_F))) (id (fst c_F))
 |}.
@@ -84,9 +86,9 @@ Qed.
 (** The natural transformation needed to make the right to left natural
     transformation of Yoneda lemma. *)
 Program Definition Y_right_to_left_NT (C : Category) (c : Obj)
-        (F : (C^op –≻ Type_Cat)%functor) (h : (F _o c)%object)
+        (F : (C^op --> Type_Cat)%functor) (h : (F _o c)%object)
   :
-    ((Yoneda _) _o c)%object –≻ F :=
+    ((Yoneda _) _o c)%object --> F :=
 {|
   Trans := fun c' => fun g => (F _a g)%morphism h
 |}.
@@ -110,7 +112,7 @@ Proof.
 Qed.
 
 (** The right to left natural transformation of Yoneda lemma. *)
-Program Definition Y_right_to_left (C : Category) : (Y_right C) –≻ (Y_left C) :=
+Program Definition Y_right_to_left (C : Category) : (Y_right C) --> (Y_left C) :=
 {|
   Trans := fun c_F => fun h => Y_right_to_left_NT C (fst c_F) (snd c_F) h
 |}.

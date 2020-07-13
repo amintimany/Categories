@@ -8,13 +8,13 @@ From Categories Require Import Basic_Cons.Terminal.
 From Categories Require Import Archetypal.Discr.Discr.
 
 (** The unique functor from the initial category to any other. *)
-Program Definition Functor_From_Empty_Cat (C' : Category) : (0 –≻ C')%functor :=
+Program Definition Functor_From_Empty_Cat (C' : Category) : (0 --> C')%functor :=
 {|
   FO := fun x => Empty_rect _ x;
   FA := fun a b f => match a as _ return _ with end
 |}.
 
-Local Hint Extern 1 => cbn in *.
+Local Hint Extern 1 => cbn in * : core.
 
 (** Empty Cat is the initial category. *)
 Program Instance Cat_Init : (𝟘_ Cat)%object :=

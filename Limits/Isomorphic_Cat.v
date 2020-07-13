@@ -14,9 +14,8 @@ Section Limit_From_Isomorphic_Cat.
 Context {C D : Category}
         (I : (C ≃≃ D ::> Cat)%isomorphism)
         {E : Category}
-        {F : (D –≻ E)%functor}
-        (L : Limit F)
-.
+        {F : (D --> E)%functor}
+        (L : Limit F).
 
 Definition Limit_From_Isomorphic_Cat : Limit (F ∘ (iso_morphism I)) :=
   Local_Right_KanExt_Iso_along
@@ -25,8 +24,7 @@ Definition Limit_From_Isomorphic_Cat : Limit (F ∘ (iso_morphism I)) :=
         (Functor_To_1_Cat C)
         (Functor_To_1_Cat D ∘ (iso_morphism I))
     )
-    (KanExt_From_Isomorphic_Cat I (Functor_To_1_Cat D) F L)
-.
+    (KanExt_From_Isomorphic_Cat I (Functor_To_1_Cat D) F L).
 
 End Limit_From_Isomorphic_Cat.
 
@@ -36,12 +34,10 @@ Section CoLimit_From_Isomorphic_Cat.
 Context {C D : Category}
         (I : (C ≃≃ D ::> Cat)%isomorphism)
         {E : Category}
-        {F : (D –≻ E)%functor}
-        (L : CoLimit F)
-.
+        {F : (D --> E)%functor}
+        (L : CoLimit F).
 
 Definition CoLimit_From_Isomorphic_Cat : CoLimit (F ∘ (iso_morphism I)) :=
-  Limit_From_Isomorphic_Cat (Opposite_Cat_Iso I) L
-.
+  Limit_From_Isomorphic_Cat (Opposite_Cat_Iso I) L.
 
 End CoLimit_From_Isomorphic_Cat.

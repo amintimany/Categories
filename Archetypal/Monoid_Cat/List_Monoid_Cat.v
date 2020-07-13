@@ -6,7 +6,7 @@ Require Import Coq.Lists.List.
 Section List_Monoid_Cat.
   Context (A : Type).
 
-  Hint Resolve app_assoc app_nil_r.
+  Hint Resolve app_assoc app_nil_r : core.
 
   Program Definition List_Monoid : Monoid :=
     {|

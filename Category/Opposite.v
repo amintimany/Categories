@@ -11,22 +11,22 @@ Definition Opposite (C : Category) : Category :=
 {|
 
   Obj := Obj C;
-           
-  Hom := fun a b => (b –≻ a)%morphism;
+
+  Hom := fun a b => (b --> a)%morphism;
 
   compose :=
-    fun a b c (f : (b –≻ a)%morphism) (g : (c –≻ b)%morphism) => compose C c b a g f;
+    fun a b c (f : (b --> a)%morphism) (g : (c --> b)%morphism) => compose C c b a g f;
 
   id := fun c => id C c;
-  
+
   assoc := fun _ _ _ _ f g h => assoc_sym h g f;
 
   assoc_sym := fun _ _ _ _ f g h => assoc h g f;
 
   id_unit_left := fun _ _ h => @id_unit_right C _ _ h;
-  
+
   id_unit_right := fun _ _ h => @id_unit_left C _ _ h
-                   
+
 |}.
 
 Notation "C '^op'" := (Opposite C) : category_scope.

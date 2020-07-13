@@ -13,7 +13,7 @@ From Categories Require Import NatTrans.NatTrans NatTrans.Operations.
 *)
 Program Definition Func_Cat (C C' : Category) : Category :=
 {|
-  Obj := (C –≻ C')%functor;
+  Obj := (C --> C')%functor;
 
   Hom := NatTrans;
 
@@ -22,12 +22,12 @@ Program Definition Func_Cat (C C' : Category) : Category :=
   id := @NatTrans_id _ _;
 
   assoc := fun _ _ _ _ _ _ _ => @NatTrans_compose_assoc _ _ _ _ _ _ _ _ _;
-             
+
   assoc_sym :=
     fun _ _ _ _ _ _ _ => eq_sym (@NatTrans_compose_assoc _ _ _ _ _ _ _ _ _);
 
   id_unit_right := @NatTrans_id_unit_right _ _;
-  
+
   id_unit_left := @NatTrans_id_unit_left _ _
 |}.
 
@@ -37,25 +37,25 @@ Section Opposite_Func_Cat.
   (** Functor from functor category to its opposite. Maps each functor
        to its opposite. *)
   Program Definition Op_Func_Cat_to_Func_Cat_Op
-    : ((Func_Cat C D)^op –≻ (Func_Cat (C^op) (D^op)))%functor :=
+    : ((Func_Cat C D)^op --> (Func_Cat (C^op) (D^op)))%functor :=
     {|
       FO := Opposite_Functor;
       FA := fun _ _ => Opposite_NatTrans;
       F_id := fun _ => NatTrans_id_Op _;
-      F_compose := fun _ _ _ _ _ => NatTrans_compose_Op _ _ 
+      F_compose := fun _ _ _ _ _ => NatTrans_compose_Op _ _
     |}.
 
   (** Functor from the opposite of a functor category to it. Maps each functor
       to its opposite. *)
   Program Definition Func_Cat_Op_to_Op_Func_Cat
-    : ((Func_Cat (C^op) (D^op)) –≻ (Func_Cat C D)^op)%functor :=
+    : ((Func_Cat (C^op) (D^op)) --> (Func_Cat C D)^op)%functor :=
     {|
       FO := Opposite_Functor;
       FA := fun _ _ => Opposite_NatTrans;
       F_id := fun F => NatTrans_id_Op F;
       F_compose := fun _ _ _ N N' => NatTrans_compose_Op N N'
     |}.
-  
+
   (** The opposite of the category of functors from C to D is naturally
        isomorphic to the category of functors from C^op to D^op. *)
   Program Definition Func_Cat_Op_Iso

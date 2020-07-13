@@ -11,13 +11,13 @@ From Categories Require Import Ext_Cons.Prod_Cat.Prod_Cat.
 From Categories Require Import Cat.Facts.
 
 
-Program Definition term_id : (Type_Cat –≻ (Type_Cat × Type_Cat))%functor :=
+Program Definition term_id : (Type_Cat --> (Type_Cat × Type_Cat))%functor :=
 {|
   FO := fun a => (@CCC_term Type_Cat _, a);
   FA := fun a b f => (@id _ (@CCC_term Type_Cat _), f)
 |}.
 
-Definition S_nat_func : (Type_Cat –≻ Type_Cat)%functor :=
+Definition S_nat_func : (Type_Cat --> Type_Cat)%functor :=
   ((+ᶠⁿᶜ Type_Cat _) ∘ term_id)%functor.
 
 (* S_nat_func defined *)
@@ -175,11 +175,3 @@ Proof.
   inversion H1; inversion H2.
   trivial.
 Qed.
-
-
-
-
-
-
-
-

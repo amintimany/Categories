@@ -2,17 +2,20 @@ From Categories Require Import Essentials.Notations.
 From Categories Require Import Essentials.Types.
 From Categories Require Import Essentials.Facts_Tactics.
 From Categories Require Import Category.Main.
-From Categories Require Import Functor.Functor Functor.Const_Func Functor.Functor_Ops.
-From Categories Require Import Ext_Cons.Prod_Cat.Prod_Cat Ext_Cons.Prod_Cat.Operations.
+From Categories Require Import
+     Functor.Functor Functor.Const_Func Functor.Functor_Ops.
+From Categories Require Import
+     Ext_Cons.Prod_Cat.Prod_Cat Ext_Cons.Prod_Cat.Operations.
 From Categories Require Import NatTrans.Operations NatTrans.NatIso.
 From Categories Require Import Archetypal.Discr.Discr.
 From Categories Require Import Limits.Limit Limits.Pointwise.
 From Categories Require Import Ext_Cons.Arrow.
-From Categories Require Import Coq_Cats.Type_Cat.Type_Cat Coq_Cats.Type_Cat.GenProd.
+From Categories Require Import
+     Coq_Cats.Type_Cat.Type_Cat Coq_Cats.Type_Cat.GenProd.
 
 (**
   This file shows that if a category is complete, then for any pair of objects
-  x and y, we have (Arrow C) (Hom C x y) is isomorphic to 
+  x and y, we have (Arrow C) (Hom C x y) is isomorphic to
   Hom C x (Limit_of (Discr_Func Arr_y)).
   This of course would be a contradiction as soon as we have some objects c and
   d for which
@@ -31,7 +34,7 @@ Section Complete_Preorder.
   Context (C : Category) (CC : Complete C) (x y : C).
 
   Local Definition Arr_y := (fun w : (Arrow C) => y).
-  
+
   Local Definition LimOf_Arr_y := (LimitOf (Discr_Func Arr_y)).
 
   Local Definition GenProd_of_const_Hom_x_y :=
@@ -40,7 +43,7 @@ Section Complete_Preorder.
       (((@Fix_Bi_Func_1
            (C^op) _ _ x (Hom_Func.Hom_Func C)) ∘ (Discr_Func Arr_y)) _o)%object.
 
-  Local Hint Extern 1 => cbn.
+  Local Hint Extern 1 => cbn : core.
 
   Local Program Definition Func_Iso :
     (
@@ -66,17 +69,15 @@ Section Complete_Preorder.
       ≃≃
       GenProd_of_const_Hom_x_y
       ::> LoKan_Cone_Cat _ _)%isomorphism
-    := Local_Right_KanExt_unique _ _ _ _
-  .
-  
+    := Local_Right_KanExt_unique _ _ _ _.
+
   Local Definition Hom_x_LimOf_Arr_y_ISO_Arrow_C_to_Hom_x_y :
-    (((x –≻ ((LimOf_Arr_y _o) tt))%object%morphism)
-       ≃≃ (Arrow C → x –≻ y)%morphism ::> Type_Cat)%isomorphism :=
+    (((x --> ((LimOf_Arr_y _o) tt))%object%morphism)
+       ≃≃ (Arrow C → x --> y)%morphism ::> Type_Cat)%isomorphism :=
     LoKan_Cone_Iso_object_Iso
       _
       _
       Local_Right_KanExt_Iso_Limits_Pointwise_LimOf_Arr_y__ISO__GenProd_of_const_Hom_x_y
-      tt
-  .
+      tt.
 
 End Complete_Preorder.

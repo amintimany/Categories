@@ -19,10 +19,10 @@ Section Term_IsoCat.
         t_morph :=
           fun c =>
             match
-              f_equal (fun w : (D –≻ D)%functor => (w _o)%object c)
+              f_equal (fun w : (D --> D)%functor => (w _o)%object c)
                       (right_inverse I)
               in _ = u return
-              (u –≻ _)%morphism
+              (u --> _)%morphism
             with
               eq_refl => ((iso_morphism I) _a ((t_morph
                                                  trm ((I⁻¹)%morphism _o c)))
@@ -36,18 +36,18 @@ Section Term_IsoCat.
   Next Obligation.
   Proof.
     assert (H := f_equal
-                   (fun w : (C –≻ C)%functor => (w _o)%object (terminal trm))
+                   (fun w : (C --> C)%functor => (w _o)%object (terminal trm))
                    (left_inverse I)).
     cbn in H.
     cut (
         match H in _ = u return
-              (_ –≻ u)%morphism
+              (_ --> u)%morphism
         with
         | eq_refl => ((I ⁻¹) _a f)%morphism
         end
         =
         match H in _ = u return
-              (_ –≻ u)%morphism
+              (_ --> u)%morphism
         with
         | eq_refl => ((I ⁻¹) _a g)%morphism
         end

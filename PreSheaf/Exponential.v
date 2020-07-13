@@ -15,14 +15,14 @@ Section Exponential.
   Local Obligation Tactic := idtac.
 
   (** The exponential in category of presheaves is the presheaf that maps each
-      object c of C to the set of natural transformations (Y(c) × F –≻ G).
+      object c of C to the set of natural transformations (Y(c) × F --> G).
       Where Y is the Yoneda embedding, and × is the product of presheaves.
 
-      This presheaf, maps an arrow h : c –≻ c' in C to the natural
+      This presheaf, maps an arrow h : c --> c' in C to the natural
       transformation ( morphisms in category of presheaves are natural
       transformations) that maps a natural transformation u to the natural
       transformation that maps an objet x of C to the function that given
-      v : ((c' –≻ x : Cᵒᵖ) * F(x)) gives
+      v : ((c' --> x : Cᵒᵖ) * F(x)) gives
       (Trans u x (((fst v) ∘ f)%morphism, (snd v)))
  *)
   Program Definition funspace_psh : Functor (C^op) Type_Cat :=
@@ -66,7 +66,7 @@ Section Exponential.
   Qed.
 
   Next Obligation.
-  Proof.    
+  Proof.
     intros a b c f g.
     FunExt.
     apply NatTrans_eq_simplify; cbn.
@@ -78,7 +78,7 @@ Section Exponential.
   (** The evaluation morphism (natural transformation) for exponentials of
       presheaves. *)
   Program Definition PSh_Exponential_Eval :
-    (pointwise_product_psh C funspace_psh F –≻ G)%nattrans
+    (pointwise_product_psh C funspace_psh F --> G)%nattrans
     :=
       {|
         Trans := fun x u => Trans (fst u) x (id, snd u)
@@ -102,10 +102,10 @@ Section Exponential.
   (** The currying morphism (natural transformation) for exponentials of
       presheaves. *)
   Program Definition PSh_Exponential_Curry
-          (x : (C ^op –≻ Type_Cat)%functor)
-          (u : (pointwise_product_psh C x F –≻ G)%nattrans)
+          (x : (C ^op --> Type_Cat)%functor)
+          (u : (pointwise_product_psh C x F --> G)%nattrans)
     :
-      (x –≻ funspace_psh)%nattrans
+      (x --> funspace_psh)%nattrans
   :=
     {|
       Trans :=

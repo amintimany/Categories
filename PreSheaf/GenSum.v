@@ -14,15 +14,15 @@ Section PSh_GenSum.
 
   Local Notation Fm := (Discr_Func_op (PShCat C) map) (only parsing).
 
-  Local Hint Extern 1 => match goal with [h : {x : _ & _} |- _] => destruct x end.
+  Local Hint Extern 1 => match goal with [h : {x : _ & _} |- _] => destruct x end : core.
   Local Hint Extern 1 => match goal with
                           [|- context [(?F _a id)%morphism]] => rewrite (F_id F)
-                        end.
+                        end : core.
   Local Hint Extern 1 =>
   match goal with
     [|- context [(?F _a (?f ∘ ?g))%morphism]] =>
     cbn_rewrite (F_compose F f g)
-  end.
+  end : core.
 
   (** The pointwise generalized sum presheaf. *)
   Program Definition PSh_GenSum_func : PreSheaf C :=
@@ -34,14 +34,14 @@ Section PSh_GenSum.
         fun _ _ h x => existT _ (projT1 x)
                            ((map (projT1 x) _a h (projT2 x))%morphism)
     |}.
-    
+
   (** The injection of generalized sum presheaf. *)
   Program Definition PSh_GenProd_inj (x : A) :
-    (map x –≻ PSh_GenSum_func)%nattrans :=
+    (map x --> PSh_GenSum_func)%nattrans :=
     {|
       Trans := fun c y => existT _ x y
     |}.
-    
+
   (** The cone for generalized sum presheaf. *)
   Program Definition PSh_GenSum_CoCone : CoCone Fm :=
     {|
@@ -52,18 +52,18 @@ Section PSh_GenSum.
         |};
       cone_edge := {|Trans := fun x => PSh_GenProd_inj x |}
     |}.
-  
+
   Local Hint Extern 1 =>
     match goal with
       [|- context [Trans ?f _ ((?F _a)%morphism ?h _)]] =>
       cbn_rewrite (equal_f (Trans_com f h))
-    end.
+    end : core.
 
-  Local Hint Extern 1 => match goal with [H : unit |- _] => destruct H end.
+  Local Hint Extern 1 => match goal with [H : unit |- _] => destruct H end : core.
 
-  Local Hint Resolve NatTrans_eq_simplify.
+  Local Hint Resolve NatTrans_eq_simplify : core.
 
-  Local Hint Extern 1 => rewrite From_Term_Cat.
+  Local Hint Extern 1 => rewrite From_Term_Cat : core.
 
 
   (** The morphism that maps to the generalized product given a map to its
@@ -73,12 +73,12 @@ Section PSh_GenSum.
                   (Functor_To_1_Cat (Discr_Cat A ^op) ^op)
                   (Discr_Func_op ((PShCat C))  map ^op)
           )
-    : (PSh_GenSum_func –≻ (Cn _o)%object tt)%nattrans :=
+    : (PSh_GenSum_func --> (Cn _o)%object tt)%nattrans :=
     {|
       Trans := fun c y => Trans (Trans Cn (projT1 y)) c (projT2 y)
     |}.
-    
-  Local Hint Extern 1 => progress cbn.
+
+  Local Hint Extern 1 => progress cbn : core.
 
   Local Obligation Tactic := basic_simpl; auto 10.
 
@@ -93,7 +93,7 @@ Section PSh_GenSum.
                 Trans :=
                   fun x => _
                           match x as u return
-                                (PSh_GenSum_func –≻ (Cn _o)%object u)%nattrans
+                                (PSh_GenSum_func --> (Cn _o)%object u)%nattrans
                           with
                             tt => PSh_GenSum_morph_ex Cn
                           end
@@ -123,7 +123,7 @@ Section PSh_GenSum.
               (fun w :
                      (
                        (Cn ∘ Functor_To_1_Cat (Discr_Cat A ^op) ^op)
-                          –≻ Discr_Func_op (PShCat C) map ^op
+                          --> Discr_Func_op (PShCat C) map ^op
                      )%nattrans
                =>
                  Trans (Trans w z) y
@@ -140,7 +140,7 @@ Section PSh_GenSum.
               (fun w :
                      (
                        (Cn ∘ Functor_To_1_Cat (Discr_Cat A ^op) ^op)
-                          –≻ Discr_Func_op (PShCat C) map ^op
+                          --> Discr_Func_op (PShCat C) map ^op
                      )%nattrans
                =>
                  Trans (Trans w z) y
@@ -150,10 +150,8 @@ Section PSh_GenSum.
       ).
     trivial.
   Qed.
-  
+
 End PSh_GenSum.
-
-
 
 (** In category of types, generalized sums are simply dependent sum types. *)
 Section Type_Cat_GenSum.
@@ -168,7 +166,7 @@ Section Type_Cat_GenSum.
         {|FO := fun _ => {x : A & (Fm _o x)%object}; FA := fun _ _ _ h => h|};
       cone_edge := {|Trans := fun x => existT _ x |}
     |}.
-    
+
    Program Definition Type_Cat_GenSum : (Σ map)%object :=
     {|
       LRKE := Type_Cat_GenSum_CoCone;
@@ -184,20 +182,17 @@ Section Type_Cat_GenSum.
               |}
           |}
     |}.
-   
   Next Obligation.
   Proof.
     extensionality x.
     destruct c; destruct c'; destruct h.
     apply (equal_f (@Trans_com _ _ _ _ Cn (projT1 x) (projT1 x) eq_refl)).
   Qed.
-
   Next Obligation.
   Proof.
     symmetry.
     apply Type_Cat_GenSum_obligation_1.
-  Qed.    
-
+  Qed.
   Next Obligation.
   Proof.
     apply NatTrans_eq_simplify.
@@ -211,7 +206,7 @@ Section Type_Cat_GenSum.
                  f_equal
                    (fun w :
                         ((Cn ∘ (Functor_To_1_Cat
-                                  (Discr_Cat A)^op) ^op) –≻ Fm^op)%nattrans
+                                  (Discr_Cat A)^op) ^op) --> Fm^op)%nattrans
                     =>
                       Trans w y1 y2) hc
                )

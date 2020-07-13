@@ -23,7 +23,7 @@ unique morphism χₘ : b → Ω such that the following diagram is a pullback:
         |                |
         ↓                ↓
         b ————————————–> Ω
-               χₘ  
+               χₘ
 </pre>
 #
 
@@ -33,12 +33,12 @@ Section SubObject_Classifier.
   Context (C : Category) {term : (𝟙_ C)%object}.
 
   Local Notation "1" := term.
-  
+
   Record SubObject_Classifier : Type :=
     {
       SOC : C;
-      SOC_morph : (1 –≻ SOC)%morphism;
-      SOC_char {a b : C} (m : (a ≫–> b)%morphism) : (b –≻ SOC)%morphism;
+      SOC_morph : (1 --> SOC)%morphism;
+      SOC_char {a b : C} (m : (a ≫–> b)%morphism) : (b --> SOC)%morphism;
       SO_pulback {a b : C} (m : (a ≫–> b)%morphism) :
         is_PullBack
           (mono_morphism m)
@@ -46,7 +46,7 @@ Section SubObject_Classifier.
           (SOC_char m)
           SOC_morph;
       SOC_char_unique {a b : C} (m : (a ≫–> b)%morphism)
-                      (h h' : (b –≻ SOC)%morphism) :
+                      (h h' : (b --> SOC)%morphism) :
         is_PullBack
           (mono_morphism m)
           (t_morph 1 a)
@@ -62,5 +62,4 @@ Section SubObject_Classifier.
         h = h'
     }.
 
-  
 End SubObject_Classifier.

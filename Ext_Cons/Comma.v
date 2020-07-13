@@ -1,7 +1,8 @@
 From Categories Require Import Essentials.Notations.
 From Categories Require Import Essentials.Types.
 From Categories Require Import Essentials.Facts_Tactics.
-From Categories Require Import Category.Category Category.Morph Category.Opposite.
+From Categories Require Import Category.Category Category.Morph
+     Category.Opposite.
 From Categories Require Import Ext_Cons.Arrow.
 From Categories Require Import Functor.Functor Functor.Functor_Ops Const_Func.
 From Categories Require Import Archetypal.Discr.Discr.
@@ -15,7 +16,7 @@ A comma category for Functors F : B → C and G : D → C is a category whose
 objects are arrows in C
 
 #
-<pre>   
+<pre>
    F _o x ———————–> G _o y
 </pre>
 #
@@ -28,7 +29,7 @@ diagrams in C:
          F _o x ———————–> G _o y
            |                |
            |                |
-   F _a h  |                |  F _a h'
+   F _a h  |                |  G _a h'
            |                |
            |                |
            ↓                ↓
@@ -37,22 +38,22 @@ diagrams in C:
 #
 
 for h : x → x' an arrow in B and h' : y → y' an arrow in G.
- 
+
 *)
 Section Comma.
-  Context {B C D : Category} (F : (B –≻ C)%functor) (G : (D –≻ C)%functor).
+  Context {B C D : Category} (F : (B --> C)%functor) (G : (D --> C)%functor).
 
   Record Comma_Obj : Type :=
     {
       CMO_src : B;
       CMO_trg : D;
-      CMO_hom : ((F _o CMO_src) –≻ (G _o CMO_trg))%object
+      CMO_hom : ((F _o CMO_src) --> (G _o CMO_trg))%object
     }.
 
   Record Comma_Hom (a b : Comma_Obj) : Type :=
     {
-      CMH_left : (CMO_src a) –≻ (CMO_src b);
-      CMH_right : (CMO_trg a) –≻ (CMO_trg b);
+      CMH_left : (CMO_src a) --> (CMO_src b);
+      CMH_right : (CMO_trg a) --> (CMO_trg b);
       CMH_com :  ((G _a CMH_right) ∘ (@CMO_hom a) =
                   (@CMO_hom b) ∘ (F _a CMH_left))%morphism
     }.
@@ -95,9 +96,9 @@ Section Comma.
           (h' : Comma_Hom b c) (h'' : Comma_Hom c d) :
     Comma_Hom_compose h (Comma_Hom_compose h' h'') =
     Comma_Hom_compose (Comma_Hom_compose h h') h''.
-  Proof.                    
+  Proof.
     apply Comma_Hom_eq_simplify; cbn; auto.
-  Qed.    
+  Qed.
 
   Program Definition Comma_Hom_id (a : Comma_Obj) : Comma_Hom a a :=
     {|
@@ -117,7 +118,6 @@ Section Comma.
     apply Comma_Hom_eq_simplify; cbn; auto.
   Qed.
 
-  
   Definition Comma : Category :=
     {|
       Obj := Comma_Obj;
@@ -129,7 +129,7 @@ Section Comma.
       assoc := @Comma_Hom_compose_assoc;
 
       assoc_sym := fun _ _ _ _ f g h => eq_sym (Comma_Hom_compose_assoc f g h);
-      
+
       id := Comma_Hom_id;
 
       id_unit_right := @Comma_Hom_id_unit_right;
@@ -150,12 +150,12 @@ Arguments CMH_com {_ _ _ _ _ _ _} _.
 is isomorphic to the comma category (Comma Gᵒᵖ Fᵒᵖ).
  *)
 Section Comma_Opposite_Iso.
-  Context {B C D : Category} (F : (B –≻ C)%functor) (G : (D –≻ C)%functor).
+  Context {B C D : Category} (F : (B --> C)%functor) (G : (D --> C)%functor).
 
-  Local Hint Extern 1 => progress cbn.
+  Local Hint Extern 1 => progress cbn : core.
 
-  Local Hint Extern 1 => apply Comma_Hom_eq_simplify.
-  
+  Local Hint Extern 1 => apply Comma_Hom_eq_simplify : core.
+
   Program Definition Comma_Opposite_Iso_LR :
     Functor ((Comma F G)^op) (Comma (G ^op) (F ^op))
     :=
@@ -195,16 +195,14 @@ Section Comma_Opposite_Iso.
               CMH_com := eq_sym (CMH_com h)
             |}
       |}.
-    
-    
+
   Program Definition Comma_Opposite_Iso :
     (((Comma F G)^op)%category ≃≃ Comma (G ^op) (F ^op) ::> Cat)%isomorphism
     :=
       {|
         iso_morphism := Comma_Opposite_Iso_LR;
         inverse_morphism := Comma_Opposite_Iso_RL
-      |}
-  .
+      |}.
 
 End Comma_Opposite_Iso.
 
@@ -214,16 +212,15 @@ isomorphic functors, then (Comma F G) is isomorphic to (Comma F' G).
 Section Comma_Left_Func_Iso.
   Context {B C D : Category}.
 
-  Local Hint Extern 1 => progress cbn.
+  Local Hint Extern 1 => progress cbn : core.
 
-  Local Hint Extern 1 => apply Comma_Hom_eq_simplify.
+  Local Hint Extern 1 => apply Comma_Hom_eq_simplify : core.
 
   Section Comma_Left_Func_Iso_FC.
     Context
-      {F F' : (B –≻ C)%functor}
+      {F F' : (B --> C)%functor}
       (I : (F ≃ F')%natiso)
-      (G : (D –≻ C)%functor)
-    .
+      (G : (D --> C)%functor).
 
     (** Given a natural isomorphism we build a functor. *)
     Program Definition Comma_Left_Func_Iso_FC :
@@ -245,24 +242,23 @@ Section Comma_Left_Func_Iso.
               CMH_com := _
               |}
         |}.
-    
+
     Next Obligation.
     Proof.
       rewrite assoc_sym.
       rewrite (CMH_com h).
       rewrite assoc.
       rewrite <- (Trans_com (inverse_morphism I) (CMH_left h)).
-      auto.    
+      auto.
     Qed.
-    
+
   End Comma_Left_Func_Iso_FC.
 
   Section Comma_Left_Func_Iso_FC_Iso.
     Context
-      {F F' : (B –≻ C)%functor}
+      {F F' : (B --> C)%functor}
       (I : (F ≃ F')%natiso)
-      (G : (D –≻ C)%functor)
-    .
+      (G : (D --> C)%functor).
 
     (** Functors produced from a natural isomorphism and its inverse
 are inverses.
@@ -293,14 +289,15 @@ are inverses.
         end.
         transitivity (
             match H' x in _ = u return
-                  u –≻ _
+                  u --> _
             with
               eq_refl =>
               match H' y in _ = v return
-                    _ –≻ v
+                    _ --> v
               with
                 eq_refl =>
-                ((Comma_Left_Func_Iso_FC I G ∘ Comma_Left_Func_Iso_FC (I ⁻¹) G) _a f)
+                ((Comma_Left_Func_Iso_FC I G ∘
+                  Comma_Left_Func_Iso_FC (I ⁻¹) G) _a f)
               end
             end
           ).
@@ -329,27 +326,24 @@ are inverses.
         cbn; auto.
       }
     Qed.
-    
+
   End Comma_Left_Func_Iso_FC_Iso.
 
-  
-  Context
-    {F F' : (B –≻ C)%functor}
-    (I : (F ≃ F')%natiso)
-    (G : (D –≻ C)%functor)
-  .
 
-  Local Hint Extern 1 => apply Comma_Left_Func_Iso_FC_Iso.
-  
+  Context
+    {F F' : (B --> C)%functor}
+    (I : (F ≃ F')%natiso)
+    (G : (D --> C)%functor).
+
+  Local Hint Extern 1 => apply Comma_Left_Func_Iso_FC_Iso : core.
+
   Program Definition Comma_Left_Func_Iso :
     ((Comma F G) ≃≃ (Comma F' G) ::> Cat)%isomorphism
     :=
       {|
         iso_morphism := Comma_Left_Func_Iso_FC I G;
         inverse_morphism := Comma_Left_Func_Iso_FC (Inverse_Isomorphism I) G
-      |}
-  . 
-    
+      |}.
 End Comma_Left_Func_Iso.
 
 (** In this section we show that whenever G and G' are two naturally
@@ -360,10 +354,9 @@ above.
 Section Comma_Right_Func_Iso.
   Context
     {B C D : Category}
-    (F : (B –≻ C)%functor)
-    {G G' : (D –≻ C)%functor}
-    (I : (G ≃ G')%natiso)
-  .
+    (F : (B --> C)%functor)
+    {G G' : (D --> C)%functor}
+    (I : (G ≃ G')%natiso).
 
   Definition Comma_Right_Func_Iso :
     ((Comma F G) ≃≃ (Comma F G') ::> Cat)%isomorphism :=
@@ -373,9 +366,8 @@ Section Comma_Right_Func_Iso.
           (Inverse_Isomorphism (Comma_Opposite_Iso (G ^op) (F ^op)))
           (Opposite_Cat_Iso (Comma_Left_Func_Iso (Opposite_NatIso I) (F^op)))
       )
-      (Comma_Opposite_Iso (G' ^op) (F ^op))
-  .
-    
+      (Comma_Opposite_Iso (G' ^op) (F ^op)).
+
 End Comma_Right_Func_Iso.
 
 (**
@@ -385,7 +377,7 @@ defined below:
 
 Section Slice_CoSlice.
   Context (C : Category) (c : Obj).
-  
+
   (**
    The Slice of Category C with respect to c:
      Objects : Arrows of C ending in c
@@ -398,11 +390,11 @@ Section Slice_CoSlice.
            g
          a –––→ c
          |     ↗
-         ∣    /    
+         ∣    /
         f∣   / h
          |  /
          ↓ /
-         b 
+         b
 </pre>
 #
    *)
@@ -411,9 +403,10 @@ Section Slice_CoSlice.
 
   (**
    The Slice of Category C with respect to c:
-     Objects : Arrows of C ending in c
-     Arrows: for g : a → c and h : b → c, 
-       an arrow from g to h is a pair of arrows f : a → b s.t. the ollowing commutes:
+   Objects : Arrows of C ending in c
+   Arrows: for g : a → c and h : b → c,
+   an arrow from g to h is a pair of arrows f : a → b s.t. the ollowing
+   commutes:
 
 #
 <pre>
@@ -424,7 +417,7 @@ Section Slice_CoSlice.
         h∣   / f
          |  /
          | ↙
-         b 
+         b
 </pre>
 #
    *)
@@ -438,9 +431,9 @@ Section Arrow_Cat.
 
   (**
    The Arrow Category of C:
-     Objects : Arrows of C
-     Arrows: for g : a → b and h : c → d,
-       an arrow from g to h is a pair of arrows (f,f') s.t. the ollowing commutes:
+   Objects : Arrows of C
+   Arrows: for g : a → b and h : c → d,
+   an arrow from g to h is a pair of arrows (f,f') s.t. the ollowing commutes:
 
 #
 <pre>

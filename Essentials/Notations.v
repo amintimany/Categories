@@ -1,30 +1,8 @@
-Notation "∀ x .. y , P" := (forall x, .. (forall y, P) ..)
-                             (at level 200, x binder, y binder, right associativity) : type_scope.
-
-Notation "∃ x .. y , P" := (exists x, .. (exists y, P) ..)
-  (at level 200, x binder, y binder, right associativity) : type_scope.
-
-Notation "x ∨ y" := (x \/ y) (at level 85, right associativity) : type_scope.
-
-Notation "x ∧ y" := (x /\ y) (at level 80, right associativity) : type_scope.
-
-Notation "x → y" := (x -> y)
-  (at level 90, y at level 200, right associativity): type_scope.
-
-Notation "x ↔ y" := (x <-> y) (at level 95, no associativity): type_scope.
-
-Notation "¬ x" := (~x) (at level 75, right associativity) : type_scope.
-
-Notation "x ≠ y" := (x <> y) (at level 70) : type_scope.
-
-
-Notation "x ≤ y" := (le x y) (at level 70, no associativity).
-
-Notation "x ≥ y" := (ge x y) (at level 70, no associativity).
+From Coq.Unicode Require Export Utf8.
 
 Reserved Notation "C '^op'" (at level 50, no associativity).
 
-Reserved Notation "a –≻ b" (at level 90, b at level 200, right associativity).
+Reserved Notation "a --> b" (at level 90, b at level 200, right associativity).
 
 Reserved Notation "f '⁻¹'" (at level 50, no associativity).
 
@@ -64,20 +42,26 @@ Reserved Notation "'Π_' C ↓ m" (at level 50, no associativity).
 
 Reserved Notation "'Σ_' C ↓ m" (at level 50, no associativity).
 
+Declare Scope category_scope.
 Delimit Scope category_scope with category.
 
+Declare Scope morphism_scope.
 Delimit Scope morphism_scope with morphism.
 
+Declare Scope object_scope.
 Delimit Scope object_scope with object.
 
+Declare Scope functor_scope.
 Delimit Scope functor_scope with functor.
 
+Declare Scope nattrans_scope.
 Delimit Scope nattrans_scope with nattrans.
 
-Delimit Scope nattrans_scope with nattrans.
-
+Declare Scope natiso_scope.
 Delimit Scope natiso_scope with natiso.
 
+Declare Scope isomorphism_scope.
 Delimit Scope isomorphism_scope with isomorphism.
 
+Declare Scope preorder_scope.
 Delimit Scope preorder_scope with preorder.

@@ -7,9 +7,9 @@ From Categories Require Import Coq_Cats.Type_Cat.Type_Cat.
 
 Local Obligation Tactic := idtac.
 
-(** Just like in category of sets, in category of types, the equalizer is the type
-that reperesents the subset of the cartesian profuct of the domain of the two functions
-that is mapped to equal values by both functions. *)
+(** Just like in category of sets, in category of types, the equalizer is the
+    type that reperesents the subset of the cartesian profuct of the domain of
+    the two functions that is mapped to equal values by both functions. *)
 Section Equalizer.
   Context {A B : Type} (f g : A → B).
 
@@ -25,10 +25,10 @@ Section Equalizer.
   Next Obligation.
   Proof.
     extensionality x; destruct x as [x Px]; trivial.
-  Qed.  
+  Qed.
 
   Next Obligation.
-  Proof.  
+  Proof.
     intros T eqm H x.
     apply (fun w => equal_f w x) in H; trivial.
   Qed.
@@ -174,7 +174,7 @@ Section CoEqualizer.
     match goal with
       [|- ?A = ?B] =>
       match type of H2 with
-        ?C = ?D => cutrewrite (A = C); [cutrewrite (B = D)|]; trivial
+        ?C = ?D => assert (A = C) as ->; [|assert (B = D) as ->]; trivial
       end
     end.
     {

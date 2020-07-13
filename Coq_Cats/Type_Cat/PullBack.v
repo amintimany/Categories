@@ -5,7 +5,7 @@ From Categories Require Import Category.Main.
 From Categories Require Import Basic_Cons.CCC Basic_Cons.PullBack.
 From Categories Require Import Coq_Cats.Type_Cat.Type_Cat.
 
-(** Type_Cat has pullbacks. The pullback of two functions f : a → b and 
+(** Type_Cat has pullbacks. The pullback of two functions f : a → b and
     g : c → b is {(x, y) | f x = g y} *)
 Section PullBack.
   Context {A B C : Type} (f : A → C) (g : B → C).
@@ -15,8 +15,8 @@ Section PullBack.
     [x : sig _ |- _ ] =>
     let H := fresh "H" in
     destruct x as [x H]
-  end.
-  
+  end : core.
+
   Program Definition Type_Cat_PullBack : @PullBack Type_Cat _ _ _ f g :=
     {|
       pullback := {x : A * B| f (fst x) = g (snd x)};
@@ -34,12 +34,12 @@ Section PullBack.
         apply (equal_f H)
       end
     end.
-  Qed.    
+  Qed.
 
   Local Obligation Tactic := idtac.
 
   Next Obligation.
-  Proof.  
+  Proof.
     intros X p1 p2 H u u' H1 H2 H3 H4.
     destruct H3; destruct H4.
     extensionality x.

@@ -15,13 +15,13 @@ Section Term_Prod.
   Context {C : Category} {term : (𝟙_ C)%object} {CHP : Has_Products C}.
 
   Local Notation "1" := (terminal term) : object_scope.
-  
+
   Local Notation "a × b" := (CHP a b) : object_scope.
 
   (** Natural transformations to be used with Yoneda. *)
   Program Definition Term_Prod_lr (a : C) :
       ((((Yoneda C) _o (a × 1))%object)
-         –≻ ((Yoneda C) _o a)%object)%nattrans
+         --> ((Yoneda C) _o a)%object)%nattrans
     :=
       {|
         Trans := fun b f => @compose C _ _ _ f (@Pi_1 _ _ _ (CHP a term))
@@ -29,12 +29,12 @@ Section Term_Prod.
 
   Program Definition Term_Prod_rl (a : C) :
     ((((Yoneda C) _o a)%object)
-       –≻ ((Yoneda C) _o (a × 1))%object)%nattrans
+       --> ((Yoneda C) _o (a × 1))%object)%nattrans
     :=
       {|
         Trans := fun b f =>  @Prod_morph_ex C _ _ _ _ f (@t_morph C _ b)
       |}.
-  
+
   Next Obligation. (* Trans_com *)
   Proof.
     extensionality g.
@@ -53,7 +53,7 @@ Section Term_Prod.
     symmetry.
     apply Term_Prod_rl_obligation_1.
   Qed.
-  
+
   Theorem Term_Prod (a : C) : (((×ᶠⁿᶜ C) _o (a, 1)%object) ≃ a)%isomorphism.
   Proof.
     Yoneda.

@@ -7,8 +7,8 @@ From Categories Require Import Functor.Functor Functor.Functor_Ops
 From Categories Require Import Functor.Functor_Extender.
 From Categories Require Import NatTrans.NatTrans NatTrans.Operations
         NatTrans.Func_Cat NatTrans.NatIso.
-From Categories Require Import Ext_Cons.Prod_Cat.Prod_Cat Ext_Cons.Prod_Cat.Operations
-        Ext_Cons.Prod_Cat.Nat_Facts.
+From Categories Require Import Ext_Cons.Prod_Cat.Prod_Cat
+     Ext_Cons.Prod_Cat.Operations Ext_Cons.Prod_Cat.Nat_Facts.
 From Categories Require Import KanExt.Local
         KanExt.LocalFacts.HomToCones
         KanExt.LocalFacts.ConesToHom.
@@ -21,8 +21,8 @@ Local Open Scope functor_scope.
 (** Any two naturally isomorphic functors have the same kan extensions –
 stated with hom functor definition of local kan extensions. *)
 Section Hom_Local_Right_KanExt_Iso.
-  Context {C C' : Category} {p : C –≻ C'}
-          {D : Category} {F F' : C –≻ D}
+  Context {C C' : Category} {p : C --> C'}
+          {D : Category} {F F' : C --> D}
           (N : (F' ≃ F)%natiso)
           (hlrke : Hom_Local_Right_KanExt p F).
 
@@ -37,7 +37,6 @@ Section Hom_Local_Right_KanExt_Iso.
                ∘_h (NatTrans_id_Iso (Left_Functor_Extender p D)^op)
             )
         )%isomorphism%natiso
-          
     |}.
 
 End Hom_Local_Right_KanExt_Iso.
@@ -46,9 +45,9 @@ End Hom_Local_Right_KanExt_Iso.
 stated with cones definition of local kan extensions. *)
 Section Local_Right_KanExt_Iso.
   Context {C C' : Category}
-          {p : C –≻ C'}
+          {p : C --> C'}
           {D : Category}
-          {F F' : C –≻ D}
+          {F F' : C --> D}
           (N : (F' ≃ F)%natiso)
           (hlrke : Local_Right_KanExt p F).
 
@@ -65,13 +64,13 @@ End Local_Right_KanExt_Iso.
 it also is local right kan extensions *)
 Section Iso_Hom_Local_Right_KanExt.
   Context {C C' : Category}
-          {p : C –≻ C'}
+          {p : C --> C'}
           {D : Category}
-          {F : C –≻ D}
-          {hlrke hlrke' : C' –≻ D}
+          {F : C --> D}
+          {hlrke hlrke' : C' --> D}
           (N : (hlrke ≃ hlrke')%natiso)
           (ihlrke : Hom_Local_Right_KanExt_Isomorphism p F hlrke).
-  
+
   Definition Iso_Hom_Local_Right_KanExt : Hom_Local_Right_KanExt p F :=
     {|
       HLRKE := hlrke';
@@ -86,10 +85,10 @@ End Iso_Hom_Local_Right_KanExt.
 it also is local left kan extensions – proven using duality. *)
 Section Iso_Local_Right_KanExt.
   Context {C C' : Category}
-          {p : C –≻ C'}
+          {p : C --> C'}
           {D : Category}
-          {F : C –≻ D}
-          {hlrke hlrke' : C' –≻ D}
+          {F : C --> D}
+          {hlrke hlrke' : C' --> D}
           (N : (hlrke ≃ hlrke')%natiso)
           (ihlrke : is_Local_Right_KanExt p F hlrke).
 
@@ -115,9 +114,9 @@ End Iso_Local_Right_KanExt.
 (** Kan extension along any two naturally isomorphic functors is the same –
 stated with hom functor definition of local kan extensions. *)
 Section Hom_Local_Right_KanExt_Iso_along.
-  Context {C C' : Category} {p p' : C –≻ C'}
+  Context {C C' : Category} {p p' : C --> C'}
           (N : (p' ≃ p )%natiso)
-          {D : Category} {F : C –≻ D}
+          {D : Category} {F : C --> D}
           (hlrke : Hom_Local_Right_KanExt p F).
 
   Program Definition Hom_Local_Right_KanExt_Iso_along
@@ -141,9 +140,9 @@ End Hom_Local_Right_KanExt_Iso_along.
 (** Any two naturally isomorphic functors have the same kan extensions –
 stated with cones definition of local kan extensions. *)
 Section Local_Right_KanExt_Iso_along.
-  Context {C C' : Category} {p p' : C –≻ C'}
+  Context {C C' : Category} {p p' : C --> C'}
           (N : (p' ≃ p)%natiso)
-          {D : Category} {F : C –≻ D}
+          {D : Category} {F : C --> D}
           (hlrke : Local_Right_KanExt p F).
 
   Definition Local_Right_KanExt_Iso_along : Local_Right_KanExt p' F :=
