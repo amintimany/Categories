@@ -32,7 +32,7 @@ Record Functor (C C' : Category) : Type :=
 }.
 
 Arguments FO {_ _} _ _.
-Arguments FA {_ _} _ {_ _} _, {_ _} _ _ _ _.
+Arguments FA {_ _} _ _ _ _.
 Arguments F_id {_ _} _ _.
 Arguments F_compose {_ _} _ {_ _ _} _ _.
 
@@ -44,7 +44,7 @@ Notation "F '_o'" := (FO F) : object_scope.
 
 Notation "F '@_a'" := (@FA _ _ F) : morphism_scope.
 
-Notation "F '_a'" := (FA F) : morphism_scope.
+Notation "F '_a'" := (@FA _ _ F _ _) : morphism_scope.
 
 Hint Extern 2 => (apply F_id) : core.
 
