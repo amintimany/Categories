@@ -16,8 +16,7 @@ Section Monic_Iso_Monic_Factorization.
   Context
     {A B : Type}
     {f : A → B}
-    (fm : @is_Monic Type_Cat _ _ f)
-  .
+    (fm : @is_Monic Type_Cat _ _ f).
 
   Definition Monic_Image_of : Type := {x : B & {a : A | f a = x}}.
 
@@ -28,8 +27,7 @@ Section Monic_Iso_Monic_Factorization.
     {|
       mono_morphism := Monic_From_Image_forward;
       mono_morphism_monomorphic := fun T g h => _
-    |}
-  .
+    |}.
 
   Next Obligation.
   Proof.
@@ -66,10 +64,8 @@ Section Monic_Iso_Monic_Factorization.
   Qed.
 
   Theorem Monic_To_Image_form_split_epic :
-    (
-      fun (x : Monic_Image_of) =>
-        Monic_To_Image (Monic_From_Image_back x)
-    ) = (fun x => x).
+    (fun (x : Monic_Image_of) =>
+        Monic_To_Image (Monic_From_Image_back x)) = (fun x => x).
   Proof.
     extensionality x.
     destruct x as [x [y Hxy]].
@@ -93,8 +89,7 @@ Section Monic_Iso_Monic_Factorization.
             Monic_To_Image
             _
             Monic_To_Image_form_split_epic
-        )
-  .
+        ).
 
   Theorem Monic_Iso_Monic_Factorization :
     f = fun x =>  Monic_From_Image_forward (Monic_To_Image x).
@@ -106,7 +101,7 @@ End Monic_Iso_Monic_Factorization.
 
 (** In the following we show a similar result for any funtion. That is, we show
     that any function can be split into a split epic function followed by a
-    monic function. Here the split epic function is not an isomorphism. 
+    monic function. Here the split epic function is not an isomorphism.
 
 The monic is from the domain of the function to its image.
 The epic function is from the image of the function to its codomain.
@@ -130,8 +125,7 @@ Section split_Epic_Monic_Factorization.
     {|
       mono_morphism := From_Image_forward;
       mono_morphism_monomorphic := fun T g h => _
-    |}
-  .
+    |}.
 
   Next Obligation.
   Proof.

@@ -1,6 +1,4 @@
-From Categories Require Import Essentials.Notations.
-From Categories Require Import Essentials.Types.
-From Categories Require Import Essentials.Facts_Tactics.
+From Categories.Essentials Require Import Notations Types Facts_Tactics Quotient.
 From Categories Require Import Category.Main.
 From Categories Require Import Functor.Main.
 From Categories Require Import Basic_Cons.Equalizer.
@@ -106,12 +104,10 @@ Instance PSh_Has_Equalizers (C : Category) : Has_Equalizers (PShCat C)
 Section CoEqualizer.
   Context (C : Category) {A B : PreSheaf C} (f g : (A --> B)%nattrans).
 
-
   Lemma another_coequalizer
         (c c' : C)
         (h : (c' --> c)%morphism)
-    :
-      ((equalizer_morph
+    : ((equalizer_morph
           (Type_Cat_Has_CoEqualizers _ _ (Trans f c') (Trans g c'))) ∘
         (B _a h) ∘ (Trans f c))%morphism
       =
@@ -132,9 +128,7 @@ Section CoEqualizer.
         (h : (b --> a)%morphism)
         (x y : (B _o)%object a)
         (H : CoEq_rel (Trans f a) (Trans g a) x y)
-    :
-      CoEq_rel (Trans f b) (Trans g b) (B _a h x)%morphism (B _a h y)%morphism
-  .
+    : CoEq_rel (Trans f b) (Trans g b) (B _a h x)%morphism (B _a h y)%morphism.
   Proof.
     cbn in *.
     induction H.
@@ -155,9 +149,8 @@ Section CoEqualizer.
         (a : C)
         (x y : (B _o)%object a)
         (H : CoEq_rel (Trans f a) (Trans g a) x y)
-    :
-      Equalizer.Type_Cat_CoEq_obligation_1 (Trans f a) (Trans g a) y =
-      Equalizer.Type_Cat_CoEq_obligation_1 (Trans f a) (Trans g a) x.
+    : equalizer_morph (Type_Cat_CoEq (Trans f a) (Trans g a)) y =
+      equalizer_morph (Type_Cat_CoEq (Trans f a) (Trans g a)) x.
   Proof.
     induction H; auto.
     destruct H as [z [H1 H2]].
@@ -210,22 +203,14 @@ Section CoEqualizer.
                _ _ _ _ _
                (Type_Cat_Has_CoEqualizers _ _ (Trans f c) (Trans g c))).
     + extensionality x.
-      destruct
-        (CoEq_Choice
-             (Trans f c)
-             (Trans g c)
-             (Equalizer.Type_Cat_CoEq_obligation_1
-                (Trans f c)
-                (Trans g c)
-                x)) as [y H].
+      apply class_of_inj.
       rewrite (F_id B).
-      apply equalizer_morph_com_simplified; assumption.
+      apply representative_of_class_of.
   Qed.
 
   Next Obligation.
   Proof.
-    intros a b c f' g'.
-    cbn in *.
+    intros a b c f' g'; cbn in *.
     apply
       (@equalizer_morph_unique
          _
@@ -238,8 +223,7 @@ Section CoEqualizer.
          ((equalizer_morph
              (Type_Cat_Has_CoEqualizers _ _ (Trans f c) (Trans g c)))
             ∘ (B _a (f' ∘ g')))%morphism
-      );
-      cbn.
+      ); cbn.
     {
       extensionality x.
       cbn_rewrite (F_compose B f' g').
@@ -260,58 +244,23 @@ Section CoEqualizer.
     }
     {
       extensionality x.
-      destruct (
-          (
-            CoEq_Choice
-              _
-              _
-              (
-                Equalizer.Type_Cat_CoEq_obligation_1
-                  _
-                  _
-                  x
-              )
-          )
-        ) as [y H].
-      cbn in *.
       apply equalizer_morph_com_simplified.
-      apply CoEq_rel_natural; trivial.
+      apply CoEq_rel_natural.
+      symmetry.
+      apply representative_of_class_of.
     }
     {
       extensionality x.
-      cbn_rewrite (F_compose B f' g').
-      destruct (
-          (
-            CoEq_Choice
-              _
-              _
-              (
-                Equalizer.Type_Cat_CoEq_obligation_1
-                  _
-                  _
-                  x
-              )
-          )
-        ) as [y H].
-      cbn in *.
-      destruct (
-          (
-            CoEq_Choice
-              _
-              _
-              (
-                Equalizer.Type_Cat_CoEq_obligation_1
-                  _
-                  _
-                  ((B _a)%morphism f' y)
-              )
-          )
-        ) as [z H'].
-      cbn in *.
+      cbn_rewrite (@F_compose _ _ B).
       apply equalizer_morph_com_simplified.
       apply CoEq_rel_natural; trivial.
-      econstructor 4; [|exact H'].
-      apply CoEq_rel_natural; trivial.
+      etransitivity.
+      apply CoEq_rel_natural; reflexivity.
+      symmetry.
+      etransitivity.
+      apply representative_of_class_of.
+      apply CoEq_rel_natural.
+      apply representative_of_class_of.
     }
   Qed.
 
@@ -329,23 +278,9 @@ Section CoEqualizer.
     intros c c' h.
     extensionality x.
     cbn.
-    destruct (
-          (
-            CoEq_Choice
-              _
-              _
-              (
-                Equalizer.Type_Cat_CoEq_obligation_1
-                  _
-                  _
-                  x
-              )
-          )
-        ) as [z H'].
-      cbn in *.
-      apply equalizer_morph_com_simplified.
-      apply CoEq_rel_natural; trivial.
-      constructor 3; trivial.
+    apply equalizer_morph_com_simplified.
+    apply CoEq_rel_natural; trivial.
+    apply representative_of_class_of.
   Qed.
   Next Obligation.
   Proof.
@@ -362,7 +297,7 @@ Section CoEqualizer.
       equalizer_morph_ex :=
         fun u v H =>
           {|
-            Trans := fun x w => _
+            Trans := fun x w => Trans v x (representative w)
           |}
     |}.
   Next Obligation.
@@ -383,69 +318,42 @@ Section CoEqualizer.
   Qed.
   Next Obligation.
   Proof.
-    intros.
-    destruct (CoEq_Choice _ _ w) as [z H'].
-    exact (Trans v x z).
-  Defined.
-
-  Next Obligation.
-  Proof.
-    intros u v H c c' h.
+    intros u v Hfg c c' h; cbn in *.
     extensionality w.
-    unfold PSh_CoEq_obligation_2.
-    cbn in *.
-    destruct (CoEq_Choice _ _ w) as [z H'].
-    cbn in *.
     cbn_rewrite <- (equal_f (Trans_com v h)).
-    destruct (
-        CoEq_Choice
-          _
-          _
-          (
-            Equalizer.Type_Cat_CoEq_obligation_1
-              _
-              _
-              ((B _a)%morphism h z)
-          )
-      ) as [y H''].
-    cbn in *.
-    induction H'' as [l l' H''| | |]; auto.
+    pose proof
+         (representative_of_class_of
+            (CoEq_rel (Trans f c') (Trans g c'))
+            ((B _a)%morphism h (representative w))) as Hw.
+    revert Hw.
+    generalize
+      (representative
+         (class_of
+            (CoEq_rel (Trans f c') (Trans g c'))
+            ((B _a)%morphism h (representative w)))) as x; intros x Hw.
+    induction Hw as [l l' H''| | |]; auto.
     destruct H'' as [q [H''1 H''2]].
     rewrite <- H''1, <- H''2.
-    symmetry.
-    apply (f_equal (fun w : (A --> u)%nattrans => Trans w c' q) H).
+    apply (f_equal (fun w : (A --> u)%nattrans => Trans w c' q) Hfg).
   Qed.
   Next Obligation.
   Proof.
     symmetry.
-    apply PSh_CoEq_obligation_3.
+    apply PSh_CoEq_obligation_2; trivial.
   Qed.
   Next Obligation.
   Proof.
     intros e' eqm eqmc.
     apply NatTrans_eq_simplify.
-    unfold PSh_CoEq_obligation_2.
     extensionality c; extensionality x.
     cbn in *.
-    destruct (
-        CoEq_Choice
-          _
-          _
-          (
-            Equalizer.Type_Cat_CoEq_obligation_1
-              _
-              _
-              x
-          )
-      ) as [y H''].
-    cbn in *.
-    induction H'' as [l l' H''| | |]; auto.
+    pose proof (representative_of_class_of (CoEq_rel (Trans f c) (Trans g c)) x)
+      as Hx.
+    induction Hx as [l l' H''| | |]; auto.
     destruct H'' as [q [H''1 H''2]].
     rewrite <- H''1, <- H''2.
-    symmetry.
     apply (f_equal (fun w : (A --> e')%nattrans => Trans w c q) eqmc).
   Qed.
-
   Next Obligation.
     intros e' eqm eqmc u u' H4 H5.
     apply NatTrans_eq_simplify.

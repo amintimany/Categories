@@ -1,6 +1,5 @@
-From Categories Require Import Essentials.Notations.
-From Categories Require Import Essentials.Types.
-From Categories Require Import Essentials.Facts_Tactics.
+From Coq.Relations Require Import Relations Relation_Definitions.
+From Categories.Essentials Require Import Notations Types Facts_Tactics Quotient.
 From Categories Require Import Category.Main.
 From Categories Require Import Basic_Cons.Equalizer.
 From Categories Require Import Coq_Cats.Type_Cat.Type_Cat.
@@ -64,10 +63,6 @@ x ~ y if and only if ∃z. (f(z) = x) ∧ (g(z) = y)
 Program Instance Type_Cat_Has_Equalizers : Has_Equalizers Type_Cat :=
   fun _ _ => Type_Cat_Eq.
 
-Require Import Coq.Relations.Relations Coq.Relations.Relation_Definitions.
-Require Import Coq.Logic.ClassicalChoice Coq.Logic.ChoiceFacts.
-Require Coq.Logic.ClassicalFacts.
-
 Section CoEqualizer.
   Context {A B : Type} (f g : A → B).
 
@@ -75,118 +70,45 @@ Section CoEqualizer.
 
   Definition CoEq_rel_base : relation B := fun x y => exists z, f z = x ∧ g z = y.
 
-  Definition CoEq_rel : relation B := clos_refl_sym_trans _ CoEq_rel_base.
-
-  Definition CoEq_rel_refl :=
-    equiv_refl _ _ (clos_rst_is_equiv _ CoEq_rel_base).
-  Definition CoEq_rel_sym :=
-    equiv_sym _ _ (clos_rst_is_equiv _ CoEq_rel_base).
-  Definition CoEq_rel_trans :=
-    equiv_trans _ _ (clos_rst_is_equiv _ CoEq_rel_base).
-
-  Definition CoEq_Type :=
-    {P : B → Prop | exists z : B, P z ∧ (∀ (y : B), (P y ↔ CoEq_rel z y))}.
-
-  Local Axiom ConstructiveIndefiniteDescription_B :
-    ConstructiveIndefiniteDescription_on B.
-
-  Definition CoEq_Choice (ct : CoEq_Type) : {x : B | (proj1_sig ct) x}.
+  Program Definition CoEq_rel : EquiRel B :=
+    {| EQR_rel := clos_refl_sym_trans _ CoEq_rel_base |}.
+  Next Obligation.
   Proof.
-    apply ConstructiveIndefiniteDescription_B.
-    destruct ct as [P [z [H1 H2]]].
-    exists z; trivial.
-  Defined.
-
-  Local Axiom PropExt : ClassicalFacts.prop_extensionality.
-
-  Theorem CoEq_rel_Ext : ∀ (x : A) (y : B), CoEq_rel (f x) y = CoEq_rel (g x) y.
-  Proof.
-    intros x y.
-    assert (Hx : CoEq_rel (f x) (g x)).
-    {
-      constructor 1.
-      exists x; split; trivial.
-    }
-    apply PropExt; split; intros H.
-    {
-      apply CoEq_rel_sym in Hx.
-      apply (CoEq_rel_trans _ _ _ Hx H).
-    }
-    {
-      apply (CoEq_rel_trans _ _ _ Hx H).
-    }
+    split.
+    exact (equiv_refl _ _ (clos_rst_is_equiv _ CoEq_rel_base)).
+    exact (equiv_sym _ _ (clos_rst_is_equiv _ CoEq_rel_base)).
+    exact (equiv_trans _ _ (clos_rst_is_equiv _ CoEq_rel_base)).
   Qed.
 
   Program Definition Type_Cat_CoEq  : CoEqualizer Type_Cat f g :=
     {|
-      equalizer := CoEq_Type
+      equalizer := quotient CoEq_rel;
+      equalizer_morph := λ x, class_of CoEq_rel x;
+      equalizer_morph_ex e' F H x := F (representative x)
     |}.
 
   Next Obligation.
-  Proof.  
-    cbn in *.
-    intros x.
-    exists (fun y => CoEq_rel x y).
-    exists x; split.
-    apply CoEq_rel_refl.
-    intros z; split; intros; trivial.
-  Defined.
-
-  Next Obligation.
   Proof.
-    extensionality x.
-    apply sig_proof_irrelevance.
-    extensionality y.
-    apply CoEq_rel_Ext.
+    extensionality x; simpl.
+    apply class_of_inj.
+    constructor; exists x; eauto.
   Qed.
 
   Next Obligation.
   Proof.
-    intros T F H x.
-    exact (F (proj1_sig (CoEq_Choice x))).
-  Defined.
-
-  Next Obligation.
-  Proof.
-    intros T eqm H.
-    unfold Type_Cat_CoEq_obligation_1, Type_Cat_CoEq_obligation_3.
+    intros T eqm Hfg; simpl.
     extensionality x.
-    cbn in *.
-    match goal with
-      [|- eqm (proj1_sig ?A) = _] =>
-      destruct A as [z Hz]
-    end.
-    cbn in *.
-    induction Hz as [? ? [w [[] []]]| | |]; auto.
-    {
-      eapply equal_f in H; eauto.
-    }
+    induction (representative_of_class_of CoEq_rel x)
+      as [? ? [w [[] []]]| | |]; auto; [].
+    apply (equal_f Hfg).
   Qed.
 
   Next Obligation.
   Proof.
-    intros T eqm H1 u u' H2 H3.
-    destruct H3.
+    intros T eqm Hfg u u' Hu <-; simpl in *.
     extensionality x.
-    destruct x as [P [z [Hz1 Hz2]]].
-    unfold Type_Cat_CoEq_obligation_1 in H2; cbn in *.
-    apply equal_f with (x := z) in H2.
-    match goal with
-      [|- ?A = ?B] =>
-      match type of H2 with
-        ?C = ?D => assert (A = C) as ->; [|assert (B = D) as ->]; trivial
-      end
-    end.
-    {
-      apply f_equal.
-      apply sig_proof_irrelevance; cbn.
-      extensionality y; apply PropExt; trivial.
-    }
-    {
-      apply f_equal.
-      apply sig_proof_irrelevance; cbn.
-      extensionality y; apply PropExt; trivial.
-    }
+    rewrite <- (class_of_representative CoEq_rel x).
+    apply (equal_f Hu).
   Qed.
 
 End CoEqualizer.

@@ -2,6 +2,7 @@
 Essentials/Notations.v
 Essentials/Types.v
 Essentials/Facts_Tactics.v
+Essentials/Quotient.v
 
 #Category:
 Category/Category.v
