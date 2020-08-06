@@ -94,6 +94,13 @@ Section Quotient.
       [apply class_of_represents|apply class_of_represents |trivial].
   Qed.
 
+  Lemma equal_classes x y : class_of x = class_of y → R x y.
+  Proof.
+    intros Hxy.
+    apply (represented_rel (class_of x));
+      [|rewrite Hxy]; apply class_of_represents.
+  Qed.
+
   Lemma class_of_representative c : class_of (representative c) = c.
   Proof.
     apply (uniquely_represented _ _ (representative c) (representative c));
