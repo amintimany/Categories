@@ -96,7 +96,7 @@ to an aobject isomorphic to it. *)
         |}.
 
   (** Any fully-faithful functor is conservative.
-      A conservative functor is one for which we have to objects of the domain
+      A conservative functor is one for which we have two objects of the domain
       category are isomorphic if their images are ismorphic. *)
   Program Definition Fully_Faithful_Conservative
           (fth : Faithful_Func) (fl : Full_Func)
