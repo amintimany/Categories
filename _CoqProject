@@ -172,6 +172,9 @@ PreSheaf/SubObject_Classifier.v
 PreSheaf/CCC.v
 PreSheaf/Topos.v
 
+#Monad:
+Monad/Monad.v
+Monad/Adj_Monad.v
 
 #Demo:
 Demo/Demo.v
