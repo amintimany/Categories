@@ -64,7 +64,7 @@ Section distributive_law.
     rewrite <- F_compose.
     cbn; rewrite Hright.
     change_rhs (_ ∘ (Trans (monad_mult Gmon) ((F _o) ((F _o) c)) ∘
-               (G _a) ((G _a) (Trans (monad_unit Fmon) ((F _o) c)))) ∘ _)%morphism.
+      (G _a) ((G _a) (Trans (monad_unit Fmon) ((F _o) c)))) ∘ _)%morphism.
     cbn_rewrite (@Trans_com _ _ _ _ (monad_mult Gmon)).
     cbn.
     rewrite !assoc.
@@ -94,7 +94,7 @@ Section distributive_law.
     rewrite <- F_compose.
     cbn; rewrite Hleft.
     change_rhs (_ ∘ (Trans (monad_mult Gmon) ((F _o) ((F _o) c)) ∘
-                (G _a) (Trans (monad_unit Gmon) ((F _o) ((F _o) c)))) ∘ _)%morphism.
+      (G _a) (Trans (monad_unit Gmon) ((F _o) ((F _o) c)))) ∘ _)%morphism.
     pose proof (equal_f_dep (f_equal Trans (monad_unit_mult_right Gmon))
                             (F _o (F _o c))%object) as Hright.
     revert Hright; simpl; simpl_ids; intros Hright.
@@ -115,47 +115,52 @@ Section distributive_law.
       as Hright.
     revert Hright; simpl; Functor_Simplify; simpl_ids; intros Hright.
     change_rhs (_ ∘ _ ∘ ((G _a) (Trans ι ((F _o) c)) ∘
-                (G _a) (Trans (monad_mult Fmon) ((G _o) ((F _o) c)))) ∘ _)%morphism.
+      (G _a) (Trans (monad_mult Fmon) ((G _o) ((F _o) c)))) ∘ _)%morphism.
     rewrite <- F_compose.
     cbn; rewrite Hright.
     pose proof (equal_f_dep (f_equal Trans (monad_mult_assoc Fmon)) c) as HassF.
     revert HassF; simpl; Functor_Simplify; simpl_ids; intros HassF.
     rewrite F_compose.
     change_rhs (_ ∘ (Trans (monad_mult Gmon) ((F _o) ((F _o) c)) ∘
-                    ((G _a) ((G _a) (Trans (monad_mult Fmon) ((F _o) c))))) ∘ _)%morphism.
+      ((G _a) ((G _a) (Trans (monad_mult Fmon) ((F _o) c))))) ∘ _)%morphism.
     cbn_rewrite (@Trans_com _ _ _ _ (monad_mult Gmon)).
     rewrite !assoc_sym, <- !F_compose.
     cbn; rewrite HassF; clear HassF.
     rewrite !F_compose.
     change_rhs (_ ∘ (((G _a) ((F _a) (Trans (monad_mult Fmon) c))) ∘
-                Trans (monad_mult Gmon) ((F _o) ((F _o) ((F _o) c)))) ∘ _)%morphism.
+      Trans (monad_mult Gmon) ((F _o) ((F _o) ((F _o) c)))) ∘ _)%morphism.
     cbn.
-    cbn_rewrite (@Trans_com_sym
-                   _ _ _ _ (monad_mult Gmon)
-                   _ _ ((F _a) (Trans (monad_mult Fmon) c))%morphism).
+    cbn_rewrite
+      (@Trans_com_sym
+         _ _ _ _ (monad_mult Gmon)
+         _ _ ((F _a) (Trans (monad_mult Fmon) c))%morphism).
     change_rhs (_ ∘ _ ∘ ((G _a) ((G _a) ((F _a) (Trans (monad_mult Fmon) c))) ∘
-                (G _a) (Trans ι ((F _o) ((F _o) c)))) ∘ _)%morphism.
+      (G _a) (Trans ι ((F _o) ((F _o) c)))) ∘ _)%morphism.
     rewrite <- F_compose.
     cbn; cbn_rewrite (@Trans_com_sym _ _ _ _ ι).
     rewrite !F_compose.
     change_rhs (_ ∘ _ ∘ _ ∘ _ ∘ ((G _a) ((F _a) (Trans ι ((F _o) c)))
-         ∘ Trans (monad_mult Gmon) ((F _o) ((F _o) ((G _o) ((F _o) c))))) ∘ _)%morphism.
+      ∘ Trans (monad_mult Gmon) ((F _o) ((F _o) ((G _o) ((F _o) c))))) ∘
+      _)%morphism.
     cbn; cbn_rewrite (@Trans_com_sym _ _ _ _ (monad_mult Gmon)).
-    change_rhs (_ ∘ _ ∘ _ ∘ ((G _a) ((F _a) ((G _a) (Trans (monad_mult Fmon) c)))
-         ∘ Trans (monad_mult Gmon) ((F _o) ((G _o) ((F _o) ((F _o) c))))) ∘ _)%morphism.
+    change_rhs
+      (_ ∘ _ ∘ _ ∘ ((G _a) ((F _a) ((G _a) (Trans (monad_mult Fmon) c))) ∘
+      Trans (monad_mult Gmon) ((F _o) ((G _o) ((F _o) ((F _o) c))))) ∘
+      _)%morphism.
     cbn; cbn_rewrite (@Trans_com_sym _ _ _ _ (monad_mult Gmon)).
     change_rhs (_ ∘ _ ∘ ((G _a) (Trans ι ((F _o) c)) ∘
-                    Trans (monad_mult Gmon) ((F _o) ((G _o) ((F _o) c)))) ∘ _)%morphism.
+      Trans (monad_mult Gmon) ((F _o) ((G _o) ((F _o) c)))) ∘ _)%morphism.
     cbn; cbn_rewrite (@Trans_com_sym _ _ _ _ (monad_mult Gmon)).
     pose proof (equal_f_dep (f_equal Trans (monad_mult_assoc Gmon))
                             (F _o (F _o c))%object) as HassG.
     revert HassG; simpl; Functor_Simplify; simpl_ids; intros HassG.
     change_rhs (_ ∘ (Trans (monad_mult Gmon) ((F _o) ((F _o) c)) ∘
-                     Trans (monad_mult Gmon) ((G _o) ((F _o) ((F _o) c)))) ∘ _)%morphism.
+      Trans (monad_mult Gmon) ((G _o) ((F _o) ((F _o) c)))) ∘ _)%morphism.
     cbn; rewrite HassG; clear HassG.
     rewrite !F_compose.
     change_rhs (_ ∘ _ ∘ _ ∘ ((G _a) ((G _a) (Trans ι ((F _o) c))) ∘
-      (G _a) ((G _a) ((F _a) ((G _a) (Trans (monad_mult Fmon) c))))) ∘ _)%morphism.
+      (G _a) ((G _a) ((F _a) ((G _a) (Trans (monad_mult Fmon) c))))) ∘
+      _)%morphism.
     cbn_rewrite_back (@F_compose _ _ (G ∘ G)).
     cbn; cbn_rewrite (@Trans_com _ _ _ _ ι).
     rewrite !F_compose.
@@ -172,9 +177,8 @@ Section distributive_law.
                  (G _a) ((G _a) (Trans ι ((F _o) ((F _o) c)))) ∘
                  (G _a) (Trans ι ((G _o) ((F _o) ((F _o) c))))) ∘ _)%morphism.
     rewrite <- !F_compose.
-    pose proof
-         (equal_f_dep (f_equal Trans (distr_law_mult_left dw)) (F _o (F _o c))%object)
-      as Hleft.
+    pose proof (equal_f_dep (f_equal Trans (distr_law_mult_left dw))
+                            (F _o (F _o c))%object) as Hleft.
     revert Hleft; simpl; Functor_Simplify; simpl_ids; intros Hleft.
     rewrite <- Hleft.
     rewrite !F_compose.
