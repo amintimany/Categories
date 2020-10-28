@@ -19,3 +19,8 @@ Record Monad {C : Category} (F : (C --> C)%functor) := {
     (monad_mult ∘ ((NatTrans_id F) ∘_h monad_mult)
                 ∘ (NatTrans_Functor_assoc F F F))%nattrans; }.
 
+Arguments monad_unit {_ _} _.
+Arguments monad_mult {_ _} _.
+Arguments monad_unit_mult_left {_ _} _.
+Arguments monad_unit_mult_right {_ _} _.
+Arguments monad_mult_assoc {_ _} _.

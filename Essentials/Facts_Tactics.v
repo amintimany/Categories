@@ -6,17 +6,15 @@ Require Export Coq.Program.Equality.
 Require Export Coq.Logic.FunctionalExtensionality.
 Require Export Coq.Logic.ProofIrrelevance.
 
+Definition equal_f_dep :
+  ∀ {A : Type} {B : A → Type} {f g : ∀ x, B x}, f = g → ∀ x : A, f x = g x.
+Proof. intros A B f g H x; destruct H; reflexivity. Defined.
+
 Definition equal_f : ∀ {A B : Type} {f g : A → B}, f = g → ∀ x : A, f x = g x.
-Proof.
-  intros A B f g H x.
-  destruct H; reflexivity.
-Defined.
+Proof. intros; apply (@equal_f_dep _ (λ _, _)); assumption. Defined.
 
 Definition f_equal : ∀ (A B : Type) (f : A → B) (x y : A), x = y → f x = f y.
-Proof.
-  intros A B f x y H.
-  destruct H; reflexivity.
-Defined.
+Proof. intros A B f x y H; destruct H; reflexivity. Defined.
 
 Arguments f_equal [_ _] _ [_ _] _.
 
