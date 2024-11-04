@@ -11,46 +11,25 @@ Local Open Scope nattrans_scope.
 (** The opposite of a natural transformation N : F -> F' is a nattrans
     N^op : F'^op -> F^op. It has the same arrow family as the original
     natural transformation. *)
-Section Opposite_NatTrans.
-  Context {C D : Category} {F F' : (C --> D)%functor} (N : (F --> F')%nattrans).
+Program Definition opposite_natural {C D : category} {F F' : functor C D} (N : natural F F') : natural (F' ᴼᴾ) (F ᴼᴾ) :=
+  {|
+    trans := trans N;
+    naturality := fun c c' h => (naturality_sym N h);
+    naturality_sym := fun c c' h => (naturality N h)
+  |}.
 
-  Program Definition Opposite_NatTrans : F'^op --> F^op :=
-    {|
-      Trans := Trans N;
-      Trans_com := fun c c' h => (Trans_com_sym N h);
-      Trans_com_sym := fun c c' h => (Trans_com N h)
-    |}.
-
-End Opposite_NatTrans.
-
-Notation "N '^op'" := (Opposite_NatTrans N) : nattrans_scope.
+Notation "N 'ᴼᴾ'" := (opposite_natural N) : nattrans_scope.
 
 (** Composition of opposite natural transformations is just the same as the
     opposite natural transformation of the composition. *)
-Section Compose_NOP.
-  Context {C D : Category} {F F' F'' : (C --> D)%functor}
-          (N : F --> F') (N' : F' --> F'').
 
-  Theorem NatTrans_compose_Op : ((N' ∘ N)^op = N^op ∘ (N'^op))%nattrans.
-  Proof.
-    apply NatTrans_eq_simplify.
-    trivial.
-  Qed.
+Theorem natural_compose_op {C D : category} {F F' F'' : functor C D} (N : natural F F') (N' : natural F' F'') :
+  ((N' ∘ N) ᴼᴾ = N ᴼᴾ ∘ (N' ᴼᴾ))%nattrans.
+Proof. apply natural_eq_simplify; trivial. Qed.
 
-End Compose_NOP.
-
-(** Opposite of NatTrans_id is just NatTrans_id of the opposite functor *)
-Section NatTrans_id_Op.
-  Context {C D : Category} (F : (C --> D)%functor).
-
-  Theorem NatTrans_id_Op
-    : ((NatTrans_id F)^op)%nattrans = NatTrans_id (F^op)%functor.
-  Proof.
-    apply NatTrans_eq_simplify.
-    trivial.
-  Qed.
-
-End NatTrans_id_Op.
+(** Opposite of natural_id is just natural_id of the opposite functor *)
+Theorem natural_id_op {C D : category} (F : functor C D) : ((natural_id F) ᴼᴾ)%nattrans = natural_id (F ᴼᴾ).
+Proof. apply natural_eq_simplify; trivial. Qed.
 
 (** Horizontal composition of natural transformations:
 
@@ -59,29 +38,18 @@ G' : D -> E be functors and N : F -> G and N' : F' -> G' be natural
 transformations. Then, the horizontal composition of N and N',
 denoted by N ∘_h N' : F' ∘ F -> G' ∘ G is defined as follows:
  *)
-Program Definition NatTrans_hor_comp {C D E : Category} {F G : (C --> D)%functor}
-        {F' G' : (D --> E)%functor} (tr : F --> G) (tr' : F' --> G')
-  : (F' ∘ F) --> (G' ∘ G) :=
+Program Definition natural_hor_comp {C D E : category} {F G : functor C D} {F' G' : functor D E}
+  (tr : natural F G) (tr' : natural F' G') : natural (F' ∘ F) (G' ∘ G) :=
 {|
-  Trans := fun c : Obj => ((G' _a (Trans tr c)) ∘ (Trans tr' (F _o c)))%morphism
+  trans c := ((G' ₐ (trans tr c)) ∘ (trans tr' (F ₒ c)))%morphism
 |}.
-
-Next Obligation. (* Trans_com*)
-Proof.
-  rewrite assoc.
-  rewrite Trans_com.
-  rewrite assoc_sym.
-  rewrite <- F_compose.
-  rewrite Trans_com.
-  rewrite F_compose.
-  auto.
+Next Obligation.
+  repeat intros ?; rewrite /= assoc naturality -assoc -F_compose naturality F_compose; auto.
 Qed.
-
-Next Obligation. (* Trans_com*)
-Proof.
-  symmetry.
-  apply NatTrans_hor_comp_obligation_1.
+Next Obligation.
+  repeat intros ?; symmetry; rewrite /= assoc naturality -assoc -F_compose naturality F_compose; auto.
 Qed.
+Fail Next Obligation.
 
 (**
 Graphically:
@@ -102,99 +70,77 @@ Graphically:
 #
 *)
 
-Notation "N ∘_h N'" := (NatTrans_hor_comp N' N) : nattrans_scope.
+Notation "N ∘ₕ N'" := (natural_hor_comp N' N) : nattrans_scope.
 
-(** Horizontal composition of NatTrans_ids is just the NatTrans_id of
+(** Horizontal composition of natural_ids is just the natural_id of
     the composition of underlying functors. *)
-Section Hor_Compose_ids.
-  Context {C D E : Category} (F : (C --> D)%functor) (G : (D --> E)%functor).
-
-  Theorem NatTrans_hor_comp_ids
-    : ((NatTrans_id G) ∘_h (NatTrans_id F))%nattrans = NatTrans_id  (G ∘ F).
-  Proof.
-    apply NatTrans_eq_simplify.
-    cbn.
-    extensionality c.
-    rewrite F_id; simpl_ids; trivial.
-  Qed.
-
-End Hor_Compose_ids.
+Theorem natural_hor_comp_ids {C D E : category} (F : functor C D) (G : functor D E) :
+  ((natural_id G) ∘ₕ (natural_id F))%nattrans = natural_id  (G ∘ F).
+Proof. apply natural_eq_simplify; cbn; extensionality c; rewrite F_id; simpl_ids; trivial. Qed.
 
 (** Horizontal composition of opposite of two natural transformations is just
     the opposite of the horizontal composition of those two natural
     transformations. *)
-Section Hor_Compose_NOP.
-  Context {C D E : Category} {F G : (C --> D)%functor} {F' G' : (D --> E)%functor}
-          (N : F --> G) (N' : F' --> G').
 
-  Theorem NatTrans_hor_comp_Op : ((N' ∘_h N)^op = N'^op ∘_h N^op)%nattrans.
-  Proof.
-    apply NatTrans_eq_simplify.
-    cbn.
-    extensionality c.
-    rewrite Trans_com.
-    trivial.
-  Qed.
+Theorem natural_hor_comp_op {C D E : category} {F G : functor C D} {F' G' : functor D E} (N : natural F G) (N' : natural F' G') :
+  ((N' ∘ₕ N) ᴼᴾ = N' ᴼᴾ ∘ₕ N ᴼᴾ)%nattrans.
+Proof. apply natural_eq_simplify; cbn; extensionality c; rewrite naturality; trivial. Qed.
 
-End Hor_Compose_NOP.
+(** Natural transformation from a functor to itself composed with id on
+    the right. *)
+Program Definition natural_to_compose_id {C D : category} (F : functor C D) : natural F ((functor_id D) ∘ F) :=
+  {|
+    trans c := id (F ₒ c)
+  |}.
+Solve All Obligations with simpl; auto.
+Fail Next Obligation.
 
-Section NatTransCompID.
-  Context {C D : Category} (F : (C --> D)%functor).
+(** Natural transformation to a functor from itself composed with id on
+    the right. *)
+Program Definition natural_from_compose_id {C D : category} (F : functor C D) : natural ((functor_id D) ∘ F) F :=
+  {|
+    trans c := id (F ₒ c)
+  |}.
+Solve All Obligations with simpl; auto.
+Fail Next Obligation.
 
-  (** Natural transformation from a functor to itself composed with id on
-      the right. *)
-  Program Definition NatTrans_to_compose_id : F --> ((Functor_id D) ∘ F) :=
-    {|
-      Trans := fun c => id
-    |}.
+(** Natural transformation from a functor to itself composed with id on
+    the left. *)
+Program Definition natural_to_id_compose {C D : category} (F : functor C D) : natural F (F ∘ (functor_id C)) :=
+  {|
+    trans c := id (F ₒ c)
+  |}.
+Solve All Obligations with simpl; auto.
+Fail Next Obligation.
 
-  (** Natural transformation to a functor from itself composed with id on
-      the right. *)
-  Program Definition NatTrans_from_compose_id : ((Functor_id _) ∘ F) --> F :=
-    {|
-      Trans := fun c => id
-    |}.
+(** Natural transformation to a functor from itself composed with id on
+    the left. *)
+Program Definition natural_from_id_compose {C D : category} (F : functor C D) : natural (F ∘ (functor_id C)) F :=
+  {|
+    trans c := id (F ₒ c)
+  |}.
+Solve All Obligations with simpl; auto.
+Fail Next Obligation.
 
-  (** Natural transformation from a functor to itself composed with id on
-      the left. *)
-  Program Definition NatTrans_to_id_compose : F --> (F ∘ (Functor_id _)) :=
-    {|
-      Trans := fun c => id
-    |}.
+(** Natural transformation corresponding to associativity of
+    functor composition *)
+Program Definition func_associator {C1 C2 C3 C4 : category} (F : functor C1 C2) (G : functor C2 C3) (H : functor C3 C4) :
+  natural ((H ∘ G) ∘ F) (H ∘ (G ∘ F)) :=
+  {|
+    trans c := id (H ₒ (G ₒ (F ₒ c)))
+  |}.
+Solve All Obligations with simpl; auto.
+Fail Next Obligation.
 
-  (** Natural transformation to a functor from itself composed with id on
-      the left. *)
-  Program Definition NatTrans_from_id_compose : (F ∘ (Functor_id _)) --> F :=
-    {|
-      Trans := fun c => id
-    |}.
-
-End NatTransCompID.
-
-Section NatTransAssoc.
-  Context {C1 C2 C3 C4 : Category}
-          (F : (C1 --> C2)%functor)
-          (G : (C2 --> C3)%functor)
-          (H : (C3 --> C4)%functor).
-
-  (** Natural transformation corresponding to associativity of
-      functor composition *)
-  Program Definition NatTrans_Functor_assoc
-    : ((H ∘ G) ∘ F) --> (H ∘ (G ∘ F)) :=
-    {|
-      Trans := fun c => id
-    |}.
-
-  (** Natural transformation corresponding to the symmetric form of
-      associativity of functor composition *)
-  Program Definition NatTrans_Functor_assoc_sym
-    : (H ∘ (G ∘ F)) --> ((H ∘ G) ∘ F) :=
-    {|
-      Trans := fun c => id
-    |}.
-
-End NatTransAssoc.
-
+(** Natural transformation corresponding to the symmetric form of
+    associativity of functor composition *)
+Program Definition func_associator_sym {C1 C2 C3 C4 : category} (F : functor C1 C2) (G : functor C2 C3) (H : functor C3 C4) :
+  natural (H ∘ (G ∘ F)) ((H ∘ G) ∘ F) :=
+  {|
+    trans c := id (H ₒ (G ₒ (F ₒ c)))
+  |}.
+Solve All Obligations with simpl; auto.
+Fail Next Obligation.
 (**
 The following theorem states that the two natural transformations of
 the diagram in the middle are equal.
@@ -207,10 +153,10 @@ the diagram in the middle are equal.
      ||           ||                           ||          ||
      \/           ||                           ||          \/
      F'           ||                           ||          G'
- C ————–—–>D      ||(N4 ∘ N2) ∘_h (N3 ∘ N1)    ||      D ———–——–> E
+ C ————–—–>D      ||  (N4 ∘ N2) ∘ₕ (N3 ∘ N1)   ||      D ———–——–> E
      ||           ||                           ||          ||
      || N3        ||                           ||          ||N4
-     ||           ||  (N4 ∘_h N3) ∘ (N2 ∘_h N1)||          ||
+     ||           ||  (N4 ∘ₕ N3) ∘ (N2 ∘ₕ  N1)  ||          ||
      \/           ||                           ||          \/
      F''          \/                           \/          G''
  C ————–—–> D  D ——–—————————————————————————–——–> E   D————–——–> E
@@ -218,224 +164,55 @@ the diagram in the middle are equal.
 </pre>
 #
 *)
-Section NatTrans_comp_hor_comp.
-  Context {C D E  : Category}
-          {F F' F'' : (C --> D)%functor}
-          {G G' G'' : (D --> E)%functor}
-          (N1 : F --> F')
-          (N2 : G --> G')
-          (N3 : F' --> F'')
-          (N4 : G' --> G'').
+Theorem natural_comp_hor_comp {C D E : category} {F F' F'' : functor C D} {G G' G'' : functor D E}
+  (N1 : natural F F') (N2 : natural G G') (N3 : natural F' F'') (N4 : natural G' G'') :
+  ((N4 ∘ₕ N3) ∘ (N2 ∘ₕ N1) = (N4 ∘ N2) ∘ₕ (N3 ∘ N1))%nattrans.
+Proof.
+  apply natural_eq_simplify; extensionality c; cbn.
+  rewrite F_compose !assoc; f_equal; rewrite -!assoc; f_equal.
+  rewrite naturality; trivial.
+Qed.
 
-  Theorem NatTrans_comp_hor_comp
-    : ((N4 ∘_h N3) ∘ (N2 ∘_h N1) = (N4 ∘ N2) ∘_h (N3 ∘ N1))%nattrans.
-  Proof.
-    apply NatTrans_eq_simplify.
-    extensionality c.
-    cbn.
-    rewrite F_compose.
-    repeat rewrite assoc.
-    match goal with
-      [|- (?A ∘ ?B = ?A ∘ ?C)%morphism] =>
-      let H := fresh in
-      cut (B = C); [intros H; rewrite H; trivial|]
-    end.
-    repeat rewrite assoc_sym.
-    match goal with
-      [|- (?A ∘ ?B = ?C ∘ ?B)%morphism] =>
-      let H := fresh in
-      cut (A = C); [intros H; rewrite H; trivial|]
-    end.
-    apply Trans_com.
-  Qed.
+(** Equal functors produce a natural isomorphism. *)
+Program Definition func_eq_to_natural {C D : category} {F G : functor C D} (FGeq : F = G) : natural F G :=
+  {| trans c := hom_trans eq_refl (equal_f (f_equal FO FGeq) c) (id (F ₒ c)) |}.
+Next Obligation.
+Proof.
+  intros ????????; simpl in *.
+  rewrite hom_trans_comp_take_in_l right_id hom_trans_comp_take_in_r !hom_trans_refl left_id.
+  apply hom_trans_r_to_l.
+  rewrite hom_trans_trans eq_trans_refl_r eq_trans_refl_l !eq_sym_involutive.
+  apply Functor_eq_morph.
+Qed.
+Next Obligation.
+Proof.
+  intros ????????; simpl in *.
+  symmetry.
+  rewrite hom_trans_comp_take_in_l right_id hom_trans_comp_take_in_r !hom_trans_refl left_id.
+  apply hom_trans_r_to_l.
+  rewrite hom_trans_trans eq_trans_refl_r eq_trans_refl_l !eq_sym_involutive.
+  apply Functor_eq_morph.
+Qed.
+Fail Next Obligation.
 
-End NatTrans_comp_hor_comp.
+Program Definition func_eq_to_natural_inverse {C D : category} {F G : functor C D} (FGeq : F = G) :
+  func_eq_to_natural (eq_sym FGeq) ∘ func_eq_to_natural FGeq = natural_id F.
+Proof.
+  apply natural_eq_simplify; extensionality c; simpl.
+  rewrite hom_trans_comp_take_in_l right_id !hom_trans_trans !eq_trans_refl_r eq_trans_refl_l.
+  rewrite -equal_f_eq_sym -f_equal_eq_sym.
+  rewrite -(F_id F) -(F_id G).
+  apply (Functor_eq_morph (eq_sym FGeq)).
+Qed.
 
 (**
 Given I : C ≃ D for categories C and D and F : D -> E, there is a natural
 transformation from F ∘ (I ∘ I⁻¹) to F and back.
 *)
-Section IsoCat_NatTrans.
-  Context {C D : Category} (I : (C ≃≃ D ::> Cat)%isomorphism)
-          {E : Category} (F : (D --> E)%functor).
+Program Definition IsoCat_natural {C D : category} (I : C ≃@{Cat} D) {E : category} (F : functor D E) :
+  natural (F ∘ ((iso_morphism I) ∘ (I⁻¹)%morphism)) F :=
+  func_eq_to_natural (eq_trans (f_equal (fun G => F ∘ G)%functor (right_inverse I)) (Functor_id_unit_right _ _ F)).
 
-  Local Obligation Tactic := idtac.
-
-  Program Definition IsoCat_NatTrans :
-    (F ∘ ((iso_morphism I) ∘ (I⁻¹)%morphism)) --> F
-    :=
-      {|
-        Trans :=
-          fun c =>
-            match eq_sym (f_equal (fun x => (x _o)%object c) (right_inverse I))
-                  in _ = y return ((F _o y) --> (F _o c))%object%morphism
-            with
-              eq_refl => id
-            end
-      |}.
-  Next Obligation.
-  Proof.
-    intros c c' h; cbn.
-    match goal with
-      [|- (match ?e with _ => _ end ∘ ?A)%morphism
-         = (?B ∘ match ?e' with _ => _ end)%morphism] =>
-      generalize e; generalize e';
-      set (U := A); set (V := B)
-    end.
-    intros H H'.
-    cut (JMeq U V); [intros HUV|].
-    {
-      apply JMeq_eq.
-      destruct H.
-      set (z' := ((iso_morphism I)
-                    _o ((inverse_morphism I) _o c'))%object) in *.
-      clearbody U.
-      clearbody z'.
-      destruct H'.
-      auto.
-    }
-    {
-      unfold U, V; clear.
-      match goal with
-        [|- JMeq (F @_a ?A ?B ?C)%morphism (F _a ?D)%morphism] =>
-        set (V := C);
-        set (M := A) in *;
-        set (N := B) in *;
-        set (U := D)
-      end.
-      cut (M = c); [intros Hc|].
-      {
-        cut (N = c'); [intros Hc'|].
-        {
-          cut (JMeq V U); [intros HVU|].
-          {
-            clearbody U V M N.
-            destruct Hc.
-            destruct Hc'.
-            apply JMeq_eq in HVU.
-            destruct HVU.
-            trivial.
-          }
-          {
-            unfold U, V, M, N; clear.
-            change ((iso_morphism I) _o ((I⁻¹)%morphism _o c))%object
-            with (((iso_morphism I) ∘ (I⁻¹)%morphism) _o c)%object.
-            change ((iso_morphism I) _o ((I⁻¹)%morphism _o c'))%object
-            with (((iso_morphism I) ∘ (I⁻¹)%morphism) _o c')%object.
-            change ((iso_morphism I) _a (I⁻¹ _a h))%morphism
-            with (((iso_morphism I) ∘ I⁻¹) _a h)%morphism.
-            cbn_rewrite (right_inverse I).
-            trivial.
-          }
-        }
-        {
-          unfold N; clear.
-          change ((iso_morphism I) _o ((I⁻¹)%morphism _o c'))%object
-          with (((iso_morphism I) ∘ (I⁻¹)%morphism) _o c')%object.
-          cbn_rewrite (right_inverse I); trivial.
-        }
-      }
-      {
-        unfold M; clear.
-        change ((iso_morphism I) _o ((I⁻¹)%morphism _o c))%object
-        with (((iso_morphism I) ∘ (I⁻¹)%morphism) _o c)%object.
-        cbn_rewrite (right_inverse I); trivial.
-      }
-    }
-  Qed.
-
-  Next Obligation.
-  Proof.
-    symmetry.
-    apply IsoCat_NatTrans_obligation_1.
-  Qed.
-
-  Program Definition IsoCat_NatTrans_back :
-    F --> (F ∘ ((iso_morphism I) ∘ (I⁻¹)%morphism))
-    :=
-      {|
-        Trans :=
-          fun c =>
-            match eq_sym (f_equal (fun x => (x _o)%object c) (right_inverse I))
-                  in _ = y return ((F _o c) --> (F _o y))%object%morphism
-            with
-              eq_refl => id
-            end
-      |}.
-  Next Obligation.
-  Proof.
-    intros c c' h; cbn.
-    match goal with
-      [|- (match ?e with _ => _ end ∘ ?A)%morphism
-         = (?B ∘ match ?e' with _ => _ end)%morphism] =>
-      generalize e; generalize e';
-      set (U := A); set (V := B)
-    end.
-    intros H H'.
-    cut (JMeq U V); [intros HUV|].
-    {
-      apply JMeq_eq.
-      destruct H'.
-      set (z := ((iso_morphism I) _o ((inverse_morphism I) _o c))%object) in *.
-      clearbody V.
-      clearbody z.
-      destruct H.
-      auto.
-    }
-    {
-      unfold U, V; clear.
-      match goal with
-        [|- JMeq (F _a ?D)%morphism (F @_a ?A ?B ?C)%morphism] =>
-        set (V := C);
-        set (M := A) in *;
-        set (N := B) in *;
-        set (U := D)
-      end.
-      cut (M = c); [intros Hc|].
-      {
-        cut (N = c'); [intros Hc'|].
-        {
-          cut (JMeq U V); [intros HUV|].
-          {
-            clearbody U V M N.
-            destruct Hc.
-            destruct Hc'.
-            apply JMeq_eq in HUV.
-            destruct HUV.
-            trivial.
-          }
-          {
-            unfold U, V, M, N; clear.
-            change ((iso_morphism I) _o ((I⁻¹)%morphism _o c))%object
-            with (((iso_morphism I) ∘ (I⁻¹)%morphism) _o c)%object.
-            change ((iso_morphism I) _o ((I⁻¹)%morphism _o c'))%object
-            with (((iso_morphism I) ∘ (I⁻¹)%morphism) _o c')%object.
-            change ((iso_morphism I) _a (I⁻¹ _a h))%morphism
-            with (((iso_morphism I) ∘ I⁻¹) _a h)%morphism.
-            cbn_rewrite (right_inverse I).
-            trivial.
-          }
-        }
-        {
-          unfold N; clear.
-          change ((iso_morphism I) _o ((I⁻¹)%morphism _o c'))%object
-          with (((iso_morphism I) ∘ (I⁻¹)%morphism) _o c')%object.
-          cbn_rewrite (right_inverse I); trivial.
-        }
-      }
-      {
-        unfold M; clear.
-        change ((iso_morphism I) _o ((I⁻¹)%morphism _o c))%object
-        with (((iso_morphism I) ∘ (I⁻¹)%morphism) _o c)%object.
-        cbn_rewrite (right_inverse I); trivial.
-      }
-    }
-  Qed.
-
-  Next Obligation.
-  Proof.
-    symmetry.
-    apply IsoCat_NatTrans_back_obligation_1.
-  Qed.
-
-End IsoCat_NatTrans.
+Program Definition IsoCat_natural_back {C D : category} (I : C ≃@{Cat} D) {E : category} (F : functor D E) :
+  natural F (F ∘ ((iso_morphism I) ∘ (I⁻¹)%morphism)) :=
+  func_eq_to_natural (eq_sym (eq_trans (f_equal (fun G => F ∘ G)%functor (right_inverse I)) (Functor_id_unit_right _ _ F))).

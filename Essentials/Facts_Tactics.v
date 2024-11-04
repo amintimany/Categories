@@ -6,17 +6,27 @@ Require Export Coq.Program.Equality.
 Require Export Coq.Logic.FunctionalExtensionality.
 Require Export Coq.Logic.ProofIrrelevance.
 
-Definition equal_f_dep :
-  ∀ {A : Type} {B : A → Type} {f g : ∀ x, B x}, f = g → ∀ x : A, f x = g x.
-Proof. intros A B f g H x; destruct H; reflexivity. Defined.
+From Coq.ssr Require Export ssreflect.
 
-Definition equal_f : ∀ {A B : Type} {f g : A → B}, f = g → ∀ x : A, f x = g x.
-Proof. intros; apply (@equal_f_dep _ (λ _, _)); assumption. Defined.
+Definition equal_f_dep [A : Type] [B : A → Type] [f g : ∀ x, B x] : f = g → ∀ x : A, f x = g x :=
+  fun eq x => match eq in _ = u return f x = u x with eq_refl => eq_refl end.
+Definition equal_f [A B : Type] [f g : A → B] : f = g → ∀ x : A, f x = g x :=
+  fun eq x => equal_f_dep eq x.
 
-Definition f_equal : ∀ (A B : Type) (f : A → B) (x y : A), x = y → f x = f y.
-Proof. intros A B f x y H; destruct H; reflexivity. Defined.
+Definition f_equal [A B : Type] (f : A → B) [x y : A] : x = y → f x = f y :=
+  fun eq => match eq in _ = z return f x = f z with eq_refl => eq_refl end.
 
-Arguments f_equal [_ _] _ [_ _] _.
+Lemma equal_f_dep_eq_sym [A : Type] [B : A → Type] [f g : ∀ x, B x] (fgeq : f = g) :
+  ∀ x : A, equal_f_dep (eq_sym fgeq) x = eq_sym (equal_f_dep fgeq x).
+Proof. destruct fgeq; done. Qed.
+
+Lemma equal_f_eq_sym [A B : Type] [f g : A → B] (fgeq : f = g) :
+  ∀ x : A, equal_f (eq_sym fgeq) x = eq_sym (equal_f fgeq x).
+Proof. destruct fgeq; done. Qed.
+
+Lemma f_equal_eq_sym [A B : Type] (f : A → B) [x y : A] (xyeq : x = y) :
+  f_equal f (eq_sym xyeq) = eq_sym (f_equal f xyeq).
+Proof. destruct xyeq; done. Qed.
 
 Ltac basic_simpl :=
   let simpl_prod _ :=
@@ -43,7 +53,7 @@ Ltac basic_simpl :=
   repeat basic_simpl_helper tt
 .
 
-Global Obligation Tactic := basic_simpl; auto.
+Global Obligation Tactic := idtac.
 
 (** A tactic to apply proof irrelevance on all proofs of the same type in the
  context. *)
@@ -57,8 +67,7 @@ Ltac PIR :=
        end
       end
   in
-  repeat pir_helper tt
-.
+  repeat pir_helper tt.
 
 (** A tactic to eliminate equalities in the context. *)
 Ltac ElimEq := repeat match goal with [H : _ = _|- _] => destruct H end.
@@ -122,6 +131,17 @@ Qed.
 
 Hint Resolve pair_eq : core.
 
+Definition transport {A B : Type} (eq : A = B) (x : A) : B :=
+  match eq in _ = T return T with eq_refl => x end.
+
+Arguments transport : simpl never.
+
+Lemma transport_refl {A} (eq : A = A) (x : A) : transport eq x = x.
+Proof. replace eq with (eq_refl A); [done|apply proof_irrelevance]. Qed.
+
+Lemma transport_trans {A B C} (eqAB : A = B) (eqBC : B  = C) (x : A) : transport eqBC (transport eqAB x) = transport (eq_trans eqAB eqBC) x.
+Proof. destruct eqAB; destruct eqBC; done. Qed.
+
 (** Tactics to apply a tactic to all hypothesis in an efficient way.
 This is due to Jonathan's (jonikelee@gmail.com) message on coq-club *)
 
@@ -153,5 +173,3 @@ Tactic Notation "do1hyp" "reverse" tactic3(tac) :=
  let hs := hyp_stack in
  let rec step H hs := next_hyp hs step fail + tac H in
  next_hyp hs step fail.
-
-(** End of tactics for applying a tactic to all hypothesis. *)

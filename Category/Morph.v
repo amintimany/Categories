@@ -4,16 +4,14 @@ From Categories Require Import Essentials.Facts_Tactics.
 From Categories Require Import Category.Category.
 From Categories Require Import Category.Opposite.
 
-Local Open Scope morphism_scope.
-
 (** The basic Definition of an isomorphism in a category.
 An isomorphism is a pair of arrows f : a -> b and g : b -> a such that
 g ∘ f = id a and f ∘ g = id b. *)
-Record Isomorphism {C : Category} (a b : C) : Type :=
+Record Isomorphism {C : category} (a b : C) : Type :=
 {
-  iso_morphism : a --> b;
+  iso_morphism : hom a b;
 
-  inverse_morphism : b --> a;
+  inverse_morphism : hom b a;
 
   left_inverse : (inverse_morphism ∘ iso_morphism)%morphism = id;
 
@@ -28,7 +26,7 @@ Hint Resolve left_inverse : core.
 
 Hint Resolve right_inverse : core.
 
-Coercion iso_morphism : Isomorphism >-> Hom.
+Coercion iso_morphism : Isomorphism >-> hom.
 
 Arguments iso_morphism {_ _ _} _.
 Arguments inverse_morphism {_ _ _} _.
@@ -37,11 +35,9 @@ Arguments right_inverse {_ _ _} _.
 
 Notation "f '⁻¹'" := (inverse_morphism f) : morphism_scope.
 
-Notation "a ≃ b" := (Isomorphism a b) : isomorphism_scope.
+Notation "a ≃ b" := (Isomorphism a b) : type_scope.
 
-Notation "a ≃≃ b ::> C" := (@Isomorphism C a b) : isomorphism_scope.
-
-Local Open Scope isomorphism_scope.
+Notation "a ≃@{ C } b" := (@Isomorphism C a b) : type_scope.
 
 (* basic tactics for isomorphisms *)
 
@@ -84,7 +80,7 @@ Hint Extern 3 => progress (dohyps (fun H => simpl_isos in H)) : core.
 (** simplifies equality of iso-morphisms. This theorem uses proof irrelevance
 to assume any two proofs for left and right inverse properties are equal.
 In other words, two isomorphisms are equal if their underlying morphisms are. *)
-Theorem Isomorphism_eq_simplify {C : Category} {a b : C} (I I' : a ≃ b) :
+Theorem Isomorphism_eq_simplify {C : category} {a b : C} (I I' : a ≃ b) :
   (iso_morphism I = iso_morphism I') →
   (inverse_morphism I = inverse_morphism I') → I = I'.
 Proof.
@@ -102,16 +98,21 @@ Qed.
 (** The identity morphism forms an isomorphism, i.e., it is inverse to itself.
 This is reflexivity property for the equivalence relation of isomorphism
 on objects. *)
-Program Definition Isomorphism_id {C : Category} {a : C} : a ≃ a :=
+Program Definition Isomorphism_id {C : category} {a : C} : a ≃ a :=
 {|
   iso_morphism := id;
   inverse_morphism := id
 |}.
+Next Obligation.
+Proof. intros ??; rewrite left_id //. Qed.
+Next Obligation.
+Proof. intros ??; rewrite right_id //. Qed.
+Fail Next Obligation.
 
 (** Each ismorphism has an inverse isomorphism. Simply swap the morphisms and
 proofs of left and right inverse properties. This is symmetry property for the
 equivalence relation of isomorphism on objects. *)
-Definition Inverse_Isomorphism {C : Category} {a b : C} (I : a ≃ b) : b ≃ a :=
+Definition Inverse_Isomorphism {C : category} {a b : C} (I : a ≃ b) : b ≃ a :=
 {|
   iso_morphism := I⁻¹;
   inverse_morphism := I;
@@ -125,188 +126,132 @@ Notation "f '⁻¹'" := (Inverse_Isomorphism f) : isomorphism_scope.
 isomorphism. Left and right inverse properties follow straightforwardly.
 This is transitivty property for the equivalence relation of isomorphism
 on objects. *)
-Program Definition Isomorphism_Compose
-        {C : Category} {a b c : C} (I : a ≃ b) (I' : b ≃ c) : a ≃ c
-  :=
+Program Definition Isomorphism_Compose {C : category} {a b c : C} (I : a ≃ b) (I' : b ≃ c) :
+  (a ≃ c)%isomorphism :=
 {|
   iso_morphism := I' ∘ I;
-  inverse_morphism := I⁻¹ ∘ I'⁻¹
+  inverse_morphism := I⁻¹ ∘ I' ⁻¹
 |}.
 Next Obligation.
 Proof.
-  rewrite assoc.
-  rewrite (assoc_sym I).
-  auto.
+  intros ???? I ?; rewrite assoc (assoc_sym I) left_inverse left_id left_inverse //.
 Qed.
 Next Obligation.
 Proof.
-  rewrite assoc.
-  rewrite (assoc_sym (I'⁻¹)).
-  auto.
+  intros ????? I'; rewrite assoc (assoc_sym (I' ⁻¹)) right_inverse left_id right_inverse //.
 Qed.
+Fail Next Obligation.
 
 Notation "f ∘ g" := (Isomorphism_Compose g f) : isomorphism_scope.
-
-Local Close Scope isomorphism_scope.
 
 (** A monic arrow (AKA, mono, monomorphic arrow and monomorphism) m is an arrow
 such that for any two arrows g and h (of the appropriate domain and codomain)
 we have if m ∘ g = m ∘ h then g = h. *)
-Record Monic {C : Category} (a b : Obj) :=
-{
-  mono_morphism : a --> b;
-  mono_morphism_monomorphic : ∀ (c : Obj) (g h : c --> a),
-      (mono_morphism ∘ g = mono_morphism ∘ h) → g = h
-}.
+Record Monic {C : category} (a b : C) :=
+  {
+    mono_morphism : hom a b;
+    mono_morphism_monomorphic : ∀ (c : C) (g h : hom c a),
+      (mono_morphism ∘ g = mono_morphism ∘ h)%morphism → g = h
+  }.
 
-Coercion mono_morphism : Monic >-> Hom.
+Coercion mono_morphism : Monic >-> hom.
 
 Arguments mono_morphism {_ _ _} _.
 Arguments mono_morphism_monomorphic {_ _ _} _ _ _ _ _.
 
-Notation "a ≫–> b" := (Monic a b) : morphism_scope.
-
-Bind Scope morphism_scope with Monic.
+Notation "a ≫–> b" := (Monic a b) : type_scope.
 
 (** An epic arrow (AKA, epi, epimorphic arrow and epimorphism) is a monomorphism
 in the opposite category. That is, m is epic if for any pair of arrows g and h
 (of the appropriate domain and codomain) we have if g ∘ m = h ∘ m then g = h. *)
-Definition Epic {C : Category} (a b : C) := @Monic (C^op) b a.
+Definition Epic {C : category} (a b : C) := @Monic (C ᴼᴾ) b a.
 
-Notation "a –≫ b" := (Epic a b) : morphism_scope.
-
-Bind Scope morphism_scope with Epic.
+Notation "a –≫ b" := (Epic a b) : type_scope.
 
 (** The condition for a morphism to be mono-morphic. *)
-Definition is_Monic {C : Category} {a b : Obj} (f : a --> b) :=
-  ∀ (c : Obj) (g h : c --> a), (f ∘ g = f ∘ h) → g = h.
+Definition is_Monic {C : category} {a b : C} (f : hom a b) := ∀ (c : C) (g h : hom c a), (f ∘ g = f ∘ h)%morphism → g = h.
 
 (** A mono-morphic morphism forms a Monic. *)
-Definition is_Monic_Monic
-           {C : Category}
-           {a b : Obj}
-           {f : a --> b}
-           (H : is_Monic f)
-  : Monic a b
-  :=
-    {|
-      mono_morphism := f;
-      mono_morphism_monomorphic := H
-    |}.
+Definition is_Monic_Monic {C : category} {a b : C} {f : hom a b} (M : is_Monic f) : Monic a b :=
+  {|
+    mono_morphism := f;
+    mono_morphism_monomorphic := M
+  |}.
 
 (** A morphism is ipic if it is monic in the opposit category. *)
-Definition is_Epic {C : Category} {a b : C} (f : a --> b) :=
-  @is_Monic (C^op) b a f.
+Definition is_Epic {C : category} {a b : C} (f : hom a b) := @is_Monic (C ᴼᴾ) b a f.
 
 (** A morphism f : a --> b is split monic if there is another morphism
 g : b --> a such that g ∘ f = idₐ *)
-Record is_split_Monic {C : Category} {a b : Obj} (f : a --> b) :=
+Record is_split_Monic {C : category} {a b : C} (f : hom a b) :=
   {
-    is_split_monic_left_inverse : b --> a;
+    is_split_monic_left_inverse : hom b a;
     is_split_monic_left_inverse_is_left_inverse :
-      (is_split_monic_left_inverse ∘ f) = id
+      (is_split_monic_left_inverse ∘ f)%morphism = id
   }.
 
 Arguments is_split_monic_left_inverse {_ _ _ _} _.
 Arguments is_split_monic_left_inverse_is_left_inverse {_ _ _ _} _.
 
 (** A morphism is ipic if it is monic in the opposit category. *)
-Definition is_split_Epic {C : Category} {a b : C} (f : a --> b) :=
-  @is_split_Monic (C^op) b a f.
+Definition is_split_Epic {C : category} {a b : C} (f : hom a b) := @is_split_Monic (C ᴼᴾ) b a f.
 
 (** A split monic morphism is a monomorphism. *)
-Program Definition is_split_Monic_Monic
-           {C : Category}
-           {a b : Obj}
-           {f : a --> b}
-           (H : is_split_Monic f)
-  : Monic a b
-  :=
-    {|
-      mono_morphism := f;
-      mono_morphism_monomorphic := fun c g h H1 => _
-    |}.
+Program Definition is_split_Monic_Monic {C : category} {a b : C} {f : hom a b} (SM : is_split_Monic f) : Monic a b :=
+  {|
+    mono_morphism := f;
+    mono_morphism_monomorphic := _
+  |}.
 Next Obligation.
-Proof.
-  assert (H2 := f_equal (fun w : c --> b => (is_split_monic_left_inverse H) ∘ w) H1).
-  cbn in H2.
-  repeat rewrite assoc_sym in H2.
-  rewrite is_split_monic_left_inverse_is_left_inverse in H2.
-  auto.
-Qed.
+Proof. intros ???? [r Hr] ??? Hgh; rewrite -(left_id g) -(left_id h) -!Hr !assoc Hgh //. Qed.
+Fail Next Obligation.
 
 (** If a monic morphism is split epic, it forms an isomorphism. *)
-Program Definition Monic_is_split_Epic_Iso
-        {C : Category}
-        (a b : Obj)
-        (f : a ≫–> b)
-        (H : is_split_Epic f)
-  :
-    (a ≃ b)%isomorphism
+Program Definition Monic_is_split_Epic_Iso {C : category} (a b : C) (f : a ≫–> b) (SE : is_split_Epic f) : (a ≃ b)%isomorphism
   :=
     {|
       iso_morphism := f;
-      inverse_morphism := is_split_monic_left_inverse H;
-      right_inverse := is_split_monic_left_inverse_is_left_inverse H
+      inverse_morphism := is_split_monic_left_inverse SE;
+      right_inverse := is_split_monic_left_inverse_is_left_inverse SE
     |}.
 Next Obligation.
 Proof.
+  intros ??? f SE.
   apply (mono_morphism_monomorphic f).
   rewrite assoc_sym.
-  cbn_rewrite (is_split_monic_left_inverse_is_left_inverse H).
-  auto.
+  cbn_rewrite (is_split_monic_left_inverse_is_left_inverse SE); auto.
 Qed.
+Fail Next Obligation.
 
 (** If both g and (f ∘ g) are monic, then so is f. *)
-Program Definition Compose_Monic_is_Monic_then_Monic
-           {C : Category}
-           {a b c : C}
-           (M : a --> b)
-           (M' : b ≫–> c)
-           (H : is_Monic (M' ∘ M))
-  :
-    Monic a b
+Program Definition Compose_Monic_is_Monic_then_Monic {C : category} {a b c : C} (M : hom a b) (M' : b ≫–> c)
+  (iM : is_Monic (M' ∘ M)) : Monic a b
   :=
     {|
       mono_morphism := M;
-      mono_morphism_monomorphic := fun d g h H1 => _
+      mono_morphism_monomorphic := _
     |}.
 Next Obligation.
-Proof.
-  assert (H2 := f_equal (fun w : d --> b => M' ∘ w) H1).
-  cbn in H2.
-  repeat rewrite assoc_sym in H2.
-  apply H; trivial.
-Qed.
+Proof. intros ?????? iM ??? Hgh; apply iM; rewrite !assoc Hgh //. Qed.
+Fail Next Obligation.
 
 (** Monomorphisms compose. The case for epis follows by duality.*)
-Section Mono_compose.
-  Context {C : Category} {a b c : C} (M : a ≫–> b) (M' : b ≫–> c).
-
-  Local Hint Resolve mono_morphism_monomorphic : core.
-
-  Local Obligation Tactic := eauto.
-
-  Program Definition Mono_compose : a ≫–> c :=
-    {|
-      mono_morphism := M' ∘ M
-    |}.
-
-End Mono_compose.
-
-Local Open Scope isomorphism_scope.
+Program Definition Mono_compose {C : category} {a b c : C} (M : a ≫–> b) (M' : b ≫–> c) : a ≫–> c :=
+  {|
+    mono_morphism := M' ∘ M
+  |}.
+Next Obligation.
+Proof. eauto using mono_morphism_monomorphic. Qed.
+Fail Next Obligation.
 
 (** An isomorphism is both monic and epic. *)
-Section Iso_Mono_Epi.
-  Context {C : Category} {a b : Obj} (I : a ≃ b).
-
-  Program Definition Ismorphism_Monic : a ≫–> b :=
-    {|
-      mono_morphism := I
-    |}.
-
+Program Definition Ismorphism_Monic {C : category} {a b : C} (I : a ≃ b) : a ≫–> b :=
+  {|
+    mono_morphism := I
+  |}.
   Next Obligation. (* mono_morphism_monomorphism *)
   Proof.
+    intros ????????.
     match goal with
         [ H : (_ ∘ ?f = _ ∘ ?f')%morphism |- ?f = ?f'] =>
         match type of H with
@@ -319,12 +264,13 @@ Section Iso_Mono_Epi.
     auto.
   Qed.
 
-  Program Definition Ismorphism_Epic : b –≫ a :=
+  Program Definition Ismorphism_Epic {C : category} {a b : C} (I : a ≃ b) : b –≫ a :=
     {|
       mono_morphism := inverse_morphism I
     |}.
   Next Obligation. (* epi_morphism_epimorphism *)
   Proof.
+    intros ????????; cbn in *.
     match goal with
         [ H : (?f ∘ _ = ?f' ∘ _)%morphism |- ?f = ?f'] =>
         match type of H with
@@ -337,13 +283,11 @@ Section Iso_Mono_Epi.
     auto.
   Qed.
 
-End Iso_Mono_Epi.
-
 (** If two objects are isomorphic in category C then they are also isomorphic
 in C^op. *)
-Theorem CoIso {C : Category} (a b : C) : a ≃≃ b ::> C → a ≃≃ b ::> C^op.
+Theorem CoIso {C : category} (a b : C) : a ≃@{C} b → a ≃@{C ᴼᴾ} b.
 Proof.
   intros I.
-  eapply (Build_Isomorphism (C^op)%category _ _ (I⁻¹) I);
+  eapply (Build_Isomorphism (C ᴼᴾ)%category _ _ (I⁻¹) I);
     unfold compose; simpl; auto.
 Qed.

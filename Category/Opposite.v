@@ -7,15 +7,15 @@ From Categories Require Import Category.Category.
 As a result, f ∘_Cᵒᵖ g is just g ∘_C f and consequently, assoc is assoc_sym (reversed with arrow
 arguments) and vice versa. Similarly, id_unit_left and id_unit_right are also swapped. *)
 
-Definition Opposite (C : Category) : Category :=
+Definition opposite (C : category) : category :=
 {|
 
-  Obj := Obj C;
+  obj := obj C;
 
-  Hom := fun a b => (b --> a)%morphism;
+  hom := fun a b => (hom b a)%morphism;
 
   compose :=
-    fun a b c (f : (b --> a)%morphism) (g : (c --> b)%morphism) => compose C c b a g f;
+    fun a b c (f : hom b a) (g : hom c b) => compose g f;
 
   id := fun c => id C c;
 
@@ -23,10 +23,10 @@ Definition Opposite (C : Category) : Category :=
 
   assoc_sym := fun _ _ _ _ f g h => assoc h g f;
 
-  id_unit_left := fun _ _ h => @id_unit_right C _ _ h;
+  left_id := fun _ _ h => @right_id C _ _ h;
 
-  id_unit_right := fun _ _ h => @id_unit_left C _ _ h
+  right_id := fun _ _ h => @left_id C _ _ h
 
 |}.
 
-Notation "C '^op'" := (Opposite C) : category_scope.
+Notation "C 'ᴼᴾ'" := (opposite C) : category_scope.

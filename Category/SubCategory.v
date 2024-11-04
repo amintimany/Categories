@@ -19,28 +19,26 @@ the arrows of the subcategory. Additionally, For ant two composable arrow that
 are in the subcategory, their composition must also be in the subcategory.
 *)
 Section SubCategory.
-  Context (C : Category)
-          (Obj_Cri : Obj → Type)
-          (Hom_Cri : ∀ a b, (a --> b)%morphism → Prop).
+  Context (C : category)
+          (Obj_Cri : C → Type)
+          (Hom_Cri : ∀ a b, (hom C a b) → Prop).
 
   Arguments Hom_Cri {_ _} _.
 
   Context (Hom_Cri_id : ∀ a, Obj_Cri a → Hom_Cri (id a))
           (Hom_Cri_compose :
-             ∀ a b c (f : (a --> b)%morphism)
-               (g : (b --> c)%morphism),
+             ∀ a b c (f : hom a b)
+               (g : hom b c),
                Hom_Cri f → Hom_Cri g → Hom_Cri (g ∘ f)).
 
   Arguments Hom_Cri_id {_} _.
   Arguments Hom_Cri_compose {_ _ _ _ _} _ _.
 
-  Local Obligation Tactic := idtac.
-
-  Program Definition SubCategory : Category :=
+  Program Definition SubCategory : category :=
   {|
-    Obj := sigT Obj_Cri;
+    obj := sigT Obj_Cri;
 
-    Hom :=
+    hom :=
       fun a b =>
         sig (@Hom_Cri (projT1 a) (projT1 b));
 
@@ -53,22 +51,8 @@ Section SubCategory.
       fun a =>
         exist _ _ (Hom_Cri_id (projT2 a))
   |}.
-
-  Next Obligation.
-    intros.
-    apply sig_proof_irrelevance; simpl; abstract auto.
-  Qed.
-
-  Next Obligation.
-    symmetry.
-    apply SubCategory_obligation_1.
-  Qed.
-
-  Local Hint Extern 3 => simpl : core.
-
-  Local Obligation Tactic := basic_simpl; auto.
-
-  Solve Obligations.
+  Solve All Obligations with basic_simpl; apply sig_proof_irrelevance; simpl; auto.
+  Fail Next Obligation.
 
 End SubCategory.
 

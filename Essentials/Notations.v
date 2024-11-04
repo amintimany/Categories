@@ -1,28 +1,28 @@
 From Coq.Unicode Require Export Utf8.
 
-Reserved Notation "C '^op'" (at level 50, no associativity).
+Reserved Notation "C 'ᴼᴾ'" (at level 1, no associativity).
 
-Reserved Notation "a --> b" (at level 90, b at level 200, right associativity).
-
-Reserved Notation "f '⁻¹'" (at level 50, no associativity).
+Reserved Notation "f '⁻¹'" (at level 1, no associativity).
 
 Reserved Notation "a ≃ b" (at level 70, no associativity).
 
-Reserved Notation "a ≃≃ b ::> C" (at level 70, no associativity).
+Reserved Notation "a ≃@{ C } b" (at level 70, no associativity, format "a ≃@{ C } b").
 
 Reserved Notation "f ∘ g" (at level 51, right associativity).
 
-Reserved Notation "f '∘_h' g" (at level 51, right associativity).
+Reserved Notation "f ∘@{ C } g" (at level 51, right associativity, format "f ∘@{ C } g").
+
+Reserved Notation "f '∘ₕ' g" (at level 51, right associativity).
 
 Reserved Notation "a ≫–> b" (at level 100, no associativity).
 
 Reserved Notation "a –≫ b" (at level 100, no associativity).
 
-Reserved Notation "F '_o'" (at level 50, no associativity).
+Reserved Notation "F 'ₒ'" (at level 1, no associativity).
 
-Reserved Notation "F '_a'" (at level 50, no associativity).
+Reserved Notation "F 'ₐ'" (at level 1, no associativity).
 
-Reserved Notation "F '@_a'" (at level 50, no associativity).
+Reserved Notation "F '@ₐ'" (at level 1, no associativity).
 
 Reserved Notation "F ⊣ G" (at level 100, no associativity).
 

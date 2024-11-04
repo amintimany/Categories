@@ -3,215 +3,59 @@ From Categories Require Import Essentials.Types.
 From Categories Require Import Essentials.Facts_Tactics.
 
 (** The basic definition of a category *)
-Cumulative Class Category : Type :=
+Cumulative Record category : Type :=
 {
   (** Type of Objects *)
-  Obj : Type;
+  obj : Type;
 
   (** Type of morphism beween two objects *)
-  Hom : Obj → Obj → Type where "a --> b" := (Hom a b);
+  hom : obj → obj → Type where "a → b" := (hom a b) : morphism_scope;
 
   (** composition of morphisms: *)
-  compose : ∀ {a b c : Obj}, (a --> b) → (b --> c) → (a --> c)
+  compose : ∀ {a b c : obj}, (hom a b)%morphism → (hom b c) → (hom a c)
     where "f ∘ g" := (compose g f);
 
   (** associativity of composition: *)
-  assoc : ∀ {a b c d : Obj} (f : a --> b) (g : b --> c) (h : c --> d),
+  assoc : ∀ {a b c d : obj} (f : hom a b) (g : hom b c) (h : hom c d),
             ((h ∘ g) ∘ f) = (h ∘ (g ∘ f));
 
   (** symmetric form of associativity: *)
-  assoc_sym : ∀ {a b c d : Obj} (f : a --> b) (g : b --> c) (h : c --> d),
+  assoc_sym : ∀ {a b c d : obj} (f : hom a b) (g : hom b c) (h : hom c d),
                 ((h ∘ (g ∘ f) = (h ∘ g) ∘ f));
 
   (** identity morphisms: *)
-  id : ∀ {a : Obj}, a --> a;
+  id : ∀ {a : obj}, hom a a;
 
   (** id left unit: *)
-  id_unit_left : ∀ (a b : Obj) (h : a --> b), id ∘ h = h;
+  left_id : ∀ (a b : obj) (h : hom a b), id ∘ h = h;
 
   (** id right unit: *)
-  id_unit_right : ∀ (a b : Obj) (h : a --> b), h ∘ id = h
+  right_id : ∀ (a b : obj) (h : hom a b), h ∘ id = h
 }.
 
-Arguments Obj {_}, _.
+Arguments obj {_}, _.
 Arguments id {_ _}, {_} _, _ _.
-Arguments Hom {_} _ _, _ _ _.
-Arguments compose {_} {_ _ _} _ _, _ {_ _ _} _ _, _ _ _ _ _ _.
-Arguments assoc {_ _ _ _ _} _ _ _.
-Arguments assoc_sym {_ _ _ _ _} _ _ _.
+Arguments hom {_} _ _, _ _ _.
+Arguments compose {_} {_ _ _} _%_morphism _%_morphism.
+Arguments assoc {_ _ _ _ _} _%_morphism _%_morphism _%_morphism.
+Arguments assoc_sym {_ _ _ _ _} _%_morphism _%_morphism _%_morphism.
+Arguments left_id {_ _ _} _%_morphism.
+Arguments right_id {_ _ _} _%_morphism.
 
+Notation "f ∘@{ C } g" := (@compose C _ _ _ g f) : morphism_scope.
 Notation "f ∘ g" := (compose g f) : morphism_scope.
-Notation "a --> b" := (Hom a b) : morphism_scope.
 
-Bind Scope category_scope with Category.
+Bind Scope category_scope with category.
 
-Bind Scope morphism_scope with Hom.
+Bind Scope morphism_scope with hom.
 
-Bind Scope object_scope with Obj.
+Bind Scope object_scope with obj.
 
-Coercion Obj : Category >-> Sortclass.
+Coercion obj : category >-> Sortclass.
 
-Hint Resolve id_unit_left id_unit_right : core.
+Hint Resolve left_id right_id : core.
 
 (* basic tactics for categories *)
-
-(** We can't write reveal_comp tactic more efficiently without a mechanism to match
-with a pattern and get back also the matched term. This is currently impossible in Coq. *)
-(**
-#
-<pre>
-Ltac reveal_make_rightmost f term :=
-  let rec RMR termx :=
-      lazymatch termx with
-        | (_ ∘ f)%morphism => apply (eq_refl termx)
-        | (?A ∘ ?B)%morphism =>
-          match type of $(RMR B)$ with
-              _ = (?C ∘ f)%morphism =>
-              exact (
-                  eq_trans
-                  (match $(RMR B)$ in _ = Y return termx = (A ∘ Y)%morphism with
-                      eq_refl => eq_refl
-                  end)
-                    (assoc_sym f C A)
-                )
-          end
-        | _ => fail
-      end
-  in
-  RMR term.
-
-Ltac reveal_make_leftmost f term :=
-  let rec RML termx :=
-      lazymatch termx with
-        | (f ∘ _)%morphism => apply (eq_refl termx)
-        | (?A ∘ ?B)%morphism =>
-          match type of $(RML A)$ with
-              _ = (f ∘ ?C)%morphism =>
-              exact (
-                  eq_trans
-                  (match $(RML A)$ in _ = Y return termx = (Y ∘ B)%morphism with
-                      eq_refl => eq_refl
-                  end)
-                    (assoc B C f)
-                )
-          end
-        | _ => fail
-      end
-  in
-  RML term.
-
-Ltac reveal_prepare_equality_term f g A B term :=
-  match type of $(reveal_make_rightmost f A)$ with
-      _ = (?C ∘ f)%morphism =>
-      match type of $(reveal_make_leftmost g B)$ with
-          _ = (g ∘ ?D)%morphism =>
-          exact (eq_trans
-                   (match $(reveal_make_rightmost f A)$ in _ = X return term = (X ∘ _)%morphism with
-                        eq_refl =>
-                        match $(reveal_make_leftmost g B)$ in _ = Y return term = (_ ∘ Y)%morphism with
-                            eq_refl => eq_refl
-                        end
-                    end)
-                   (eq_trans
-                       (assoc (g ∘ D) f C)
-                       (match assoc_sym D g f in _ = Z return (C ∘ f ∘ g ∘ D = C ∘ Z)%morphism with
-                            eq_refl => eq_refl
-                        end)
-                   )
-                )
-      end
-  end
-.
-
-Ltac reveal_prepare_equality_term_left_explicit f g B term :=
-  match type of $(reveal_make_leftmost g B)$ with
-      _ = (g ∘ ?D)%morphism =>
-      exact (eq_trans
-               (
-                 match $(reveal_make_leftmost g B)$ in _ = Y return term = (_ ∘ Y)%morphism with
-                     eq_refl => eq_refl
-                 end
-               )
-               (assoc_sym D g f)
-            )
-  end
-.
-
-Ltac reveal_prepare_equality_term_right_explicit f g A term :=
-  match type of $(reveal_make_rightmost f A)$ with
-      _ = (?C ∘ f)%morphism =>
-      exact (eq_trans
-               (
-                 match $(reveal_make_rightmost f A)$ in _ = Y return term = (Y ∘ _)%morphism with
-                     eq_refl => eq_refl
-                 end
-               )
-               (assoc g f C)
-            )
-  end
-.
-
-Ltac reveal_comp_in_goal f g :=
-  match goal with
-    | [|- context[?term]] =>
-      match term with
-          context [f] =>
-          match term with
-              context [g] =>
-              match term with
-                | (f ∘ g)%morphism => idtac
-                | (?A ∘ ?B)%morphism =>
-                  match A with
-                      context [f] =>
-                      match B with
-                          context [g] =>
-                          rewrite $(reveal_prepare_equality_term f g A B term)$
-                      end
-                  end
-                | (f ∘ ?B)%morphism =>
-                  rewrite $(reveal_prepare_equality_term_left_explicit f g B term)$
-                | (?A ∘ g)%morphism =>
-                  rewrite $(reveal_prepare_equality_term_right_explicit f g A term)$
-              end
-          end
-      end
-    | _ => fail
-  end.
-
-Ltac reveal_comp_in_I f g I :=
-  match type of I with
-    | context[?term] =>
-      match term with
-          context [f] =>
-          match term with
-              context [g] =>
-              match term with
-                | (f ∘ g)%morphism => idtac
-                | (?A ∘ ?B)%morphism =>
-                  match A with
-                      context [f] =>
-                      match B with
-                          context [g] =>
-                          rewrite $(reveal_prepare_equality_term f g A B term)$ in I
-                      end
-                  end
-                | (f ∘ ?B)%morphism =>
-                  rewrite $(reveal_prepare_equality_term_left_explicit f g B term)$ in I
-                | (?A ∘ g)%morphism =>
-                  rewrite $(reveal_prepare_equality_term_right_explicit f g A term)$ in I
-              end
-          end
-      end
-    | _ => fail
-  end.
-
-Tactic Notation "reveal_comp" constr(f) constr(g) := reveal_comp_in_goal f g.
-
-Tactic Notation "reveal_comp" constr(f) constr(g) "in" hyp(I) := reveal_comp_in_I f g I.
-
-</pre>
-#
- *)
 
 Ltac simpl_ids :=
   let id_detected B :=
@@ -220,8 +64,8 @@ Ltac simpl_ids :=
   in
   repeat(
       match goal with
-        | [|- context[(?A ∘ id)%morphism] ] => rewrite id_unit_right
-        | [|- context[(id ∘ ?A)%morphism] ] => rewrite id_unit_left
+        | [|- context[(?A ∘ id)%morphism] ] => rewrite left_id
+        | [|- context[(id ∘ ?A)%morphism] ] => rewrite right_id
         | [|- (?A ∘ ?B)%morphism = ?A] => id_detected B
         | [|- (?A = ?A ∘ ?B) %morphism] => id_detected B
         | [|- (?B ∘ ?A = ?A)%morphism] => id_detected B
@@ -232,8 +76,8 @@ Ltac simpl_ids :=
 Ltac simpl_ids_in_I I :=
   repeat(
       match type of I with
-        | context[(?A ∘ id)%morphism] => rewrite id_unit_right in I
-        | context[(id ∘ ?A)%morphism] => rewrite id_unit_left in I
+        | context[(?A ∘ id)%morphism] => rewrite right_id in I
+        | context[(id ∘ ?A)%morphism] => rewrite left_id in I
       end
     ).
 
@@ -247,14 +91,51 @@ Hint Extern 3 => progress (dohyps (fun H => simpl_ids in H)) : core.
 
 Hint Extern 2 =>
 match goal with
-    [|- ?A = ?B :> Hom _ _ _] =>
+    [|- ?A = ?B :> hom _ _ _] =>
     repeat rewrite assoc; trivial; fail
 end : core.
 
 Hint Extern 2 =>
 match goal with
-  [H : _ = _ :> Hom _ _ _ |- _ = _ :> Hom _ _ _] =>
+  [H : _ = _ :> hom _ _ _ |- _ = _ :> hom _ _ _] =>
   repeat rewrite assoc in H;
     repeat rewrite assoc;
     (idtac + symmetry); apply H
 end : core.
+
+Definition hom_trans {C : category} {a b c d : C} (eqd : a = b) (eqc : c = d) (h : hom a c) : hom b d :=
+  match eqd in _ = y return hom y d with
+  eq_refl => match eqc in _ = z return hom a z with eq_refl => h end
+  end.
+
+Arguments hom_trans : simpl never.
+
+Lemma hom_trans_refl {C : category} {a c : C} (eqd : a = a) (eqc : c = c) (h : hom a c) : hom_trans eqd eqc h = h.
+Proof.
+  replace eqd with (eq_refl a); [|by apply proof_irrelevance].
+  replace eqc with (eq_refl c); [done|by apply proof_irrelevance].
+Qed.
+
+Lemma hom_trans_trans {C : category} {a b c d e f : C} (eqd1 : a = b) (eqd2 : b = c) (eqc1 : d = e) (eqc2 : e = f) (h : hom a d) :
+  hom_trans eqd2 eqc2 (hom_trans eqd1 eqc1 h) = (hom_trans (eq_trans eqd1 eqd2) (eq_trans eqc1 eqc2) h).
+Proof. destruct eqd1; destruct eqd2; destruct eqc1; destruct eqc2; done. Qed.
+
+Lemma hom_trans_comp_take_in_l {C : category} {a b c d x : C} (eqd : a = b) (eqc : c = d) (g : hom d x) (h : hom a c) :
+  (g ∘ hom_trans eqd eqc h = hom_trans eqd eq_refl ((hom_trans (eq_sym eqc) eq_refl g) ∘ h))%morphism.
+Proof. destruct eqd; destruct eqc; done. Qed.
+
+Lemma hom_trans_comp_take_in_r {C : category} {a b c d x : C} (eqd : c = b) (eqc : d = x) (g : hom c d) (h : hom a b) :
+  ((hom_trans eqd eqc g) ∘ h = hom_trans eq_refl eqc (g ∘ (hom_trans eq_refl (eq_sym eqd) h)))%morphism.
+Proof. destruct eqd; destruct eqc; done. Qed.
+
+Lemma hom_trans_comp_split {C : category} {a b c x y : C} (eqd : a = b) (eqc : x = y) (g : hom c x) (h : hom a c) :
+  (hom_trans eqd eqc (g ∘ h) = hom_trans eq_refl eqc g ∘ hom_trans eqd eq_refl h)%morphism.
+Proof. destruct eqd; destruct eqc; done. Qed.
+
+Lemma hom_trans_l_to_r {C : category} {a b c d : C} (eqd : a = b) (eqc : c = d) (g : hom a c) (h : hom b d) :
+  g = hom_trans (eq_sym eqd) (eq_sym eqc) h → hom_trans eqd eqc g = h.
+Proof. destruct eqd; destruct eqc; done. Qed.
+
+Lemma hom_trans_r_to_l {C : category} {a b c d : C} (eqd : a = b) (eqc : c = d) (g : hom a c) (h : hom b d) :
+  hom_trans (eq_sym eqd) (eq_sym eqc) h = g → h = hom_trans eqd eqc g.
+Proof. destruct eqd; destruct eqc; done. Qed.
